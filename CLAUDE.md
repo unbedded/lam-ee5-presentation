@@ -149,4 +149,42 @@ Based on rubric weights:
 
 ---
 
+## PHASE COMPLETION WORKFLOW
+
+When a phase is complete (all tasks [x], phase title green), follow this workflow:
+
+### Step 1: Log Time
+```bash
+# Edit TIME-LOG.md
+# Add entries: YYYY-MM-DD | Phase | Hours | Description
+# Update Summary Statistics
+```
+
+### Step 2: Run Status Check
+```bash
+/status
+# Verify: Total logged, remaining hours, on track?
+# Check: Phase shows ✓ Complete
+```
+
+### Step 3: Commit Phase Completion
+```bash
+git add TIME-LOG.md
+git commit -m "chore(vX.X.X): Log final time entries for phase completion"
+git push origin main
+```
+
+### Step 4: Review & Plan Next Phase
+- Read next phase in TODO.md
+- Understand deliverables and estimates
+- Plan approach before starting work
+
+**Example Completion:**
+```
+✓ v0.1.0 complete: 3.5h logged (under 3h budget)
+→ v1.1.0 next: Quality Metrics (3h est)
+```
+
+---
+
 
