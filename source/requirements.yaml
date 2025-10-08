@@ -10,6 +10,47 @@ metadata:
   author: "Spencer Barrett"
   source_doc: "docs/reference/Interview Overview and Concept Evaluation - EE Presentation.pdf"
 
+  # Scope & Assumptions
+  scope:
+    in_scope:
+      - "Technical requirements identification (system, electrical, manufacturing, user)"
+      - "Alternative solution architectures (actuator, control, communication)"
+      - "Quantitative trade-off analysis (cost, power, size, timeline)"
+      - "Path to production (2-month timeline to production-ready design)"
+      - "Design for manufacturability (DFM) - high volume SMT assembly"
+      - "Standards awareness (representative examples: FCC/CE, UL, ADA/ISO)"
+      - "Prototype-to-production feasibility"
+
+    out_of_scope:
+      - "Regulatory compliance certification (full FCC/CE/UL testing)"
+      - "Market-specific localization (country variants, language packs)"
+      - "Service infrastructure (warranty programs, repair network, spare parts logistics)"
+      - "End-of-life management (recycling programs, disposal procedures)"
+      - "Full product lifecycle costing (beyond initial BOM + NRE)"
+      - "Software application development (cell phone app - assumes existing solutions)"
+      - "Clinical trials / accessibility user studies (assumed separate effort)"
+      - "Intellectual property strategy (patent search, freedom-to-operate)"
+      - "Supply chain contracts (vendor selection, volume pricing negotiations)"
+      - "Quality management system (ISO 9001, manufacturing process controls)"
+
+    assumptions:
+      - "Target market: US/EU primary (FCC + CE compliance paths identified)"
+      - "Cell phone interface: Standard protocols (BLE 5.0+ or USB-C) - no proprietary APIs"
+      - "Braille standard: Grade 1 (6-dot) - not Grade 2 contracted braille"
+      - "User demographics: Adult users with visual impairment, basic tech literacy"
+      - "Operating environment: Indoor, room temperature (0-40°C), non-extreme conditions"
+      - "Production volume: >10K units/year (justifies tooling investment)"
+      - "Timeline constraint: 2 months to production-ready design (per PDF p.8)"
+      - "Battery: Rechargeable Li-ion/LiPo with USB-C charging (industry standard)"
+      - "Actuator sourcing: COTS components available (no custom fabrication)"
+
+  rationale: |
+    This is a concept evaluation focused on electrical engineering design and
+    production feasibility within a 2-month timeline. Scope deliberately excludes
+    post-production activities (compliance testing, service, lifecycle) to maintain
+    focus on core design deliverables. Compliance requirements are identified for
+    design consideration, but full certification is a post-production activity.
+
 # Requirement ID Convention: [CATEGORY]-[SUBCATEGORY]-[NUMBER]
 # Categories:
 #   SYS = System Requirements
