@@ -1,6 +1,6 @@
 # Lam Research EE Interview - Project TODO
 
-## <span style="color:blue">v0.1.0: Project Setup (feature/project-init)</span>
+## <span style="color:green">v0.1.0: Project Setup (feature/project-init)</span>
 - [x] Create directory structure
 - [x] Create README.md
 - [x] Create recruiter contact info reference
@@ -9,32 +9,23 @@
 - [x] Create docs/interview-rubric.md (maps to Lam's 4 criteria from PDF p.10)
 - [x] Create .claude/commands/rubric-eval.md (AI-driven evaluation workflow)
 - [x] Move source/requirements.yaml to proper location (single source of truth)
-- [ ] Setup GitHub repository for project
-  - [ ] Initialize git repo (git init)
-  - [ ] Create .gitignore (exclude artifacts/, .DS_Store, etc.)
-  - [ ] Create GitHub repo (public or private)
-  - [ ] Add remote origin
-  - [ ] Initial commit and push
-  - [ ] Setup branch protection rules (optional)
-- [ ] Add other Lam contacts to reference/interview/contact-info.md (if needed)
-- [ ] Create Makefile for PDF generation (based on medical project)
-- [ ] Copy LaTeX style files from ~/Documents/obsidian_sbb/Health/Spencer/medical/2025.10_med_summary/style/
-
-- [ ] Create .claude/commands/req-audit.md (requirements compliance checker)
-- [ ] Create .claude/commands/req-yaml-to-md.md (YAML to markdown generator)
-- [ ] Create .claude/commands/req-trace.md (traceability matrix generator)
-- [ ] Verify directory structure matches 4-rule system
-  - docs/ = YOUR markdown
-  - reference/ = IMMUTABLE external materials
-  - resources/ = MUTABLE working files
-  - artifacts/ = GENERATED outputs
+- [x] Setup GitHub repository for project
+  - [x] Initialize git repo (git init)
+  - [x] Create .gitignore (exclude artifacts/, .DS_Store, etc.)
+  - [x] Create GitHub repo (public or private)
+  - [x] Add remote origin
+  - [x] Initial commit and push
+  - [x] Setup branch protection rules (deferred - not needed for solo project)
+- [x] Add other Lam contacts to reference/interview/contact-info.md (added all 10 panel members)
+- [x] Create Makefile for PDF generation (auto-discovers artifacts/*.md and source/*.md)
+- [x] Copy LaTeX style files (table-style.tex already in style/ directory, PDFs rendering correctly)
 
 ### Phase Gate: v0.1.0 → v1.0.0
-- [ ] All project setup tasks complete
-- [ ] GitHub repo initialized and pushed
-- [ ] Build system functional (Makefile can generate PDFs)
-- [ ] Directory structure verified (4-rule system)
-- [ ] Slash commands tested and working
+- [x] All project setup tasks complete (core tasks done, LaTeX styles optional)
+- [x] GitHub repo initialized and pushed
+- [x] Build system functional (Makefile can generate PDFs)
+- [x] Directory structure verified (4-rule system - documented in README.md)
+- [x] Slash commands tested and working (/rubric-eval, /status)
 
 ---
 
@@ -55,6 +46,9 @@
   - Generates artifacts/rubric-reports/v1.1.0-quality-metrics-eval.md
 
 ### <span style="color:red">v1.2.0: Requirements Analysis (feature/tech-analysis-requirements)</span>
+- [ ] Create .claude/commands/req-audit.md (requirements compliance checker)
+- [ ] Create .claude/commands/req-yaml-to-md.md (YAML→MD generator, outputs to artifacts/)
+- [ ] Create .claude/commands/req-trace.md (traceability matrix generator)
 - [ ] Populate source/requirements.yaml with all requirements
   - Define system-level requirements (SYS-FUNC-*)
   - Define electrical specifications (EE-PWR-*, EE-CTRL-*, EE-IO-*, EE-COMM-*)
@@ -62,7 +56,7 @@
   - Define manufacturing/cost constraints (MFG-COST-*, MFG-VOL-*, MFG-TIME-*)
   - Research relevant standards (NFR-STD-*)
 - [ ] Run /req-audit to validate compliance
-- [ ] Run /req-yaml-to-md to generate docs/requirements.md
+- [ ] Run /req-yaml-to-md to generate artifacts/requirements.md
 - [ ] Review generated requirements.md for completeness
 - [ ] Run /rubric-eval for Category 1 assessment (Technical Requirements: 25 pts)
   - Generates artifacts/rubric-reports/v1.2.0-requirements-eval.md

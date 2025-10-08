@@ -8,7 +8,7 @@
 
 PANDOC = pandoc
 PDF_ENGINE = xelatex
-FONT = Noto Sans
+FONT = DejaVu Sans
 STYLE = style/table-style.tex
 MARKDOWN_OPTS = -f markdown+pipe_tables+line_blocks
 
@@ -47,68 +47,59 @@ RUBRIC_OPTS = --pdf-engine=$(PDF_ENGINE) \
               $(RUBRIC_TOC)
 
 # ============================================================================
-# FILE LISTS - Explicitly define which files use which options
+# FILE LISTS - Auto-discover .md files in artifacts/
 # ============================================================================
 
-# Standard option PDFs (from source/)
-STD_SOURCE_PDFS = artifacts/technical-analysis.pdf
+# Find all .md files in artifacts/ directory
+ARTIFACTS_MD_FILES = $(wildcard artifacts/*.md)
 
-# Presentation PDFs (larger font, no TOC, from source/)
-PRES_PDFS = artifacts/presentation.pdf
+# Generate PDF paths by replacing .md with .pdf
+ARTIFACTS_PDF_FILES = $(ARTIFACTS_MD_FILES:.md=.pdf)
 
-# Rubric PDFs (compact format)
-RUBRIC_PDFS = artifacts/interview-rubric.pdf \
-              artifacts/phase1-rubric.pdf \
-              artifacts/phase2-rubric.pdf \
-              artifacts/phase1-quality-metrics.pdf \
-              artifacts/phase2-quality-metrics.pdf
+# Find all .md files in source/ directory
+SOURCE_MD_FILES = $(wildcard source/*.md)
+
+# Generate PDF paths for source files (source/foo.md -> artifacts/foo.pdf)
+SOURCE_PDF_FILES = $(patsubst source/%.md,artifacts/%.pdf,$(SOURCE_MD_FILES))
 
 # All PDF files to be created
-PDF_FILES = $(STD_SOURCE_PDFS) $(PRES_PDFS) $(RUBRIC_PDFS)
+PDF_FILES = $(ARTIFACTS_PDF_FILES) $(SOURCE_PDF_FILES)
 
 # ============================================================================
-# BUILD RULES - Single rule per option set
+# BUILD RULES - Pattern-based rules for auto-discovery
 # ============================================================================
 
 # Default target - convert all markdown files to PDF
 all: $(PDF_FILES)
 
-# Standard options: source markdown -> PDF
-$(STD_SOURCE_PDFS): artifacts/%.pdf: source/%.md $(STYLE)
+# Convert .md files in artifacts/ directory (in-place: artifacts/foo.md -> artifacts/foo.pdf)
+artifacts/%.pdf: artifacts/%.md $(STYLE)
 	@echo "Converting $<..."
-	$(PANDOC) $< -o $@ $(STD_OPTS)
+	@if echo "$<" | grep -qE "(rubric|metrics)"; then \
+		echo "  Using RUBRIC_OPTS (compact format)"; \
+		$(PANDOC) $< -o $@ $(RUBRIC_OPTS); \
+	elif echo "$<" | grep -q "presentation"; then \
+		echo "  Using PRES_OPTS (large font, no TOC)"; \
+		$(PANDOC) $< -o $@ $(PRES_OPTS); \
+	else \
+		echo "  Using STD_OPTS (standard format)"; \
+		$(PANDOC) $< -o $@ $(STD_OPTS); \
+	fi
 	@echo "Created $@"
 
-# Presentation options: larger font, no TOC
-$(PRES_PDFS): artifacts/%.pdf: source/%.md $(STYLE)
-	@echo "Converting $<..."
-	$(PANDOC) $< -o $@ $(PRES_OPTS)
-	@echo "Created $@"
-
-# Rubric options: compact format, deeper TOC
-artifacts/interview-rubric.pdf: interview-rubric.md $(STYLE)
-	@echo "Converting $<..."
-	$(PANDOC) $< -o $@ $(RUBRIC_OPTS)
-	@echo "Created $@"
-
-artifacts/phase1-rubric.pdf: source/phase1-rubric.md $(STYLE)
-	@echo "Converting $<..."
-	$(PANDOC) $< -o $@ $(RUBRIC_OPTS)
-	@echo "Created $@"
-
-artifacts/phase2-rubric.pdf: source/phase2-rubric.md $(STYLE)
-	@echo "Converting $<..."
-	$(PANDOC) $< -o $@ $(RUBRIC_OPTS)
-	@echo "Created $@"
-
-artifacts/phase1-quality-metrics.pdf: source/phase1-quality-metrics.md $(STYLE)
-	@echo "Converting $<..."
-	$(PANDOC) $< -o $@ $(RUBRIC_OPTS)
-	@echo "Created $@"
-
-artifacts/phase2-quality-metrics.pdf: source/phase2-quality-metrics.md $(STYLE)
-	@echo "Converting $<..."
-	$(PANDOC) $< -o $@ $(RUBRIC_OPTS)
+# Convert source/*.md to artifacts/*.pdf
+artifacts/%.pdf: source/%.md $(STYLE)
+	@echo "Converting $< -> $@..."
+	@if echo "$<" | grep -qE "(rubric|metrics)"; then \
+		echo "  Using RUBRIC_OPTS (compact format)"; \
+		$(PANDOC) $< -o $@ $(RUBRIC_OPTS); \
+	elif echo "$<" | grep -q "presentation"; then \
+		echo "  Using PRES_OPTS (large font, no TOC)"; \
+		$(PANDOC) $< -o $@ $(PRES_OPTS); \
+	else \
+		echo "  Using STD_OPTS (standard format)"; \
+		$(PANDOC) $< -o $@ $(STD_OPTS); \
+	fi
 	@echo "Created $@"
 
 # Clean target - remove all generated PDFs

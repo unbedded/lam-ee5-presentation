@@ -216,27 +216,45 @@ Generate evaluation report in Markdown format:
 ### 1. Technical Requirements (XX/25 points)
 **Performance Level:** [Excellent/Good/Adequate/Poor]
 
-**Strengths:**
+#### Scoring Checklist
+
+**Requirement Coverage (X/10 points)**
+| Criteria | Points | Earned | Notes |
+|----------|--------|--------|-------|
+| System requirements (I/O count, functionality) | 3 | X | [Evidence/Gap] |
+| Electrical requirements (power, control, communication) | 3 | X | [Evidence/Gap] |
+| Manufacturing requirements (cost, volume, timeline) | 2 | X | [Evidence/Gap] |
+| User/accessibility requirements | 2 | X | [Evidence/Gap] |
+
+**Requirement Quality (X/10 points)**
+| Criteria | Points | Earned | Notes |
+|----------|--------|--------|-------|
+| Requirements are specific and measurable | 3 | X | [Evidence/Gap] |
+| Proper prioritization (P0-Critical to P3-Low) | 2 | X | [Evidence/Gap] |
+| Acceptance criteria defined | 3 | X | [Evidence/Gap] |
+| Verification methods specified | 2 | X | [Evidence/Gap] |
+
+**Standards & Compliance (X/5 points)**
+| Criteria | Points | Earned | Notes |
+|----------|--------|--------|-------|
+| Relevant standards researched (EMI, safety, accessibility) | 3 | X | [Evidence/Gap] |
+| Compliance requirements documented | 2 | X | [Evidence/Gap] |
+
+**Category Total: XX/25 points**
+
+#### Strengths
 - [Specific example with file:line link]
 
-**Weaknesses:**
+#### Weaknesses
 - [Specific gap with file reference]
 
-**Scoring Details:**
-- Requirement Coverage: X/10
-  - [Detailed breakdown]
-- Requirement Quality: X/10
-  - [Detailed breakdown]
-- Standards & Compliance: X/5
-  - [Detailed breakdown]
-
-**Recommendations:**
+#### Recommendations
 1. [Actionable improvement]
 2. [Actionable improvement]
 
 ---
 
-[Repeat for each category evaluated]
+[Repeat similar detailed breakdown for each category evaluated]
 
 ---
 
