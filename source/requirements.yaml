@@ -1,0 +1,362 @@
+# Braille Display Device - Requirements Database
+# Project: Lam Research EE Concept Evaluation
+# Purpose: Machine-readable requirements with full traceability
+# Auto-generates: requirements.md (human report) + requirements-trace.yml (audit matrix)
+
+metadata:
+  project: "Lam Research - Braille Display EE Concept Evaluation"
+  version: "1.0.0"
+  date: "2025-10-05"
+  author: "Spencer Barrett"
+  source_doc: "docs/reference/Interview Overview and Concept Evaluation - EE Presentation.pdf"
+
+# Requirement ID Convention: [CATEGORY]-[SUBCATEGORY]-[NUMBER]
+# Categories:
+#   SYS = System Requirements
+#   EE  = Electrical Engineering Requirements
+#   MFG = Manufacturing Requirements
+#   USR = User Requirements
+#   NFR = Non-Functional Requirements
+#   PRD = Production Requirements
+
+requirements:
+  # ============================================================================
+  # SYSTEM REQUIREMENTS (from PDF p.9 - Design Scenario)
+  # ============================================================================
+
+  SYS-FUNC-001:
+    title: "Single Line Braille Display"
+    description: "Device shall display a single line of braille text consisting of 32 characters"
+    source: "PDF p.9 'displays a single line of braille text'"
+    rationale: "Core product function"
+    priority: "P0-Critical"
+    category: "Functional"
+    verification_method: "Prototype demonstration"
+    acceptance_criteria:
+      - "32 braille characters physically present"
+      - "Characters arranged in readable single line"
+      - "Each character independently controllable"
+    traces_to:
+      design: ["docs/architecture.md#braille-actuator-array"]
+      analysis: ["docs/requirements.md#SYS-FUNC-001"]
+      tradeoffs: ["docs/tradeoffs.md#actuator-technology"]
+      solution: ["docs/solution.md#recommended-architecture"]
+      rubric: ["artifacts/rubric-reports/phase1-rubric-eval.md"]
+
+  SYS-FUNC-002:
+    title: "Braille Character Definition"
+    description: "Each braille character shall have 6 dots which can be raised or lowered"
+    source: "PDF p.9 'Each character has 6 dots which are either raised or lowered'"
+    rationale: "Standard braille Grade 1 alphabet (6-dot system)"
+    priority: "P0-Critical"
+    category: "Functional"
+    verification_method: "Design review + prototype test"
+    acceptance_criteria:
+      - "6 dots per character (2x3 grid)"
+      - "Binary state: raised (1) or lowered (0)"
+      - "Tactile differentiation between states"
+    traces_to:
+      design: ["docs/architecture.md#dot-actuation-mechanism"]
+      analysis: ["docs/requirements.md#SYS-FUNC-002"]
+
+  SYS-FUNC-003:
+    title: "Total Control Signals"
+    description: "System shall provide 192 control signals (32 characters × 6 dots)"
+    source: "PDF p.9 'outputs are control signals to 32 braille characters'"
+    rationale: "Derived requirement from character count and dot count"
+    priority: "P0-Critical"
+    category: "Functional"
+    verification_method: "Design calculation + schematic review"
+    acceptance_criteria:
+      - "192 independent control outputs"
+      - "Signals map correctly to character/dot positions"
+    calculation: "32 characters × 6 dots/character = 192 signals"
+    traces_to:
+      design: ["docs/architecture.md#control-signal-architecture"]
+      tradeoffs: ["docs/tradeoffs.md#io-expansion-comparison"]
+
+  SYS-FUNC-004:
+    title: "Cell Phone Text Input"
+    description: "System shall receive text information from cell phone"
+    source: "PDF p.9 'input is text information from the cell phone'"
+    rationale: "Primary data source for braille conversion"
+    priority: "P0-Critical"
+    category: "Functional"
+    verification_method: "Interface test with cell phone"
+    acceptance_criteria:
+      - "Successful pairing/connection with cell phone"
+      - "Text data received without corruption"
+      - "Supports standard text protocols"
+    traces_to:
+      design: ["docs/architecture.md#communication-interface"]
+      tradeoffs: ["docs/tradeoffs.md#bluetooth-vs-usb-vs-wifi"]
+
+  SYS-FUNC-005:
+    title: "Line Update Capability"
+    description: "After reading current line, device shall update to display next line of text"
+    source: "PDF p.9 'After the line of text is read, the device can update the line of braille to read the next line of text'"
+    rationale: "Essential for multi-line text reading"
+    priority: "P1-High"
+    category: "Functional"
+    verification_method: "User acceptance test"
+    acceptance_criteria:
+      - "User-triggered update (button/gesture)"
+      - "Smooth transition between lines"
+      - "No data loss during update"
+    traces_to:
+      design: ["docs/architecture.md#user-interface"]
+      analysis: ["docs/requirements.md#SYS-FUNC-005"]
+
+  # ============================================================================
+  # ELECTRICAL ENGINEERING REQUIREMENTS
+  # ============================================================================
+
+  EE-PWR-001:
+    title: "Portable Power Source"
+    description: "Device shall be battery powered for portability"
+    source: "PDF p.9 'portable...companion device'"
+    rationale: "Portability constraint requires battery operation"
+    priority: "P1-High"
+    category: "Electrical"
+    subcategory: "Power"
+    verification_method: "Power budget analysis + battery life test"
+    acceptance_criteria:
+      - "Rechargeable battery (USB-C charging preferred)"
+      - "Minimum 4-hour continuous operation"
+      - "Low battery indicator"
+    traces_to:
+      design: ["docs/architecture.md#power-supply"]
+      tradeoffs: ["docs/tradeoffs.md#power-budget"]
+
+  EE-PWR-002:
+    title: "Actuator Drive Power"
+    description: "Power supply shall provide sufficient current/voltage for 192 actuators"
+    source: "Derived from SYS-FUNC-003"
+    rationale: "Actuators may require high instantaneous current"
+    priority: "P0-Critical"
+    category: "Electrical"
+    subcategory: "Power"
+    verification_method: "Power analysis + thermal testing"
+    acceptance_criteria:
+      - "Peak current capacity meets worst-case draw"
+      - "Voltage regulation within actuator specs"
+      - "Thermal limits not exceeded"
+    traces_to:
+      design: ["docs/architecture.md#power-distribution"]
+      tradeoffs: ["docs/tradeoffs.md#actuator-power-requirements"]
+
+  EE-CTRL-001:
+    title: "Microcontroller Selection"
+    description: "Control system shall use appropriate MCU/FPGA for I/O requirements"
+    source: "PDF p.10 scope item 1"
+    rationale: "Need sufficient GPIO/peripherals for 192 outputs"
+    priority: "P0-Critical"
+    category: "Electrical"
+    subcategory: "Control"
+    verification_method: "Design review"
+    acceptance_criteria:
+      - "Sufficient I/O (direct or expanded)"
+      - "Processing power for braille translation"
+      - "Low power consumption"
+    traces_to:
+      design: ["docs/architecture.md#control-architecture"]
+      tradeoffs: ["docs/tradeoffs.md#mcu-vs-fpga"]
+
+  EE-IO-001:
+    title: "I/O Expansion Strategy"
+    description: "System shall expand available I/O to meet 192 output requirement"
+    source: "Derived from EE-CTRL-001 + SYS-FUNC-003"
+    rationale: "Most MCUs lack 192 GPIO pins"
+    priority: "P0-Critical"
+    category: "Electrical"
+    subcategory: "I/O"
+    verification_method: "Schematic review + bench test"
+    acceptance_criteria:
+      - "Reliable I/O expansion (shift registers, mux, I2C GPIO, etc.)"
+      - "Update rate meets user experience needs"
+      - "Fault tolerance (no single point of failure)"
+    traces_to:
+      design: ["docs/architecture.md#io-expansion"]
+      tradeoffs: ["docs/tradeoffs.md#io-expansion-comparison"]
+
+  EE-COMM-001:
+    title: "Cell Phone Communication Interface"
+    description: "Device shall implement wireless/wired interface to cell phone"
+    source: "SYS-FUNC-004"
+    rationale: "Primary data input method"
+    priority: "P0-Critical"
+    category: "Electrical"
+    subcategory: "Communication"
+    verification_method: "Interoperability testing (iOS/Android)"
+    acceptance_criteria:
+      - "Standard protocol (BLE, USB-C, WiFi)"
+      - "Cross-platform support (iOS + Android)"
+      - "Pairing process < 30 seconds"
+    traces_to:
+      design: ["docs/architecture.md#communication-interface"]
+      tradeoffs: ["docs/tradeoffs.md#bluetooth-vs-usb-vs-wifi"]
+
+  # ============================================================================
+  # MANUFACTURING REQUIREMENTS
+  # ============================================================================
+
+  MFG-COST-001:
+    title: "Low-Cost BOM"
+    description: "Bill of Materials shall support low-cost production target"
+    source: "PDF p.9 'portable, low cost, high volume'"
+    rationale: "Accessibility product - cost critical for market adoption"
+    priority: "P1-High"
+    category: "Manufacturing"
+    verification_method: "BOM cost analysis"
+    acceptance_criteria:
+      - "Target BOM < $100 (TBD with stakeholders)"
+      - "Standard components (high availability)"
+      - "Minimal exotic/expensive parts"
+    traces_to:
+      tradeoffs: ["docs/tradeoffs.md#cost-comparison"]
+      solution: ["docs/solution.md#cost-justification"]
+
+  MFG-VOL-001:
+    title: "High-Volume Manufacturing"
+    description: "Design shall support high-volume automated production"
+    source: "PDF p.9 'high volume companion device'"
+    rationale: "Scale to market demand"
+    priority: "P1-High"
+    category: "Manufacturing"
+    verification_method: "DFM review with manufacturer"
+    acceptance_criteria:
+      - "Standard PCB processes (SMT preferred)"
+      - "Minimal hand assembly"
+      - "Test points for automated testing"
+    traces_to:
+      design: ["docs/architecture.md#manufacturability"]
+      solution: ["docs/solution.md#production-plan"]
+
+  MFG-TIME-001:
+    title: "2-Month Production Timeline"
+    description: "Design shall be production-ready within 2 months"
+    source: "PDF p.8 'program director aims to release the project into production within two months'"
+    rationale: "Customer deadline constraint"
+    priority: "P0-Critical"
+    category: "Manufacturing"
+    verification_method: "Project schedule + risk analysis"
+    acceptance_criteria:
+      - "Parts lead time < 6 weeks"
+      - "No custom tooling (use COTS where possible)"
+      - "Rapid prototyping feasible"
+    traces_to:
+      tradeoffs: ["docs/tradeoffs.md#timeline-feasibility"]
+      solution: ["docs/solution.md#timeline-mitigation"]
+
+  # ============================================================================
+  # USER REQUIREMENTS
+  # ============================================================================
+
+  USR-PORT-001:
+    title: "Device Portability"
+    description: "Device shall be easily portable (size/weight constraints)"
+    source: "PDF p.9 'portable...companion device'"
+    rationale: "Usability for visually impaired users on-the-go"
+    priority: "P1-High"
+    category: "User Experience"
+    verification_method: "User acceptance test"
+    acceptance_criteria:
+      - "Weight < 500g (comparable to tablet)"
+      - "Fits in bag/purse"
+      - "Durable for daily transport"
+    traces_to:
+      design: ["docs/architecture.md#form-factor"]
+      tradeoffs: ["docs/tradeoffs.md#size-vs-features"]
+
+  USR-UX-001:
+    title: "Intuitive Operation"
+    description: "Device operation shall be intuitive for visually impaired users"
+    source: "Implied by product purpose"
+    rationale: "Target user has visual impairment - tactile feedback critical"
+    priority: "P1-High"
+    category: "User Experience"
+    verification_method: "User testing with target demographic"
+    acceptance_criteria:
+      - "Tactile buttons/controls (no screen dependency)"
+      - "Audio feedback for status"
+      - "Simple pairing process"
+    traces_to:
+      design: ["docs/architecture.md#user-interface"]
+      analysis: ["docs/requirements.md#accessibility"]
+
+  # ============================================================================
+  # NON-FUNCTIONAL REQUIREMENTS
+  # ============================================================================
+
+  NFR-PERF-001:
+    title: "Braille Refresh Rate"
+    description: "Display update latency shall be acceptable to user"
+    source: "User experience expectation"
+    rationale: "Slow updates frustrate users"
+    priority: "P2-Medium"
+    category: "Performance"
+    verification_method: "Latency measurement + user feedback"
+    acceptance_criteria:
+      - "Line update < 2 seconds"
+      - "Perceptible progress indicator if slower"
+    traces_to:
+      design: ["docs/architecture.md#performance"]
+      tradeoffs: ["docs/tradeoffs.md#update-speed"]
+
+  NFR-REL-001:
+    title: "Reliability"
+    description: "Device shall operate reliably for daily use"
+    source: "Implied by product purpose"
+    rationale: "Accessibility device - reliability critical for user independence"
+    priority: "P1-High"
+    category: "Reliability"
+    verification_method: "MTBF testing"
+    acceptance_criteria:
+      - "MTBF > 10,000 hours"
+      - "Graceful degradation (partial failures tolerable)"
+    traces_to:
+      design: ["docs/architecture.md#fault-tolerance"]
+      solution: ["docs/solution.md#risk-mitigation"]
+
+  NFR-STD-001:
+    title: "Standards Compliance"
+    description: "Device shall comply with relevant accessibility and safety standards"
+    source: "PDF p.10 scope item 1"
+    rationale: "Legal and market requirements"
+    priority: "P1-High"
+    category: "Compliance"
+    verification_method: "Standards audit + certification testing"
+    acceptance_criteria:
+      - "FCC/CE compliance (EMI)"
+      - "Battery safety (UL)"
+      - "Accessibility standards (ADA, ISO 9241)"
+    traces_to:
+      analysis: ["docs/requirements.md#standards"]
+      solution: ["docs/solution.md#compliance-plan"]
+
+# ============================================================================
+# PRIORITY DEFINITIONS
+# ============================================================================
+priorities:
+  P0-Critical:
+    desc: "Must have - product fails without this"
+    risk: "Project failure if not met"
+  P1-High:
+    desc: "Should have - significant value/risk"
+    risk: "Major degradation if not met"
+  P2-Medium:
+    desc: "Nice to have - enhances product"
+    risk: "Minor impact if deferred"
+  P3-Low:
+    desc: "Future enhancement"
+    risk: "No immediate impact"
+
+# ============================================================================
+# TRACEABILITY TEMPLATE (auto-populated by script)
+# ============================================================================
+# Each requirement automatically traces to:
+#   - Source document (PDF page/section)
+#   - Design documents (architecture.md, tradeoffs.md, solution.md)
+#   - Analysis documents (requirements.md)
+#   - Rubric evaluation (phase1-rubric-eval.md)
+#   - Presentation slides (for v2.0.0)
