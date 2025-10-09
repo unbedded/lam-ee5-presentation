@@ -424,6 +424,149 @@ requirements:
     verification_method: "Inspection (mechanical measurements), Test (user validation with sight-impaired testers)"
     traces_to_existing: "PRD-FUNC-001, PRD-FUNC-003"
 
+  # --------------------------------------------------------------------------
+  # POWER / BATTERY LIFE REQUIREMENTS
+  # --------------------------------------------------------------------------
+
+  PRD-POWER-003-ASMP:
+    title: "USB Power Budget (ARCH-B Wired)"
+    parent: "PRD-IFACE-001-ASMP"
+    pdf_says: "Scenario B: USB-C wired interface"
+    our_assumption: "Device is USB 2.0 bus-powered, limited to 500mA @ 5V = 2.5W (USB specification)"
+    rationale: |
+      USB 2.0 specification limits bus-powered devices to 500mA (2.5W max).
+      Need 20% margin (0.5W) for voltage drops, cable losses, and compatibility with older USB ports.
+      Android phone USB OTG also limited to 500mA.
+    requirement: "Average power consumption ≤ 2.0W (80% of USB 2.0 budget, 20% margin)"
+    risk_level: MEDIUM
+    customer_validation_needed: YES
+    impact_if_wrong: "Device won't work on older USB ports or Android phones, may cause voltage brownout"
+    test_plan: "v1.3.0 power budget analysis, v1.4.0 architecture trade-offs"
+    priority: "P0-Critical"
+    category: "Power"
+    acceptance_criteria:
+      - "Average power: ≤2.0W during typical reading (24 dots/sec actuation)"
+      - "Peak power: ≤10W for <100ms (USB can handle brief transients)"
+      - "Inrush current: <500mA on plug-in (no USB enumeration failure)"
+    verification_method: "Analysis (power budget spreadsheet), Test (USB power analyzer during reading simulation)"
+    derived_from: "USB 2.0 specification (500mA max bus-powered)"
+    traces_to: "ARCH-B, actuator selection"
+
+  PRD-POWER-004-ASMP:
+    title: "AA Battery Life (ARCH-C Hybrid)"
+    parent: "PRD-IFACE-001-ASMP"
+    pdf_says: "Scenario C: Hybrid (BLE + USB), battery-powered option"
+    our_assumption: "User wants 8 hours of continuous reading on 4× AA alkaline batteries (typical book reading session)"
+    rationale: |
+      4× AA alkaline: 2500 mAh @ 6V = 15 Wh total energy.
+      Usable capacity: 80% (4 Wh lost to voltage sag at end-of-discharge) = 12 Wh usable.
+      8-hour reading session: 12 Wh ÷ 8 hrs = 1.5W average power budget.
+      Typical use case: Reading 1-2 books in a day (4-8 hours).
+    requirement: "Average power consumption ≤ 1.5W for 8-hour battery life with 4× AA alkaline"
+    risk_level: HIGH
+    customer_validation_needed: YES
+    impact_if_wrong: "Battery life too short (<4 hours), user frustration, need to carry spare batteries or use larger battery pack (8× AA)"
+    test_plan: "v1.3.0 power budget analysis shows piezo (2.16W) EXCEEDS this budget by 46%. Need solenoid+latch alternative or larger battery."
+    priority: "P1-High"
+    category: "Power"
+    acceptance_criteria:
+      - "Average power: ≤1.5W during typical reading (24 dots/sec actuation, 50% active/25% page/25% idle)"
+      - "Battery life: ≥8 hours continuous reading (4× AA alkaline, 2500 mAh)"
+      - "Low-battery warning: Alert user at 20% capacity (1.6 hours remaining)"
+    verification_method: "Analysis (power budget), Test (battery discharge test with continuous reading simulation)"
+    derived_from: "AA battery capacity (2500 mAh @ 6V), typical reading session duration"
+    traces_to: "ARCH-C, actuator selection (solenoid+latch required)"
+
+  PRD-POWER-005-ASMP:
+    title: "Li-ion Battery Life (ARCH-A Wireless)"
+    parent: "PRD-IFACE-001-ASMP"
+    pdf_says: "Scenario A: BLE-only wireless, rechargeable battery"
+    our_assumption: "User wants 2 hours of reading on single charge (commute, short sessions between recharges)"
+    rationale: |
+      18650 Li-ion cell: 2500 mAh @ 3.7V = 9.25 Wh total energy.
+      Usable capacity: 80% (safety margin, cutoff at 3.0V min) = 7.4 Wh usable.
+      2-hour reading session: 7.4 Wh ÷ 2 hrs = 3.7W average power budget.
+      Rechargeable expectation: User charges overnight, expects 2-4 hours per charge (commute, short sessions).
+    requirement: "Average power consumption ≤ 3.7W for 2-hour battery life with 18650 Li-ion (2500 mAh @ 3.7V)"
+    risk_level: LOW
+    customer_validation_needed: YES
+    impact_if_wrong: "Battery life <1 hour unacceptable, but risk LOW because piezo (2.16W) fits comfortably within 3.7W budget (58% utilization)"
+    test_plan: "v1.3.0 power budget analysis shows piezo fits with 1.54W margin (42% headroom)"
+    priority: "P1-High"
+    category: "Power"
+    acceptance_criteria:
+      - "Average power: ≤3.7W during typical reading"
+      - "Battery life: ≥2 hours continuous reading (18650 Li-ion 2500 mAh)"
+      - "Charging time: ≤3 hours (USB-C input, 1.5A charge rate)"
+      - "Battery gauge: Display SOC % to user"
+    verification_method: "Analysis (power budget), Test (battery discharge test, charge cycle validation)"
+    derived_from: "18650 Li-ion capacity (2500 mAh @ 3.7V), typical commute duration"
+    traces_to: "ARCH-A, charging circuit design"
+
+  # --------------------------------------------------------------------------
+  # USAGE PROFILE / READING SPEED REQUIREMENTS
+  # --------------------------------------------------------------------------
+
+  PRD-FUNC-005-ASMP:
+    title: "Reading Speed and Actuation Rate"
+    parent: "PRD-FUNC-002-ASMP"
+    pdf_says: "Refresh speed: rapid enough for smooth reading"
+    our_assumption: "Average braille reader reads at 125 words/min (750 characters/min), requiring 38 dots/sec average actuation rate during continuous scrolling"
+    rationale: |
+      Literature on braille reading speed (skilled adult readers):
+      - Average: 125 words/min
+      - Range: 90-170 words/min (varies by experience)
+      - Average English word: 5 characters + 1 space = 6 characters
+      - 125 words/min × 6 chars/word = 750 chars/min = 12.5 chars/sec
+      - Scrolling mode: 50% of dots change per scroll (partial overlap, 16 cells stay, 16 cells update)
+      - 32 cells display, user reads in 2.5 seconds, scrolls next line
+      - 192 dots × 50% overlap = 96 dots change every 2.5 sec = 38 dots/sec
+    requirement: "System must support continuous scrolling at 125 words/min (38 dots/sec actuation rate) for minimum 4 hours"
+    risk_level: LOW
+    customer_validation_needed: YES
+    impact_if_wrong: "If reading speed assumption wrong (e.g., 50 words/min slow reader), power consumption could be lower (benefit). If 200 words/min speed reader, may need higher actuation rate."
+    test_plan: "v1.3.0 power budget uses 38 dots/sec for active reading, 6.4 dots/sec for page turns, 0 dots/sec for idle (weighted avg = 24 dots/sec)"
+    priority: "P2-Medium"
+    category: "Functional"
+    acceptance_criteria:
+      - "Reading speed: 125 words/min (750 chars/min) typical user"
+      - "Scrolling rate: 1 line every 2.5 seconds (38 dots/sec actuation)"
+      - "Page turn: Full 32-cell refresh every 25-30 seconds (6.4 dots/sec average)"
+    verification_method: "Test (user study with braille readers, measure actual reading speed and scrolling behavior)"
+    derived_from: "Braille reading speed literature, typical English word length"
+    traces_to: "Power budget, actuator selection, firmware refresh algorithms"
+
+  PRD-FUNC-006-ASMP:
+    title: "Typical Usage Profile (Duty Cycle)"
+    parent: "PRD-FUNC-005-ASMP"
+    pdf_says: "N/A (engineering assumption for power budget)"
+    our_assumption: "Typical 8-hour reading session: 50% active reading (scrolling), 25% page turns (pauses), 25% idle (breaks)"
+    rationale: |
+      Realistic reading behavior includes:
+      - Active reading: Continuous scrolling, high actuation rate (38 dots/sec)
+      - Page turns: User pauses to absorb content, then turns page (6.4 dots/sec)
+      - Idle: User takes breaks, thinks, device remains on but static (0 dots/sec)
+
+      Conservative estimate: 50% active / 25% page / 25% idle
+      → Weighted average: (50% × 38) + (25% × 6.4) + (25% × 0) = 24 dots/sec average
+
+      This reduces power consumption vs worst-case continuous scrolling (38 dots/sec).
+    requirement: "Power budget calculated based on weighted average: 24 dots/sec (50% active @ 38 dots/sec, 25% page @ 6.4 dots/sec, 25% idle @ 0 dots/sec)"
+    risk_level: LOW
+    customer_validation_needed: YES
+    impact_if_wrong: "If users scroll more continuously (75% active), power consumption increases 30%. If more idle time (50% idle), battery life improves significantly."
+    test_plan: "v1.3.0 power budget uses 24 dots/sec weighted average. v1.4.0 sensitivity analysis on duty cycle (best/worst case)."
+    priority: "P2-Medium"
+    category: "Functional"
+    acceptance_criteria:
+      - "Active reading: 50% of time (continuous scrolling)"
+      - "Page turns: 25% of time (full refresh every 25-30 sec)"
+      - "Idle: 25% of time (display static, no actuation)"
+      - "Weighted average: 24 dots/sec actuation rate for power budget"
+    verification_method: "Test (user study, log actual usage patterns over 8-hour reading sessions)"
+    derived_from: "Typical reading behavior (pauses for comprehension, breaks)"
+    traces_to: "Power budget (PRD-POWER-003/004/005-ASMP), battery life estimates"
+
 # ============================================================================
 # PRIORITY DEFINITIONS
 # ============================================================================
