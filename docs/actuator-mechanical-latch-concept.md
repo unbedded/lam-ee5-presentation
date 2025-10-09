@@ -6,6 +6,34 @@
 
 ---
 
+## Executive Summary
+
+**Key Finding:** Solenoid + latch reduces actuator cost by 54% ($131 vs $288 piezo), but **requires 4mm COTS solenoids** which violate standard 2.3mm size constraint.
+
+**Size Exception Required:**
+- Standard braille: 2.5mm cell pitch → 2.3mm actuator max (PRD-FUNC-003)
+- COTS solenoids: 4mm diameter (Takaha BS-0420N-01, smallest available)
+- **Resolution:** Relax to 3.5mm cell pitch (PRD-FUNC-003-ARCH-C-EXCEPT)
+  - Device grows: 200mm → 280mm length (40% longer)
+  - Still ADA compliant: 3.5mm within 2.3-3.8mm spec
+  - **This is ARCH-D architecture**
+
+**Trade-off:**
+- ✅ COTS compliant (2-week lead time vs 8-12 weeks custom piezo)
+- ✅ 54% actuator cost savings ($131 vs $288)
+- ✅ Zero hold power (latch holds position, 6.8% duty cycle)
+- ❌ Large device (280mm vs 200mm, 40% longer)
+- ❌ Slow refresh (5.2 sec vs 1.5 sec piezo, due to 2-channel sequential)
+- ❌ Latch mechanism unproven (HIGH technical risk, needs prototype Week 3-4)
+
+**Answer to "Can we get custom 2.8mm solenoid?"**
+- NO assumption of custom solenoid
+- Uses standard COTS 4mm solenoid (Takaha BS-0420N-01, Digikey stock)
+- Size exception (3.5mm pitch) accommodates 4mm actuator
+- **Custom solenoid would defeat COTS mandate** (PRD-SCHED-002-ASMP: ≤4 week lead time)
+
+---
+
 ## Problem Statement (Current)
 
 **Solenoid actuators** are 47-67% cheaper than piezo ($96-154 vs $288), but have **fatal flaw**:
@@ -22,8 +50,18 @@
 
 ### Concept Description
 
+**IMPORTANT SIZE CONSTRAINT:**
+- **Standard braille spacing:** 2.5mm dot pitch → actuator ≤2.3mm diameter (PRD-FUNC-003)
+- **COTS solenoids:** Smallest available = 4mm diameter (Takaha BS-0420N-01)
+- **Implication:** This concept **requires size exception** (PRD-FUNC-003-ARCH-C-EXCEPT)
+  - Relax cell pitch: 2.5mm → 3.5mm (within ADA 2.3-3.8mm spec)
+  - Device length: 200mm → 280mm (32 cells × 8.75mm = 280mm, 40% longer)
+  - **Trade-off:** Larger device for lower cost + COTS compliance
+
 **Mechanical System:**
-1. **Actuators:** Standard cheap solenoids (4mm, $0.50 each) move dots up/down
+1. **Actuators:** COTS solenoids (4mm diameter, $0.50 each) move dots up/down
+   - Part: Takaha BS-0420N-01 (4mm dia, 1mm stroke, 0.5N force, 2-week lead time)
+   - **NOT custom** - standard COTS product (meets PRD-SCHED-002-ASMP ≤4 week lead time)
 2. **Global latch plate:** Sliding plate with 192 detents (holes/notches) that locks ALL dots in position
 3. **Latch actuator:** Single solenoid/motor moves plate to engage/disengage detents
 4. **Overdrive mode:** Drive solenoids at 2-3× rated current (short pulse, low duty cycle)
