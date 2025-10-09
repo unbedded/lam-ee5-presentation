@@ -123,6 +123,53 @@ Each requirement MUST include:
 
 ---
 
+## Requirements Sources
+
+Requirements come from multiple sources:
+
+### 1. Explicit Requirements (PDF)
+- Directly stated specifications
+- Example: "32 characters × 6 dots = 192 control signals"
+- **Source tag**: `"PDF p.9 'description...'"`
+
+### 2. Derived Requirements
+- Calculated/inferred from explicit requirements
+- Example: 192 GPIO signals derived from 32 chars × 6 dots
+- **Source tag**: `"Derived from [PARENT-REQ-ID]"`
+- **Must include**: `calculation:` field showing math
+
+### 3. Competitive Analysis Requirements
+- Features/specs discovered from existing products
+- Example: UP/DOWN navigation buttons (standard on BrailleMe, Orbit Reader)
+- Example: Auto-sleep power management (BrailleMe feature)
+- Example: Weight/size benchmarks (BrailleMe: 1.3 lbs, 20-cell)
+- **Source tag**: `"Competitive analysis (BrailleMe, Orbit Reader)"`
+- **Must include**: `competitor_reference:` field with product details
+
+**Why competitive analysis matters:**
+- Validates assumptions (what does "low-cost" mean? Look at market pricing: $449-$1795)
+- Identifies industry-standard UX patterns (navigation, charging, interfaces)
+- Establishes performance benchmarks (weight, battery life, features)
+- Demonstrates market awareness to LAM interviewers
+
+**Example competitive analysis requirement:**
+```yaml
+USR-UX-002:
+  title: "Page Navigation Controls"
+  description: "Device shall provide UP/DOWN buttons for forward/backward line navigation"
+  source: "Competitive analysis (BrailleMe, Orbit Reader standard feature)"
+  rationale: "Industry standard - all competitor products include navigation controls"
+  priority: "P0-Critical"
+  competitor_reference: "BrailleMe ($515.50, Perkins keyboard + nav), Orbit Reader (nav buttons)"
+```
+
+### 4. Assumption-Based Requirements
+- Requirements created when PDF is vague
+- Example: "Low-cost" → <$50 BOM (assumed)
+- See [Handling Assumptions](#handling-assumptions-in-requirements) section below
+
+---
+
 ## Writing Good Requirements
 
 ### SMART Criteria
@@ -262,11 +309,147 @@ Requirements MUST align with PDF p.10 scope:
 
 ---
 
+## Handling Assumptions in Requirements
+
+### When Requirements Are Vague
+
+**Problem:** PDF requirements often lack specificity:
+- "low-cost" (no target given)
+- "portable" (no dimensions given)
+- "high-volume" (no quantity given)
+
+**Solution:** Document assumptions as requirements with unique IDs and risk levels.
+
+### Assumptions Register
+
+**Location:** `docs/assumptions-register.md` (human-readable) + `source/requirements.yaml` metadata.assumptions (machine-readable)
+
+**Convention:** `ASMP-[CATEGORY]-[NUMBER]`
+
+**Example:**
+```yaml
+metadata:
+  assumptions:
+    ASMP-COST-001:
+      description: "Low-cost means <$50 BOM at 1000-unit volume"
+      rationale: "Competitor braille displays retail $80-200. Assuming 40% BOM ratio → $32-80 BOM."
+      risk_level: CRITICAL
+      impact_if_wrong: "If target is $30, eliminates premium architectures. If $100, enables more options."
+      tested_in: "v1.4.0 sensitivity analysis"
+```
+
+### Creating Assumption-Based Requirements
+
+When PDF requirement is vague, create TWO artifacts:
+
+1. **Assumption** (in metadata.assumptions section):
+   - Unique ID (ASMP-XXX-NNN)
+   - Description of what you're assuming
+   - Rationale (why this assumption is reasonable)
+   - Risk level (CRITICAL, HIGH, MEDIUM, LOW)
+   - Impact if wrong
+   - Where tested (usually v1.4.0 sensitivity analysis)
+
+2. **Requirement** (in requirements section):
+   - Same ID as assumption (ASMP-COST-001)
+   - Concrete testable requirement using assumed value
+   - Add `assumption_risk: [LEVEL]` field
+   - Add `impact_if_wrong:` field
+   - Add `tested_in: "v1.4.0 sensitivity analysis"` field
+
+### Assumption Risk Levels
+
+| Risk Level | Definition | Impact If Wrong | Testing Required |
+|------------|------------|-----------------|------------------|
+| **CRITICAL** | Wrong assumption eliminates/enables entire architectures | Complete redesign needed | MUST test in v1.4.0 sensitivity |
+| **HIGH** | Wrong assumption significantly changes design priorities | Major design changes | MUST test in v1.4.0 sensitivity |
+| **MEDIUM** | Wrong assumption requires design adjustments | Moderate changes possible | SHOULD test in v1.4.0 |
+| **LOW** | Wrong assumption has minimal impact | Minor tweaks only | Optional testing |
+
+### Examples
+
+**CRITICAL Risk:**
+- ASMP-COST-001: "Low-cost = <$50 BOM" (vs $30 or $100 changes everything)
+- ASMP-COMP-001: "COTS actuators only" (vs custom fabrication fundamentally different)
+
+**HIGH Risk:**
+- ASMP-MKT-001: "China/India emerging market" (vs US/EU changes priorities)
+- ASMP-VOL-001: "High-volume = >10K/year" (vs 1K or 100K changes DFM)
+
+**MEDIUM Risk:**
+- ASMP-SIZE-001: "Portable = ≤200g, ≤20×10×3cm" (reasonable variation OK)
+- ASMP-PWR-001: "Battery powered" (vs USB-C tethered is trade-off)
+
+**LOW Risk:**
+- ASMP-STD-001: "Grade 1 braille (6-dot)" (industry standard)
+- ASMP-ENV-001: "Indoor, 0-40°C" (typical consumer environment)
+
+### Integration with v1.4.0 Evaluation
+
+**Sensitivity Analysis Tests Assumptions:**
+
+1. **Stakeholder Value Sensitivity** (tests priority assumptions):
+   - "What if they value cost > time-to-market?" (tests ASMP-MKT-001)
+   - "What if they prioritize risk minimization?" (tests design approach)
+
+2. **External Constraint Sensitivity** (tests quantitative assumptions):
+   - "What if cost target is $30? $100?" (tests ASMP-COST-001)
+   - "What if volume is 1K/year? 100K/year?" (tests ASMP-VOL-001)
+
+**Output:** Robustness matrix showing which architecture wins under different assumption scenarios.
+
+### Workflow
+
+1. **v1.2.0: Define Requirements**
+   - Encounter vague PDF requirement
+   - Create assumption in metadata.assumptions
+   - Create corresponding requirement with assumption_risk tag
+   - Document in docs/assumptions-register.md
+
+2. **v1.3.0: Design Architectures**
+   - Use assumed values as constraints
+   - Note which assumptions drive design choices
+
+3. **v1.4.0: Sensitivity Analysis**
+   - Test CRITICAL and HIGH risk assumptions
+   - Show how recommendation changes if assumptions are wrong
+   - Demonstrate engineering judgment and risk awareness
+
+4. **v2.0.0: Presentation**
+   - Slide: "Key Assumptions" (3-5 critical ones)
+   - Talking point: "PDF was intentionally vague. Here's what I assumed and why."
+   - Q&A ready: If challenged, show sensitivity analysis
+
+### Red Flags
+
+❌ **Don't do this:**
+- Invent requirements without documenting assumptions
+- Ignore vague specifications
+- Assume one value without testing sensitivity
+- Hide assumptions in notes/comments
+
+✅ **Do this:**
+- Explicitly document all assumptions with unique IDs
+- Tag risk levels honestly
+- Test CRITICAL/HIGH assumptions in v1.4.0
+- Present assumptions transparently in interview
+
+### Verification
+
+Use `/req-audit` to verify:
+- All ASMP-XXX-NNN IDs are unique
+- All assumption-based requirements have risk level
+- CRITICAL/HIGH assumptions are tested in v1.4.0
+- Assumptions register is up to date
+
+---
+
 ## References
 
 - **Source Document:** `docs/reference/Interview Overview and Concept Evaluation - EE Presentation.pdf`
 - **Problem Statement:** `docs/problem-statement.md`
 - **YAML Source:** `source/requirements.yaml`
+- **Assumptions Register:** `docs/assumptions-register.md`
 - **Naming Inspiration:** `/home/preact/sw/job/rapyuta/movie_db_qa/docs/requirements.md`
 
 ---

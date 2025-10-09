@@ -84,36 +84,57 @@ This document establishes measurable quality metrics for each phase to ensure in
 
 **Deliverable:** `docs/tradeoffs.md`
 
+**Guide:** See [tradeoff-analysis-guide.md](tradeoff-analysis-guide.md) for complete methodology
+
 **Quality Metrics:**
 
 | Metric | Target | Measurement Method | Rubric Impact |
 |--------|--------|--------------------|---------------|
-| **Quantitative Data** | All architectures | Numbers, not opinions | Category 3: 12/12 pts |
-| Cost comparison | BOM estimates | $ per architecture (qty 1/100/1000) | 4 pts |
-| Power budget | Calculations | mW per architecture + battery life | 4 pts |
+| **Quantitative Analysis** | All architectures | Real numbers, not opinions | Category 3: 10/10 pts |
+| Cost comparison | BOM estimates | $ per architecture (qty 1/100/1000) | 2 pts |
+| Power budget | Calculations | mW per architecture + battery life | 2 pts |
 | Size/complexity | Metrics | Component count, PCB area estimate | 2 pts |
 | Timeline feasibility | Gantt chart | 2-month critical path shown | 2 pts |
-| **Trade-off Analysis** | Clear criteria | Decision framework shown | Category 3: 10/10 pts |
-| Decision criteria | Listed | Cost, power, timeline, risk weighted | 3 pts |
-| Pros/cons | Quantified | Data-driven, not subjective | 4 pts |
-| Sensitivity analysis | Shown | What if cost 2x? Timeline 1 month? | 3 pts |
-| **Risk Assessment** | All identified | Technical + timeline | Category 3: 5/5 pts |
-| Technical risks | ≥3 per arch | Actuator reliability, EMI, etc. | 2 pts |
-| Timeline risks | ≥2 overall | Parts lead time, integration time | 2 pts |
+| Comparison matrix | Complete | All criteria in one table | 2 pts |
+| **Evaluation Framework** | Defined | What we value + weights | Category 3: 8/8 pts |
+| Evaluation criteria | 7-10 criteria | Time, cost, DFM, risk, UX, etc. | 2 pts |
+| Weights assigned | Sum to 100% | Justified based on context | 2 pts |
+| Assumptions documented | All listed | Market, customer, budget, priorities | 2 pts |
+| Advantages & disadvantages | All architectures | Honest assessment (PDF requirement!) | 2 pts |
+| **Sensitivity Analysis** | Both types shown | ⚠️ CRITICAL - 5 pts! | Category 3: 5/5 pts |
+| Stakeholder value sensitivity | ≥3 scenarios | What if they value cost>time? Risk>speed? | 2 pts |
+| External constraint sensitivity | ≥3 scenarios | What if cost 2x? Timeline 1mo? Part unavailable? | 2 pts |
+| Robustness matrix | Complete | Which architecture wins across scenarios? | 1 pt |
+| **Risk Assessment** | All identified | Technical + timeline + supply chain | Category 3: 4/4 pts |
+| Technical risks | ≥3 per arch | Actuator reliability, EMI, etc. | 1 pt |
+| Timeline risks | ≥2 overall | Parts lead time, integration time | 1 pt |
+| Supply chain risks | Addressed | Component availability, alternates | 1 pt |
 | Mitigation strategies | All risks | Contingency plans shown | 1 pt |
+| **Other Considerations** | Addressed | Beyond quantitative analysis | Category 3: (part of evaluation) |
+| Supply chain | Discussed | Lead times, multi-source, geography | - |
+| Team expertise | Discussed | Familiar vs new tech, training needed | - |
+| Tooling/equipment | Discussed | Existing vs new capex required | - |
+| Risk tolerance | Discussed | Proven tech vs cutting edge trade-off | - |
 | **Selection Justification** | Data-driven | Clear winner from analysis | Category 3: 3/3 pts |
 | Recommendation | 1 architecture | Final choice made | 1 pt |
-| Justification | Quantitative | Based on data, not gut feel | 2 pts |
+| Justification | Quantitative | Based on evaluation data, not gut feel | 2 pts |
 
 **Success Criteria:**
+- ✓ Evaluation framework defined (criteria + weights + assumptions)
 - ✓ Comparison matrix with real numbers (cost, power, size, timeline)
-- ✓ BOM cost estimates (even if rough) for each architecture
-- ✓ Power budget calculations with battery life
-- ✓ 2-month Gantt chart with critical path
-- ✓ Risk matrix (likelihood × impact)
-- ✓ Final recommendation justified by data
+- ✓ Advantages & disadvantages documented for EACH architecture
+- ✓ Sensitivity analysis BOTH types (stakeholder values + external constraints)
+- ✓ Robustness matrix (which architecture wins in different scenarios)
+- ✓ "Other considerations" addressed (supply chain, expertise, tooling, risk tolerance)
+- ✓ Final recommendation justified by evaluation data
 
 **Gate Decision:** Can proceed to v1.5.0 if **Category 3 score ≥ 24/30** (80% threshold)
+
+**Red Flags:**
+- Missing sensitivity analysis → Automatic -5 pts (fails gate!)
+- Missing advantages/disadvantages → PDF requirement not met
+- No evaluation framework → Can't justify recommendation
+- Equal weights on all criteria → Shows poor judgment
 
 ---
 

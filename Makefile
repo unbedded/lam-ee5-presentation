@@ -66,6 +66,61 @@ SOURCE_PDF_FILES = $(patsubst source/%.md,artifacts/%.pdf,$(SOURCE_MD_FILES))
 PDF_FILES = $(ARTIFACTS_PDF_FILES) $(SOURCE_PDF_FILES)
 
 # ============================================================================
+# REQ TRANSFORMS - Generate derived documents from requirements.yaml
+# ============================================================================
+
+# Req source file (SSOT)
+REQ_SOURCE = source/requirements.yaml
+
+# Generated req artifacts
+REQ_MD = artifacts/requirements.md
+REQ_TRACE = artifacts/traceability-matrix.md
+REQ_AUDIT = artifacts/requirements-audit.md
+REQ_RISK = artifacts/assumption-risk-report.md
+
+# Generate human-readable req report from YAML
+req-md: $(REQ_SOURCE)
+	@echo "Generating requirements.md from requirements.yaml..."
+	@echo "  Running /req-yaml-to-md slash command..."
+	@echo "/req-yaml-to-md" | claude-code || echo "  (Manually run '/req-yaml-to-md' in Claude Code)"
+	@echo "Generated: $(REQ_MD)"
+
+# Generate traceability matrix
+req-trace: $(REQ_SOURCE)
+	@echo "Generating traceability matrix from requirements.yaml..."
+	@echo "  Running /req-trace slash command..."
+	@echo "/req-trace" | claude-code || echo "  (Manually run '/req-trace' in Claude Code)"
+	@echo "Generated: $(REQ_TRACE)"
+
+# Run req compliance audit
+req-audit: $(REQ_SOURCE)
+	@echo "Running req compliance audit..."
+	@echo "  Running /req-audit slash command..."
+	@echo "/req-audit" | claude-code || echo "  (Manually run '/req-audit' in Claude Code)"
+	@echo "Generated: $(REQ_AUDIT)"
+
+# Generate risk-ranked assumption report
+req-risk: $(REQ_SOURCE)
+	@echo "Generating assumption risk report..."
+	@echo "  Running /req-risk-report slash command..."
+	@echo "/req-risk-report" | claude-code || echo "  (Manually run '/req-risk-report' in Claude Code)"
+	@echo "Generated: $(REQ_RISK)"
+
+# Generate all req artifacts
+req-all: req-md req-trace req-audit req-risk
+	@echo "All req artifacts generated"
+	@echo "  - $(REQ_MD)"
+	@echo "  - $(REQ_TRACE)"
+	@echo "  - $(REQ_AUDIT)"
+	@echo "  - $(REQ_RISK)"
+
+# Clean generated req artifacts
+req-clean:
+	@echo "Cleaning generated req artifacts..."
+	rm -f $(REQ_MD) $(REQ_TRACE) $(REQ_AUDIT) $(REQ_RISK)
+	@echo "Req artifacts cleaned"
+
+# ============================================================================
 # BUILD RULES - Pattern-based rules for auto-discovery
 # ============================================================================
 
@@ -221,5 +276,14 @@ help:
 	@echo "  - xelatex (texlive-xetex package)"
 	@echo "  - $(STYLE) file"
 	@echo "  - $(FONT) font"
+	@echo ""
+	@echo "Req Transform Targets:"
+	@echo "  make req-md              - Generate artifacts/requirements.md from YAML"
+	@echo "  make req-trace           - Generate traceability matrix"
+	@echo "  make req-audit           - Run compliance audit"
+	@echo "  make req-risk            - Generate assumption risk report"
+	@echo "  make req-all             - Generate all req artifacts"
+	@echo "  make req-clean           - Remove generated req artifacts"
 
-.PHONY: all clean rebuild presentation analysis rubrics print print-to email-pres list check help
+.PHONY: all clean rebuild presentation analysis rubrics print print-to email-pres list check help \
+        req-md req-trace req-audit req-risk req-all req-clean

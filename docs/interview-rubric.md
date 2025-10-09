@@ -84,35 +84,44 @@ This rubric defines the evaluation criteria for the Lam Research EE Concept Eval
 
 ### 3. Solution Evaluation & Trade-off Analysis (30 points)
 
-**Source:** PDF p.10 Scope Item 3 - "Evaluate the proposed solutions by discussing their advantages and disadvantages, as well as any other considerations that influenced your final selection."
+**Source:** PDF p.10 Scope Item 3 - "Evaluate the proposed solutions by discussing their advantages and disadvantages, as well as **any other considerations** that influenced your final selection."
+
+**⚠️ CRITICAL:** "Any other considerations" = sensitivity analysis, supply chain, expertise, tooling, market timing, risk tolerance
 
 #### Performance Levels
 
 | Level | Score | Criteria |
 |-------|-------|----------|
-| **Excellent** | 27-30 | • Quantitative comparison (cost, power, size, complexity, timeline)<br>• Rigorous trade-off analysis with clear decision criteria<br>• Advantages and disadvantages thoroughly analyzed<br>• Risk assessment included<br>• Final selection well-justified with data<br>• Considerations beyond obvious (supply chain, expertise, tooling) |
-| **Good** | 21-26 | • Quantitative data provided<br>• Good trade-off analysis<br>• Pros/cons covered<br>• Selection justified<br>• Some risk considerations |
-| **Adequate** | 15-20 | • Basic comparison present<br>• Some trade-offs discussed<br>• Qualitative analysis mostly<br>• Weak justification |
+| **Excellent** | 27-30 | • Quantitative comparison (cost, power, size, complexity, timeline)<br>• Rigorous trade-off analysis with clear decision criteria<br>• Advantages and disadvantages thoroughly analyzed<br>• **Sensitivity analysis** ("what if" scenarios)<br>• Risk assessment included<br>• Final selection well-justified with data<br>• Considerations beyond obvious (supply chain, expertise, tooling) |
+| **Good** | 21-26 | • Quantitative data provided<br>• Good trade-off analysis<br>• Pros/cons covered<br>• Some sensitivity analysis<br>• Selection justified<br>• Some risk considerations |
+| **Adequate** | 15-20 | • Basic comparison present<br>• Some trade-offs discussed<br>• Qualitative analysis mostly<br>• Weak justification<br>• No sensitivity analysis |
 | **Poor** | 0-14 | • Minimal comparison<br>• No trade-off analysis<br>• Selection unjustified |
 
 #### Detailed Scoring
 
-**Quantitative Analysis (12 points)**
-- [ ] Cost comparison (BOM estimates) (3 pts)
-- [ ] Power budget calculations (3 pts)
+**Quantitative Analysis (10 points)**
+- [ ] Cost comparison (BOM estimates) (2 pts)
+- [ ] Power budget calculations (2 pts)
 - [ ] Size/complexity metrics (2 pts)
 - [ ] Timeline feasibility analysis (2 pts)
 - [ ] Comparison matrix/table (2 pts)
 
-**Trade-off Analysis (10 points)**
-- [ ] Clear decision criteria established (3 pts)
+**Trade-off Analysis (8 points)**
+- [ ] Clear decision criteria established (2 pts)
 - [ ] Advantages thoroughly analyzed (3 pts)
 - [ ] Disadvantages honestly assessed (3 pts)
-- [ ] Weighting/prioritization shown (1 pt)
 
-**Risk Assessment (5 points)**
-- [ ] Technical risks identified (2 pts)
-- [ ] Timeline risks assessed (2 pts)
+**Sensitivity Analysis (5 points) ← NEW**
+- [ ] "What if cost doubles?" scenario (1 pt)
+- [ ] "What if timeline compresses?" scenario (1 pt)
+- [ ] "What if key component unavailable?" scenario (1 pt)
+- [ ] "What if volume targets change?" scenario (1 pt)
+- [ ] Robustness comparison across solutions (1 pt)
+
+**Risk Assessment (4 points)**
+- [ ] Technical risks identified (1 pt)
+- [ ] Timeline risks assessed (1 pt)
+- [ ] Supply chain risks considered (1 pt)
 - [ ] Mitigation strategies proposed (1 pt)
 
 **Final Selection Justification (3 points)**

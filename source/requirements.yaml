@@ -1,379 +1,428 @@
-# Braille Display Device - Requirements Database
+# Braille Display Device - Requirements Database (REFACTORED)
 # Project: Lam Research EE Concept Evaluation
-# Purpose: Machine-readable requirements with full traceability
-# Auto-generates: requirements.md (human report) + requirements-trace.yml (audit matrix)
+# Purpose: SINGLE SOURCE OF TRUTH for all requirements and assumptions
+# Auto-generates: requirements.md (human report) + traceability-matrix.md
+#
+# HIERARCHICAL NAMING CONVENTION:
+#   PRD-XXXX-NNN         = Product Requirement (verbatim from PDF)
+#   PRD-XXXX-NNN-ASMP    = Assumption (our interpretation to make PRD actionable)
+#   NO DEEPER NESTING    = Design decisions go in v1.3.0 architecture docs, NOT here
+#
+# Categories:
+#   PRD-SCHED = Schedule/Timeline requirements
+#   PRD-COST  = Cost requirements
+#   PRD-VOL   = Volume/manufacturing requirements
+#   PRD-SIZE  = Size/portability requirements
+#   PRD-USER  = User/accessibility requirements
+#   PRD-FUNC  = Functional requirements
+#   PRD-IFACE = Interface/connectivity requirements
 
 metadata:
   project: "Lam Research - Braille Display EE Concept Evaluation"
-  version: "1.0.0"
-  date: "2025-10-05"
+  version: "2.0.0"
+  date: "2025-10-08"
   author: "Spencer Barrett"
-  source_doc: "docs/reference/Interview Overview and Concept Evaluation - EE Presentation.pdf"
+  source_doc: "reference/interview/Interview Overview and Concept Evaluation - EE Presentation.pdf"
+  source_email: "reference/interview/interview-confirmation-email.md"
 
-  # Scope & Assumptions
   scope:
     in_scope:
       - "Technical requirements identification (system, electrical, manufacturing, user)"
       - "Alternative solution architectures (actuator, control, communication)"
       - "Quantitative trade-off analysis (cost, power, size, timeline)"
-      - "Path to production (2-month timeline to production-ready design)"
+      - "Path to production (2-month timeline to pilot production)"
       - "Design for manufacturability (DFM) - high volume SMT assembly"
-      - "Standards awareness (representative examples: FCC/CE, UL, ADA/ISO)"
-      - "Prototype-to-production feasibility"
+      - "Standards awareness (FCC/CE, UL, ADA/ISO)"
+      - "Prototype-to-pilot feasibility (10-100 units)"
 
     out_of_scope:
-      - "Regulatory compliance certification (full FCC/CE/UL testing)"
-      - "Market-specific localization (country variants, language packs)"
-      - "Service infrastructure (warranty programs, repair network, spare parts logistics)"
-      - "End-of-life management (recycling programs, disposal procedures)"
-      - "Full product lifecycle costing (beyond initial BOM + NRE)"
-      - "Software application development (cell phone app - assumes existing solutions)"
-      - "Clinical trials / accessibility user studies (assumed separate effort)"
-      - "Intellectual property strategy (patent search, freedom-to-operate)"
-      - "Supply chain contracts (vendor selection, volume pricing negotiations)"
-      - "Quality management system (ISO 9001, manufacturing process controls)"
-
-    assumptions:
-      - "Target market: US/EU primary (FCC + CE compliance paths identified)"
-      - "Cell phone interface: Standard protocols (BLE 5.0+ or USB-C) - no proprietary APIs"
-      - "Braille standard: Grade 1 (6-dot) - not Grade 2 contracted braille"
-      - "User demographics: Adult users with visual impairment, basic tech literacy"
-      - "Operating environment: Indoor, room temperature (0-40°C), non-extreme conditions"
-      - "Production volume: >10K units/year (justifies tooling investment)"
-      - "Timeline constraint: 2 months to production-ready design (per PDF p.8)"
-      - "Battery: Rechargeable Li-ion/LiPo with USB-C charging (industry standard)"
-      - "Actuator sourcing: COTS components available (no custom fabrication)"
+      # ⚠️ DEFERRED to post-pilot phases (Month 3+), NOT ignored
+      - "Regulatory compliance certification (FCC/CE/UL testing) → Post-pilot"
+      - "Formal FMEA/DFMEA with RPN scoring → Post-pilot, v1.5.0 does lightweight risk analysis"
+      - "Market-specific localization → Post-pilot"
+      - "Service infrastructure (warranty, RMA, spare parts) → Post-pilot"
+      - "End-of-life management (recycling) → Post-pilot"
+      - "Intellectual property strategy (patents, FTO) → Post-pilot when design frozen"
+      - "Supply chain contracts (vendor negotiations) → Post-pilot"
+      - "Quality management system (ISO 9001) → Post-pilot"
+      - "Field trials at scale (50-100 beta users) → Post-pilot"
+      - "Environmental sealing / IP rating → Post-pilot if market requires"
+      - "Detailed DFX (DFT, DFA, DFS) → Post-pilot, v1.5.0 covers basic DFM"
+      - "Software application development (cell phone app) → Out of scope, use existing screen readers"
 
   rationale: |
-    This is a concept evaluation focused on electrical engineering design and
-    production feasibility within a 2-month timeline. Scope deliberately excludes
-    post-production activities (compliance testing, service, lifecycle) to maintain
-    focus on core design deliverables. Compliance requirements are identified for
-    design consideration, but full certification is a post-production activity.
+    This is a concept evaluation focused on electrical engineering design and production
+    feasibility within a 2-month timeline to PILOT PRODUCTION (10-100 units for design
+    validation), NOT immediate mass production. Pilot validates design, manufacturing
+    tolerances, and failure modes before scaling to high volume (Month 3+).
 
-# Requirement ID Convention: [CATEGORY]-[SUBCATEGORY]-[NUMBER]
-# Categories:
-#   SYS = System Requirements
-#   EE  = Electrical Engineering Requirements
-#   MFG = Manufacturing Requirements
-#   USR = User Requirements
-#   NFR = Non-Functional Requirements
-#   PRD = Production Requirements
+    PDF intentionally left many requirements vague to test engineering judgment.
+    Professional approach: Document assumptions (PRD-XXX-NNN-ASMP), test sensitivity
+    in v1.4.0, present portfolio of design options in v1.3.0.
+
+# ============================================================================
+# GROUND TRUTH REQUIREMENTS (verbatim from PDF)
+# ============================================================================
+# These are directly quoted from PDF. Status = CLEAR (testable) or VAGUE (needs assumption)
 
 requirements:
-  # ============================================================================
-  # SYSTEM REQUIREMENTS (from PDF p.9 - Design Scenario)
-  # ============================================================================
 
-  SYS-FUNC-001:
-    title: "Single Line Braille Display"
-    description: "Device shall display a single line of braille text consisting of 32 characters"
-    source: "PDF p.9 'displays a single line of braille text'"
-    rationale: "Core product function"
+  # --------------------------------------------------------------------------
+  # SCHEDULE / TIMELINE
+  # --------------------------------------------------------------------------
+
+  PRD-SCHED-001:
+    title: "Production Timeline - Two Month Release"
+    source: "PDF p.2 - Context"
+    pdf_verbatim: "The program director aims to release the project into production within two months to meet a customer deadline."
+    status: "VAGUE - 'production' undefined (pilot vs mass?)"
+    why_vague: "Does 'production' mean pilot (100-500 units) or mass production (10k+/month)? Industry context suggests pilot, but not explicit."
+    testable: NO
     priority: "P0-Critical"
-    category: "Functional"
-    verification_method: "Prototype demonstration"
-    acceptance_criteria:
-      - "32 braille characters physically present"
-      - "Characters arranged in readable single line"
-      - "Each character independently controllable"
-    traces_to:
-      design: ["docs/architecture.md#braille-actuator-array"]
-      analysis: ["docs/requirements.md#SYS-FUNC-001"]
-      tradeoffs: ["docs/tradeoffs.md#actuator-technology"]
-      solution: ["docs/solution.md#recommended-architecture"]
-      rubric: ["artifacts/rubric-reports/phase1-rubric-eval.md"]
+    category: "Schedule"
 
-  SYS-FUNC-002:
-    title: "Braille Character Definition"
-    description: "Each braille character shall have 6 dots which can be raised or lowered"
-    source: "PDF p.9 'Each character has 6 dots which are either raised or lowered'"
-    rationale: "Standard braille Grade 1 alphabet (6-dot system)"
+  PRD-SCHED-001-ASMP:
+    parent: "PRD-SCHED-001"
+    title: "Pilot Production Assumption"
+    pdf_says: "release the project into production within two months"
+    our_assumption: "Production within 2 months = PILOT production of 100-500 units for design validation, NOT mass production (10k+/month)"
+    rationale: |
+      Industry best practice: 2-month design cycle → pilot run (100-500 units) → validate design,
+      manufacturing tolerances, failure modes → scale to mass production (Month 3+).
+      Direct-to-mass-production is extremely high-risk (no tolerance validation, no FMEA data).
+    risk_level: MEDIUM
+    customer_validation_needed: YES
+    impact_if_wrong: "If mass production required in 2 months, timeline is infeasible (tooling, certification, supply chain all take 8-12 weeks minimum)"
+    test_plan: "v1.5.0 production timeline (design → pilot → scale), v1.4.0 sensitivity on timeline compression"
     priority: "P0-Critical"
-    category: "Functional"
-    verification_method: "Design review + prototype test"
+    category: "Schedule"
     acceptance_criteria:
-      - "6 dots per character (2x3 grid)"
-      - "Binary state: raised (1) or lowered (0)"
-      - "Tactile differentiation between states"
-    traces_to:
-      design: ["docs/architecture.md#dot-actuation-mechanism"]
-      analysis: ["docs/requirements.md#SYS-FUNC-002"]
+      - "Pilot run: 100-500 units for design validation"
+      - "Parts lead time: <6 weeks (use COTS components, no custom tooling)"
+      - "Assembly method: Hand assembly or semi-automated (pilot scale)"
+      - "Validation: Pilot units test mechanical tolerances, failure modes, user acceptance"
+      - "Post-pilot: Scale to mass production (10k+/month) after validation"
 
-  SYS-FUNC-003:
-    title: "Total Control Signals"
-    description: "System shall provide 192 control signals (32 characters × 6 dots)"
-    source: "PDF p.9 'outputs are control signals to 32 braille characters'"
-    rationale: "Derived requirement from character count and dot count"
-    priority: "P0-Critical"
-    category: "Functional"
-    verification_method: "Design calculation + schematic review"
-    acceptance_criteria:
-      - "192 independent control outputs"
-      - "Signals map correctly to character/dot positions"
-    calculation: "32 characters × 6 dots/character = 192 signals"
-    traces_to:
-      design: ["docs/architecture.md#control-signal-architecture"]
-      tradeoffs: ["docs/tradeoffs.md#io-expansion-comparison"]
+  # --------------------------------------------------------------------------
+  # SIZE / PORTABILITY
+  # --------------------------------------------------------------------------
 
-  SYS-FUNC-004:
-    title: "Cell Phone Text Input"
-    description: "System shall receive text information from cell phone"
-    source: "PDF p.9 'input is text information from the cell phone'"
-    rationale: "Primary data source for braille conversion"
-    priority: "P0-Critical"
-    category: "Functional"
-    verification_method: "Interface test with cell phone"
-    acceptance_criteria:
-      - "Successful pairing/connection with cell phone"
-      - "Text data received without corruption"
-      - "Supports standard text protocols"
-    traces_to:
-      design: ["docs/architecture.md#communication-interface"]
-      tradeoffs: ["docs/tradeoffs.md#bluetooth-vs-usb-vs-wifi"]
-
-  SYS-FUNC-005:
-    title: "Line Update Capability"
-    description: "After reading current line, device shall update to display next line of text"
-    source: "PDF p.9 'After the line of text is read, the device can update the line of braille to read the next line of text'"
-    rationale: "Essential for multi-line text reading"
+  PRD-SIZE-001:
+    title: "Portable Device"
+    source: "PDF p.2 - Objective"
+    pdf_verbatim: "portable, low cost, high volume companion device to a cell phone"
+    status: "VAGUE - no size/weight/portability definition"
+    why_vague: "No dimensions, weight limits, or context (pocket? bag? hand-carry? desktop?)"
+    testable: NO
     priority: "P1-High"
-    category: "Functional"
-    verification_method: "User acceptance test"
-    acceptance_criteria:
-      - "User-triggered update (button/gesture)"
-      - "Smooth transition between lines"
-      - "No data loss during update"
-    traces_to:
-      design: ["docs/architecture.md#user-interface"]
-      analysis: ["docs/requirements.md#SYS-FUNC-005"]
+    category: "Form Factor"
 
-  # ============================================================================
-  # ELECTRICAL ENGINEERING REQUIREMENTS
-  # ============================================================================
+  PRD-SIZE-001-ASMP:
+    parent: "PRD-SIZE-001"
+    title: "Portable Form Factor - Cell Phone Environment Compatible"
+    pdf_says: "portable companion device to a cell phone"
+    our_assumption: "Portable = compatible with environments where cell phone goes (pocket, bag, desk). Target ≤1.3 lbs (590g) weight, fits in bag/purse (~8\"×4\"×1\" max), operates anywhere cell phone operates."
+    rationale: |
+      'Companion device to cell phone' suggests same portability/environment as cell phone:
+      - Pocket/bag portable (not desktop/tethered)
+      - Indoor environments (home, office, school, cafe)
+      - Battery powered (untethered)
+      - Durable for daily transport
 
-  EE-PWR-001:
-    title: "Portable Power Source"
-    description: "Device shall be battery powered for portability"
-    source: "PDF p.9 'portable...companion device'"
-    rationale: "Portability constraint requires battery operation"
+      BrailleMe competitor benchmark: 1.3 lbs (590g), 20-cell, portable design.
+      Our 32-cell device will be slightly larger/heavier, but target ≤1.3 lbs is achievable.
+    risk_level: MEDIUM
+    customer_validation_needed: YES
+    sensitivity_range: "Weight: 0.5-1.5 lbs (230-680g), Size: 6-10\" wide × 3-5\" deep × 0.5-1.5\" tall"
+    impact_if_wrong: "If ultra-light (<0.5 lbs) required, limits battery capacity significantly. If desktop (2+ lbs) acceptable, eases design constraints."
+    test_plan: "v1.3.0 weight budget (actuators + battery + enclosure), v1.4.0 sensitivity on size/weight trade-offs"
     priority: "P1-High"
-    category: "Electrical"
-    subcategory: "Power"
-    verification_method: "Power budget analysis + battery life test"
+    category: "Form Factor"
     acceptance_criteria:
-      - "Rechargeable battery (USB-C charging preferred)"
-      - "Minimum 4-hour continuous operation"
-      - "Low battery indicator"
-    traces_to:
-      design: ["docs/architecture.md#power-supply"]
-      tradeoffs: ["docs/tradeoffs.md#power-budget"]
+      - "Weight: ≤1.3 lbs (590g) target (BrailleMe benchmark)"
+      - "Dimensions: ≤8\" × 4\" × 1\" (fits in bag/purse)"
+      - "Operating environments: Same as cell phone (indoor, 0-40°C, 20-80% RH non-condensing)"
+      - "Durability: Survives daily transport (bag/backpack, 1m drop test)"
+      - "Power: Battery powered (untethered), USB-C charging"
+    competitor_reference: "BrailleMe (1.3 lbs, 20-cell, portable design)"
 
-  EE-PWR-002:
-    title: "Actuator Drive Power"
-    description: "Power supply shall provide sufficient current/voltage for 192 actuators"
-    source: "Derived from SYS-FUNC-003"
-    rationale: "Actuators may require high instantaneous current"
+  # --------------------------------------------------------------------------
+  # INTERFACE / CONNECTIVITY
+  # --------------------------------------------------------------------------
+
+  PRD-IFACE-001:
+    title: "Cell Phone Connectivity - Text Input to Braille Output"
+    source: "PDF p.2 - Function"
+    pdf_verbatim: "device connects to a cell phone - receives text source from phone and displays as appropriate Braille text"
+    status: "VAGUE - protocol and text format unspecified"
+    why_vague: "No interface protocol (BLE? USB? WiFi? wired?), no text encoding (ASCII? Unicode?), no pairing process specified"
+    testable: NO
     priority: "P0-Critical"
-    category: "Electrical"
-    subcategory: "Power"
-    verification_method: "Power analysis + thermal testing"
-    acceptance_criteria:
-      - "Peak current capacity meets worst-case draw"
-      - "Voltage regulation within actuator specs"
-      - "Thermal limits not exceeded"
-    traces_to:
-      design: ["docs/architecture.md#power-distribution"]
-      tradeoffs: ["docs/tradeoffs.md#actuator-power-requirements"]
+    category: "Interface"
 
-  EE-CTRL-001:
-    title: "Microcontroller Selection"
-    description: "Control system shall use appropriate MCU/FPGA for I/O requirements"
-    source: "PDF p.10 scope item 1"
-    rationale: "Need sufficient GPIO/peripherals for 192 outputs"
+  PRD-IFACE-001-ASMP:
+    parent: "PRD-IFACE-001"
+    title: "Multi-Interface Connectivity Strategy"
+    pdf_says: "device connects to a cell phone - receives text source"
+    our_assumption: "Primary interface: BLE (wireless, universal on modern phones). Secondary: USB-C wired (charging + data fallback, also low-cost option for future). Text format: ASCII (English Grade 1 braille), Unicode deferred to v2.0."
+    rationale: |
+      'Portable companion device' suggests wireless (BLE) for mobility, BUT wired (USB-C) is
+      valid low-cost alternative (no battery, tethered = still portable, just less convenient).
+
+      PORTFOLIO APPROACH (v1.3.0 will design multiple architectures):
+      - Architecture A: BLE-only (most portable, requires battery, wireless freedom)
+      - Architecture B: USB-C wired (no battery, tethered to phone, lowest cost $100-150 BOM savings)
+      - Architecture C: BLE + USB-C hybrid (battery for wireless, USB for charging/fallback, best UX)
+
+      Text format: ASCII initially (simpler firmware, covers English Grade 1 braille),
+      Unicode support deferred to v2.0 (adds complexity, requires lookup tables).
+    risk_level: HIGH
+    customer_validation_needed: YES
+    sensitivity_range: "BLE-only, USB-C-only, or BLE+USB hybrid"
+    impact_if_wrong: "BLE-only eliminates low-cost wired option. USB-C-only eliminates wireless UX. Hybrid is most flexible but highest cost."
+    test_plan: "v1.3.0 interface architecture comparison (BLE vs USB-C vs hybrid), v1.4.0 cost/UX trade-offs"
     priority: "P0-Critical"
-    category: "Electrical"
-    subcategory: "Control"
-    verification_method: "Design review"
+    category: "Interface"
     acceptance_criteria:
-      - "Sufficient I/O (direct or expanded)"
-      - "Processing power for braille translation"
-      - "Low power consumption"
-    traces_to:
-      design: ["docs/architecture.md#control-architecture"]
-      tradeoffs: ["docs/tradeoffs.md#mcu-vs-fpga"]
+      - "Protocol options: BLE 5.0+ (wireless) OR USB-C (wired) OR both (hybrid)"
+      - "Text format: ASCII (English, Grade 1 braille), 8-bit encoding"
+      - "Cross-platform: iOS + Android compatibility"
+      - "Pairing/connection: <30 seconds (BLE), plug-and-play (USB-C)"
+      - "Data integrity: Text received without corruption, CRC or checksum"
+    alternative_scenarios:
+      - "Scenario A (BLE-only): Wireless, requires battery, $200-250 BOM"
+      - "Scenario B (USB-C wired): Tethered, no battery, $100-150 BOM (great low-cost option!)"
+      - "Scenario C (Hybrid BLE+USB): Best UX, highest cost $250-300 BOM"
 
-  EE-IO-001:
-    title: "I/O Expansion Strategy"
-    description: "System shall expand available I/O to meet 192 output requirement"
-    source: "Derived from EE-CTRL-001 + SYS-FUNC-003"
-    rationale: "Most MCUs lack 192 GPIO pins"
+  # --------------------------------------------------------------------------
+  # COST
+  # --------------------------------------------------------------------------
+
+  PRD-COST-001:
+    title: "Low Cost at Volume"
+    source: "PDF p.2 - Objective"
+    pdf_verbatim: "The device must be low-cost at volume production volume"
+    status: "VAGUE - no dollar amount specified"
+    why_vague: "No specific cost target (BOM? Retail? FOB?), no definition of 'low-cost' (relative to what?)"
+    testable: NO
     priority: "P0-Critical"
-    category: "Electrical"
-    subcategory: "I/O"
-    verification_method: "Schematic review + bench test"
-    acceptance_criteria:
-      - "Reliable I/O expansion (shift registers, mux, I2C GPIO, etc.)"
-      - "Update rate meets user experience needs"
-      - "Fault tolerance (no single point of failure)"
-    traces_to:
-      design: ["docs/architecture.md#io-expansion"]
-      tradeoffs: ["docs/tradeoffs.md#io-expansion-comparison"]
+    category: "Cost"
 
-  EE-COMM-001:
-    title: "Cell Phone Communication Interface"
-    description: "Device shall implement wireless/wired interface to cell phone"
-    source: "SYS-FUNC-004"
-    rationale: "Primary data input method"
+  PRD-COST-001-ASMP:
+    parent: "PRD-COST-001"
+    title: "BOM Cost Target with Volume Assumption"
+    pdf_says: "low-cost at volume production volume"
+    our_assumption: "BOM parts cost $200 ±$100 at volume of 10k units/month (range: $100-$300 BOM)"
+    rationale: |
+      PDF says 'low-cost' but gives no dollar amount. Market research (2025-10-08):
+      - BrailleMe: $515.50 retail (20-cell) → assuming 3× markup → ~$170 BOM
+      - Orbit Reader: $449 retail (20-cell) → assuming 3× markup → ~$150 BOM
+      - APH Refreshabraille: $1,795 retail (18-cell) → premium product
+
+      Our 32-cell device (60% more actuators than 20-cell) → target $200 BOM (mid-range).
+      3× markup → $600 retail (competitive with BrailleMe $515).
+
+      CRITICAL: This is an ASSUMPTION with ±50% sensitivity range ($100-$300 BOM).
+      v1.4.0 will test multiple cost scenarios, v1.3.0 will design portfolio at different cost points.
+    risk_level: CRITICAL
+    customer_validation_needed: YES
+    sensitivity_range: "$100-$300 BOM (±50% from $200 target)"
+    volume_assumption: "10k units/month (120k/year) for BOM pricing"
+    impact_if_wrong: |
+      - If target is $100 BOM → Eliminates most actuator options, requires aggressive cost reduction
+      - If target is $300 BOM → Opens up premium actuator options (solenoid, haptic feedback)
+    test_plan: "v1.4.0 sensitivity analysis (BOM scenarios: $100, $150, $200, $250, $300), v1.3.0 portfolio of architectures at different cost points"
     priority: "P0-Critical"
-    category: "Electrical"
-    subcategory: "Communication"
-    verification_method: "Interoperability testing (iOS/Android)"
+    category: "Cost"
     acceptance_criteria:
-      - "Standard protocol (BLE, USB-C, WiFi)"
-      - "Cross-platform support (iOS + Android)"
-      - "Pairing process < 30 seconds"
-    traces_to:
-      design: ["docs/architecture.md#communication-interface"]
-      tradeoffs: ["docs/tradeoffs.md#bluetooth-vs-usb-vs-wifi"]
+      - "BOM target: $200 ±$100 (range: $100-$300) at 10k/month volume"
+      - "Retail price: ~$600 (3× markup from $200 BOM)"
+      - "Competitive positioning: Comparable to BrailleMe ($515) but 32-cell vs 20-cell"
+      - "Cost breakdown: Actuators ~40-50% of BOM, PCB ~15%, battery ~10%, enclosure ~10%, misc ~15-25%"
+    competitor_data: "BrailleMe ($515.50 retail, 20-cell), Orbit Reader ($449, 20-cell)"
 
-  # ============================================================================
-  # MANUFACTURING REQUIREMENTS
-  # ============================================================================
+  # --------------------------------------------------------------------------
+  # VOLUME / MANUFACTURING
+  # --------------------------------------------------------------------------
 
-  MFG-COST-001:
-    title: "Low-Cost BOM"
-    description: "Bill of Materials shall support low-cost production target"
-    source: "PDF p.9 'portable, low cost, high volume'"
-    rationale: "Accessibility product - cost critical for market adoption"
-    priority: "P1-High"
-    category: "Manufacturing"
-    verification_method: "BOM cost analysis"
-    acceptance_criteria:
-      - "Target BOM < $100 (TBD with stakeholders)"
-      - "Standard components (high availability)"
-      - "Minimal exotic/expensive parts"
-    traces_to:
-      tradeoffs: ["docs/tradeoffs.md#cost-comparison"]
-      solution: ["docs/solution.md#cost-justification"]
-
-  MFG-VOL-001:
-    title: "High-Volume Manufacturing"
-    description: "Design shall support high-volume automated production"
-    source: "PDF p.9 'high volume companion device'"
-    rationale: "Scale to market demand"
+  PRD-VOL-001:
+    title: "High Volume Production Design"
+    source: "PDF p.2 - Objective"
+    pdf_verbatim: "The device must be designed for high-volume production"
+    status: "VAGUE - no volume quantity specified"
+    why_vague: "No specific volume target (1k/mo? 10k/mo? 100k/mo?), no manufacturing process specified"
+    testable: NO
     priority: "P1-High"
     category: "Manufacturing"
-    verification_method: "DFM review with manufacturer"
-    acceptance_criteria:
-      - "Standard PCB processes (SMT preferred)"
-      - "Minimal hand assembly"
-      - "Test points for automated testing"
-    traces_to:
-      design: ["docs/architecture.md#manufacturability"]
-      solution: ["docs/solution.md#production-plan"]
 
-  MFG-TIME-001:
-    title: "2-Month Production Timeline"
-    description: "Design shall be production-ready within 2 months"
-    source: "PDF p.8 'program director aims to release the project into production within two months'"
-    rationale: "Customer deadline constraint"
-    priority: "P0-Critical"
+  PRD-VOL-001-ASMP:
+    parent: "PRD-VOL-001"
+    title: "High Volume Production Capability"
+    pdf_says: "designed for high-volume production"
+    our_assumption: "High-volume = 10k units/month (120k/year) production capability, SMT assembly, design for automation"
+    rationale: |
+      Global accessibility market: ~285M visually impaired, assuming 0.01% penetration = 28K units/year potential.
+      Target 10k/month (120k/year) as 'high-volume' threshold that drives design decisions:
+      - SMT assembly (not through-hole or hand assembly)
+      - Standard PCB processes (no exotic fabrication)
+      - Automated testing (test points, boundary scan)
+      - Component availability (no obsolete or single-source parts)
+
+      NOTE: Pilot production (PRD-SCHED-001-ASMP) is 100-500 units, then scale to 10k/month.
+    risk_level: HIGH
+    customer_validation_needed: YES
+    sensitivity_range: "1k/month (low volume, hand assembly OK) to 100k/month (full automation required)"
+    impact_if_wrong: "If 1k/month, hand assembly acceptable (lower NRE, higher unit cost). If 100k/month, requires full automation (higher NRE, lower unit cost)."
+    test_plan: "v1.4.0 sensitivity analysis (volume scaling 1k vs 10k vs 100k), v1.5.0 DFM analysis for SMT assembly"
+    priority: "P1-High"
     category: "Manufacturing"
-    verification_method: "Project schedule + risk analysis"
     acceptance_criteria:
-      - "Parts lead time < 6 weeks"
-      - "No custom tooling (use COTS where possible)"
-      - "Rapid prototyping feasible"
-    traces_to:
-      tradeoffs: ["docs/tradeoffs.md#timeline-feasibility"]
-      solution: ["docs/solution.md#timeline-mitigation"]
+      - "Production volume: 10k units/month capability (120k/year)"
+      - "Assembly: SMT (surface-mount technology), automated pick-and-place"
+      - "Testing: Automated test fixtures (bed-of-nails, flying probe, or boundary scan)"
+      - "Component sourcing: Standard parts, multi-source where possible, no obsolete parts"
+      - "Yield target: ≥95% first-pass yield (pilot), ≥98% (mass production)"
+    manufacturing_strategy: "Pilot (100-500 units, hand/semi-auto) → Scale (10k/month, full SMT automation)"
 
-  # ============================================================================
-  # USER REQUIREMENTS
-  # ============================================================================
+  # --------------------------------------------------------------------------
+  # USER / ACCESSIBILITY
+  # --------------------------------------------------------------------------
 
-  USR-PORT-001:
-    title: "Device Portability"
-    description: "Device shall be easily portable (size/weight constraints)"
-    source: "PDF p.9 'portable...companion device'"
-    rationale: "Usability for visually impaired users on-the-go"
+  PRD-USER-001:
+    title: "Sight-Impaired User"
+    source: "PDF p.2 - Objective"
+    pdf_verbatim: "The device is intended for use by a sight-impaired person."
+    status: "CLEAR - target user specified"
+    testable: YES
+    priority: "P0-Critical"
+    category: "User"
+    acceptance_criteria:
+      - "Device meets accessibility standards (US ADA braille specs Section 703.3)"
+      - "Tactile controls only (no screen dependency)"
+      - "Audio feedback for status (optional but recommended)"
+      - "User validation: ≥9/10 sight-impaired test users can operate device independently"
+
+  # --------------------------------------------------------------------------
+  # FUNCTIONAL REQUIREMENTS
+  # --------------------------------------------------------------------------
+
+  PRD-FUNC-001:
+    title: "Single Line Braille Display - 32 Characters, 6 Dots Each"
+    source: "PDF p.2 - Function"
+    pdf_verbatim: "product displays a single line of Braille text at a time - drive 32 Braille characters. Each Braille character consists of 6 dots."
+    status: "CLEAR - display specification explicit"
+    testable: YES
+    priority: "P0-Critical"
+    category: "Function"
+    acceptance_criteria:
+      - "32 braille cells (characters) in single horizontal line"
+      - "6 dots per cell (2 columns × 3 rows = Grade 1 braille)"
+      - "Total: 192 individually controllable dots (32 × 6)"
+      - "Dot spacing: 2.5mm pitch within cell, 6.0mm pitch between cells (US ADA 703.3)"
+      - "Display width: ~192mm (32 cells × 6mm)"
+      - "Actuator size constraint: ≤2.3mm diameter (derived from 2.5mm pitch minus dot diameter 1.5mm ÷ 2)"
+    standards_reference:
+      - "US ADA Section 703.3 (Signs) - braille dimensions"
+      - "Braille Authority of North America (BANA) - spacing guidelines"
+      - "reference/standards/braille-dimensions-standards.md"
+
+  PRD-FUNC-002:
+    title: "Braille Line Update (Refresh Next Line)"
+    source: "PDF p.2 - Function"
+    pdf_verbatim: "After a line of Braille text is read, the device must update to show the next line of text."
+    status: "VAGUE - refresh speed and mechanism unspecified"
+    why_vague: "No timing requirement (instant? 1 sec? 5 sec?), no trigger mechanism (button? automatic? gesture?)"
+    testable: NO
     priority: "P1-High"
-    category: "User Experience"
-    verification_method: "User acceptance test"
-    acceptance_criteria:
-      - "Weight < 500g (comparable to tablet)"
-      - "Fits in bag/purse"
-      - "Durable for daily transport"
-    traces_to:
-      design: ["docs/architecture.md#form-factor"]
-      tradeoffs: ["docs/tradeoffs.md#size-vs-features"]
+    category: "Function"
 
-  USR-UX-001:
-    title: "Intuitive Operation"
-    description: "Device operation shall be intuitive for visually impaired users"
-    source: "Implied by product purpose"
-    rationale: "Target user has visual impairment - tactile feedback critical"
+  PRD-FUNC-002-ASMP:
+    parent: "PRD-FUNC-002"
+    title: "Braille Refresh Speed and Navigation"
+    pdf_says: "device must update to show the next line of text"
+    our_assumption: "Refresh speed: <2 seconds full-line update (acceptable UX). Trigger: Tactile UP/DOWN buttons (standard pattern from BrailleMe, Orbit Reader competitors)."
+    rationale: |
+      Typical braille reading speed: 60-150 words/minute (advanced readers) = 1-2.5 seconds per line.
+      Refresh <2 seconds = doesn't interrupt reading flow.
+
+      Navigation: BrailleMe and Orbit Reader use tactile buttons (UP/DOWN or PREV/NEXT).
+      Automatic scroll would be disruptive (users read at different speeds).
+      Manual button trigger = user controls pace.
+    risk_level: MEDIUM
+    customer_validation_needed: YES
+    sensitivity_range: "<1 sec (fast, challenging for some actuators) to <5 sec (slow but acceptable)"
+    impact_if_wrong: "If <0.5 sec required, limits actuator options (piezo only). If 5 sec acceptable, eases actuator selection."
+    test_plan: "v1.3.0 actuator selection (refresh speed capability), v1.4.0 UX testing with target users"
     priority: "P1-High"
-    category: "User Experience"
-    verification_method: "User testing with target demographic"
+    category: "Function"
     acceptance_criteria:
-      - "Tactile buttons/controls (no screen dependency)"
-      - "Audio feedback for status"
-      - "Simple pairing process"
-    traces_to:
-      design: ["docs/architecture.md#user-interface"]
-      analysis: ["docs/requirements.md#accessibility"]
+      - "Refresh speed: <2 seconds for full 32-character line update"
+      - "Navigation: Two tactile buttons (UP = next line, DOWN = previous line)"
+      - "Debouncing: No accidental double-presses (<50ms debounce)"
+      - "Visual/audio feedback: Optional LED or beep on button press"
+    competitor_reference: "BrailleMe (Perkins keyboard with nav keys), Orbit Reader (tactile buttons)"
 
-  # ============================================================================
-  # NON-FUNCTIONAL REQUIREMENTS
-  # ============================================================================
-
-  NFR-PERF-001:
-    title: "Braille Refresh Rate"
-    description: "Display update latency shall be acceptable to user"
-    source: "User experience expectation"
-    rationale: "Slow updates frustrate users"
-    priority: "P2-Medium"
-    category: "Performance"
-    verification_method: "Latency measurement + user feedback"
+  PRD-FUNC-003:
+    title: "Braille Dot Actuation - Raised or Lowered"
+    source: "PDF p.2 - Function"
+    pdf_verbatim: "the device creates the braille dot pattern - Each dot can be either raised or lowered"
+    status: "CLEAR - binary actuation specified"
+    testable: YES
+    priority: "P0-Critical"
+    category: "Function"
     acceptance_criteria:
-      - "Line update < 2 seconds"
-      - "Perceptible progress indicator if slower"
-    traces_to:
-      design: ["docs/architecture.md#performance"]
-      tradeoffs: ["docs/tradeoffs.md#update-speed"]
+      - "Binary control: Each dot has two states (raised or lowered)"
+      - "Dot height (raised): 0.5-0.7mm above surrounding surface (US ADA 703.3: 0.64-0.94mm)"
+      - "Dot diameter: 1.5mm ±0.1mm (US ADA 703.3: 1.5-1.6mm)"
+      - "Dot shape: Hemispherical dome (tactile sensitivity requirement)"
+      - "Holding force: 50-100 grams (maintains raised position under finger pressure)"
+      - "Reliability: >1 million actuation cycles (8 hrs/day × 2 years × 10 actuations/min)"
+      - "Actuator size constraint: ≤2.3mm diameter (derived from 2.5mm pitch spacing)"
+    standards_reference:
+      - "US ADA Section 703.3"
+      - "reference/standards/braille-dimensions-standards.md"
 
-  NFR-REL-001:
-    title: "Reliability"
-    description: "Device shall operate reliably for daily use"
-    source: "Implied by product purpose"
-    rationale: "Accessibility device - reliability critical for user independence"
-    priority: "P1-High"
-    category: "Reliability"
-    verification_method: "MTBF testing"
-    acceptance_criteria:
-      - "MTBF > 10,000 hours"
-      - "Graceful degradation (partial failures tolerable)"
-    traces_to:
-      design: ["docs/architecture.md#fault-tolerance"]
-      solution: ["docs/solution.md#risk-mitigation"]
+  # --------------------------------------------------------------------------
+  # STANDARDS & COMPLIANCE
+  # --------------------------------------------------------------------------
 
   NFR-STD-001:
-    title: "Standards Compliance"
-    description: "Device shall comply with relevant accessibility and safety standards"
-    source: "PDF p.10 scope item 1"
-    rationale: "Legal and market requirements"
+    title: "North America Regulatory Compliance (UL + FCC)"
+    source: "Derived from metadata.scope (standards awareness)"
+    description: "Device shall be designed for compliance with North America standards (certification post-pilot)"
     priority: "P1-High"
     category: "Compliance"
-    verification_method: "Standards audit + certification testing"
+    standards:
+      - "UL 62368-1 (Electrical safety - ICT equipment)"
+      - "UL 2054 (Battery safety - if BLE architecture)"
+      - "FCC Part 15 Class B (EMI emissions)"
+      - "FCC Part 15C (Radio emissions - if BLE)"
+    rationale: "Phase 1 targets North America market. Design for compliance, certify post-pilot (Month 3-4)."
     acceptance_criteria:
-      - "FCC/CE compliance (EMI)"
-      - "Battery safety (UL)"
-      - "Accessibility standards (ADA, ISO 9241)"
-    traces_to:
-      analysis: ["docs/requirements.md#standards"]
-      solution: ["docs/solution.md#compliance-plan"]
+      - "Design complies with UL 62368-1 safety requirements"
+      - "PCB layout follows FCC Part 15B best practices (shielding, filtering)"
+      - "Use pre-certified BLE modules (FCC ID) if BLE architecture"
+      - "Use pre-certified battery packs (UL listed) if BLE architecture"
+    verification_method: "Analysis (design review), Inspection (component selection), Test (post-pilot certification)"
+    cost_impact: "$23K-45K, 3-4 months (post-pilot)"
+
+  NFR-STD-002:
+    title: "Accessibility Standards Compliance (US ADA)"
+    source: "PDF p.2 - sight-impaired user requirement"
+    description: "Braille display shall comply with US ADA Section 703.3 braille dimensions"
+    priority: "P0-Critical"
+    category: "Accessibility"
+    standards:
+      - "US ADA Section 703.3 (Braille signage standards)"
+      - "Braille Authority of North America (BANA) guidelines"
+    rationale: "ADA compliance ensures device is usable by sight-impaired population"
+    acceptance_criteria:
+      - "Dot spacing: 2.5mm pitch within cell, 6.0mm pitch between cells"
+      - "Dot diameter: 1.5mm ±0.1mm (ADA: 1.5-1.6mm)"
+      - "Dot height: 0.5-0.7mm raised (ADA: 0.64-0.94mm)"
+      - "Actuator size: ≤2.3mm diameter (derived from spacing)"
+    verification_method: "Inspection (mechanical measurements), Test (user validation with sight-impaired testers)"
+    traces_to_existing: "PRD-FUNC-001, PRD-FUNC-003"
 
 # ============================================================================
 # PRIORITY DEFINITIONS
@@ -393,11 +442,10 @@ priorities:
     risk: "No immediate impact"
 
 # ============================================================================
-# TRACEABILITY TEMPLATE (auto-populated by script)
+# TRACEABILITY MATRIX (auto-populated by /req-trace command)
 # ============================================================================
-# Each requirement automatically traces to:
+# Each requirement traces to:
 #   - Source document (PDF page/section)
-#   - Design documents (architecture.md, tradeoffs.md, solution.md)
-#   - Analysis documents (requirements.md)
-#   - Rubric evaluation (phase1-rubric-eval.md)
-#   - Presentation slides (for v2.0.0)
+#   - Design documents (v1.3.0 architecture options)
+#   - Analysis documents (v1.4.0 trade-offs, v1.5.0 production plan)
+#   - Presentation slides (v2.0.0)

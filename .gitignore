@@ -60,3 +60,7 @@ credentials.json
 build/
 dist/
 *.egg-info/
+
+# Obsolete/archived files
+docs/_obsolete/
+**/*.OLD

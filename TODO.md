@@ -44,22 +44,45 @@
   - Defined phase gate criteria (80% per category, 85+ overall)
 
 ### <span style="color:blue">v1.2.0: Requirements Analysis (feature/tech-analysis-requirements)</span>
-- [ ] Create .claude/commands/req-audit.md (requirements compliance checker)
-- [ ] Create .claude/commands/req-yaml-to-md.md (YAML→MD generator, outputs to artifacts/)
-- [ ] Create .claude/commands/req-trace.md (traceability matrix generator)
-- [ ] Populate source/requirements.yaml with all requirements
-  - Define system-level requirements (SYS-FUNC-*)
-  - Define electrical specifications (EE-PWR-*, EE-CTRL-*, EE-IO-*, EE-COMM-*)
-  - Define user/UX requirements (USR-PORT-*, USR-UX-*, USR-ACC-*)
-  - Define manufacturing/cost constraints (MFG-COST-*, MFG-VOL-*, MFG-TIME-*)
-  - Research relevant standards (NFR-STD-*)
+**Design Plan Alignment:** Complete Design Step 1 (PDF p.10) - 25/100 points
+
+- [x] Renamed problem-statement.md → design-plan.md (per hiring manager: "READ THIS CAREFULLY")
+- [x] Created docs/todo-design-plan-mapping.md (harmonize TODO with 4-step design scope)
+- [x] Create .claude/commands/req-audit.md (req compliance checker)
+- [x] Create .claude/commands/req-yaml-to-md.md (YAML→MD generator, outputs to artifacts/)
+- [x] Create .claude/commands/req-trace.md (traceability matrix generator)
+- [x] Create .claude/commands/req-risk-report.md (risk-ranked assumption report generator)
+- [x] Create docs/presentation-plan.md (strategic presentation plan - "begin with end in mind")
+- [x] Create docs/presentation-key-messages.md (systems engineering philosophy slide)
+- [x] Create docs/requirements-philosophy-alignment.md (req structure → presentation thesis)
+- [x] Updated scope/assumptions in requirements.yaml (pilot production strategy)
+- [x] MAJOR REFACTOR: Hierarchical PRD naming (v2.0.0)
+  - 9 ground truth requirements (PRD-XXXX-NNN) verbatim from PDF
+  - 6 assumptions (PRD-XXXX-NNN-ASMP) with derivation process, risk levels
+  - Generated artifacts/requirements.md (34KB professional report)
+  - Generated artifacts/assumption-risk-report.md (risk-ranked analysis)
+- [x] Add hierarchical ASCII tree to requirements.md with hyperlinks
+- [x] Update /req-yaml-to-md to include tree + ground truth/assumptions sections
+- [x] Create Makefile req transform targets (make req-md, req-trace, req-audit, req-risk, req-all, req-clean)
+- [x] Update /req-trace for hierarchical PRD naming (PRD-XXXX-NNN → PRD-XXXX-NNN-ASMP)
 - [ ] Run /req-audit to validate compliance
-- [ ] Run /req-yaml-to-md to generate artifacts/requirements.md
 - [ ] Review generated requirements.md for completeness
+- [ ] Phase gate: Freeze requirements.yaml before v1.3.0 (architecture design)
 - [ ] Run /rubric-eval for Category 1 assessment (Technical Requirements: 25 pts)
   - Generates artifacts/rubric-reports/v1.2.0-requirements-eval.md
 
 ### <span style="color:red">v1.3.0: Solution Architecture Development (feature/tech-analysis-architecture)</span>
+**Design Plan Alignment:** Complete Design Step 2 (PDF p.10) - 25/100 points
+
+**PDF Quote:** "Develop and describe **multiple alternative solutions**"
+
+- [ ] **Market scan: Identify what solutions currently exist**
+  - [ ] Search for existing braille displays (commercial products)
+  - [ ] Identify technology types used (piezo, solenoid, SMA, electroactive polymers)
+  - [ ] Note price points ($50 budget? $200 premium? $500 professional?)
+  - [ ] Capture key specs (refresh rate, power, size, connectivity)
+  - [ ] Document in resources/notes/market-research.md
+  - **Purpose:** Understand what "potential solutions" are viable (not reinventing wheel!)
 - [ ] Download datasheets to reference/datasheets/
   - [ ] Actuators: piezo, solenoid, SMA, micro-motor
   - [ ] MCUs: STM32, ESP32, RP2040, or FPGA options
@@ -83,6 +106,52 @@
   - Generates artifacts/rubric-reports/v1.3.0-architecture-eval.md
 
 ### <span style="color:red">v1.4.0: Trade-off Analysis (feature/tech-analysis-tradeoffs)</span>
+**Design Plan Alignment:** Complete Design Step 3 (PDF p.10) - 30/100 points ← **HIGHEST WEIGHT**
+
+**⚠️ PDF REQUIREMENT:** "Evaluate the proposed solutions by discussing their **advantages and disadvantages**, as well as **any other considerations** that influenced your final selection."
+
+**Guide:** See [docs/tradeoff-analysis-guide.md](docs/tradeoff-analysis-guide.md) for complete methodology
+
+**Quality Metrics:** See [docs/quality-metrics.md](docs/quality-metrics.md) v1.4.0 section for gate criteria
+
+**Step 1: Define Evaluation Criteria (What Do We VALUE?)**
+- [ ] Define evaluation framework based on design context:
+  - [ ] **Context:** 2-month pilot production for China accessibility market
+  - [ ] **Stakeholder priorities:** (ASSUME since not specified)
+    - [ ] Time to market (CRITICAL - 2 month constraint)
+    - [ ] Unit cost (HIGH - China market price sensitivity)
+    - [ ] Development cost/NRE (MEDIUM - pilot budget limited)
+    - [ ] Manufacturability/yield (HIGH - pilot → mass production)
+    - [ ] Robustness/reliability (MEDIUM - accessibility device)
+    - [ ] UX/usability (HIGH - sight-impaired users)
+    - [ ] Safety (MEDIUM - low voltage, battery powered)
+  - [ ] **Assumption documentation:** Explicitly state what was assumed and why
+  - [ ] **Weighted scoring matrix:** Assign weights to each criterion (must sum to 100%)
+- [ ] Example evaluation matrix structure:
+  ```
+  Criterion              | Weight | Arch A | Arch B | Arch C | Notes
+  -----------------------|--------|--------|--------|--------|-------
+  Time to Market         | 25%    | 7/10   | 9/10   | 5/10   | B fastest (COTS parts)
+  Unit Cost (<$50 BOM)   | 20%    | 6/10   | 8/10   | 4/10   | B lowest cost
+  Dev Cost (<$50K NRE)   | 10%    | 5/10   | 9/10   | 3/10   | A needs custom tooling
+  Manufacturability      | 20%    | 8/10   | 7/10   | 6/10   | A best DFM
+  Robustness/Reliability | 10%    | 7/10   | 6/10   | 8/10   | C most robust
+  UX/Usability           | 10%    | 8/10   | 7/10   | 9/10   | C best tactile feel
+  Safety                 | 5%     | 9/10   | 9/10   | 8/10   | All low voltage
+  TOTAL SCORE            | 100%   | X.X    | X.X    | X.X    | Weighted average
+  ```
+
+**Step 2: Advantages & Disadvantages Analysis**
+**⚠️ PDF REQUIREMENT:** "Discuss their advantages and disadvantages" (explicit in Step 3)
+
+- [ ] For EACH architecture, document:
+  - [ ] **Advantages** (strengths, what it does well - be specific with data)
+  - [ ] **Disadvantages** (weaknesses, limitations, risks - be honest)
+  - [ ] **When it wins** (under what conditions is this the best choice?)
+  - [ ] **When it fails** (under what conditions does this become unviable?)
+- [ ] Create comparison table showing advantages/disadvantages side-by-side
+
+**Step 3: Quantitative Comparison**
 - [ ] Create comparison matrix in resources/calculations/
   - [ ] Cost comparison (BOM estimates for each architecture)
   - [ ] Power budget calculations (actuators + MCU + communication)
@@ -100,11 +169,33 @@
   - Risk buffers
 - [ ] Assess manufacturability for high volume (DFM analysis)
 - [ ] Risk analysis for each approach (technical, timeline, cost, supply chain)
-- [ ] Create docs/tradeoffs.md with quantitative analysis (reference spreadsheets)
+- [ ] **⚠️ SENSITIVITY ANALYSIS (REQUIRED):**
+  - [ ] "What if cost doubles?" - Which architecture is most robust?
+  - [ ] "What if timeline compresses to 1 month?" - Which is fastest to implement?
+  - [ ] "What if key component unavailable?" - Which has best alternates?
+  - [ ] "What if volume targets change (1K vs 100K)?" - Which scales best?
+  - [ ] Create sensitivity comparison matrix
+- [ ] **"Other Considerations" Analysis:**
+  - [ ] Supply chain availability (lead times, single-source risks)
+  - [ ] Team expertise required (familiar vs new technology)
+  - [ ] Tooling/equipment needs (what's available vs what to buy)
+  - [ ] Risk tolerance (proven tech vs cutting edge)
+  - [ ] Market timing considerations
+- [ ] Create docs/tradeoffs.md with:
+  - [ ] **Evaluation criteria framework** (what we value + weights)
+  - [ ] **Assumptions documentation** (China market, pilot production, etc.)
+  - [ ] **Advantages & disadvantages** for each architecture (honest assessment)
+  - [ ] **Quantitative comparison** (cost, power, size, timeline - scored objectively)
+  - [ ] **Weighted scoring results** (which architecture scores highest?)
+  - [ ] **Sensitivity analysis** ("what if" scenarios - how evaluation changes)
+  - [ ] **"Other considerations"** (supply chain, expertise, tooling)
+  - [ ] **Final recommendation** with data-driven justification (decision based on evaluation)
 - [ ] Run /rubric-eval for Category 3 assessment (Trade-off Analysis: 30 pts)
   - Generates artifacts/rubric-reports/v1.4.0-tradeoffs-eval.md
 
 ### <span style="color:red">v1.5.0: Recommended Solution (feature/tech-analysis-solution)</span>
+**Design Plan Alignment:** Complete Design Step 4 (PDF p.10) - 20/100 points
+
 - [ ] Select and justify final architecture (data-driven from v1.4.0 analysis)
 - [ ] Create detailed block diagram (resources/diagrams/final-architecture.png)
 - [ ] Draft preliminary schematic concepts (resources/schematics/)
@@ -151,12 +242,35 @@
   - 32 chars, 6 dots, 192 control signals
   - Portable, low-cost, high-volume, 2-month timeline
 - [ ] Slides 4-6: Requirements summary (3-5 min)
-  - Key technical requirements (SYS, EE, MFG, USR)
-  - Prioritization and rationale
+  - Slide 4: Show PDF requirements (verbatim - demonstrate vagueness)
+    - Quote PRD-COST-001: "low cost" (no dollar amount)
+    - Quote PRD-VOL-001: "high volume" (no quantity)
+    - Quote PRD-SIZE-001: "portable" (no dimensions)
+  - Slide 5: **⭐ SYSTEMS ENGINEERING PHILOSOPHY (KEY SLIDE)**
+    - **Title:** "Systems Engineering: Trade-offs Over Perfection"
+    - **Thesis:** Requirements exist in RANGES, not absolutes
+    - **Example:** PRD-COST-001-ASMP ($200 ±$100 BOM, not "$200")
+    - **Message:** Portfolio approach (3 architectures) vs point design (1 architecture)
+    - **Visual:** Trade-off triangle OR Point vs Portfolio comparison
+    - **Key phrases:**
+      - "Not about 'best power supply with uber-clean output'"
+      - "Balance cost/reliability/performance/timeline"
+      - "Simplification is innovation (USB-C wired = -$100 BOM)"
+      - "Know when SW replaces HW complexity"
+    - **See:** docs/presentation-key-messages.md (complete talking points)
+    - **See:** docs/requirements-philosophy-alignment.md (how requirements support this)
+  - Slide 6: Assumptions & sensitivity ranges
+    - Show PRD-XXXX-NNN-ASMP structure
+    - Highlight customer_validation_needed flags
 - [ ] Slides 7-12: Solution alternatives presentation (8-10 min)
+  - Reference Slide 5 philosophy (portfolio driven by sensitivity ranges)
   - 3+ architectures with block diagrams
+  - Each architecture optimizes DIFFERENT trade-off:
+    - Architecture A: Optimizes UX (BLE wireless)
+    - Architecture B: Optimizes cost (USB-C wired - value engineering!)
+    - Architecture C: Optimizes flexibility (hybrid)
   - Component selection rationale
-  - Pros/cons for each
+  - Pros/cons for each (trace to alternative_scenarios in requirements.yaml)
 - [ ] Slides 13-16: Trade-off comparison (5-7 min)
   - Comparison matrix (cost, power, size, complexity, timeline)
   - Quantitative data (power budgets, BOM costs)
@@ -211,20 +325,106 @@
 - [ ] Extract presentation notes to source/presentation-notes.md
   - Speaker notes for each slide
   - Q&A preparation material
+- [ ] Download LinkedIn FISH controller presentation
+  - [ ] Save Unbedded(1).pptx to resources/portfolio/
+  - [ ] Extract key slides for appendix-E-portfolio.pdf
+  - [ ] Verify file renders correctly (test on laptop)
 
 ### <span style="color:red">v3.2.0: Artifacts to Generate (feature/delivery-artifacts)</span>
 - [ ] Generate artifacts/presentation.pdf (export from source/presentation.pptx)
 - [ ] Copy artifacts/presentation.pptx (from source/presentation.pptx)
-- [ ] Verify both files are under size limits for email
-- [ ] Test artifacts/presentation.pdf opens correctly on different devices
+- [ ] Generate artifacts/appendix-A-technical-analysis.pdf (from source/technical-analysis.md)
+- [ ] Generate artifacts/appendix-B-calculations.pdf (from resources/calculations/*.xlsx)
+- [ ] Generate artifacts/appendix-C-datasheets.pdf (compile key datasheets from reference/)
+- [ ] Generate artifacts/appendix-D-qa-prep.pdf (from source/presentation-notes.md)
+- [ ] Generate artifacts/appendix-E-portfolio.pdf (FISH + ham radio docs + Unbedded(1).pptx slides)
+- [ ] Verify all files under size limits for email (<25MB total)
+- [ ] Test artifacts/presentation.pdf opens correctly on different devices (Windows + Mac)
+- [ ] Test artifacts/presentation.pptx renders correctly (Windows + Mac)
 
 ### <span style="color:red">v3.3.0: Pre-Interview Checklist (feature/delivery-checklist)</span>
-- [ ] Email presentation to Nathan Briggs 24 hours prior
-- [ ] Test HDMI output from laptop
-- [ ] Print backup copy of presentation
-- [ ] Bring government-issued ID
-- [ ] Bring latest resume
-- [ ] Optional: Bring engineering portfolio examples
+⚠️ **CRITICAL DEADLINE: OCT 22, 2025** - Presentation due 24hrs before interview!
+
+**Digital Checklist (Email Oct 22):**
+- [ ] **OCT 22 (BY EOD):** Email presentation & appendices to Nathan Briggs
+  - Subject: "LAM EE5 Interview - Concept Evaluation Presentation & Appendices - Spencer Barrett"
+  - Attach: presentation.pdf (primary - main slide deck)
+  - Attach: presentation.pptx (backup - editable format)
+  - Attach: appendix-A-technical-analysis.pdf (consolidated Phase 1 docs)
+  - Attach: appendix-B-calculations.pdf (power budget, BOM, timeline)
+  - Attach: appendix-C-datasheets.pdf (key component datasheets referenced)
+  - Attach: appendix-D-qa-prep.pdf (anticipated questions & answers)
+  - Attach: appendix-E-portfolio.pdf (FISH controller + ham radio documentation)
+  - Verify: Total <25MB, email sent successfully
+  - Confirm: Check for delivery confirmation/read receipt
+
+**Laptop Preparation (Oct 21-22):**
+- [ ] Test HDMI output from laptop (verify video works)
+- [ ] Charge laptop fully (bring charger as backup)
+- [ ] Load all files locally on laptop (don't rely on email/cloud)
+  - presentation.pptx (main file to present from)
+  - All appendix PDFs
+  - FISH controller project files (code, schematics, photos)
+  - Unbedded(1).pptx (LinkedIn FISH light controller presentation)
+- [ ] Test presentation.pptx renders correctly on laptop
+- [ ] Close all unnecessary apps (clean desktop for professionalism)
+- [ ] Disable notifications (Slack, email, OS updates)
+- [ ] Set display to "Extend" mode (not mirror) for presenter notes
+
+**Physical Items Checklist (Pack Night Before - Oct 22):**
+
+**Required:**
+- [ ] Government-issued ID (driver's license or passport)
+- [ ] Latest resume (5 printed copies - one per panel member + extras)
+- [ ] Printed presentation slides (full deck backup if laptop fails)
+- [ ] Printed appendices packet (all 5 appendices A-E, bound or stapled)
+- [ ] Laptop with HDMI output support
+- [ ] Laptop charger (just in case)
+- [ ] HDMI cable (backup - they should have one, but bring yours)
+- [ ] HDMI adapter if needed (USB-C to HDMI, etc.)
+
+**Portfolio/Background Review:**
+- [ ] FISH light controller hardware (PCB assembled, in protective case)
+- [ ] FISH controller documentation packet:
+  - [ ] 1-page project overview (what it does, why you built it)
+  - [ ] Schematic printout (readable, annotated if helpful)
+  - [ ] PCB layout printout (top/bottom layers)
+  - [ ] Code snippet printout (key algorithm or driver)
+  - [ ] Photos of installed system (in fish tank, working)
+  - [ ] Lessons learned / design decisions (1-page)
+  - [ ] LinkedIn presentation printout (Unbedded(1).pptx - key slides)
+- [ ] Ham radio kit (assembled min-ham radio)
+- [ ] Ham radio documentation packet:
+  - [ ] 1-page project overview (kit model, build experience)
+  - [ ] Schematic from kit (annotated with your notes)
+  - [ ] Photos of build process (assembly stages)
+  - [ ] Photos of completed radio (operational)
+  - [ ] Operating demonstration plan (if applicable)
+  - [ ] Lessons learned / technical challenges overcome (1-page)
+
+**Backup Materials:**
+- [ ] Printed copy of presentation slides (backup if laptop fails)
+- [ ] Printed copy of resume (extras beyond the 5)
+- [ ] Business cards (if you have them)
+- [ ] Notebook + pen (for taking notes during interview)
+
+**Comfort Items:**
+- [ ] Water bottle (stay hydrated during 5h 45min interview)
+- [ ] Breath mints (post-lunch freshness)
+- [ ] Professional appearance (check night before):
+  - [ ] Outfit planned (business casual or business professional)
+  - [ ] Shoes polished
+  - [ ] Minimal jewelry/accessories
+
+**Verify Night Before (Oct 22):**
+- [ ] All physical items packed in bag
+- [ ] Laptop bag has: laptop, charger, HDMI cable, adapter
+- [ ] Portfolio bag has: FISH controller, documentation packet
+- [ ] Documents bag has: ID, resumes, printed slides
+- [ ] Know exact address: Lam Research, Tualatin, OR campus
+- [ ] Know parking instructions
+- [ ] Know check-in procedure (security desk)
+- [ ] Set 2 alarms for interview morning
 
 ### Phase Gate: v3.0.0 → v4.0.0
 - [ ] All deliverable PDFs generated successfully

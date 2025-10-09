@@ -99,13 +99,20 @@ For each applicable rubric category:
 **Evaluate `docs/tradeoffs.md`:**
 - [ ] Quantitative: Cost, power, size, complexity, timeline data?
 - [ ] Analysis: Clear decision criteria, pros/cons, weighting?
+- [ ] **⚠️ SENSITIVITY ANALYSIS: "What if" scenarios present?**
+  - [ ] "What if cost doubles?" - robustness to cost changes
+  - [ ] "What if timeline compresses to 1 month?" - speed to implementation
+  - [ ] "What if key component unavailable?" - alternate component options
+  - [ ] "What if volume targets change (1K vs 100K)?" - scalability
+- [ ] **Other Considerations: Supply chain, expertise, tooling, risk tolerance addressed?**
 - [ ] Risk: Technical and timeline risks identified with mitigation?
 - [ ] Justification: Final selection data-driven and well-reasoned?
 
 **Scoring:**
-- Quantitative Analysis: X/12
-- Trade-off Analysis: X/10
-- Risk Assessment: X/5
+- Quantitative Analysis: X/10
+- Trade-off Analysis (pros/cons): X/8
+- **Sensitivity Analysis: X/5 ← CRITICAL**
+- Risk Assessment: X/4
 - Final Selection Justification: X/3
 - **Total: X/30**
 
