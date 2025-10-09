@@ -24,6 +24,13 @@ subsystems_core:
     part_ref: "TBD-PIEZO-01"
     quantity: 192
     rationale: "Piezo: ≤2.3mm size, <100ms fast, low hold power vs solenoid"
+    pcb_specs:
+      layers_required: 2  # Top + Bottom (signal routing only, no HV planes needed)
+      min_trace_width_mil: 10  # Standard 10mil (0.25mm) for low-current piezo control
+      min_spacing_mil: 10  # Standard 10mil spacing
+      hv_clearance_mil: 50  # 50mil (1.27mm) clearance for 30V piezo drive (IPC-2221 Class 2)
+      expected_hf_emissions_mhz: 0.5  # <1 MHz (DC drive pulses, slow PWM if used)
+      emi_concerns: "Minimal - DC/low-freq switching, no high-speed digital"
 
   SS-CONTROL:
     name: "Main Control Unit (MCU)"
@@ -33,6 +40,13 @@ subsystems_core:
     part_ref: "497-14367-ND"
     quantity: 1
     rationale: "STM32F4: 140 GPIO (easier I/O expansion), built-in USB PHY, lower power vs ESP32"
+    pcb_specs:
+      layers_required: 4  # Top + Bottom + VDD + GND (high-speed 168MHz core needs proper power distribution)
+      min_trace_width_mil: 6  # 6mil (0.15mm) for high-density LQFP100 fanout
+      min_spacing_mil: 6  # 6mil spacing for dense routing
+      hv_clearance_mil: 10  # 10mil (standard low-voltage)
+      expected_hf_emissions_mhz: 168  # 168 MHz core clock + harmonics up to ~500 MHz
+      emi_concerns: "HIGH - Fast digital switching, USB D+/D- differential pairs (90Ω controlled impedance), decoupling critical"
 
   SS-IO-EXPAND:
     name: "I/O Expander Array"
@@ -42,6 +56,13 @@ subsystems_core:
     part_ref: "MCP23017-E/SP-ND"
     quantity: 4
     rationale: "MCP23017: 4 chips cleaner than 7× shift registers, I2C simple, interrupt support"
+    pcb_specs:
+      layers_required: 2  # Top + Bottom (I2C is low-speed, simple routing)
+      min_trace_width_mil: 10  # Standard 10mil
+      min_spacing_mil: 10  # Standard 10mil
+      hv_clearance_mil: 10  # Standard low-voltage
+      expected_hf_emissions_mhz: 1.6  # I2C max 1.6 MHz (Fast Mode)
+      emi_concerns: "LOW - I2C is low-speed, pull-up resistors suppress ringing"
 
   SS-ACTUATOR-DRIVER:
     name: "Actuator High-Voltage Driver Array"
@@ -51,6 +72,13 @@ subsystems_core:
     part_ref: "296-1781-5-ND"
     quantity: 24
     rationale: "ULN2803A: Cost-effective ($19 vs $36), 50V rating >> 30V, proven for capacitive loads"
+    pcb_specs:
+      layers_required: 4  # Top + Bottom + 30V plane + GND (isolated HV power distribution)
+      min_trace_width_mil: 15  # 15mil (0.38mm) for 500mA peak current per channel
+      min_spacing_mil: 15  # 15mil spacing
+      hv_clearance_mil: 50  # 50mil (1.27mm) for 30V (IPC-2221 Class 2: 0.1mm/V × 30V = 3mm, use 1.27mm for coated board)
+      expected_hf_emissions_mhz: 2  # ~1-5 MHz switching transients (capacitive load ringing)
+      emi_concerns: "MEDIUM - 30V switching into capacitive piezo loads creates inductive kickback, snubber diodes needed"
 
   SS-USER-IO:
     name: "User Interface Buttons"
@@ -60,6 +88,13 @@ subsystems_core:
     part_ref: "CKN12221-ND"
     quantity: 2
     rationale: "C&K KMR: Standard footprint, good tactile, >1M cycle life"
+    pcb_specs:
+      layers_required: 2  # Top + Bottom (simple GPIO button interface)
+      min_trace_width_mil: 10  # Standard 10mil
+      min_spacing_mil: 10  # Standard 10mil
+      hv_clearance_mil: 10  # Standard low-voltage
+      expected_hf_emissions_mhz: 0.01  # ~10 kHz debounce filtering, DC button press
+      emi_concerns: "NONE - DC input with RC debounce filtering"
 
   SS-PCB:
     name: "Main PCB (4-layer)"
@@ -69,6 +104,15 @@ subsystems_core:
     part_ref: "CUSTOM-PCB-01"
     quantity: 1
     rationale: "4-layer: Clean power distribution (30V/5V/3.3V), ground plane for EMI (FCC)"
+    pcb_specs:
+      layers_required: 4  # Layer 1: Top signals, Layer 2: GND plane, Layer 3: Power planes (30V/5V/3.3V), Layer 4: Bottom signals
+      min_trace_width_mil: 6  # 6mil (0.15mm) for high-density MCU routing
+      min_spacing_mil: 6  # 6mil spacing
+      hv_clearance_mil: 50  # 50mil for 30V traces/planes
+      board_thickness_mil: 62  # 1.6mm standard FR-4
+      copper_weight_oz: 1  # 1oz (35µm) copper standard
+      expected_hf_emissions_mhz: 168  # Dominated by STM32F4 168 MHz clock + USB 480 MHz harmonics
+      emi_concerns: "HIGH - Continuous GND plane (Layer 2) required for FCC Part 15B compliance, 30V HV isolation from digital"
 
   SS-ENCLOSURE:
     name: "Mechanical Enclosure"
@@ -78,6 +122,10 @@ subsystems_core:
     part_ref: "CUSTOM-ENCL-01"
     quantity: 1
     rationale: "3D print (SLS nylon) for pilot (zero NRE, fast iteration). Switch to injection mold for 10k+/month."
+    pcb_specs:
+      layers_required: 0  # N/A - mechanical component only
+      emi_shielding: "Conductive coating or grounded metal insert for FCC compliance (if plastic enclosure shows radiated emissions >FCC limit)"
+      emi_concerns: "Enclosure acts as secondary EMI containment, grounding contact to PCB GND plane required"
 
 # ============================================================================
 # ARCHITECTURE-SPECIFIC SUBSYSTEMS
@@ -93,6 +141,14 @@ subsystems_unique:
     part_ref: "1597-MDBT50Q-1MV2-ND"
     quantity: 1
     rationale: "nRF52840 module: Pre-certified FCC (saves $20K + 4-6 weeks), built-in antenna. $12 premium justified."
+    pcb_specs:
+      layers_required: 4  # Top + Bottom + GND + VDD (RF requires solid GND plane under antenna keepout)
+      min_trace_width_mil: 8  # 8mil (0.2mm) for module I/O
+      min_spacing_mil: 8  # 8mil spacing
+      hv_clearance_mil: 10  # Standard low-voltage
+      antenna_keepout_mm: 10  # 10mm keepout zone around PCB antenna (no copper, no components)
+      expected_hf_emissions_mhz: 2440  # 2.4 GHz ISM band (BLE operates 2400-2483.5 MHz)
+      emi_concerns: "CRITICAL - Pre-certified module (FCC ID: 2AF8Q-MDBT50Q), DO NOT modify antenna trace/PCB layout from reference design or FCC cert is VOID"
 
   SS-COMM-USB:
     name: "USB-C Communication Interface"
@@ -102,6 +158,15 @@ subsystems_unique:
     part_ref: "2073-USB4105-GF-A-ND"
     quantity: 1
     rationale: "Standard USB-C receptacle, STM32 has built-in USB PHY (no external chip needed)"
+    pcb_specs:
+      layers_required: 4  # Top + Bottom + GND + VDD (USB D+/D- differential pair needs GND reference plane)
+      min_trace_width_mil: 6  # 6mil for differential pair routing
+      min_spacing_mil: 6  # 6mil spacing
+      hv_clearance_mil: 10  # Standard low-voltage
+      differential_impedance_ohm: 90  # USB 2.0 Full Speed requires 90Ω ±10% differential impedance for D+/D- pair
+      diff_pair_spacing_mil: 8  # 8mil spacing between D+ and D- traces (tightly coupled)
+      expected_hf_emissions_mhz: 12  # USB Full Speed 12 Mbps, fundamental ~12 MHz + harmonics to ~100 MHz
+      emi_concerns: "MEDIUM - USB differential pair requires controlled impedance (90Ω), length matching (<5mm mismatch), and solid GND plane beneath"
 
   SS-POWER-USB-LDO:
     name: "USB Power - LDO (5V→3.3V)"
@@ -111,6 +176,13 @@ subsystems_unique:
     part_ref: "296-38833-1-ND"
     quantity: 1
     rationale: "Bus-powered design, 2.5W USB budget"
+    pcb_specs:
+      layers_required: 2  # Top + Bottom (linear regulator, simple analog)
+      min_trace_width_mil: 20  # 20mil (0.5mm) for 400mA output current
+      min_spacing_mil: 10  # Standard 10mil
+      hv_clearance_mil: 10  # Standard low-voltage
+      expected_hf_emissions_mhz: 0.1  # ~100 kHz PSRR bandwidth, essentially DC
+      emi_concerns: "LOW - Linear regulator (no switching), requires input/output decoupling caps only"
 
   SS-POWER-USB-BOOST:
     name: "USB Power - Boost (5V→30V)"
@@ -120,6 +192,13 @@ subsystems_unique:
     part_ref: "296-50464-1-ND"
     quantity: 1
     rationale: "Boost to 30V for piezo actuators"
+    pcb_specs:
+      layers_required: 4  # Top + Bottom + GND + 30V (switching converter needs GND plane for return current, isolated 30V plane)
+      min_trace_width_mil: 30  # 30mil (0.76mm) for 2.5A switch current
+      min_spacing_mil: 20  # 20mil spacing for high-current traces
+      hv_clearance_mil: 50  # 50mil for 30V output
+      expected_hf_emissions_mhz: 2.5  # TPS61088 switching at 1-2.5 MHz (adjustable), harmonics to ~25 MHz
+      emi_concerns: "HIGH - Boost converter switching creates high di/dt noise, requires: (1) tight input/output cap placement (<5mm), (2) solid GND plane under switch node, (3) kelvin sensing for feedback, (4) ferrite bead on output"
 
   SS-POWER-AA-HOLDER:
     name: "AA Battery Holder (4×AA)"
@@ -129,6 +208,13 @@ subsystems_unique:
     part_ref: "36-2466K-ND"
     quantity: 1
     rationale: "AA exempt from UL 2054 cert ($12K saved), instant swap, global availability"
+    pcb_specs:
+      layers_required: 2  # Top + Bottom (DC battery connection)
+      min_trace_width_mil: 40  # 40mil (1.0mm) for battery supply (250mA avg, 500mA peak)
+      min_spacing_mil: 20  # 20mil spacing
+      hv_clearance_mil: 10  # Standard low-voltage (6V nominal)
+      expected_hf_emissions_mhz: 0  # DC only
+      emi_concerns: "NONE - DC battery input, add bulk capacitance (100µF) at PCB entry for transient suppression"
 
   SS-POWER-AA-BOOST-3V3:
     name: "AA Power - Boost (6V→3.3V)"
@@ -138,6 +224,13 @@ subsystems_unique:
     part_ref: "296-50464-1-ND"
     quantity: 1
     rationale: "Buck-boost mode, same chip as other boost converters (design reuse)"
+    pcb_specs:
+      layers_required: 4  # Top + Bottom + GND + 3.3V (buck-boost needs GND plane)
+      min_trace_width_mil: 30  # 30mil for 2.5A switch current
+      min_spacing_mil: 20  # 20mil spacing
+      hv_clearance_mil: 10  # Standard low-voltage
+      expected_hf_emissions_mhz: 2.5  # Same TPS61088, 1-2.5 MHz switching
+      emi_concerns: "HIGH - Same as USB boost converter (tight layout, GND plane, ferrite bead)"
 
   SS-POWER-AA-BOOST-30V:
     name: "AA Power - Boost (6V→30V)"
@@ -147,6 +240,13 @@ subsystems_unique:
     part_ref: "296-50464-1-ND"
     quantity: 1
     rationale: "Same chip as USB boost (design reuse)"
+    pcb_specs:
+      layers_required: 4  # Top + Bottom + GND + 30V
+      min_trace_width_mil: 30  # 30mil for 2.5A switch current
+      min_spacing_mil: 20  # 20mil spacing
+      hv_clearance_mil: 50  # 50mil for 30V output
+      expected_hf_emissions_mhz: 2.5  # Same TPS61088, 1-2.5 MHz switching
+      emi_concerns: "HIGH - Same as USB boost converter (tight layout, GND plane, ferrite bead)"
 
   SS-POWER-LIION-CELL:
     name: "Li-ion Cell (18650)"
@@ -156,6 +256,13 @@ subsystems_unique:
     part_ref: "TBD-18650-01"
     quantity: 1
     rationale: "Premium rechargeable, sleek integrated design, UL 2054 cert required"
+    pcb_specs:
+      layers_required: 2  # Top + Bottom (DC battery connection with protection circuit)
+      min_trace_width_mil: 50  # 50mil (1.27mm) for 1.5A charge current
+      min_spacing_mil: 30  # 30mil spacing for high-current traces
+      hv_clearance_mil: 10  # Standard low-voltage (3.7V nominal, 4.2V max)
+      expected_hf_emissions_mhz: 0  # DC only
+      emi_concerns: "SAFETY-CRITICAL - UL 2054 requires: (1) overcharge protection (<4.2V), (2) over-discharge protection (>2.5V), (3) overcurrent protection (<3A), (4) thermal fuse, (5) insulated battery pack"
 
   SS-POWER-LIION-CHARGER:
     name: "Li-ion Charger IC"
@@ -165,6 +272,13 @@ subsystems_unique:
     part_ref: "296-38713-1-ND"
     quantity: 1
     rationale: "TI BQ24075: USB-C input, 1.5A charge rate"
+    pcb_specs:
+      layers_required: 4  # Top + Bottom + GND + VBAT (switching charger needs GND plane)
+      min_trace_width_mil: 30  # 30mil for 1.5A charge current
+      min_spacing_mil: 20  # 20mil spacing
+      hv_clearance_mil: 10  # Standard low-voltage
+      expected_hf_emissions_mhz: 1.5  # BQ24075 switching at ~1.5 MHz
+      emi_concerns: "MEDIUM - Switching charger, requires: (1) tight input/output cap placement, (2) thermal pad to GND plane (heat dissipation), (3) sense resistor kelvin connection"
 
   SS-POWER-LIION-PROTECTION:
     name: "Li-ion Protection Circuit"
@@ -174,6 +288,13 @@ subsystems_unique:
     part_ref: "TBD-PROTECTION-01"
     quantity: 1
     rationale: "UL 2054 requirement for Li-ion safety"
+    pcb_specs:
+      layers_required: 2  # Top + Bottom (simple protection circuit)
+      min_trace_width_mil: 40  # 40mil for battery current path
+      min_spacing_mil: 20  # 20mil spacing
+      hv_clearance_mil: 10  # Standard low-voltage
+      expected_hf_emissions_mhz: 0  # DC protection circuit (comparator-based)
+      emi_concerns: "SAFETY-CRITICAL - Must be in series with battery, trace from cell to protection IC to system must handle full load current (3A)"
 
   SS-POWER-LIION-GAUGE:
     name: "Fuel Gauge IC"
@@ -183,3 +304,10 @@ subsystems_unique:
     part_ref: "296-41985-1-ND"
     quantity: 1
     rationale: "TI BQ27441: I2C interface, SOC % for user display"
+    pcb_specs:
+      layers_required: 2  # Top + Bottom (I2C + sense resistor)
+      min_trace_width_mil: 10  # Standard 10mil for I2C
+      min_spacing_mil: 10  # Standard 10mil
+      hv_clearance_mil: 10  # Standard low-voltage
+      expected_hf_emissions_mhz: 0.4  # I2C Fast Mode 400 kHz
+      emi_concerns: "LOW - I2C communication, requires kelvin sensing of battery current shunt resistor (4-wire measurement)"
