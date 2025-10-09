@@ -103,6 +103,43 @@ requirements:
       - "Validation: Pilot units test mechanical tolerances, failure modes, user acceptance"
       - "Post-pilot: Scale to mass production (10k+/month) after validation"
 
+  PRD-SCHED-002-ASMP:
+    parent: "PRD-SCHED-001-ASMP"
+    title: "COTS Component Mandate (2-Month Timeline)"
+    pdf_says: "release the project into production within two months"
+    our_assumption: "2-month timeline requires ALL components be COTS (commercial off-the-shelf) with ≤4 week lead time, NO custom parts"
+    rationale: |
+      Timeline breakdown (8 weeks total):
+      - Week 1-2: Requirements & Architecture (complete)
+      - Week 3-4: Detailed Design (schematic, PCB layout, enclosure CAD)
+      - Week 5-6: Procurement & Fabrication (COTS parts arrive, PCB fab 3 weeks)
+      - Week 7: Assembly & Test (pilot units)
+      - Week 8: Pilot Production (100 units for validation)
+
+      Custom piezo actuators: 8-12 week lead time (vendor quote, tooling, samples) → VIOLATES timeline
+      COTS components: ≤4 week lead time (Digikey/Mouser stock) → FITS timeline
+
+      CRITICAL FINDING: NO COTS piezo available at 2-3mm diameter with 0.5mm stroke.
+      Smallest COTS piezo: 5mm diameter (Piezo Systems T216, insufficient stroke).
+      COTS solenoids available: 4mm diameter (Takaha BS-0420N-01, 2-week lead time, $0.60 ea).
+
+      Implication: Must use solenoid (4mm) OR relax size constraint OR abandon 2-month timeline.
+    requirement: "All components must be COTS with ≤4 week lead time (Digikey/Mouser stock or equivalent)"
+    risk_level: CRITICAL
+    customer_validation_needed: YES
+    impact_if_wrong: "Custom piezo requires 8-12 weeks → misses 2-month deadline by 6-10 weeks. Pilot production delayed to Month 3-4."
+    test_plan: "docs/cots-timeline-analysis.md shows custom piezo = 8-12 weeks (FAIL), COTS solenoid = 2 weeks (PASS)"
+    priority: "P0-Critical"
+    category: "Schedule"
+    acceptance_criteria:
+      - "Lead time: ≤4 weeks for ALL components (actuators, MCU, power, connectors)"
+      - "Stock availability: Digikey/Mouser or equivalent distributor in-stock"
+      - "NO custom tooling: No injection molds, custom piezo, or proprietary parts"
+      - "Exceptions: PCB fabrication (3 weeks OK), enclosure 3D print (1 week OK)"
+    verification_method: "Analysis (BOM review with lead times), Procurement (confirm stock availability before design freeze)"
+    derived_from: "8-week timeline constraint (PRD-SCHED-001-ASMP)"
+    traces_to: "Actuator selection (solenoid vs piezo), BOM, docs/cots-timeline-analysis.md"
+
   # --------------------------------------------------------------------------
   # SIZE / PORTABILITY
   # --------------------------------------------------------------------------
@@ -121,7 +158,7 @@ requirements:
     parent: "PRD-SIZE-001"
     title: "Portable Form Factor - Cell Phone Environment Compatible"
     pdf_says: "portable companion device to a cell phone"
-    our_assumption: "Portable = compatible with environments where cell phone goes (pocket, bag, desk). Target ≤1.3 lbs (590g) weight, fits in bag/purse (~8\"×4\"×1\" max), operates anywhere cell phone operates."
+    our_assumption: "Portable = compatible with environments where cell phone goes (pocket, bag, desk). Target ≤1.3 lbs (590g) weight, fits in bag/purse, operates anywhere cell phone operates."
     rationale: |
       'Companion device to cell phone' suggests same portability/environment as cell phone:
       - Pocket/bag portable (not desktop/tethered)
@@ -131,16 +168,23 @@ requirements:
 
       BrailleMe competitor benchmark: 1.3 lbs (590g), 20-cell, portable design.
       Our 32-cell device will be slightly larger/heavier, but target ≤1.3 lbs is achievable.
+
+      SIZE VARIANCE BY ARCHITECTURE:
+      - ARCH-A (Li-ion BLE): 200mm × 100mm × 15mm (2.5mm cell pitch, piezo actuators)
+      - ARCH-B (USB wired): 200mm × 100mm × 15mm (2.5mm cell pitch, piezo actuators)
+      - ARCH-C (AA hybrid): 280mm × 100mm × 15mm (3.5mm cell pitch, 4mm solenoid actuators)
+        → See PRD-FUNC-003-ARCH-C-EXCEPT for ARCH-C size exception rationale
     risk_level: MEDIUM
     customer_validation_needed: YES
-    sensitivity_range: "Weight: 0.5-1.5 lbs (230-680g), Size: 6-10\" wide × 3-5\" deep × 0.5-1.5\" tall"
+    sensitivity_range: "Weight: 0.5-1.5 lbs (230-680g), Length: 200-280mm (by architecture), Width: 100mm, Height: 15mm"
     impact_if_wrong: "If ultra-light (<0.5 lbs) required, limits battery capacity significantly. If desktop (2+ lbs) acceptable, eases design constraints."
     test_plan: "v1.3.0 weight budget (actuators + battery + enclosure), v1.4.0 sensitivity on size/weight trade-offs"
     priority: "P1-High"
     category: "Form Factor"
     acceptance_criteria:
       - "Weight: ≤1.3 lbs (590g) target (BrailleMe benchmark)"
-      - "Dimensions: ≤8\" × 4\" × 1\" (fits in bag/purse)"
+      - "Dimensions (ARCH-A/B): 200mm × 100mm × 15mm (7.9\" × 3.9\" × 0.6\")"
+      - "Dimensions (ARCH-C): 280mm × 100mm × 15mm (11\" × 3.9\" × 0.6\", larger due to 3.5mm pitch)"
       - "Operating environments: Same as cell phone (indoor, 0-40°C, 20-80% RH non-condensing)"
       - "Durability: Survives daily transport (bag/backpack, 1m drop test)"
       - "Power: Battery powered (untethered), USB-C charging"
@@ -381,6 +425,44 @@ requirements:
     standards_reference:
       - "US ADA Section 703.3"
       - "reference/standards/braille-dimensions-standards.md"
+
+  PRD-FUNC-003-ARCH-C-EXCEPT:
+    parent: "PRD-FUNC-003"
+    title: "Size Exception for ARCH-C (COTS Solenoid)"
+    pdf_says: "N/A (derived exception from PRD-SCHED-002-ASMP COTS mandate)"
+    our_assumption: "ARCH-C (Hybrid AA battery) relaxes actuator size constraint to 4mm diameter (from 2.3mm) to enable COTS solenoid use"
+    rationale: |
+      Conflict between requirements:
+      - PRD-SCHED-002-ASMP: COTS mandate (≤4 week lead time) → NO COTS piezo at 2-3mm diameter
+      - PRD-FUNC-003: Actuator size ≤2.3mm (derived from 2.5mm dot pitch)
+      - PRD-POWER-004-ASMP: AA battery life 8 hours → piezo (2.16W) EXCEEDS 1.5W budget by 46%
+
+      Resolution for ARCH-C only:
+      - Use COTS solenoid (Takaha BS-0420N-01, 4mm dia, $0.60 ea, 2-week lead time)
+      - Relax cell pitch: 2.5mm → 3.5mm (4mm actuator + 0.5mm clearance)
+      - Device length: 200mm → 280mm (32 cells × 8.75mm spacing)
+      - Actuator power: Solenoid+latch (2 channels) = 1.53W (fits 1.5W AA budget marginally)
+      - Cost savings: $131 vs $288 piezo (54% reduction)
+
+      ADA compliance: US ADA 703.3 allows cell spacing 2.3-3.8mm (3.5mm is WITHIN spec).
+
+      ARCH-A (Li-ion) and ARCH-B (USB) can still use piezo (2.3mm) if timeline relaxed for custom sourcing.
+    requirement: "ARCH-C only: Allow 4mm actuator diameter, 3.5mm cell pitch, 280mm device length"
+    risk_level: MEDIUM
+    customer_validation_needed: YES
+    impact_if_wrong: "If customer requires <250mm device length, ARCH-C is eliminated. Must use ARCH-A (Li-ion) or ARCH-B (USB wired) instead."
+    test_plan: "docs/cots-timeline-analysis.md shows COTS solenoid 4mm is only option. User testing: 3.5mm pitch within ADA spec (2.3-3.8mm)."
+    priority: "P1-High"
+    category: "Function"
+    acceptance_criteria:
+      - "ARCH-C actuator: 4mm diameter COTS solenoid (Takaha BS-0420N-01 or equivalent)"
+      - "ARCH-C cell pitch: 3.5mm (within ADA 2.3-3.8mm spec)"
+      - "ARCH-C device length: 280mm (32 cells × 8.75mm = 280mm)"
+      - "ARCH-A/ARCH-B: Retain 2.5mm pitch, 2.3mm actuator (200mm device length)"
+    verification_method: "Analysis (dimensional stack-up), Test (user tactile sensitivity at 3.5mm pitch)"
+    derived_from: "PRD-SCHED-002-ASMP (COTS mandate), PRD-POWER-004-ASMP (AA power budget)"
+    traces_to: "ARCH-C design, solenoid+latch architecture, docs/cots-timeline-analysis.md"
+    ada_compliance_note: "US ADA 703.3 allows 2.3-3.8mm cell spacing (3.5mm is compliant)"
 
   # --------------------------------------------------------------------------
   # STANDARDS & COMPLIANCE
