@@ -65,8 +65,11 @@
 - [x] Update /req-yaml-to-md to include tree + ground truth/assumptions sections
 - [x] Create Makefile req transform targets (make req-md, req-trace, req-audit, req-risk, req-all, req-clean)
 - [x] Update /req-trace for hierarchical PRD naming (PRD-XXXX-NNN → PRD-XXXX-NNN-ASMP)
-- [ ] Run /req-audit to validate compliance
-- [ ] Review generated requirements.md for completeness
+- [x] Run /req-audit to validate compliance (93% SMART, CONDITIONAL PASS)
+- [x] Add actuator size constraint (≤2.3mm) to PRD-FUNC-001 and PRD-FUNC-003
+- [x] Add NFR-STD-001 (UL/FCC) and NFR-STD-002 (ADA) standards requirements
+- [x] Regenerate requirements.md with 17 requirements (9 ground truth + 6 assumptions + 2 standards)
+- [x] Review generated requirements.md for completeness (32KB, compact header tables)
 - [ ] Phase gate: Freeze requirements.yaml before v1.3.0 (architecture design)
 - [ ] Run /rubric-eval for Category 1 assessment (Technical Requirements: 25 pts)
   - Generates artifacts/rubric-reports/v1.2.0-requirements-eval.md

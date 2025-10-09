@@ -2,6 +2,9 @@
 
 # Artifacts directory (generated outputs)
 artifacts/
+# EXCEPTION: Phase gate rubric reports are versioned (capture state at phase completion)
+!artifacts/rubric-reports/
+!artifacts/rubric-reports/*.md
 
 # OS Files
 .DS_Store
