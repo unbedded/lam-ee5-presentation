@@ -1,0 +1,383 @@
+# Braille Display Device - Architecture Database
+# Project: Lam Research EE Concept Evaluation
+# Purpose: SINGLE SOURCE OF TRUTH for 3 alternative solution architectures
+# Links to: source/requirements.yaml, source/subsystems.yaml
+
+metadata:
+  project: "Lam Research - Braille Display EE Concept Evaluation"
+  version: "1.0.0"
+  date: "2025-10-09"
+  author: "Spencer Barrett"
+  purpose: "Define 3 alternative architectures (Wired/Hybrid/Wireless) with qualitative + quantitative comparison"
+
+# ============================================================================
+# ARCHITECTURE DEFINITIONS
+# ============================================================================
+
+architectures:
+
+  ARCH-B:
+    id: "ARCH-B"
+    name: "Wired (Budget)"
+    nickname: "Value Desk"
+    market_position: "Entry-level / Education / Desktop"
+
+    # Requirements traceability
+    driven_by_requirements:
+      - id: "PRD-IFACE-001-ASMP"
+        scenario: "Scenario B (USB-C wired): Tethered, no battery, $100-150 BOM"
+      - id: "PRD-COST-001-ASMP"
+        target: "Low-end BOM target ($100-150)"
+      - id: "PRD-SCHED-001-ASMP"
+        target: "Fastest to pilot (simplest design)"
+
+    # Subsystem mapping
+    subsystems:
+      core:
+        - SS-ACTUATOR       # $288.00
+        - SS-CONTROL        # $8.00
+        - SS-IO-EXPAND      # $4.80
+        - SS-ACTUATOR-DRIVER # $19.20
+        - SS-USER-IO        # $0.50
+        - SS-PCB            # $15.00
+        - SS-ENCLOSURE      # $25.00
+      unique:
+        - SS-COMM-USB       # $1.50
+        - SS-POWER-USB-LDO  # $0.75
+        - SS-POWER-USB-BOOST # $2.25
+
+    # Qualitative assessment
+    qualitative:
+      cost:
+        bom: "LOW"
+        certification: "LOW"
+        nre: "LOW"
+      size:
+        physical: "SMALL"
+        weight: "LIGHT"
+        portability: "MEDIUM"
+      ux:
+        setup: "BEST"
+        convenience: "FAIR"
+        reliability: "BEST"
+        battery_anxiety: "NONE"
+        mobility: "POOR"
+      complexity:
+        hardware: "SIMPLE"
+        firmware: "SIMPLE"
+        power: "TRIVIAL"
+        mechanical: "SIMPLE"
+      timeline:
+        pilot: "FASTEST"
+        parts_leadtime: "SHORT"
+        certification: "FAST"
+      manufacturing:
+        assembly: "SIMPLE"
+        component_count: "LOW"
+        dfm: "EXCELLENT"
+        yield_risk: "LOW"
+      risk:
+        technical: "LOW"
+        supply_chain: "LOW"
+        safety: "LOW"
+        timeline: "LOW"
+        cost_overrun: "LOW"
+      market_fit:
+        education: "EXCELLENT"
+        consumer: "FAIR"
+        professional: "POOR"
+        accessibility_ngos: "EXCELLENT"
+        global: "EXCELLENT"
+
+    # Quantitative metrics
+    quantitative:
+      cost:
+        bom_subtotal: 365.00      # Core + unique subsystems
+        misc_15pct: 54.75         # Passives, connectors, misc
+        bom_total: 419.75         # Subtotal + misc
+        bom_target: 125           # Target (need cost reduction!)
+        bom_range_min: 100
+        bom_range_max: 150
+        certification_cost: 20000  # FCC Part 15B only (no radio, no battery)
+        nre_total: 35000          # Cert + PCB setup + enclosure tooling (3D print)
+      size:
+        length_mm: 200            # 8 inches
+        width_mm: 100             # 4 inches
+        height_mm: 15             # 0.6 inches (thin, no battery)
+        weight_grams: 360         # 0.79 lbs
+        weight_lbs: 0.79
+      performance:
+        refresh_speed_sec: 1.5    # Full 32-cell line update
+        battery_life_hrs: null    # N/A (bus-powered)
+        power_consumption_watts: 2.5  # From USB-C 5V
+      timeline:
+        design_weeks: 2
+        prototype_weeks: 2
+        pilot_production_weeks: 2
+        total_weeks: 6
+        certification_weeks: 4     # FCC 15B (simplest)
+      manufacturing:
+        component_count: 250       # Approx (192 actuators + 24 drivers + 4 expanders + MCU + passives)
+        assembly_time_min: 15      # Per unit (pilot, hand assembly)
+        yield_estimate: 0.98       # 98% first-pass yield
+
+    block_diagram_path: "docs/diagrams/arch-b-wired-block.png"
+    bom_csv_path: "artifacts/bom/arch-b-wired-bom.csv"
+
+  ARCH-C:
+    id: "ARCH-C"
+    name: "Hybrid (Mid-Range)"
+    nickname: "Mainstream Mobile"
+    market_position: "Mid-Range / Mainstream / Best Value"
+
+    # Requirements traceability
+    driven_by_requirements:
+      - id: "PRD-IFACE-001-ASMP"
+        scenario: "Scenario C (Hybrid BLE+USB): Best UX, highest cost $250-300 BOM"
+        note: "Using AA batteries reduces cost from $250-300 to $210-230"
+      - id: "PRD-COST-001-ASMP"
+        target: "Mid-range BOM target ($210-230 with AA battery optimization)"
+      - id: "PRD-SIZE-001-ASMP"
+        target: "Portable with battery (≤1.3 lbs)"
+
+    # Subsystem mapping
+    subsystems:
+      core:
+        - SS-ACTUATOR       # $288.00
+        - SS-CONTROL        # $8.00
+        - SS-IO-EXPAND      # $4.80
+        - SS-ACTUATOR-DRIVER # $19.20
+        - SS-USER-IO        # $0.50
+        - SS-PCB            # $15.00
+        - SS-ENCLOSURE      # $25.00
+      unique:
+        - SS-COMM-BLE       # $12.00
+        - SS-COMM-USB       # $1.50
+        - SS-POWER-AA-HOLDER  # $2.00
+        - SS-POWER-AA-BOOST-3V3  # $2.25
+        - SS-POWER-AA-BOOST-30V  # $2.25
+
+    # Qualitative assessment
+    qualitative:
+      cost:
+        bom: "MEDIUM"
+        certification: "MEDIUM"
+        nre: "MEDIUM"
+      size:
+        physical: "LARGE"        # AA holder adds bulk
+        weight: "HEAVY"          # 4× AA = 96g
+        portability: "HIGH"      # Wireless capable
+      ux:
+        setup: "GOOD"            # Pairing + plug
+        convenience: "BEST"      # Wireless + instant battery swap + wired fallback
+        reliability: "BEST"      # Dual interface fallback
+        battery_anxiety: "NONE"  # Instant AA swap
+        mobility: "EXCELLENT"    # Wireless freedom
+      complexity:
+        hardware: "MODERATE"
+        firmware: "COMPLEX"      # Dual BLE + USB stack
+        power: "MODERATE"        # Boost converters (no charger)
+        mechanical: "COMPLEX"    # AA holder integration
+      timeline:
+        pilot: "MODERATE"        # 7-8 weeks
+        parts_leadtime: "SHORT"  # Standard parts
+        certification: "MODERATE" # FCC 15B + 15C (radio)
+      manufacturing:
+        assembly: "MODERATE"
+        component_count: "HIGH"
+        dfm: "GOOD"
+        yield_risk: "MEDIUM"
+      risk:
+        technical: "MEDIUM"      # BLE + USB integration
+        supply_chain: "LOW"      # AA globally available
+        safety: "LOW"            # AA safe (no Li-ion hazard)
+        timeline: "MEDIUM"
+        cost_overrun: "MEDIUM"
+      market_fit:
+        education: "GOOD"
+        consumer: "EXCELLENT"    # Best flexibility
+        professional: "EXCELLENT" # Reliable dual interface
+        accessibility_ngos: "EXCELLENT"
+        global: "EXCELLENT"      # AA everywhere
+
+    # Quantitative metrics
+    quantitative:
+      cost:
+        bom_subtotal: 379.00      # Core + unique
+        misc_15pct: 56.85
+        bom_total: 435.85
+        bom_target: 220           # Mid-range target
+        bom_range_min: 210
+        bom_range_max: 230
+        certification_cost: 26500  # FCC 15B + 15C (radio), NO UL 2054 (AA exempt)
+        nre_total: 55000
+      size:
+        length_mm: 220            # Slightly longer (AA holder)
+        width_mm: 105             # Slightly wider
+        height_mm: 25             # Taller (AA holder = 15mm height)
+        weight_grams: 550         # 1.21 lbs (heavier due to 4× AA)
+        weight_lbs: 1.21
+      performance:
+        refresh_speed_sec: 1.5
+        battery_life_hrs: 18      # 4× AA = 2500mAh @ 6V, ~250mA avg
+        power_consumption_watts: 1.5  # Lower than USB (efficient boost converters)
+      timeline:
+        design_weeks: 3
+        prototype_weeks: 2
+        pilot_production_weeks: 2.5
+        total_weeks: 7.5
+        certification_weeks: 6     # FCC 15B + 15C (radio testing)
+      manufacturing:
+        component_count: 280
+        assembly_time_min: 20      # More complex (dual interfaces)
+        yield_estimate: 0.95       # Slightly lower (more parts)
+
+    block_diagram_path: "docs/diagrams/arch-c-hybrid-block.png"
+    bom_csv_path: "artifacts/bom/arch-c-hybrid-bom.csv"
+
+  ARCH-A:
+    id: "ARCH-A"
+    name: "Wireless (Premium)"
+    nickname: "Premium Pro"
+    market_position: "Premium / Mobile Professional / Sleek Design"
+
+    # Requirements traceability
+    driven_by_requirements:
+      - id: "PRD-IFACE-001-ASMP"
+        scenario: "Scenario A (BLE-only): Wireless, requires battery, $200-250 BOM"
+      - id: "PRD-COST-001-ASMP"
+        target: "Premium BOM target ($200-250)"
+      - id: "PRD-SIZE-001-ASMP"
+        target: "Most portable (sleek, integrated rechargeable)"
+
+    # Subsystem mapping
+    subsystems:
+      core:
+        - SS-ACTUATOR       # $288.00
+        - SS-CONTROL        # $8.00
+        - SS-IO-EXPAND      # $4.80
+        - SS-ACTUATOR-DRIVER # $19.20
+        - SS-USER-IO        # $0.50
+        - SS-PCB            # $15.00
+        - SS-ENCLOSURE      # $25.00
+      unique:
+        - SS-COMM-BLE       # $12.00
+        - SS-POWER-LIION-CELL  # $5.00
+        - SS-POWER-LIION-CHARGER  # $3.00
+        - SS-POWER-LIION-PROTECTION  # $1.50
+        - SS-POWER-LIION-GAUGE  # $2.50
+
+    # Qualitative assessment
+    qualitative:
+      cost:
+        bom: "MEDIUM-HIGH"
+        certification: "HIGH"    # FCC radio + UL 2054 battery
+        nre: "HIGH"
+      size:
+        physical: "MEDIUM"       # Integrated battery (sleeker than AA)
+        weight: "MEDIUM"         # Li-ion lighter than AA
+        portability: "HIGH"
+      ux:
+        setup: "GOOD"            # BLE pairing
+        convenience: "GOOD"      # Wireless freedom
+        reliability: "GOOD"      # BLE can drop (no fallback)
+        battery_anxiety: "HIGH"  # Forgot to charge?
+        mobility: "EXCELLENT"    # Truly wireless
+      complexity:
+        hardware: "MODERATE"
+        firmware: "MODERATE"     # BLE only (simpler than dual stack)
+        power: "COMPLEX"         # Charger + fuel gauge + thermal mgmt
+        mechanical: "MODERATE"   # Integrated battery pack
+      timeline:
+        pilot: "MODERATE"        # 8 weeks
+        parts_leadtime: "MEDIUM" # BLE module, Li-ion pack
+        certification: "SLOW"    # FCC 15C + UL 2054 (longest)
+      manufacturing:
+        assembly: "MODERATE"
+        component_count: "MEDIUM"
+        dfm: "GOOD"
+        yield_risk: "MEDIUM"
+      risk:
+        technical: "MEDIUM"      # BLE pairing UX
+        supply_chain: "MEDIUM"   # Li-ion sourcing
+        safety: "HIGH"           # Li-ion thermal runaway risk
+        timeline: "MEDIUM-HIGH"
+        cost_overrun: "MEDIUM-HIGH"
+      market_fit:
+        education: "POOR"        # Too expensive
+        consumer: "EXCELLENT"    # Premium wireless UX
+        professional: "GOOD"     # Mobile use cases
+        accessibility_ngos: "GOOD"
+        global: "FAIR"           # Charger voltage varies (110V/220V)
+
+    # Quantitative metrics
+    quantitative:
+      cost:
+        bom_subtotal: 390.50      # Core + unique
+        misc_15pct: 58.58
+        bom_total: 449.08
+        bom_target: 225           # Premium target
+        bom_range_min: 200
+        bom_range_max: 250
+        certification_cost: 35000  # FCC 15B + 15C + UL 2054 (battery)
+        nre_total: 70000
+      size:
+        length_mm: 210
+        width_mm: 100
+        height_mm: 20             # Integrated battery (thicker than wired, thinner than AA)
+        weight_grams: 450         # 0.99 lbs (Li-ion 60g vs AA 96g)
+        weight_lbs: 0.99
+      performance:
+        refresh_speed_sec: 1.5
+        battery_life_hrs: 10      # 2500mAh Li-ion @ 250mA avg
+        power_consumption_watts: 1.0  # BLE efficient
+      timeline:
+        design_weeks: 3
+        prototype_weeks: 2
+        pilot_production_weeks: 3
+        total_weeks: 8
+        certification_weeks: 8     # FCC 15C + UL 2054 (slowest)
+      manufacturing:
+        component_count: 270
+        assembly_time_min: 18
+        yield_estimate: 0.96
+
+    block_diagram_path: "docs/diagrams/arch-a-wireless-block.png"
+    bom_csv_path: "artifacts/bom/arch-a-wireless-bom.csv"
+
+# ============================================================================
+# COMPARISON DIMENSIONS (for auto-generating comparison tables)
+# ============================================================================
+
+comparison_dimensions:
+  - category: "Cost"
+    qualitative: ["bom", "certification", "nre"]
+    quantitative: ["bom_total", "certification_cost", "nre_total"]
+
+  - category: "Size & Weight"
+    qualitative: ["physical", "weight", "portability"]
+    quantitative: ["length_mm", "width_mm", "height_mm", "weight_lbs"]
+
+  - category: "User Experience"
+    qualitative: ["setup", "convenience", "reliability", "battery_anxiety", "mobility"]
+    quantitative: ["battery_life_hrs"]
+
+  - category: "Complexity"
+    qualitative: ["hardware", "firmware", "power", "mechanical"]
+    quantitative: ["component_count"]
+
+  - category: "Timeline"
+    qualitative: ["pilot", "parts_leadtime", "certification"]
+    quantitative: ["total_weeks", "certification_weeks"]
+
+  - category: "Manufacturing"
+    qualitative: ["assembly", "component_count", "dfm", "yield_risk"]
+    quantitative: ["assembly_time_min", "yield_estimate"]
+
+  - category: "Risk"
+    qualitative: ["technical", "supply_chain", "safety", "timeline", "cost_overrun"]
+    quantitative: []
+
+  - category: "Market Fit"
+    qualitative: ["education", "consumer", "professional", "accessibility_ngos", "global"]
+    quantitative: []

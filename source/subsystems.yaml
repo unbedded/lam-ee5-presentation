@@ -1,0 +1,185 @@
+# Braille Display Device - Subsystems Database
+# Project: Lam Research EE Concept Evaluation
+# Purpose: Define subsystems and link to parts database (source/parts.csv)
+# Pricing and part numbers maintained in parts.csv (Excel-editable)
+
+metadata:
+  project: "Lam Research - Braille Display EE Concept Evaluation"
+  version: "1.0.0"
+  date: "2025-10-09"
+  author: "Spencer Barrett"
+  purpose: "Subsystem definitions - part details in parts.csv"
+
+# ============================================================================
+# CORE SUBSYSTEMS (Shared across all 3 architectures)
+# ============================================================================
+
+subsystems_core:
+
+  SS-ACTUATOR:
+    name: "Braille Actuator Array"
+    description: "192 dots (32 cells × 6 dots/cell), binary actuation"
+    shared_across: ["ARCH-A", "ARCH-B", "ARCH-C"]
+    requirements: ["PRD-FUNC-001", "PRD-FUNC-003", "NFR-STD-002"]
+    part_ref: "TBD-PIEZO-01"
+    quantity: 192
+    rationale: "Piezo: ≤2.3mm size, <100ms fast, low hold power vs solenoid"
+
+  SS-CONTROL:
+    name: "Main Control Unit (MCU)"
+    description: "Microcontroller for actuator control + text processing"
+    shared_across: ["ARCH-A", "ARCH-B", "ARCH-C"]
+    requirements: ["PRD-FUNC-001", "PRD-FUNC-002-ASMP", "PRD-IFACE-001-ASMP"]
+    part_ref: "497-14367-ND"
+    quantity: 1
+    rationale: "STM32F4: 140 GPIO (easier I/O expansion), built-in USB PHY, lower power vs ESP32"
+
+  SS-IO-EXPAND:
+    name: "I/O Expander Array"
+    description: "GPIO expansion (STM32 140 GPIO → 192 total needed)"
+    shared_across: ["ARCH-A", "ARCH-B", "ARCH-C"]
+    requirements: ["PRD-FUNC-001"]
+    part_ref: "MCP23017-E/SP-ND"
+    quantity: 4
+    rationale: "MCP23017: 4 chips cleaner than 7× shift registers, I2C simple, interrupt support"
+
+  SS-ACTUATOR-DRIVER:
+    name: "Actuator High-Voltage Driver Array"
+    description: "30V drivers for piezo actuators"
+    shared_across: ["ARCH-A", "ARCH-B", "ARCH-C"]
+    requirements: ["SS-ACTUATOR"]
+    part_ref: "296-1781-5-ND"
+    quantity: 24
+    rationale: "ULN2803A: Cost-effective ($19 vs $36), 50V rating >> 30V, proven for capacitive loads"
+
+  SS-USER-IO:
+    name: "User Interface Buttons"
+    description: "2× tactile buttons (UP/DOWN navigation)"
+    shared_across: ["ARCH-A", "ARCH-B", "ARCH-C"]
+    requirements: ["PRD-FUNC-002-ASMP"]
+    part_ref: "CKN12221-ND"
+    quantity: 2
+    rationale: "C&K KMR: Standard footprint, good tactile, >1M cycle life"
+
+  SS-PCB:
+    name: "Main PCB (4-layer)"
+    description: "200mm × 100mm board for all electronics"
+    shared_across: ["ARCH-A", "ARCH-B", "ARCH-C"]
+    requirements: ["PRD-FUNC-001"]
+    part_ref: "CUSTOM-PCB-01"
+    quantity: 1
+    rationale: "4-layer: Clean power distribution (30V/5V/3.3V), ground plane for EMI (FCC)"
+
+  SS-ENCLOSURE:
+    name: "Mechanical Enclosure"
+    description: "Housing + braille dot surface"
+    shared_across: ["ARCH-A", "ARCH-B", "ARCH-C"]
+    requirements: ["PRD-SIZE-001-ASMP", "PRD-VOL-001-ASMP"]
+    part_ref: "CUSTOM-ENCL-01"
+    quantity: 1
+    rationale: "3D print (SLS nylon) for pilot (zero NRE, fast iteration). Switch to injection mold for 10k+/month."
+
+# ============================================================================
+# ARCHITECTURE-SPECIFIC SUBSYSTEMS
+# ============================================================================
+
+subsystems_unique:
+
+  SS-COMM-BLE:
+    name: "BLE 5.0 Communication Module"
+    description: "Bluetooth Low Energy radio for wireless connection"
+    used_in: ["ARCH-A", "ARCH-C"]
+    requirements: ["PRD-IFACE-001-ASMP"]
+    part_ref: "1597-MDBT50Q-1MV2-ND"
+    quantity: 1
+    rationale: "nRF52840 module: Pre-certified FCC (saves $20K + 4-6 weeks), built-in antenna. $12 premium justified."
+
+  SS-COMM-USB:
+    name: "USB-C Communication Interface"
+    description: "USB-C connector for wired connection"
+    used_in: ["ARCH-B", "ARCH-C"]
+    requirements: ["PRD-IFACE-001-ASMP"]
+    part_ref: "2073-USB4105-GF-A-ND"
+    quantity: 1
+    rationale: "Standard USB-C receptacle, STM32 has built-in USB PHY (no external chip needed)"
+
+  SS-POWER-USB-LDO:
+    name: "USB Power - LDO (5V→3.3V)"
+    description: "Logic power from USB"
+    used_in: ["ARCH-B"]
+    requirements: ["PRD-IFACE-001-ASMP"]
+    part_ref: "296-38833-1-ND"
+    quantity: 1
+    rationale: "Bus-powered design, 2.5W USB budget"
+
+  SS-POWER-USB-BOOST:
+    name: "USB Power - Boost (5V→30V)"
+    description: "Actuator HV power from USB"
+    used_in: ["ARCH-B"]
+    requirements: ["PRD-IFACE-001-ASMP"]
+    part_ref: "296-50464-1-ND"
+    quantity: 1
+    rationale: "Boost to 30V for piezo actuators"
+
+  SS-POWER-AA-HOLDER:
+    name: "AA Battery Holder (4×AA)"
+    description: "Battery holder for 4× AA alkaline"
+    used_in: ["ARCH-C"]
+    requirements: ["PRD-SIZE-001-ASMP"]
+    part_ref: "36-2466K-ND"
+    quantity: 1
+    rationale: "AA exempt from UL 2054 cert ($12K saved), instant swap, global availability"
+
+  SS-POWER-AA-BOOST-3V3:
+    name: "AA Power - Boost (6V→3.3V)"
+    description: "Logic power from AA batteries"
+    used_in: ["ARCH-C"]
+    requirements: ["PRD-SIZE-001-ASMP"]
+    part_ref: "296-50464-1-ND"
+    quantity: 1
+    rationale: "Buck-boost mode, same chip as other boost converters (design reuse)"
+
+  SS-POWER-AA-BOOST-30V:
+    name: "AA Power - Boost (6V→30V)"
+    description: "Actuator HV power from AA"
+    used_in: ["ARCH-C"]
+    requirements: ["PRD-SIZE-001-ASMP"]
+    part_ref: "296-50464-1-ND"
+    quantity: 1
+    rationale: "Same chip as USB boost (design reuse)"
+
+  SS-POWER-LIION-CELL:
+    name: "Li-ion Cell (18650)"
+    description: "18650 rechargeable cell 2500mAh"
+    used_in: ["ARCH-A"]
+    requirements: ["PRD-SIZE-001-ASMP", "NFR-STD-001"]
+    part_ref: "TBD-18650-01"
+    quantity: 1
+    rationale: "Premium rechargeable, sleek integrated design, UL 2054 cert required"
+
+  SS-POWER-LIION-CHARGER:
+    name: "Li-ion Charger IC"
+    description: "USB-C charging circuit"
+    used_in: ["ARCH-A"]
+    requirements: ["PRD-SIZE-001-ASMP"]
+    part_ref: "296-38713-1-ND"
+    quantity: 1
+    rationale: "TI BQ24075: USB-C input, 1.5A charge rate"
+
+  SS-POWER-LIION-PROTECTION:
+    name: "Li-ion Protection Circuit"
+    description: "Battery safety (overcharge/discharge)"
+    used_in: ["ARCH-A"]
+    requirements: ["NFR-STD-001"]
+    part_ref: "TBD-PROTECTION-01"
+    quantity: 1
+    rationale: "UL 2054 requirement for Li-ion safety"
+
+  SS-POWER-LIION-GAUGE:
+    name: "Fuel Gauge IC"
+    description: "Battery SOC estimation"
+    used_in: ["ARCH-A"]
+    requirements: ["PRD-SIZE-001-ASMP"]
+    part_ref: "296-41985-1-ND"
+    quantity: 1
+    rationale: "TI BQ27441: I2C interface, SOC % for user display"
