@@ -110,6 +110,24 @@ Generate these artifacts:
 
 ---
 
+## PCB Design Requirements by Architecture
+
+| Architecture | Layers Required | Key Drivers | Min Trace | HV Clearance | Max Emissions |
+|--------------|-----------------|-------------|-----------|--------------|---------------|
+| ARCH-B (Wired) | 4-layer | STM32F4 (168 MHz), 30V drivers, USB, boost | 6 mil | 50 mil | 168 MHz |
+| ARCH-C (Hybrid) | 4-layer | STM32F4, 30V drivers, USB, BLE (2.4 GHz), boost | 6 mil | 50 mil | 2440 MHz |
+| ARCH-A (Wireless) | 4-layer | STM32F4, 30V drivers, BLE (2.4 GHz), boost | 6 mil | 50 mil | 2440 MHz |
+
+**Layer Stack (all 3 architectures):**
+- Layer 1 (Top): Signal routing (6 mil min trace/space for MCU fanout)
+- Layer 2 (GND): Continuous ground plane (FCC Part 15B requirement)
+- Layer 3 (Power): Isolated planes for 30V / 5V / 3.3V
+- Layer 4 (Bottom): Signal routing
+
+**Cost Impact:** 4-layer PCB ~$15 vs 2-layer ~$8 (but 2-layer would fail FCC emissions)
+
+---
+
 ## Block Diagrams
 
 [Reference to docs/diagrams/arch-{a,b,c}-block.png - to be created]
@@ -204,6 +222,25 @@ Generate markdown slides (for Marp or reveal.js):
    archs = yaml.safe_load(open('source/architectures.yaml'))
    subsys = yaml.safe_load(open('source/subsystems.yaml'))
    parts = list(csv.DictReader(open('source/parts.csv')))
+   ```
+
+2. **Calculate PCB layer requirements:**
+   ```python
+   def calculate_pcb_layers(arch_data, subsys_db):
+       """Calculate required PCB layers based on subsystems used"""
+       max_layers = 2  # Start with 2-layer minimum
+       layer_drivers = []
+
+       # Check all subsystems (core + unique)
+       for ss_id in arch_data['subsystems']['core'] + arch_data['subsystems']['unique']:
+           ss = subsys_db['subsystems_core'].get(ss_id) or subsys_db['subsystems_unique'].get(ss_id)
+           if ss and 'pcb_specs' in ss:
+               layers = ss['pcb_specs'].get('layers_required', 2)
+               if layers >= 4:  # Track all 4-layer requirements
+                   layer_drivers.append(ss_id)
+               max_layers = max(max_layers, layers)
+
+       return max_layers, layer_drivers
    ```
 
 2. **Generate architecture.md:**
