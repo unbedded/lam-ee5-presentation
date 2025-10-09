@@ -235,6 +235,137 @@ architectures:
     block_diagram_path: "docs/diagrams/arch-c-hybrid-block.png"
     bom_csv_path: "artifacts/bom/arch-c-hybrid-bom.csv"
 
+  ARCH-D:
+    id: "ARCH-D"
+    name: "Hybrid (Solenoid+Latch)"
+    nickname: "Budget Mobile"
+    market_position: "Budget-Conscious / Long Battery Life / Acceptable UX Trade-off"
+
+    # Requirements traceability
+    driven_by_requirements:
+      - id: "PRD-SCHED-002-ASMP"
+        target: "COTS mandate (≤4 week lead time) → Use COTS solenoid (Takaha BS-0420N-01)"
+      - id: "PRD-POWER-004-ASMP"
+        target: "AA battery life (8 hours) → Solenoid+latch = 1.53W (marginal fit vs piezo 2.16W)"
+      - id: "PRD-FUNC-003-ARCH-C-EXCEPT"
+        target: "Allow 4mm actuator (relaxed from 2.3mm), 3.5mm cell pitch, 280mm device"
+      - id: "PRD-COST-001-ASMP"
+        target: "Low BOM target ($150-180) via actuator cost savings (solenoid $131 vs piezo $288)"
+
+    # Subsystem mapping
+    subsystems:
+      core:
+        - SS-ACTUATOR-SOLENOID  # $96.00 (192× @ $0.50 ea, vs piezo $288)
+        - SS-ACTUATOR-LATCH     # $13.00 (global latch plate + latch solenoid)
+        - SS-CONTROL            # $8.00
+        - SS-IO-EXPAND          # $4.80
+        - SS-ACTUATOR-DRIVER-2CH # $4.80 (2 channels vs 8 channels = $19.20 savings)
+        - SS-USER-IO            # $0.50
+        - SS-PCB                # $18.00 (4-layer, slightly larger for 280mm device)
+        - SS-ENCLOSURE          # $30.00 (larger for 280mm length)
+      unique:
+        - SS-COMM-BLE           # $12.00
+        - SS-COMM-USB           # $1.50
+        - SS-POWER-AA-HOLDER    # $2.00
+        - SS-POWER-AA-BOOST-3V3 # $2.25
+        - SS-POWER-AA-BOOST-12V # $2.25 (12V for solenoid overdrive, not 30V for piezo)
+
+    # Qualitative assessment
+    qualitative:
+      cost:
+        bom: "LOW-MEDIUM"
+        certification: "MEDIUM"
+        nre: "MEDIUM"
+      size:
+        physical: "VERY LARGE"   # 280mm length (40% longer than ARCH-B/C)
+        weight: "HEAVY"          # 4× AA + solenoids
+        portability: "HIGH"      # Wireless capable
+      ux:
+        setup: "GOOD"            # Pairing + plug
+        convenience: "GOOD"      # Wireless + instant battery swap
+        reliability: "BEST"      # Dual interface fallback
+        battery_anxiety: "NONE"  # Instant AA swap + longest battery life (8hrs vs 4hrs ARCH-C)
+        mobility: "EXCELLENT"    # Wireless freedom
+        refresh_speed: "SLOW"    # 5.2-second refresh (vs 1.5-sec piezo) due to sequential actuation
+      complexity:
+        hardware: "COMPLEX"      # Latch mechanism adds complexity
+        firmware: "COMPLEX"      # Dual BLE + USB + sequential latch control
+        power: "MODERATE"        # Boost converter (12V, not 30V)
+        mechanical: "VERY COMPLEX" # Latch plate + detents + alignment
+      timeline:
+        pilot: "MODERATE"        # 7-8 weeks (COTS solenoids available)
+        parts_leadtime: "SHORT"  # All COTS (solenoid 2-week lead time)
+        certification: "MODERATE" # FCC 15B + 15C (radio)
+      manufacturing:
+        assembly: "COMPLEX"      # Latch mechanism requires precision alignment
+        component_count: "HIGH"
+        dfm: "FAIR"              # Latch mechanism tolerances critical
+        yield_risk: "HIGH"       # Latch alignment/friction issues
+      risk:
+        technical: "HIGH"        # Latch mechanism unproven (needs prototype validation)
+        supply_chain: "LOW"      # AA + COTS solenoids globally available
+        safety: "LOW"            # AA safe (no Li-ion hazard), 12V low voltage
+        timeline: "MEDIUM"       # Latch prototyping adds risk
+        cost_overrun: "LOW"      # Actuators well-defined cost ($131 vs $288)
+      market_fit:
+        education: "EXCELLENT"   # Low cost + AA batteries
+        consumer: "FAIR"         # Slow refresh (5.2 sec) may frustrate users
+        professional: "POOR"     # Slow refresh unacceptable for professionals
+        accessibility_ngos: "EXCELLENT" # Low cost + long battery life
+        global: "EXCELLENT"      # AA everywhere
+
+    # Quantitative metrics
+    quantitative:
+      cost:
+        bom_subtotal: 195.10      # Core + unique (actuator savings: $157)
+        misc_15pct: 29.27
+        bom_total: 224.37         # 48% lower than ARCH-C ($435.85)
+        bom_target: 165           # Low-mid range target
+        bom_range_min: 150
+        bom_range_max: 180
+        certification_cost: 26500  # FCC 15B + 15C (radio), NO UL 2054 (AA exempt)
+        nre_total: 60000          # Higher than ARCH-C due to latch prototyping
+      size:
+        length_mm: 280            # 40% longer (3.5mm cell pitch vs 2.5mm)
+        width_mm: 105             # Same as ARCH-C
+        height_mm: 25             # Same as ARCH-C (AA holder)
+        weight_grams: 580         # 1.28 lbs (heavier due to solenoids + latch plate)
+        weight_lbs: 1.28
+      performance:
+        refresh_speed_sec: 5.2    # Sequential 2-channel actuation (vs 1.5 sec ARCH-C)
+        battery_life_hrs: 8       # 4× AA = 15Wh, 1.53W avg → 8 hrs (vs 4 hrs ARCH-C piezo)
+        power_consumption_watts: 1.53  # Solenoid+latch (2 channels) marginal fit
+      timeline:
+        design_weeks: 3
+        prototype_weeks: 3        # Latch mechanism prototyping
+        pilot_production_weeks: 2.5
+        total_weeks: 8.5
+        certification_weeks: 6     # FCC 15B + 15C (radio testing)
+      manufacturing:
+        component_count: 280
+        assembly_time_min: 25      # More complex (latch mechanism)
+        yield_estimate: 0.90       # Lower yield (latch alignment issues)
+
+    block_diagram_path: "docs/diagrams/arch-d-solenoid-latch-block.png"
+    bom_csv_path: "artifacts/bom/arch-d-solenoid-latch-bom.csv"
+
+    # Trade-off notes
+    trade_offs:
+      pros:
+        - "Lowest BOM cost ($224 vs $435 ARCH-C, 48% savings)"
+        - "COTS solenoids (2-week lead time, meets PRD-SCHED-002-ASMP)"
+        - "Longest battery life (8 hours vs 4 hours ARCH-C piezo)"
+        - "AA batteries globally available (no charger needed)"
+        - "Fits AA power budget (1.53W vs 1.5W max, marginal)"
+      cons:
+        - "Slow refresh (5.2 sec vs 1.5 sec piezo) - may frustrate fast readers"
+        - "Very large device (280mm vs 200mm, 40% longer) - less portable"
+        - "Heavy (1.28 lbs vs 1.21 lbs ARCH-C)"
+        - "Latch mechanism unproven (high technical risk, requires prototyping)"
+        - "Complex mechanical assembly (latch alignment critical, lower yield)"
+        - "Low DFM (detent tolerances, friction issues)"
+      recommendation: "Prototype latch mechanism in Week 3-4 to validate feasibility. If latch works: ARCH-D is best low-cost option. If latch fails: Fallback to ARCH-C with 6× AA (10.5Wh → 2.1W budget → piezo fits)."
+
   ARCH-A:
     id: "ARCH-A"
     name: "Wireless (Premium)"

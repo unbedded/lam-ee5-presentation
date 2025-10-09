@@ -17,3 +17,7 @@ SS-POWER-LIION-GAUGE,296-41985-1-ND,TI,BQ27441DRZT-G1A,"Fuel gauge IC, I2C, SOC 
 SS-USER-IO-BUTTON,CKN12221-ND,C&K,KMR221NGLFS,"Tactile switch, 160gf, 1M+ cycles",1,0.25,0.18,2,Y,SMT,"4.5×4.5mm footprint"
 SS-PCB-4LAYER,CUSTOM-PCB-01,PCBWay,PCB-4L-200x100,"4-layer PCB 200×100mm, ENIG finish",1,15.00,12.00,3,Y,Board,"Quote for qty 100 (pilot), 1.6mm thick"
 SS-ENCLOSURE-3DP,CUSTOM-ENCL-01,Shapeways,3DP-SLS-NYLON,"3D print SLS nylon, natural finish",1,25.00,25.00,2,Y,Mechanical,"Pilot only, ~200×100×25mm, switch to injection mold for production"
+SS-ACTUATOR-SOLENOID,TBD-SOLENOID-01,Takaha,BS-0420N-01,"Solenoid 4mm dia, 1mm stroke, 0.5N force, 5VDC",1,0.50,0.45,2,Y,Custom,"COTS part, 2-week lead time (Digikey stock), $0.50 @ 100 qty, 4mm size relaxation (PRD-FUNC-003-ARCH-C-EXCEPT)"
+SS-ACTUATOR-LATCH,CUSTOM-LATCH-01,Custom,LATCH-PLATE-V1,"Global latch plate (3D print ABS) + latch solenoid",1,10.50,10.00,1,Y,Mechanical,"Latch plate $10 (3D print with 192 detent holes) + latch solenoid $0.50 (Takaha BS-0420N-01)"
+SS-ACTUATOR-DRIVER-2CH,296-1781-5-ND,TI,ULN2803A,"8-channel Darlington array (for 2-ch architecture)",1,0.80,0.65,4,Y,DIP18,"Same as SS-ACTUATOR-DRIVER but fewer qty (12 vs 24 chips) for 2-channel design"
+SS-POWER-AA-BOOST-12V,296-50464-1-ND,TI,TPS61088,"Boost 6V→12V, 2.5A switch (solenoid overdrive)",1,2.25,1.95,6,Y,VQFN16,"Lower voltage than 30V piezo (easier isolation, less EMI)"
