@@ -82,36 +82,47 @@
 
 ### <span style="color:blue">v1.3.0: Solution Architecture Development (feature/tech-analysis-architecture)</span>
 **Design Plan Alignment:** Complete Design Step 2 (PDF p.10) - 25/100 points
-**Status:** IN PROGRESS - Starting architecture design
+**Status:** IN PROGRESS - 5h logged (of 12h est), architectures created, actuator analysis deep-dive
 
 **PDF Quote:** "Develop and describe **multiple alternative solutions**"
 
-- [ ] **Market scan: Identify what solutions currently exist**
-  - [ ] Search for existing braille displays (commercial products)
-  - [ ] Identify technology types used (piezo, solenoid, SMA, electroactive polymers)
-  - [ ] Note price points ($50 budget? $200 premium? $500 professional?)
-  - [ ] Capture key specs (refresh rate, power, size, connectivity)
-  - [ ] Document in resources/notes/market-research.md
-  - **Purpose:** Understand what "potential solutions" are viable (not reinventing wheel!)
-- [ ] Download datasheets to reference/datasheets/
-  - [ ] Actuators: piezo, solenoid, SMA, micro-motor
-  - [ ] MCUs: STM32, ESP32, RP2040, or FPGA options
-  - [ ] Communication: BLE modules, USB-C controllers, WiFi modules
-  - [ ] Power: battery specs, voltage regulators, charging ICs
-- [ ] Research braille actuator technologies
-  - [ ] Piezoelectric actuators (datasheets, pros/cons, power, cost)
-  - [ ] Solenoid-based systems (datasheets, pros/cons, power, cost)
-  - [ ] Shape memory alloy (SMA) (datasheets, pros/cons, power, cost)
-  - [ ] Micro-motor solutions (datasheets, pros/cons, power, cost)
-- [ ] Design control architecture options (create block diagrams in resources/diagrams/)
-  - [ ] Centralized MCU approach (block diagram, component selection)
-  - [ ] Distributed control (block diagram, component selection)
-  - [ ] FPGA-based solution (block diagram, component selection)
-- [ ] Evaluate communication interfaces (comparison table)
-  - [ ] Bluetooth LE (power, complexity, cross-platform support)
-  - [ ] USB-C (power, complexity, cross-platform support)
-  - [ ] WiFi (power, complexity, cross-platform support)
-- [ ] Create docs/architecture.md with 3+ distinct solutions (reference diagrams in resources/)
+- [x] **Market scan: Identify what solutions currently exist**
+  - [x] Search for existing braille displays (commercial products) - docs/market-braille-display-scan.md
+  - [x] Identify technology types used (piezo monopoly - 100% of commercial products)
+  - [x] Note price points (Orbit Reader $449, BrailleMe $515, Brailliant $1200+)
+  - [x] Capture key specs (refresh rate, power, size, connectivity, actuator voltage)
+  - [x] Document findings: docs/market-braille-display-scan.md (15KB)
+  - **Key finding:** NO COTS piezo at 2-3mm, all use 200V custom (8-12 wk lead time)
+- [x] Research braille actuator technologies (EXTENSIVE analysis)
+  - [x] Piezoelectric actuators (pros/cons, power, cost) - docs/actuator-technology-tradeoff.md
+  - [x] Solenoid-based systems (pros/cons, power, cost, mechanical latch concept)
+  - [x] Shape memory alloy (SMA) (too slow 700-1500ms, ruled out)
+  - [x] Voice coil actuators (high hold power, ruled out)
+  - [x] MEMS electrostatic (insufficient stroke, ruled out)
+  - [x] Piezo voltage options (30V/60V/100V/120V/200V) - docs/piezo-voltage-options-analysis.md (22KB)
+  - [x] Mechanical latch concept - docs/actuator-mechanical-latch-concept.md (11KB)
+  - [x] Power budget analysis - docs/power-budget-analysis.md (15KB)
+  - [x] COTS timeline analysis - docs/cots-timeline-analysis.md
+- [x] **Added critical requirements (derived from analysis):**
+  - [x] PRD-SCHED-002-ASMP: COTS component mandate (≤4 week lead time)
+  - [x] PRD-POWER-003/004/005-ASMP: Power budgets (USB/AA/Li-ion)
+  - [x] PRD-FUNC-005/006-ASMP: Reading speed and usage profiles
+  - [x] PRD-FUNC-003-ARCH-C-EXCEPT: Size exception for ARCH-C/D (4mm solenoid, 3.5mm pitch)
+  - [x] Corrected ADA 703.3 spacing spec (6.2mm not 6.0mm center-to-center)
+  - **Total requirements: 24** (9 ground truth + 13 assumptions + 2 standards)
+- [x] **Created architecture database (4 architectures):**
+  - [x] source/architectures.yaml: ARCH-A (Li-ion BLE), ARCH-B (USB wired), ARCH-C (AA hybrid piezo), ARCH-D (AA hybrid solenoid+latch)
+  - [x] source/subsystems.yaml: 19 subsystems (7 core + 12 unique) with PCB specs
+  - [x] source/parts.csv: 23 parts with Digikey PNs, costs, lead times
+  - **Architectures:** ARCH-B ($420 BOM), ARCH-C ($436), ARCH-D ($224, 48% savings), ARCH-A ($449)
+- [ ] Evaluate communication interfaces (comparison table) - partially done in architectures.yaml
+  - [x] Bluetooth LE (ARCH-A, ARCH-C, ARCH-D) - nRF52840 pre-certified FCC
+  - [x] USB-C (ARCH-B, ARCH-C, ARCH-D) - STM32 built-in USB PHY
+  - [ ] WiFi (deferred - not needed for phone companion device)
+- [ ] **Explore additional architecture variants (OPTIONAL):**
+  - [ ] ARCH-E (offset solenoid + pushrods, 198mm device, standard spacing)
+  - [ ] ARCH-A/B/C-100V (100V piezo bimorph variants if timeline relaxed)
+- [ ] Create docs/architecture.md with 3+ distinct solutions (or /arch-gen to auto-generate from YAML)
 - [ ] Run /rubric-eval for Category 2 assessment (Alternative Solutions: 25 pts)
   - Generates artifacts/rubric-reports/v1.3.0-architecture-eval.md
 
