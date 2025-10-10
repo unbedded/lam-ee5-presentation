@@ -80,9 +80,10 @@
   - Committed to git: ba286f4 "feat(v1.2.0): Complete Requirements Analysis phase"
   - Gate Decision: ✅ READY for v1.3.0 (Architecture Development)
 
-### <span style="color:blue">v1.3.0: Solution Architecture Development (feature/tech-analysis-architecture)</span>
+### <span style="color:green">v1.3.0: Solution Architecture Development (feature/tech-analysis-architecture)</span>
 **Design Plan Alignment:** Complete Design Step 2 (PDF p.10) - 25/100 points
-**Status:** IN PROGRESS - 5h logged (of 12h est), architectures created, actuator analysis deep-dive
+**Rubric Score:** 24/25 (Alternative Solutions) = 96% - Excellent
+**Status:** COMPLETE - 5h logged (of 12h est)
 
 **PDF Quote:** "Develop and describe **multiple alternative solutions**"
 
@@ -99,7 +100,7 @@
   - [x] Shape memory alloy (SMA) (too slow 700-1500ms, ruled out)
   - [x] Voice coil actuators (high hold power, ruled out)
   - [x] MEMS electrostatic (insufficient stroke, ruled out)
-  - [x] Piezo voltage options (30V/60V/100V/120V/200V) - docs/piezo-voltage-options-analysis.md (22KB)
+  - [x] Piezo voltage options (200V standard, skipped 100V exploration per user decision)
   - [x] Mechanical latch concept - docs/actuator-mechanical-latch-concept.md (11KB)
   - [x] Power budget analysis - docs/power-budget-analysis.md (15KB)
   - [x] COTS timeline analysis - docs/cots-timeline-analysis.md
@@ -107,7 +108,7 @@
   - [x] PRD-SCHED-002-ASMP: COTS component mandate (≤4 week lead time)
   - [x] PRD-POWER-003/004/005-ASMP: Power budgets (USB/AA/Li-ion)
   - [x] PRD-FUNC-005/006-ASMP: Reading speed and usage profiles
-  - [x] PRD-FUNC-003-ARCH-C-EXCEPT: Size exception for ARCH-C/D (4mm solenoid, 3.5mm pitch)
+  - [x] PRD-FUNC-003-ARCH-C-EXCEPT: Size exception for ARCH-D (4mm solenoid, 3.5mm pitch)
   - [x] Corrected ADA 703.3 spacing spec (6.2mm not 6.0mm center-to-center)
   - **Total requirements: 24** (9 ground truth + 13 assumptions + 2 standards)
 - [x] **Created architecture database (4 architectures):**
@@ -115,16 +116,24 @@
   - [x] source/subsystems.yaml: 19 subsystems (7 core + 12 unique) with PCB specs
   - [x] source/parts.csv: 23 parts with Digikey PNs, costs, lead times
   - **Architectures:** ARCH-B ($420 BOM), ARCH-C ($436), ARCH-D ($224, 48% savings), ARCH-A ($449)
-- [ ] Evaluate communication interfaces (comparison table) - partially done in architectures.yaml
+- [x] Evaluate communication interfaces (comparison table)
   - [x] Bluetooth LE (ARCH-A, ARCH-C, ARCH-D) - nRF52840 pre-certified FCC
   - [x] USB-C (ARCH-B, ARCH-C, ARCH-D) - STM32 built-in USB PHY
-  - [ ] WiFi (deferred - not needed for phone companion device)
-- [ ] **Explore additional architecture variants (OPTIONAL):**
-  - [ ] ARCH-E (offset solenoid + pushrods, 198mm device, standard spacing)
-  - [ ] ARCH-A/B/C-100V (100V piezo bimorph variants if timeline relaxed)
-- [ ] Create docs/architecture.md with 3+ distinct solutions (or /arch-gen to auto-generate from YAML)
-- [ ] Run /rubric-eval for Category 2 assessment (Alternative Solutions: 25 pts)
-  - Generates artifacts/rubric-reports/v1.3.0-architecture-eval.md
+  - [x] WiFi (deferred - not needed for phone companion device)
+- [x] **Skipped additional architecture variants per user decision:**
+  - [x] ARCH-E (offset solenoid + pushrods) - explored, not formalized per user "skip it"
+  - [x] 100V piezo variants - skipped per user "stick w/ 200 std is less risk"
+- [x] Create docs/architecture.md with 4 distinct solutions (480 lines, comprehensive)
+- [x] Run /rubric-eval for Category 2 assessment (Alternative Solutions: 24/25 pts = 96% Excellent)
+  - Generated artifacts/rubric-reports/v1.3.0-architecture-eval.md
+
+### Phase Gate: v1.3.0 → v1.4.0
+- [x] All architecture tasks complete (4 architectures defined, documented, evaluated)
+- [x] Quality metrics met (4 architectures > 3+ target, 24/25 rubric score)
+- [x] Quantitative comparison complete (14 metrics per architecture)
+- [x] Requirements traceability complete (100% architecture-requirement mapping)
+- [x] Supporting analysis thorough (6 docs: market/actuator/voltage/latch/power/COTS)
+- **Gate Decision:** ✅ READY for v1.4.0 Trade-off Analysis
 
 ### <span style="color:red">v1.4.0: Trade-off Analysis (feature/tech-analysis-tradeoffs)</span>
 **Design Plan Alignment:** Complete Design Step 3 (PDF p.10) - 30/100 points ← **HIGHEST WEIGHT**
