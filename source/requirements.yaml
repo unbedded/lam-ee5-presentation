@@ -170,10 +170,12 @@ requirements:
       Our 32-cell device will be slightly larger/heavier, but target ≤1.3 lbs is achievable.
 
       SIZE VARIANCE BY ARCHITECTURE:
-      - ARCH-A (Li-ion BLE): 200mm × 100mm × 15mm (2.5mm cell pitch, piezo actuators)
-      - ARCH-B (USB wired): 200mm × 100mm × 15mm (2.5mm cell pitch, piezo actuators)
-      - ARCH-C (AA hybrid): 280mm × 100mm × 15mm (3.5mm cell pitch, 4mm solenoid actuators)
+      - ARCH-A (Li-ion BLE): 198mm × 100mm × 15mm (6.2mm cell spacing, piezo actuators)
+      - ARCH-B (USB wired): 198mm × 100mm × 15mm (6.2mm cell spacing, piezo actuators)
+      - ARCH-C (AA hybrid): 280mm × 100mm × 15mm (8.75mm cell spacing, 4mm solenoid, 3.5mm dot pitch)
         → See PRD-FUNC-003-ARCH-C-EXCEPT for ARCH-C size exception rationale
+      - ARCH-D (Solenoid+latch): Same as ARCH-C (280mm, 3.5mm dot pitch, size exception)
+      - ARCH-E (Offset solenoid): 198mm × 100mm × 25mm (6.2mm cell spacing, staggered solenoid grid)
     risk_level: MEDIUM
     customer_validation_needed: YES
     sensitivity_range: "Weight: 0.5-1.5 lbs (230-680g), Length: 200-280mm (by architecture), Width: 100mm, Height: 15mm"
@@ -362,13 +364,16 @@ requirements:
       - "32 braille cells (characters) in single horizontal line"
       - "6 dots per cell (2 columns × 3 rows = Grade 1 braille)"
       - "Total: 192 individually controllable dots (32 × 6)"
-      - "Dot spacing: 2.5mm pitch within cell, 6.0mm pitch between cells (US ADA 703.3)"
-      - "Display width: ~192mm (32 cells × 6mm)"
-      - "Actuator size constraint: ≤2.3mm diameter (derived from 2.5mm pitch minus dot diameter 1.5mm ÷ 2)"
+      - "Dot spacing within cell: 2.3-2.5mm (horizontal), 2.5mm (vertical) per ADA 703.3"
+      - "Cell center-to-center spacing: 6.1-7.6mm (horizontal) per ADA 703.3, use 6.2mm nominal"
+      - "Display width: ~198mm (32 cells × 6.2mm center-to-center)"
+      - "Dot diameter: 1.5-1.6mm (ADA 703.3: 0.059-0.063 inches)"
+      - "Dot height: 0.6-0.9mm raised (ADA 703.3: 0.025-0.037 inches)"
+      - "Actuator size constraint: ≤2.3mm diameter (derived from 2.3mm min dot spacing within cell)"
     standards_reference:
-      - "US ADA Section 703.3 (Signs) - braille dimensions"
+      - "US ADA Section 703.3 (Signs) - braille dimensions (authoritative source)"
       - "Braille Authority of North America (BANA) - spacing guidelines"
-      - "reference/standards/braille-dimensions-standards.md"
+      - "ADA 703.3 spec: Cell spacing 0.241-0.300 inches (6.1-7.6mm), dot spacing 0.090-0.100 inches (2.3-2.5mm)"
 
   PRD-FUNC-002:
     title: "Braille Line Update (Refresh Next Line)"
