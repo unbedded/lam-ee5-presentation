@@ -1,19 +1,34 @@
 ---
-description: Generate all architecture artifacts (docs, BOMs, comparisons, slides)
+description: Generate architecture docs and BOMs from YAML/CSV sources
 ---
 
 # Architecture Generation Command
 
-Auto-generate comprehensive architecture documentation and artifacts from YAML+CSV databases.
+Auto-generate architecture documentation and BOMs from YAML+CSV databases.
+
+**Scope:** Individual architecture details (subsystems, specs, BOMs)
+**Future:** Comparison/tradeoff logic will move to `/arch-tradeoff` slash command (see TODO.md Technical-Debt)
 
 ## What You'll Generate
 
-Read these source files:
-1. `source/architectures.yaml` - Full architecture specs (ARCH-A, ARCH-B, ARCH-C)
+### Direct Source Files (Read by Generator)
+1. `source/architectures.yaml` - Full architecture specs (ARCH-A, ARCH-B, ARCH-C, ARCH-D)
 2. `source/subsystems.yaml` - Subsystem definitions and part references
 3. `source/parts.csv` - Digikey parts database with pricing/lead times
 
-Generate these artifacts:
+### Supporting Analysis (Referenced in YAML, Not Read by Generator)
+These documents informed the YAML data but are not directly parsed:
+- `source/requirements.yaml` - 24 requirements driving architecture decisions
+- `docs/market-braille-display-scan.md` - Competitive landscape analysis
+- `docs/actuator-technology-tradeoff.md` - 5 actuator technologies compared
+- `docs/actuator-mechanical-latch-concept.md` - Mechanical latch design (ARCH-D)
+- `docs/power-budget-analysis.md` - Detailed power calculations
+- `docs/cots-timeline-analysis.md` - Lead time constraints analysis
+- `artifacts/rubric-reports/req-traceability-report.md` - Requirements coverage
+
+**Note:** The generator creates technical reference docs. For strategic analysis with trade-offs and recommendations, see manually-maintained `docs/architecture.md`.
+
+### Generated Artifacts
 
 ### 1. Architecture Documentation
 **File:** `artifacts/architecture.md`

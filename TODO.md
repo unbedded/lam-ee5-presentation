@@ -500,6 +500,32 @@
 ---
 
 ## Technical-Debt
+
+### Future Slash Command: /arch-tradeoff
+- **Purpose:** Generate trade-off analysis documentation from architectures.yaml
+- **Rationale:** Separate concerns - /arch-gen focuses on individual architecture details, /arch-tradeoff focuses on comparison/evaluation
+- **Target output:** `docs/tradeoffs.md` (manually edited strategic analysis)
+- **Generated artifacts:**
+  - `artifacts/architecture-comparison-matrix.md` (quantitative tables - MOVE from /arch-gen)
+  - `artifacts/architecture-qualitative-comparison.md` (qualitative ratings across 8 dimensions)
+  - `artifacts/architecture-tradeoff-analysis.md` (advantages/disadvantages, when X wins/fails)
+  - `artifacts/architecture-recommendations.md` (portfolio strategy, cost reduction roadmap)
+- **Implementation approach:**
+  - Read source/architectures.yaml (comparison_dimensions section)
+  - Generate comparison tables (cost, size, UX, complexity, timeline, mfg, risk, market)
+  - Generate advantages/disadvantages from qualitative ratings
+  - Generate "When X Wins" decision trees from quantitative thresholds
+  - Keep strategic recommendations in docs/tradeoffs.md (manual)
+- **Benefit:** /arch-gen stays focused on subsystem details and specs, /arch-tradeoff handles evaluation logic
+- **Status:** Deferred to post-interview (not blocking v1.4.0 Trade-off Analysis - can write manually)
+
+### Documentation Structure Clarification
+- **docs/architecture.md** - Strategic analysis with trade-offs, recommendations (manually maintained)
+- **artifacts/architecture.md** - Technical reference with subsystem details (auto-generated via /arch-gen)
+- **artifacts/architecture-comparison-matrix.md** - Quantitative comparison tables (auto-generated, currently by /arch-gen)
+- Future: Move comparison matrix generation to /arch-tradeoff for better separation of concerns
+
+### Interview Logistics
 - Interview Format: Onsite at Fremont, CA (4.5 hours total)
 - Presentation: 30 minutes
 - Q&A: 15 minutes

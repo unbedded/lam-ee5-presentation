@@ -172,17 +172,26 @@ make help             # Show all available commands
         └── artifacts/rubric-reports/assumption-risk-report.md
 
 [/arch-gen]  # Generate architecture documentation with BOMs
-    ├─ source
-    │   ├── source/parts.csv
-    │   ├── source/subsystems.yaml
-    │   └── source/architectures.yaml
+    ├─ source (direct reads)
+    │   ├── source/parts.csv (23 parts with Digikey PNs, costs, lead times)
+    │   ├── source/subsystems.yaml (19 subsystems with electrical/mechanical specs)
+    │   └── source/architectures.yaml (4 architectures with qualitative + quantitative specs)
+    ├─ supporting analysis (referenced in YAML, not parsed by generator)
+    │   ├── source/requirements.yaml (24 requirements driving architecture decisions)
+    │   ├── docs/market-braille-display-scan.md (competitive landscape)
+    │   ├── docs/actuator-technology-tradeoff.md (5 technologies compared)
+    │   ├── docs/actuator-mechanical-latch-concept.md (mechanical analysis for ARCH-D)
+    │   ├── docs/power-budget-analysis.md (detailed calculations)
+    │   ├── docs/cots-timeline-analysis.md (lead time constraints)
+    │   └── artifacts/rubric-reports/req-traceability-report.md (100% coverage)
     └─ target
-        ├── artifacts/architecture.md (consolidated architecture docs)
-        ├── artifacts/bom/arch-b-wired-bom.csv (BOM for ARCH-B)
-        ├── artifacts/bom/arch-c-hybrid-bom.csv (BOM for ARCH-C)
-        ├── artifacts/bom/arch-a-wireless-bom.csv (BOM for ARCH-A)
-        ├── artifacts/architecture-comparison-matrix.md (comparison tables)
-        └── artifacts/architecture-slides.md (presentation slides)
+        ├── artifacts/architecture.md (technical reference: subsystems, specs, BOMs)
+        ├── artifacts/bom/arch-b-wired-bom.csv (BOM for ARCH-B: $420)
+        ├── artifacts/bom/arch-c-hybrid-bom.csv (BOM for ARCH-C: $438)
+        ├── artifacts/bom/arch-d-solenoid-latch-bom.csv (BOM for ARCH-D: $210)
+        ├── artifacts/bom/arch-a-wireless-bom.csv (BOM for ARCH-A: $442)
+        └── artifacts/architecture-comparison-matrix.md (quantitative comparison tables)
+    Note: For strategic analysis with trade-offs/recommendations, see docs/architecture.md (manual)
 
 [/rubric-eval]  # Evaluate phase against interview rubric (0-100 pts)
     ├─ source
