@@ -138,11 +138,18 @@ make help             # Show all available commands
 
 **Slash Command Reference:**
 ```
-[/req-yaml-to-md]  # Generate human-readable requirements report
+[/req-yaml-to-md]  # Generate human-readable requirements report (32KB, comprehensive)
     ├─ source
     │   └── source/requirements.yaml
     └─ target
         └── artifacts/requirements.md
+
+[/req-yaml-to-cheatsheet]  # Generate lean requirements cheat sheet (<5KB, quick reference)
+    ├─ source
+    │   ├── source/requirements.yaml
+    │   └── source/requirements-policy.md (category codes table)
+    └─ target
+        └── artifacts/requirements-cheat-sheet.md
 
 [/req-audit]  # Validate SMART compliance
     ├─ source
