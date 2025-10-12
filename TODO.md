@@ -504,26 +504,39 @@
 ### Future Slash Command: /arch-tradeoff
 - **Purpose:** Generate trade-off analysis documentation from architectures.yaml
 - **Rationale:** Separate concerns - /arch-gen focuses on individual architecture details, /arch-tradeoff focuses on comparison/evaluation
+- **Reference template:** `docs/_obsolete/architecture-v1.3.0-4arch-manual.md` (22KB strategic analysis with advantages/disadvantages, "When X Wins/Fails", recommendations)
 - **Target output:** `docs/tradeoffs.md` (manually edited strategic analysis)
 - **Generated artifacts:**
   - `artifacts/architecture-comparison-matrix.md` (quantitative tables - MOVE from /arch-gen)
   - `artifacts/architecture-qualitative-comparison.md` (qualitative ratings across 8 dimensions)
-  - `artifacts/architecture-tradeoff-analysis.md` (advantages/disadvantages, when X wins/fails)
+  - `artifacts/architecture-advantages-disadvantages.md` (pros/cons extracted from qualitative YAML data)
+  - `artifacts/architecture-decision-trees.md` ("When X Wins/Fails" logic based on quantitative thresholds)
   - `artifacts/architecture-recommendations.md` (portfolio strategy, cost reduction roadmap)
 - **Implementation approach:**
-  - Read source/architectures.yaml (comparison_dimensions section)
+  - Read source/architectures.yaml (comparison_dimensions + qualitative/quantitative sections)
   - Generate comparison tables (cost, size, UX, complexity, timeline, mfg, risk, market)
-  - Generate advantages/disadvantages from qualitative ratings
-  - Generate "When X Wins" decision trees from quantitative thresholds
+  - Extract advantages from qualitative ratings (💚 BEST/EXCELLENT → advantages, 🔴 POOR/FAIR → disadvantages)
+  - Generate "When X Wins" decision trees from quantitative thresholds (e.g., "if timeline < 7 weeks → ARCH-B wins")
+  - Generate "When X Fails" from constraints (e.g., "if budget < $300 → ARCH-A fails")
   - Keep strategic recommendations in docs/tradeoffs.md (manual)
+- **Content mapping from obsolete template:**
+  - Section "Advantages" → Extract from qualitative 💚 ratings
+  - Section "Disadvantages" → Extract from qualitative 🔴 ratings
+  - Section "When X Wins" → Generate from quantitative thresholds
+  - Section "When X Fails" → Generate from constraint violations
+  - Section "Trade-Off Analysis Summary" → Weighted scoring (manual in docs/tradeoffs.md)
+  - Section "Recommendations" → Portfolio strategy (manual in docs/tradeoffs.md)
 - **Benefit:** /arch-gen stays focused on subsystem details and specs, /arch-tradeoff handles evaluation logic
 - **Status:** Deferred to post-interview (not blocking v1.4.0 Trade-off Analysis - can write manually)
 
 ### Documentation Structure Clarification
-- **docs/architecture.md** - Strategic analysis with trade-offs, recommendations (manually maintained)
+- **docs/_obsolete/architecture-v1.3.0-4arch-manual.md** - OBSOLETE v1.3.0 strategic analysis (moved before renaming + 5th arch)
+- **docs/_obsolete/actuator-mechanical-latch-concept-v1.3.0.md** - OBSOLETE latch concept (specific to old ARCH-D design)
 - **artifacts/architecture.md** - Technical reference with subsystem details (auto-generated via /arch-gen)
 - **artifacts/architecture-comparison-matrix.md** - Quantitative comparison tables (auto-generated, currently by /arch-gen)
-- Future: Move comparison matrix generation to /arch-tradeoff for better separation of concerns
+- **docs/tradeoffs.md** - Strategic trade-off analysis (v1.4.0, manually written)
+- **docs/solution.md** - Recommended solution with justification (v1.5.0, manually written)
+- Future: /arch-tradeoff command will auto-generate advantages/disadvantages, decision trees from YAML
 
 ### Interview Logistics
 - Interview Format: Onsite at Fremont, CA (4.5 hours total)
