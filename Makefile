@@ -66,11 +66,24 @@ SOURCE_PDF_FILES = $(patsubst source/%.md,artifacts/%.pdf,$(SOURCE_MD_FILES))
 PDF_FILES = $(ARTIFACTS_PDF_FILES) $(SOURCE_PDF_FILES)
 
 # ============================================================================
+# ARTIFACT GENERATION - Python scripts
+# ============================================================================
+
+# Generate architecture artifacts from YAML/CSV sources
+arch-gen:
+	@echo "Generating architecture artifacts..."
+	@python3 scripts/generate_arch_artifacts.py
+	@echo "✅ Architecture artifacts generated"
+
+# Generate all artifacts (architecture + requirements)
+# NOTE: Requirement artifacts use Claude Code slash commands:
+#   /req-yaml-to-md, /req-audit, /req-trace, /req-risk-report
+artifacts: arch-gen
+	@echo "✅ All artifacts generated"
+
+# ============================================================================
 # BUILD RULES - Pattern-based rules for auto-discovery
 # ============================================================================
-# NOTE: For requirement artifact generation, use Claude Code slash commands:
-#   /req-yaml-to-md, /req-audit, /req-trace, /req-risk-report
-# These cannot be automated in Makefile as they require Claude Code context
 
 # Default target - convert all markdown files to PDF
 all: $(PDF_FILES)
@@ -200,13 +213,19 @@ help:
 	@echo "  Engine:    $(PDF_ENGINE)"
 	@echo "  Style:     $(STYLE)"
 	@echo ""
-	@echo "Targets:"
+	@echo "Artifact Generation (Python):"
+	@echo "  make arch-gen                - Generate architecture docs/BOMs from YAML/CSV"
+	@echo "  make artifacts               - Generate all artifacts (arch + requirements)"
+	@echo ""
+	@echo "PDF Conversion (Pandoc):"
 	@echo "  make all                     - Convert all .md files to PDF"
 	@echo "  make presentation            - Build only presentation PDF"
 	@echo "  make analysis                - Build only technical analysis PDF"
 	@echo "  make rubrics                 - Build only rubric PDFs"
 	@echo "  make clean                   - Remove all PDF files"
 	@echo "  make rebuild                 - Clean and rebuild all PDFs"
+	@echo ""
+	@echo "Utilities:"
 	@echo "  make check                   - Check for missing source files"
 	@echo "  make list                    - List all markdown and PDF files"
 	@echo "  make print                   - Print all PDFs to default printer"
@@ -233,4 +252,4 @@ help:
 	@echo "    /req-trace         - Generate traceability matrix"
 	@echo "    /req-risk-report   - Risk-rank assumptions"
 
-.PHONY: all clean rebuild presentation analysis rubrics print print-to email-pres list check help
+.PHONY: all clean rebuild presentation analysis rubrics print print-to email-pres list check help arch-gen artifacts

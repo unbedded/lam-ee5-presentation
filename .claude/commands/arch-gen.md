@@ -229,7 +229,18 @@ Generate markdown slides (for Marp or reveal.js):
 [Placeholder - to be filled in v1.5.0 after trade-off analysis]
 ```
 
-## Execution Steps
+## Execution
+
+Run the generator script to create all architecture artifacts:
+
+```bash
+python3 scripts/generate_arch_artifacts.py
+```
+
+**Implementation:** `scripts/generate_arch_artifacts.py` (26KB, 609 lines)
+**Dynamic architecture support:** Automatically adapts to any architectures defined in YAML (no hardcoded IDs)
+
+### Key Functions:
 
 1. **Load databases:**
    ```python
@@ -280,25 +291,32 @@ Generate markdown slides (for Marp or reveal.js):
    - Extract key tables/metrics from architecture.md
    - Format for presentation (concise, visual)
 
-## Output
+## Example Output
 
-Display summary:
 ```
-✅ Generated artifacts/architecture.md (XX KB)
-✅ Generated artifacts/bom/arch-b-wired-bom.csv (XX lines)
-✅ Generated artifacts/bom/arch-c-hybrid-bom.csv (XX lines)
-✅ Generated artifacts/bom/arch-a-wireless-bom.csv (XX lines)
-✅ Generated artifacts/architecture-comparison-matrix.md (XX KB)
-✅ Generated artifacts/architecture-slides.md (XX KB)
+Loading source files...
+Generating artifacts/architecture.md...
+✅ Generated artifacts/architecture.md (15.0 KB)
 
+Generating BOMs...
+✅ Generated artifacts/bom/arch-piezo-eco-bom.csv (14 lines)
+✅ Generated artifacts/bom/arch-sol-eco-bom.csv (21 lines)
+✅ Generated artifacts/bom/arch-piezo-dlx-bom.csv (16 lines)
+
+Generating artifacts/architecture-comparison-matrix.md...
+✅ Generated artifacts/architecture-comparison-matrix.md (3.8 KB)
+
+======================================================================
 📊 BOM Summary:
-- ARCH-B (Wired): $XXX (YY parts, ZZ weeks critical path)
-- ARCH-C (Hybrid): $XXX (YY parts, ZZ weeks critical path)
-- ARCH-A (Wireless): $XXX (YY parts, ZZ weeks critical path)
+  - ARCH_PIEZO_ECO (Piezo Economy (Wired)): $419.75
+  - ARCH_SOL_ECO (Solenoid Economy (Rotary Cam)): $276.58
+  - ARCH_PIEZO_DLX (Piezo Deluxe (Wireless)): $442.18
 
-⚠️  Cost Gap: All architectures over BOM target (primary driver: actuators $288)
+⚠️  Cost Gap: All architectures over BOM target (primary driver: actuators)
+======================================================================
 ```
 
 ---
 
 **Priority:** HIGH - Core deliverable for v1.3.0 Solution Architecture Development (25/100 rubric points)
+**Location:** `scripts/generate_arch_artifacts.py`
