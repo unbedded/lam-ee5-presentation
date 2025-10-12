@@ -1,10 +1,10 @@
 # LAM RESEARCH EE INTERVIEW - TIME LOG
 
 **Project Start:** 2025-10-07
-**⚠️ CRITICAL DEADLINE:** 2025-10-22 (Presentation due 24hrs before interview!)
-**Interview Date:** 2025-10-23
+**⚠️ CRITICAL DEADLINE:** 2025-10-20 (Monday - Presentation due 24hrs before interview!)
+**Interview Date:** 2025-10-21 (Tuesday)
 **Total Budget:** 84 hours (6 hrs/day × 14 days)
-**Effective Working Days:** 13 days (lose last 24hrs for email deadline)
+**Effective Working Days:** 12 days (Oct 7-19, lose last 24hrs for email deadline)
 
 ---
 

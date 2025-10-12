@@ -1,6 +1,6 @@
 # Lam Research EE Concept Evaluation
 
-**Current Version:** v0.1.0 (Project Setup)
+**Current Version:** v1.3.0 (Solution Architecture Development - Complete)
 
 ## Braille Display Device - Interview Preparation
 
@@ -134,20 +134,91 @@ make help             # Show all available commands
 - **Q&A:** 15 minutes
 - **Format:** HDMI projection (PDF/PPT sent 24hrs prior)
 
-### Requirements Management
+### Build Structure & Dependencies
 
-**Single Source of Truth:** `source/requirements.yaml`
+**Slash Command Reference:**
+```
+[/req-yaml-to-md]  # Generate human-readable requirements report
+    ├─ source
+    │   └── source/requirements.yaml
+    └─ target
+        └── artifacts/requirements.md
 
-**Workflow:**
-1. Edit requirements in `source/requirements.yaml`
-2. Run `/req-audit` to validate compliance with `docs/requirements-policy.md`
-3. Run `/req-yaml-to-md` to generate `docs/requirements.md`
-4. Run `/req-trace` to generate traceability matrix
+[/req-audit]  # Validate SMART compliance
+    ├─ source
+    │   ├── source/requirements.yaml
+    │   └── docs/requirements-policy.md
+    └─ target
+        └── artifacts/rubric-reports/req-audit-report.md
 
-**Naming Convention:** `[CATEGORY]-[SUBCATEGORY]-[NUMBER]`
-- Example: `SYS-FUNC-001`, `EE-PWR-001`, `MFG-COST-001`
+[/req-trace]  # Generate requirement → architecture traceability matrix
+    ├─ source
+    │   ├── source/requirements.yaml
+    │   └── source/architectures.yaml
+    └─ target
+        └── artifacts/rubric-reports/req-traceability-report.md
 
-See `docs/requirements-policy.md` for details.
+[/req-risk-report]  # Risk-rank assumptions
+    ├─ source
+    │   └── source/requirements.yaml
+    └─ target
+        └── artifacts/rubric-reports/assumption-risk-report.md
+
+[/arch-gen]  # Generate architecture documentation with BOMs
+    ├─ source
+    │   ├── source/parts.csv
+    │   ├── source/subsystems.yaml
+    │   └── source/architectures.yaml
+    └─ target
+        ├── artifacts/architecture.md (consolidated architecture docs)
+        ├── artifacts/bom/arch-b-wired-bom.csv (BOM for ARCH-B)
+        ├── artifacts/bom/arch-c-hybrid-bom.csv (BOM for ARCH-C)
+        ├── artifacts/bom/arch-a-wireless-bom.csv (BOM for ARCH-A)
+        ├── artifacts/architecture-comparison-matrix.md (comparison tables)
+        └── artifacts/architecture-slides.md (presentation slides)
+
+[/rubric-eval]  # Evaluate phase against interview rubric (0-100 pts)
+    ├─ source
+    │   ├── docs/architecture.md
+    │   ├── docs/quality-metrics.md
+    │   ├── docs/interview-rubric.md
+    │   ├── docs/tradeoff-analysis-guide.md
+    │   ├── docs/market-braille-display-scan.md
+    │   ├── docs/actuator-technology-tradeoff.md
+    │   ├── docs/power-budget-analysis.md
+    │   ├── docs/cots-timeline-analysis.md
+    │   ├── artifacts/requirements.md
+    │   ├── artifacts/rubric-reports/req-audit-report.md
+    │   ├── artifacts/rubric-reports/req-traceability-report.md
+    │   └── artifacts/rubric-reports/assumption-risk-report.md
+    └─ target
+        └── artifacts/rubric-reports/v1.X.0-*-eval.md (v0.1.0, v1.2.0, v1.3.0 exist)
+
+[/status]  # Display time tracking & project progress
+    ├─ source
+    │   ├── TIME-LOG.md
+    │   └── TODO.md
+    └─ target
+        └── console output (time summary, on-track status, focus recommendations)
+
+[/phase-complete]  # Finish phase: validate, log time, update docs, commit & push
+    ├─ source
+    │   ├── TODO.md
+    │   └── TIME-LOG.md
+    └─ target
+        ├── TODO.md (colors: blue→green, next red→blue)
+        ├── TIME-LOG.md (append entry + update summary stats)
+        ├── README.md (version, directory tree, dependencies)
+        └── git commit + push to main
+
+[make all]  # Convert all .md → .pdf (pandoc + xelatex)
+    ├─ source
+    │   ├── docs/*.md (22 files)
+    │   ├── artifacts/*.md (5 files)
+    │   └── artifacts/rubric-reports/*.md (6 files)
+    └─ target
+        └── artifacts/*.pdf (same basenames as .md files)
+```
 
 ### Self-Evaluation
 

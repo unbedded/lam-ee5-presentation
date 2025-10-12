@@ -373,10 +373,10 @@
 - [ ] Test artifacts/presentation.pptx renders correctly (Windows + Mac)
 
 ### <span style="color:red">v3.3.0: Pre-Interview Checklist (feature/delivery-checklist)</span>
-⚠️ **CRITICAL DEADLINE: OCT 22, 2025** - Presentation due 24hrs before interview!
+⚠️ **CRITICAL DEADLINE: OCT 20, 2025 (MONDAY)** - Presentation due 24hrs before interview!
 
-**Digital Checklist (Email Oct 22):**
-- [ ] **OCT 22 (BY EOD):** Email presentation & appendices to Nathan Briggs
+**Digital Checklist (Email Oct 20):**
+- [ ] **OCT 20 (BY EOD MONDAY):** Email presentation & appendices to Nathan Briggs
   - Subject: "LAM EE5 Interview - Concept Evaluation Presentation & Appendices - Spencer Barrett"
   - Attach: presentation.pdf (primary - main slide deck)
   - Attach: presentation.pptx (backup - editable format)
@@ -388,7 +388,7 @@
   - Verify: Total <25MB, email sent successfully
   - Confirm: Check for delivery confirmation/read receipt
 
-**Laptop Preparation (Oct 21-22):**
+**Laptop Preparation (Oct 19-20):**
 - [ ] Test HDMI output from laptop (verify video works)
 - [ ] Charge laptop fully (bring charger as backup)
 - [ ] Load all files locally on laptop (don't rely on email/cloud)
@@ -401,7 +401,7 @@
 - [ ] Disable notifications (Slack, email, OS updates)
 - [ ] Set display to "Extend" mode (not mirror) for presenter notes
 
-**Physical Items Checklist (Pack Night Before - Oct 22):**
+**Physical Items Checklist (Pack Night Before - Oct 20):**
 
 **Required:**
 - [ ] Government-issued ID (driver's license or passport)
@@ -446,7 +446,7 @@
   - [ ] Shoes polished
   - [ ] Minimal jewelry/accessories
 
-**Verify Night Before (Oct 22):**
+**Verify Night Before (Oct 20):**
 - [ ] All physical items packed in bag
 - [ ] Laptop bag has: laptop, charger, HDMI cable, adapter
 - [ ] Portfolio bag has: FISH controller, documentation packet
@@ -503,5 +503,5 @@
 - Interview Format: Onsite at Fremont, CA (4.5 hours total)
 - Presentation: 30 minutes
 - Q&A: 15 minutes
-- Interview Date: Week of Oct 20th (TBD - awaiting confirmation)
-- Materials delivery: Email PDF/PPT 24 hours before (USB not supported)
+- Interview Date: Tuesday, Oct 21st, 2025 (CONFIRMED)
+- Materials delivery: Email PDF/PPT by EOD Monday Oct 20th (USB not supported)

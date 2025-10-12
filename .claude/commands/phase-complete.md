@@ -53,7 +53,33 @@ Read TIME-LOG.md:
 
 Read TODO.md to get phase name
 
-### 4. Update TODO.md Colors (30 sec)
+### 4. Update README.md (2 min)
+
+Read README.md and verify/update:
+
+**Directory Structure section:**
+- Check if any new files/directories created this phase
+- Add them to the ASCII tree with descriptions
+- Remove any deleted files/directories
+- Update any renamed files
+
+**Build Structure section:**
+- Document new slash commands (if created)
+- Document new Makefile targets (if added)
+- Update data flow diagrams (if SSOT or generators changed)
+- Update dependency mappings (if new workflows added)
+
+**Version at top:**
+- Update `**Current Version:** vX.X.X` to match completed phase
+
+**If changes needed:**
+Prompt user: "README.md updates needed for this phase. Proceed with auto-update? (yes/no): "
+
+If yes, update README.md and save
+
+If no, warn user and continue (but note in commit message)
+
+### 5. Update TODO.md Colors (30 sec)
 
 Current phase: `<span style="color:blue">` → `<span style="color:green">`
 
@@ -61,7 +87,7 @@ Next phase (first red after current): `<span style="color:red">` → `<span styl
 
 Save TODO.md
 
-### 5. Update TIME-LOG.md Summary (30 sec)
+### 6. Update TIME-LOG.md Summary (30 sec)
 
 Update "Summary Statistics" section:
 ```markdown
@@ -74,9 +100,9 @@ Update "Summary Statistics" section:
 
 Save TIME-LOG.md
 
-### 6. Commit and Push (1 min)
+### 7. Commit and Push (1 min)
 
-Stage: `git add TODO.md TIME-LOG.md`
+Stage: `git add TODO.md TIME-LOG.md README.md`
 
 Commit message format:
 ```
@@ -91,7 +117,7 @@ Next: v[X].[X].[X] [Phase Name]
 
 Push: `git push origin main`
 
-### 7. Display Summary (output)
+### 8. Display Summary (output)
 
 ```
 ✅ PHASE COMPLETE: v[X].[X].[X] [Phase Name]
