@@ -1,0 +1,301 @@
+# Evaluation Framework Guide - How to Handle Missing Requirements
+
+**Author:** Spencer Barrett
+**Date:** 2025-10-08
+**Phase:** v1.4.0 Trade-off Analysis
+
+---
+
+## The Problem: We Don't Have All The Answers
+
+**Reality Check:**
+- This is a **concept evaluation interview**, not a real project with a real customer
+- We have HUGE HOLES in requirements:
+  - What market? (US? Europe? China? India?)
+  - What's the budget? (Unit cost target? Development budget?)
+  - What's most important? (Time to market? Cost? Features? UX?)
+  - Who's the customer? (Non-profit? For-profit? Government?)
+  - What's the risk tolerance? (Proven tech? Cutting edge?)
+
+**The Question:** How do I evaluate trade-offs when I don't know what stakeholders value?
+
+---
+
+## LAM's Expectation: Show Your Decision-Making Process
+
+**What LAM is Testing:**
+1. Can you identify **missing information**?
+2. Can you make **reasonable assumptions** when info is missing?
+3. Can you **document your assumptions** clearly?
+4. Can you **adapt your decision** if assumptions change?
+
+**LAM Doesn't Expect:**
+- Perfect requirements (they know they didn't give you a complete spec!)
+- Psychic powers (you can't know what they value without asking)
+- One "right answer" (multiple solutions could work)
+
+**LAM Does Expect:**
+- Engineering judgment (make reasonable assumptions)
+- Transparent thinking (show your work, state your assumptions)
+- Adaptability (show sensitivity analysis - "if this assumption is wrong, here's the impact")
+
+---
+
+## Standard Industry Evaluation Frameworks
+
+### 1. Weighted Scoring Matrix (Your Sigma Design Approach)
+
+**When to Use:** Multiple options, multiple criteria, need objective comparison
+
+**Steps:**
+1. List all evaluation criteria (time, cost, quality, risk, etc.)
+2. Assign weights based on stakeholder priorities (must sum to 100%)
+3. Score each option on each criterion (1-10 scale)
+4. Calculate weighted score: `Total = Σ(weight × score)`
+5. Highest score wins (but also check sensitivity!)
+
+**Example:**
+```
+Criterion              | Weight | Option A | Option B | Option C
+-----------------------|--------|----------|----------|----------
+Time to Market         | 30%    | 7 → 2.1  | 9 → 2.7  | 5 → 1.5
+Unit Cost              | 25%    | 6 → 1.5  | 8 → 2.0  | 4 → 1.0
+Development Cost       | 15%    | 5 → 0.75 | 9 → 1.35 | 3 → 0.45
+Manufacturability      | 20%    | 8 → 1.6  | 7 → 1.4  | 6 → 1.2
+Risk/Reliability       | 10%    | 7 → 0.7  | 6 → 0.6  | 8 → 0.8
+-----------------------|--------|----------|----------|----------
+TOTAL                  | 100%   | 6.65     | 8.05     | 4.95
+
+Winner: Option B (highest weighted score)
+```
+
+---
+
+### 2. Pugh Matrix (Relative Comparison)
+
+**When to Use:** One baseline option, compare alternatives relative to it
+
+**Steps:**
+1. Choose baseline (usually "current state" or "simplest option")
+2. Score alternatives: `+` (better), `0` (same), `-` (worse)
+3. Sum the scores
+4. Highest sum wins
+
+**Example:**
+```
+Criterion              | Baseline (Solenoid) | Piezo | SMA
+-----------------------|---------------------|-------|-----
+Unit Cost              | 0                   | -     | --
+Power Consumption      | 0                   | ++    | -
+Response Time          | 0                   | ++    | --
+Manufacturability      | 0                   | -     | +
+Component Availability | 0                   | --    | -
+-----------------------|---------------------|-------|-----
+TOTAL                  | 0                   | 0     | -3
+
+Winner: Piezo (tied with baseline, but better on critical criteria)
+```
+
+---
+
+### 3. Risk-Weighted Decision (Conservative Approach)
+
+**When to Use:** High uncertainty, need to minimize downside risk
+
+**Steps:**
+1. List risks for each option (probability × impact)
+2. Calculate risk-adjusted score: `Score - Risk`
+3. Lowest risk-adjusted score wins
+
+**Example:**
+```
+Option   | Base Score | Technical Risk | Schedule Risk | Total Risk | Final Score
+---------|------------|----------------|---------------|------------|------------
+Option A | 85         | -15            | -10           | -25        | 60
+Option B | 75         | -5             | -5            | -10        | 65 ← Winner
+Option C | 90         | -30            | -20           | -50        | 40
+
+Winner: Option B (lower risk, even though base score is lower)
+```
+
+---
+
+## How to Handle Missing Info: The Assumption Framework
+
+### Step 1: Identify What's Missing
+
+**For This Project:**
+- ❓ Target market (geography, demographics)
+- ❓ Price point target
+- ❓ Development budget
+- ❓ Risk tolerance (proven tech vs innovative)
+- ❓ Customer priorities (cost vs features vs time)
+- ❓ Volume expectations (pilot → production)
+
+### Step 2: Make Reasonable Assumptions
+
+**Use Context Clues from Assignment:**
+- ✅ "Portable, low-cost, high-volume" → **China/India market likely** (cost-sensitive, high volume)
+- ✅ "2-month timeline" → **Time to market is CRITICAL**
+- ✅ "Pilot production" → **Development budget is LIMITED** (not R&D project)
+- ✅ "Accessibility device" → **Reliability/UX is HIGH priority** (users depend on it)
+- ✅ "Companion to cell phone" → **Must work with existing ecosystem** (BLE/USB standard interfaces)
+
+### Step 3: Document Your Assumptions
+
+**In docs/tradeoffs.md, create "Assumptions" section:**
+
+```markdown
+## Evaluation Framework Assumptions
+
+**⚠️ Note:** The following assumptions were made due to limited stakeholder input.
+If any assumption is incorrect, the recommended solution may change. See Sensitivity Analysis.
+
+### Market Context
+- **Assumption:** Target market is China accessibility market
+- **Rationale:** "Low-cost, high-volume" suggests cost-sensitive emerging market
+- **Impact if wrong:** If US/EU market, can increase unit cost budget (+$20-30)
+
+### Stakeholder Priorities (Weighted)
+- **Time to Market: 30%** - 2-month constraint is explicitly stated
+- **Unit Cost: 25%** - "Low-cost" is primary requirement
+- **Manufacturability: 20%** - "High-volume" requires good DFM
+- **Development Cost: 15%** - Pilot budget assumed limited
+- **Risk/Reliability: 10%** - Important but secondary to cost/time
+
+### Budget Constraints
+- **Unit Cost Target: <$50 BOM** - Based on competitor analysis (China braille displays)
+- **Development Budget: <$50K NRE** - Typical for pilot production project
+- **Timeline: 2 months (FIXED)** - Explicitly stated in requirements
+
+### Risk Tolerance
+- **Assumption:** Moderate risk tolerance (proven tech preferred)
+- **Rationale:** Tight timeline favors off-the-shelf components over custom development
+- **Impact if wrong:** If high risk tolerance, FPGA/SMA options become more attractive
+```
+
+### Step 4: Show Sensitivity to Assumptions
+
+**For Each Key Assumption, Show Impact:**
+
+```markdown
+### Sensitivity to Market Assumption
+
+**If China market assumption is CORRECT:**
+→ Unit cost <$50 is CRITICAL (30% weight)
+→ Winner: Architecture B (Solenoid, $30 BOM)
+
+**If assumption is WRONG (actually US/EU market):**
+→ Unit cost <$100 is acceptable (20% weight)
+→ UX/reliability becomes more important (30% weight)
+→ Winner: Architecture C (Piezo, $45 BOM, better UX)
+
+**Conclusion:** Architecture B is robust to market assumption changes
+```
+
+---
+
+## The "Interview-Safe" Evaluation Framework
+
+**For LAM Interview, Use This Approach:**
+
+### 1. Acknowledge Missing Info (Transparency)
+> "The assignment does not specify target market, budget constraints, or stakeholder priorities.
+> Therefore, I made the following assumptions based on context clues..."
+
+### 2. Make Defensible Assumptions (Engineering Judgment)
+> "Given 'low-cost, high-volume' requirement, I assumed China/India market with <$50 unit cost target..."
+
+### 3. Weight Decision Criteria (Show Your Values)
+> "Based on 2-month constraint and pilot production context, I weighted criteria as follows:
+> Time to Market (30%), Unit Cost (25%), Manufacturability (20%)..."
+
+### 4. Show Sensitivity (Adaptability)
+> "If market assumption is incorrect (US/EU instead of China), the recommended solution changes from
+> Architecture B to Architecture C due to higher acceptable unit cost and UX priority shift..."
+
+### 5. Justify Final Selection (Data-Driven)
+> "Under stated assumptions, Architecture B scores highest (8.05/10) and is most robust to
+> assumption changes (wins 3/4 sensitivity scenarios)..."
+
+---
+
+## Common Decision Criteria for EE Projects
+
+**Use these as starting point:**
+
+| Criterion | Typical Weight | When to Increase | When to Decrease |
+|-----------|----------------|------------------|------------------|
+| **Time to Market** | 20-30% | Aggressive deadline, first-mover advantage | No deadline pressure |
+| **Unit Cost (BOM)** | 15-25% | High volume, cost-sensitive market | Premium product |
+| **Development Cost (NRE)** | 10-20% | Limited budget, startup | Well-funded, R&D project |
+| **Manufacturability** | 15-25% | High volume, complex assembly | Low volume, prototype |
+| **Power Consumption** | 5-15% | Battery-powered, portable | Wall-powered |
+| **Performance** | 10-20% | Competitive differentiation | Commodity product |
+| **Reliability/MTBF** | 5-15% | Safety-critical, medical | Consumer electronics |
+| **UX/Usability** | 5-15% | Consumer product | Industrial equipment |
+| **Safety/Compliance** | 5-15% | Medical, automotive | Low-risk application |
+
+**Total Must Sum to 100%**
+
+---
+
+## What NOT To Do
+
+❌ **Don't pretend you know what stakeholders want** (makes assumptions without stating them)
+❌ **Don't use equal weights** (shows lack of judgment - not all criteria are equal!)
+❌ **Don't pick favorite then justify** (decision first, data second = bias)
+❌ **Don't ignore missing info** ("I don't have enough information to decide" = dodge)
+
+✅ **DO state assumptions clearly**
+✅ **DO justify weight assignments**
+✅ **DO show data-driven comparison**
+✅ **DO test sensitivity to assumptions**
+
+---
+
+## For LAM Interview: The Bottom Line
+
+**They WANT to see:**
+1. You recognize requirements have gaps
+2. You make reasonable assumptions to fill gaps
+3. You document assumptions transparently
+4. You show how decision changes if assumptions change
+5. You justify final selection with data
+
+**This demonstrates:**
+- Engineering judgment (not just following orders)
+- Critical thinking (questioning inputs)
+- Risk management (testing assumptions)
+- Communication (explaining your thinking)
+
+**Remember:** There's no "right" answer. LAM wants to see HOW you think, not just WHAT you conclude.
+
+---
+
+## Final Checklist for v1.4.0
+
+Before creating docs/tradeoffs.md:
+
+- [ ] List all evaluation criteria (7-10 criteria)
+- [ ] Assign weights that sum to 100% (justify each weight)
+- [ ] Document all assumptions (market, budget, priorities)
+- [ ] Score each architecture on each criterion (1-10 scale with rationale)
+- [ ] Calculate weighted total scores
+- [ ] Document advantages & disadvantages for each option
+- [ ] **Perform sensitivity analysis** - See [sensitivity-analysis-guide.md](sensitivity-analysis-guide.md) for details
+- [ ] Justify final selection with data
+
+**Deliverable:** Evaluation framework that's transparent, defensible, and adaptable
+
+**Related Guides:**
+- [sensitivity-analysis-guide.md](sensitivity-analysis-guide.md) - Detailed "what if" scenarios
+- [design-plan.md](design-plan.md) - Step 3 requirements from PDF
+
+---
+
+**Document Control**
+
+| Version | Date | Author | Changes |
+|---------|------|--------|---------|
+| 1.0.0 | 2025-10-08 | Spencer Barrett | Initial guide - evaluation frameworks for missing requirements |

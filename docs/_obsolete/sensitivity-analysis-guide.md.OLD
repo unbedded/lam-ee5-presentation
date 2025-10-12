@@ -1,0 +1,217 @@
+# Sensitivity Analysis Guide - Trade-off Analysis (v1.4.0)
+
+**Phase:** v1.4.0 Trade-off Analysis
+**Rubric Weight:** 5/30 points (Step 3)
+**Source:** PDF p.10 - "any other considerations that influenced your final selection"
+
+**Related:** See [evaluation-framework-guide.md](evaluation-framework-guide.md) for overall evaluation methodology
+
+---
+
+## Why Sensitivity Analysis Matters
+
+**LAM's Ask:** "Evaluate the proposed solutions by discussing their advantages and disadvantages, as well as **any other considerations** that influenced your final selection."
+
+**Translation:** "Any other considerations" = **What if the constraints change?**
+
+This tests:
+1. **Robustness** - Which solution holds up under changing conditions?
+2. **Adaptability** - Which solution can flex with reality?
+3. **Engineering Judgment** - Do you understand trade-off sensitivity?
+
+---
+
+## Required Sensitivity Scenarios
+
+### 1. Cost Sensitivity: "What if cost doubles?"
+
+**Test:** BOM cost increases 2x (component shortage, inflation, tariffs)
+
+**Analysis:**
+- Which architecture is most cost-sensitive?
+- Which has best cost alternatives (cheaper components available)?
+- Does the recommended solution still win if costs double?
+
+**Example:**
+```
+Architecture A (Piezo): $45 BOM → $90 (still viable, but tight)
+Architecture B (Solenoid): $30 BOM → $60 (best robustness)
+Architecture C (SMA): $75 BOM → $150 (exceeds budget, ELIMINATED)
+
+Winner: Architecture B (most robust to cost changes)
+```
+
+---
+
+### 2. Timeline Sensitivity: "What if timeline compresses to 1 month?"
+
+**Test:** 2-month timeline cut in half (customer pressure, market opportunity)
+
+**Analysis:**
+- Which architecture is fastest to implement?
+- Which has shortest component lead times?
+- Which requires least development effort?
+
+**Example:**
+```
+Architecture A (Piezo): 8 weeks design + 4 weeks parts = 12 weeks (FAILS)
+Architecture B (Solenoid): 4 weeks design + 2 weeks parts = 6 weeks (MARGINAL)
+Architecture C (MCU-only): 2 weeks design + 1 week parts = 3 weeks (PASSES)
+
+Winner: Architecture C (fastest to market)
+```
+
+---
+
+### 3. Component Availability: "What if key component unavailable?"
+
+**Test:** Primary component goes EOL or has 52-week lead time
+
+**Analysis:**
+- Which architecture has best alternate components?
+- Which is least dependent on single-source parts?
+- Which uses commodity/standard parts?
+
+**Example:**
+```
+Architecture A: Uses custom piezo actuator (single-source, no alternates) - HIGH RISK
+Architecture B: Uses standard solenoids (5+ suppliers, drop-in replacements) - LOW RISK
+Architecture C: Uses SMA wire (2 suppliers, long lead times) - MEDIUM RISK
+
+Winner: Architecture B (best supply chain resilience)
+```
+
+---
+
+### 4. Volume Sensitivity: "What if volume targets change (1K vs 100K)?"
+
+**Test:** Volume shifts from 10K/year to 1K/year OR 100K/year
+
+**Analysis:**
+- Which scales best to high volume (cost, automation)?
+- Which is most economical at low volume (tooling, NRE)?
+- Which has best cost curve?
+
+**Example:**
+```
+Architecture A (FPGA): High NRE ($50K tooling), but $20 BOM at 100K units
+Architecture B (MCU): Low NRE ($5K tooling), $30 BOM at all volumes
+Architecture C (Distributed): No NRE, but $45 BOM (doesn't scale)
+
+Low Volume (1K): Winner = Architecture B (low NRE)
+High Volume (100K): Winner = Architecture A (best unit cost)
+```
+
+---
+
+## Deliverable: Sensitivity Matrix
+
+Create a table comparing robustness across scenarios:
+
+| Architecture | Cost 2x | Timeline 1mo | Component Unavailable | Volume 1K | Volume 100K | **Robustness Score** |
+|--------------|---------|--------------|----------------------|-----------|-------------|---------------------|
+| A (Piezo)    | ✅ Pass | ❌ Fail      | ❌ High Risk         | ⚠️ High NRE | ✅ Best     | 3/5 |
+| B (Solenoid) | ✅ Best | ⚠️ Marginal  | ✅ Low Risk          | ✅ Best   | ⚠️ OK       | 4/5 |
+| C (SMA)      | ❌ Fail | ✅ Pass      | ⚠️ Medium Risk       | ✅ OK     | ❌ Poor     | 2/5 |
+
+**Conclusion:** Architecture B is most robust to constraint changes.
+
+---
+
+## "Other Considerations" Checklist
+
+Beyond quantitative analysis, address:
+
+### Supply Chain
+- [ ] Lead times for key components (< 4 weeks? > 12 weeks?)
+- [ ] Single-source vs multi-source availability
+- [ ] Geographic sourcing risks (China-only? US-available?)
+- [ ] Distributor stock levels (Digi-Key, Mouser inventory)
+
+### Team Expertise
+- [ ] Familiar technology vs new learning curve?
+- [ ] In-house skills available?
+- [ ] Training requirements?
+- [ ] Consultant/vendor support needed?
+
+### Tooling & Equipment
+- [ ] Existing tools sufficient (oscilloscope, power supply, etc.)?
+- [ ] New equipment required (high-voltage driver, precision actuator tester)?
+- [ ] Software licenses needed (FPGA toolchain, PCB design)?
+- [ ] Capital expenditure required?
+
+### Risk Tolerance
+- [ ] Proven technology (lower risk, lower performance)?
+- [ ] Cutting-edge technology (higher risk, higher performance)?
+- [ ] Customer risk tolerance?
+- [ ] Backup plan if primary approach fails?
+
+### Market Timing
+- [ ] First-to-market advantage important?
+- [ ] Can wait for better components (next-gen MCUs)?
+- [ ] Competitor pressure?
+- [ ] Customer patience level?
+
+---
+
+## Integration into docs/tradeoffs.md
+
+**Section Structure:**
+
+1. **Quantitative Comparison** (cost, power, size, timeline)
+2. **Advantages & Disadvantages** (pros/cons per architecture)
+3. **⚠️ Sensitivity Analysis** (4 scenarios + robustness matrix)
+4. **Other Considerations** (supply chain, expertise, tooling, risk)
+5. **Final Selection Justification** (data-driven decision)
+
+---
+
+## Rubric Impact
+
+**Without Sensitivity Analysis:** Max score = 25/30 (loses 5 points)
+
+**With Sensitivity Analysis:** Max score = 30/30
+
+**Scoring:**
+- 1 pt per scenario analyzed (4 pts)
+- 1 pt for robustness comparison across solutions (1 pt)
+
+**Excellence Marker:** Showing you understand decisions must be robust to changing constraints, not just optimal for one specific case.
+
+---
+
+## Common Mistakes to Avoid
+
+❌ **Only analyzing "nominal" case** (assumes all constraints stay fixed)
+❌ **Ignoring "other considerations"** (only quantitative data, no supply chain/expertise discussion)
+❌ **Binary thinking** ("Architecture A is best, period") - doesn't show trade-off understanding
+❌ **No robustness comparison** (doesn't show which solution is most flexible)
+
+✅ **Multi-scenario analysis** (shows engineering judgment)
+✅ **Robustness scoring** (which solution wins across multiple scenarios?)
+✅ **Honest assessment** (no perfect solution - discuss trade-offs openly)
+✅ **Data-driven + qualitative** (numbers + judgment)
+
+---
+
+## Final Checklist
+
+Before completing v1.4.0:
+
+- [ ] All 4 sensitivity scenarios analyzed
+- [ ] Robustness matrix created
+- [ ] "Other considerations" addressed (supply chain, expertise, tooling, risk, market timing)
+- [ ] Final selection justified across multiple scenarios
+- [ ] Backup plan identified if constraints change
+
+**Deliverable:** `docs/tradeoffs.md` with sensitivity analysis section
+
+**Validation:** `/rubric-eval` should score 5/5 on Sensitivity Analysis category
+
+---
+
+**Document Control**
+
+| Version | Date | Author | Changes |
+|---------|------|--------|---------|
+| 1.0.0 | 2025-10-08 | Spencer Barrett | Initial guide from PDF analysis |

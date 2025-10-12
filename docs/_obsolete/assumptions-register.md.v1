@@ -1,0 +1,326 @@
+# Assumptions Register - Braille Display Device
+
+**Project:** LAM Research EE Concept Evaluation
+**Version:** 1.0.0
+**Date:** 2025-10-08
+**Source:** `source/requirements.yaml` (metadata.assumptions)
+
+---
+
+## Purpose
+
+This register documents all assumptions made due to incomplete/vague requirements in the PDF assignment. Each assumption has:
+- **Unique ID** for traceability
+- **Risk level** (impact if assumption is wrong)
+- **Test plan** (where we validate or test sensitivity)
+
+**Key Insight:** LAM intentionally left requirements vague to test engineering judgment. Documenting assumptions + testing them = professional approach.
+
+---
+
+## Assumptions Summary
+
+| ID | Category | Description | Risk Level | Tested In |
+|----|----------|-------------|------------|-----------|
+| ASMP-MKT-001 | Market | China/India emerging market target | HIGH | v1.4.0 sensitivity |
+| ASMP-MKT-002 | Customer | External B2C customer (not internal) | MEDIUM | v1.4.0 sensitivity |
+| ASMP-COST-001 | Cost | "Low-cost" = <$50 BOM @ 1K units | CRITICAL | v1.4.0 sensitivity |
+| ASMP-VOL-001 | Volume | "High-volume" = >10K units/year | HIGH | v1.4.0 sensitivity |
+| ASMP-SIZE-001 | Form Factor | ≤200g, ≤20×10×3cm (portable) | MEDIUM | v1.3.0 design |
+| ASMP-PWR-001 | Power | Rechargeable Li-ion (not USB parasitic, not AA/AAA) | HIGH | v1.3.0 comparison |
+| ASMP-PWR-002 | Battery | ≥8 hour battery life target | MEDIUM | v1.4.0 power budget |
+| ASMP-PWR-003 | Battery | ≥500 cycle MTBS (≈2 years) | LOW | v1.3.0 selection |
+| ASMP-COMM-001 | Interface | BLE primary, USB-C secondary (hybrid) | HIGH | v1.3.0 options |
+| ASMP-STD-001 | Braille | Grade 1 (6-dot) braille | LOW | Design validation |
+| ASMP-BRAILLE-001 | Tactile | 1.5mm diameter, 0.6mm height, dome | LOW | v1.3.0 actuators |
+| ASMP-BRAILLE-002 | Spacing | 2.5mm dot pitch, 6.0mm cell pitch | LOW | v1.3.0 mechanical |
+| ASMP-BRAILLE-003 | Force | 50-100g holding force | MEDIUM | v1.3.0 force test |
+| ASMP-UX-001 | UX | Auto-sleep (no power button) | LOW | v1.3.0 UX design |
+| ASMP-CELLS-001 | Display | 32-cell (vs 20-cell standard) | MEDIUM | v1.4.0 sensitivity |
+| ASMP-WEIGHT-001 | Weight | ≤1.3 lbs (590g) target | MEDIUM | v1.3.0 weight budget |
+| ASMP-IFACE-001 | Interface | BLE + USB-C + SD (multi-interface) | MEDIUM | v1.3.0 interface |
+| ASMP-MARKET-001 | Market | Multi-region (US/EU/China) | HIGH | v1.5.0 compliance |
+| ASMP-COMPLIANCE-001 | Compliance | Design awareness, certify post-pilot | MEDIUM | v1.5.0 strategy |
+| ASMP-ENV-001 | Environment | Indoor, 0-40°C, non-extreme | LOW | Component selection |
+| ASMP-TIME-001 | Timeline | 2 months to pilot (not mass) | LOW | v1.5.0 timeline |
+| ASMP-MFG-001 | Production | Pilot validates before scale | LOW | v1.5.0 strategy |
+| ASMP-MFG-002 | Assembly | SMT assembly (automated) | MEDIUM | v1.5.0 DFM |
+| ASMP-COMP-001 | Components | COTS actuators (no custom fab) | HIGH | v1.3.0 actuators |
+| ASMP-USER-001 | Users | Adults, basic tech literacy | LOW | v1.3.0 UX |
+
+---
+
+## Critical Assumptions (Highest Impact)
+
+### ASMP-COST-001: "Low-Cost" Interpretation
+**What PDF Says:** "portable, low-cost, high-volume companion device"
+**What We Assume:** <$50 BOM at 1000-unit volume
+**Why:** Competitor braille displays retail $449-$1,795 (BrailleMe $515, Orbit Reader $449, APH Refreshabraille $1,795). Assuming 40% BOM ratio → ~$180-210 BOM. PDF says "low-cost" - interpreting as <$50 BOM to **undercut market by 70%+** and enable emerging market accessibility.
+**Risk:** CRITICAL - Wrong assumption eliminates/enables entire architectures
+**Test Plan:** Sensitivity analysis in v1.4.0
+- If actual target is $30 → Eliminates most architectures
+- If actual target is $50 → Baseline design (aggressive cost reduction)
+- If actual target is $100 → Enables higher-reliability options
+- If actual target is $150 → Premium architectures competitive with existing products
+
+**Competitor Data (verified 2025-10-08):**
+- BrailleMe: $515.50 retail (20-cell, 1.3 lbs, Perkins keyboard, BLE/USB/SD)
+- Orbit Reader: $449 (20-cell refreshable display)
+- APH Refreshabraille: $1,795 (18-cell display)
+- OrCam MyEye: $150 (braille reader, not display - discontinued)
+
+---
+
+### ASMP-MKT-001: Market Assumption
+**What PDF Says:** "low-cost, high-volume"
+**What We Assume:** China/India emerging markets (price-sensitive)
+**Why:** Language suggests cost-sensitive market, not premium US/EU
+**Risk:** HIGH - Changes stakeholder priorities significantly
+**Test Plan:** Sensitivity analysis in v1.4.0
+- If US/EU market → Unit cost tolerance +$30-50, UX/reliability weights increase
+- If China/India → Cost is king, time-to-market critical
+
+---
+
+### ASMP-VOL-001: Volume Interpretation
+**What PDF Says:** "high-volume manufacturing"
+**What We Assume:** >10,000 units/year production capability
+**Why:** Global market ~285M visually impaired, 0.01% penetration = 28K/year potential
+**Risk:** HIGH - Affects DFM requirements, tooling decisions, component selection
+**Test Plan:** Sensitivity analysis in v1.4.0
+- If 1K/year → Hand assembly acceptable, lower NRE
+- If 100K/year → Full automation required, higher NRE
+
+---
+
+### ASMP-COMP-001: COTS Components
+**What PDF Says:** (implicit in 2-month timeline)
+**What We Assume:** Must use off-the-shelf actuators, no custom fabrication
+**Why:** 2-month timeline prohibits custom tooling (12+ week lead times)
+**Risk:** HIGH - Limits actuator technology options
+**Test Plan:** Architecture selection in v1.3.0
+- Evaluate only COTS-available actuators (piezo, solenoid, SMA from standard suppliers)
+- Document custom fabrication as "out of scope" for 2-month constraint
+
+---
+
+## High-Risk Assumptions
+
+### ASMP-PWR-001: Power Strategy
+**What PDF Says:** "portable companion device"
+**What We Assume:** Internal rechargeable Li-ion/LiPo battery (3.7V, 2000-3000mAh)
+**Why:** True portability = untethered. Rechargeable Li-ion is modern standard (smartphones, tablets, BrailleMe competitor). Best energy density (200 Wh/kg vs 100 Wh/kg for AA/AAA).
+**Risk:** HIGH - Fundamentally changes architecture
+**Alternatives & Impacts:**
+- **Alt A: USB-C parasitic power only** (no battery)
+  - Pro: -$8-12 BOM, -50g weight, simpler (no charging circuit/BMS)
+  - Con: Tethered to phone, defeats "portable" vision, cable management for blind users
+- **Alt B: Replaceable AA/AAA cells** (3×AAA ≈ 1350mAh)
+  - Pro: User-replaceable, no charging circuit, familiar
+  - Con: 2x weight for same capacity, +20-30% enclosure size, lower power density
+- **Alt C: Rechargeable Li-ion** ✅ BASELINE
+  - Pro: Smallest/lightest, highest energy density, modern UX (USB-C charging)
+  - Con: +$8-12 BOM, requires charging circuit + BMS, Li-ion safety compliance
+**Test Plan:** v1.3.0 architectures will compare all 3 power strategies
+
+### ASMP-COMM-001: Connectivity Strategy
+**What PDF Says:** "compatible with cell phone"
+**What We Assume:** BLE 5.0+ primary (wireless), USB-C secondary (charging + fallback data)
+**Why:** "Portable companion" suggests wireless freedom. BLE is universal (iOS/Android). USB-C provides charging + wired fallback if BLE fails.
+**Risk:** HIGH - Affects BOM, power budget, UX, enclosure
+**Alternatives & Impacts:**
+- **Alt A: BLE-only** (no USB data, wireless charging only)
+  - Pro: Simpler, -$3-5 BOM (no USB controller)
+  - Con: No wired fallback, wireless charging adds cost/complexity
+- **Alt B: USB-C only** (wired data + parasitic power)
+  - Pro: Simplest, no battery needed, lowest BOM
+  - Con: Tethered (defeats portability), cable management for blind users
+- **Alt C: BLE + USB-C hybrid** ✅ BASELINE
+  - Pro: Best UX (wireless primary, wired fallback), USB-C charging standard
+  - Con: Highest BOM (+$3-5 for USB), more complex firmware
+**Test Plan:** v1.3.0 architectures will compare BLE-only, USB-only, hybrid
+
+---
+
+## Medium-Risk Assumptions
+
+### ASMP-PWR-002: Battery Life Target
+**Assumption:** ≥8 hours continuous use
+**Alternatives:** 4 hours (smaller battery, -30% cost) or 16 hours (2x battery, +50% cost/weight)
+**Impact:** Affects battery size, weight, cost
+**Test Plan:** Power budget calculations in v1.4.0
+
+### ASMP-PWR-003: Battery Service Life
+**Assumption:** ≥500 charge cycles (≈2 years @ daily charging, ≈5 years @ weekly charging)
+**Alternatives:** 1000+ cycles (premium battery, +$1-2) or replaceable design (enclosure complexity)
+**Impact:** Lifecycle cost, warranty strategy
+**Test Plan:** Battery selection in v1.3.0, lifecycle cost in v1.4.0
+
+### ASMP-MFG-002: SMT Assembly
+**Assumption:** Automated SMT assembly for high-volume
+**Alternative:** Through-hole easier for prototyping
+**Impact:** SMT enables volume scaling, through-hole limits to <1K/year
+**Test Plan:** DFM analysis in v1.5.0
+
+---
+
+## Low-Risk Assumptions
+
+### ASMP-BRAILLE-001: Braille Dot Dimensions
+**What Standards Say:** US ADA 703.3: 1.5-1.6mm diameter, 0.64-0.94mm height
+**What We Assume:** 1.5mm diameter, 0.6mm height, hemispherical dome
+**Why:** Standards are clear and consistent. Targeting mid-range for broad compliance (US + Australia + BANA).
+**Risk:** LOW - Standards well-established and legally mandated (US ADA)
+**Flexibility:**
+- Diameter: 1.4-1.6 mm acceptable (tight tolerance)
+- Height: 0.5-0.7 mm acceptable (can optimize for actuator)
+- Shape: Hemispherical preferred, rounded dome acceptable
+**Test Plan:** Actuator selection in v1.3.0, mechanical measurement + user testing in v1.5.0
+**Reference:** `reference/standards/braille-dimensions-standards.md`
+
+### ASMP-BRAILLE-002: Braille Spacing
+**What Standards Say:** US ADA: 2.3-2.5mm dot pitch, 6.1-7.6mm cell pitch
+**What We Assume:** 2.5mm dot pitch (within cell), 6.0mm cell pitch (between cells)
+**Why:** Standards are clear. 2.5mm dot pitch is upper limit (easier manufacturing). 6.0mm cell pitch is lower limit (compact design).
+**Risk:** LOW - Standards well-established
+**Implications:**
+- 32 characters × 6.0mm = **192mm display width**
+- Plus margins: ~200-210mm total device width
+- Validates ASMP-SIZE-001 (≤20cm width is tight fit!)
+**Test Plan:** CAD layout in v1.3.0, mechanical verification in v1.5.0
+**Reference:** `reference/standards/braille-dimensions-standards.md`
+
+---
+
+### ASMP-MARKET-001: Multi-Region Compliance Strategy
+**What PDF Says:** (nothing - market not specified)
+**What We Assume:** Target multi-region (US/EU/China/India) for broadest market access
+**Why:** Unknown market → design for broadest compliance envelope (most restrictive wins). Prevents rework if market expands.
+**Risk:** HIGH - Drives compliance requirements
+**Alternatives & Impacts:**
+- **Alt A: US-only** → FCC only, simpler, but limits market
+- **Alt B: EU-only** → CE only, different battery standards
+- **Alt C: China-only** → CCC, SRRC (different process)
+- **Alt D: Multi-region** ✅ → Design once, test multiple (higher initial awareness, but broader access)
+**Test Plan:** v1.5.0 identifies all regional standards (FCC/CE/CCC), design awareness, post-pilot testing
+
+---
+
+### ASMP-COMPLIANCE-001: Compliance Approach
+**What We Assume:** Design awareness now, formal certification testing post-pilot
+**Why:** 2-month timeline prohibits full certification (12-16 weeks for FCC/CE/CCC testing). Design smart now, test later.
+**Risk:** MEDIUM - If design fails testing post-pilot, rework is costly
+**Mitigation:** Follow best practices (EMC layout, pre-certified BLE module, BMS for battery), reduces risk of test failure
+**Test Plan:** v1.5.0 production plan includes post-pilot certification timeline
+
+---
+
+## Medium-Risk Assumptions
+
+### ASMP-CELLS-001: 32-Cell Display Count
+**What PDF Says:** "32 characters"
+**What We Assume:** 32 cells is firm requirement (not negotiable to 20-cell standard)
+**Why:** PDF explicitly states 32. Competitors use 20-cell (BrailleMe, Orbit Reader). 32-cell = differentiation but higher cost.
+**Risk:** MEDIUM - 60% more actuators than standard (32 vs 20 = 192 dots vs 120 dots)
+**Alternatives:**
+- If 20-cell acceptable → -40% actuators, -$15-20 BOM, matches market standard
+- If 40-cell required → +25% actuators, +$10-15 BOM, larger enclosure
+**Test Plan:** Sensitivity analysis in v1.4.0 (cost impact of 20 vs 32 vs 40 cells)
+
+### ASMP-WEIGHT-001: Weight Target
+**What PDF Says:** "portable"
+**What We Assume:** ≤1.3 lbs (590g) based on BrailleMe benchmark
+**Why:** BrailleMe (20-cell) = 1.3 lbs. Our 32-cell design = 60% more actuators, so same or slightly heavier is reasonable.
+**Risk:** MEDIUM - ASMP-SIZE-001 said ≤200g (too aggressive for 32-cell with battery)
+**Revised Target:** ≤590g (1.3 lbs) more realistic for 32-cell + battery + enclosure
+**Test Plan:** Weight budget in v1.3.0 (actuators + battery + PCB + enclosure)
+
+### ASMP-IFACE-001: Multi-Interface Support
+**What PDF Says:** "compatible with cell phone"
+**What We Assume:** BLE + USB-C (hybrid), optional SD card like BrailleMe
+**Why:** BrailleMe offers BLE + USB + SD card. More interfaces = better compatibility but higher cost (+$5-10 BOM).
+**Risk:** MEDIUM - Adds complexity, cost, but improves UX
+**Alternatives:**
+- BLE-only → -$5 BOM, simpler
+- USB-C only → No battery, tethered
+- BLE + USB-C ✅ → Best flexibility
+- BLE + USB-C + SD → Like BrailleMe, +$3-5 more
+**Test Plan:** v1.3.0 interface architecture comparison, v1.4.0 cost analysis
+
+---
+
+### Other Low-Risk Assumptions
+
+### ASMP-UX-001: Auto-Sleep Feature
+**What We Assume:** Auto-sleep (no power button), wake on button press or BLE activity
+**Why:** BrailleMe uses auto-sleep. Reduces button count (-$0.50-1.00 BOM), simpler UX for blind users.
+**Risk:** LOW - Standard practice, easy to implement
+**Test Plan:** UX design in v1.3.0, power budget in v1.4.0
+
+These assumptions are either:
+- Explicitly stated in PDF (ASMP-STD-001, ASMP-TIME-001)
+- Industry standard practice (ASMP-MFG-001, ASMP-ENV-001, ASMP-UX-001)
+- Minimal impact if wrong (ASMP-USER-001, ASMP-PWR-003)
+
+---
+
+## Linking Assumptions → Requirements
+
+**Requirements that depend on assumptions:**
+
+| Requirement | Depends On Assumption | Impact |
+|-------------|----------------------|--------|
+| ASMP-COST-001 (BOM target) | ASMP-COST-001 | If $30 target, eliminates architectures; if $100, enables premium options |
+| ASMP-VOL-001 (Volume target) | ASMP-VOL-001 | If 1K/year, hand assembly OK; if 100K/year, requires full automation |
+| ASMP-SIZE-001 (Portability) | ASMP-SIZE-001 | If smaller required, limits battery; if larger OK, eases PCB routing |
+| ASMP-PWR-002 (Battery life) | ASMP-PWR-001, ASMP-PWR-002 | If Li-ion, need charging circuit; if AAA, larger enclosure; if USB-C, no battery |
+| EE-COMM-001 (Interface) | ASMP-COMM-001 | If BLE-only, -$5 BOM; if USB-only, tethered; if hybrid, best UX but costly |
+| SYS-MECH-001 (Dot dimensions) | ASMP-BRAILLE-001 | Actuator must achieve 0.5-0.7mm stroke, 1.5mm tip diameter |
+| SYS-MECH-002 (Dot spacing) | ASMP-BRAILLE-002 | 2.5mm pitch = tight spacing, actuators must be compact (192mm width for 32 chars) |
+| SYS-MECH-003 (Holding force) | ASMP-BRAILLE-003 | Actuator must provide ≥50g force, affects power/cost trade-off |
+
+---
+
+## How This Gets Used
+
+### v1.2.0: Requirements Definition
+- Document assumptions in requirements.yaml
+- Tag requirements with `assumption: "..."` field
+- Mark risk level
+
+### v1.3.0: Architecture Design
+- Test ASMP-PWR-001 (battery vs USB-C)
+- Validate ASMP-COMP-001 (COTS actuators only)
+- Apply ASMP-SIZE-001 constraints
+
+### v1.4.0: Trade-off Analysis & Sensitivity
+- **CRITICAL:** Test ASMP-COST-001 ("what if $30? what if $100?")
+- Test ASMP-MKT-001 (emerging vs developed market)
+- Test ASMP-VOL-001 (1K vs 10K vs 100K volume)
+- Show which architecture is most robust to assumption changes
+
+### v1.5.0: Production Plan
+- Validate ASMP-TIME-001 (pilot → scale strategy)
+- Apply ASMP-MFG-001 (pilot validation approach)
+- Confirm ASMP-MFG-002 (SMT assembly for volume)
+
+### Presentation (v2.0.0)
+- **Slide:** "Key Assumptions" (3-5 critical ones)
+- **Talking Point:** "PDF was intentionally vague. Here's what I assumed and why."
+- **Q&A Ready:** If they challenge assumption, show sensitivity analysis
+
+---
+
+## Document Control
+
+| Version | Date | Author | Changes |
+|---------|------|--------|---------|
+| 1.0.0 | 2025-10-08 | Spencer Barrett | Initial assumptions register (15 assumptions identified) |
+
+---
+
+## References
+
+- Source: `source/requirements.yaml` (metadata.assumptions)
+- Testing: `docs/tradeoffs.md` (sensitivity analysis section)
+- Validation: `docs/architecture.md` (design constraints)

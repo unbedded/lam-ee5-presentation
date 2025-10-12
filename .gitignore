@@ -64,6 +64,5 @@ build/
 dist/
 *.egg-info/
 
-# Obsolete/archived files
-docs/_obsolete/
+# Archived files (OLD pattern only, not _obsolete directories)
 **/*.OLD
