@@ -5,10 +5,16 @@
 
 metadata:
   project: "Lam Research - Braille Display EE Concept Evaluation"
-  version: "1.0.0"
-  date: "2025-10-09"
+  version: "2.0.0"
+  date: "2025-10-11"
   author: "Spencer Barrett"
-  purpose: "Define 3 alternative architectures (Wired/Hybrid/Wireless) with qualitative + quantitative comparison"
+  purpose: "Define 3 alternative architectures (SOL_ECO, PIEZO_ECO, PIEZO_DLX) with qualitative + quantitative comparison"
+  changelog: |
+    v2.0.0 (2025-10-11):
+    - Renamed architectures to economic tier focus: ARCH_SOL_ECO, ARCH_PIEZO_ECO, ARCH_PIEZO_DLX
+    - Added ARCH_SOL_ECO: Rotary cam mechanism, $216 production BOM, standard braille spacing
+    - Removed ARCH-C (redundant mid-tier) and ARCH-D (violated braille spacing)
+    - Portfolio strategy: Low-cost (SOL/PIEZO_ECO) vs Deluxe (PIEZO_DLX)
 
 # ============================================================================
 # ARCHITECTURE DEFINITIONS
@@ -16,11 +22,12 @@ metadata:
 
 architectures:
 
-  ARCH-B:
-    id: "ARCH-B"
-    name: "Wired (Budget)"
+  ARCH_PIEZO_ECO:
+    id: "ARCH_PIEZO_ECO"
+    name: "Piezo Economy (Wired)"
     nickname: "Value Desk"
-    market_position: "Entry-level / Education / Desktop"
+    market_position: "Entry-level / Education / Desktop / Low-cost Piezo"
+    strategy_note: "ECO tier (piezo variant): LOWEST RISK + SIMPLEST DESIGN. USB-C wired eliminates battery complexity. Fastest piezo option to market (6 weeks). Higher BOM ($420) than SOL_ECO but proven piezo technology (zero technical risk)."
 
     # Requirements traceability
     driven_by_requirements:
@@ -121,148 +128,43 @@ architectures:
         assembly_time_min: 15      # Per unit (pilot, hand assembly)
         yield_estimate: 0.98       # 98% first-pass yield
 
-    block_diagram_path: "docs/diagrams/arch-b-wired-block.png"
-    bom_csv_path: "artifacts/bom/arch-b-wired-bom.csv"
+    block_diagram_path: "docs/diagrams/arch-piezo-eco-wired-block.png"
+    bom_csv_path: "artifacts/bom/arch-piezo-eco-wired-bom.csv"
 
-  ARCH-C:
-    id: "ARCH-C"
-    name: "Hybrid (Mid-Range)"
-    nickname: "Mainstream Mobile"
-    market_position: "Mid-Range / Mainstream / Best Value"
-
-    # Requirements traceability
-    driven_by_requirements:
-      - id: "PRD-IFACE-001-ASMP"
-        scenario: "Scenario C (Hybrid BLE+USB): Best UX, highest cost $250-300 BOM"
-        note: "Using AA batteries reduces cost from $250-300 to $210-230"
-      - id: "PRD-COST-001-ASMP"
-        target: "Mid-range BOM target ($210-230 with AA battery optimization)"
-      - id: "PRD-SIZE-001-ASMP"
-        target: "Portable with battery (≤1.3 lbs)"
-
-    # Subsystem mapping
-    subsystems:
-      core:
-        - SS-ACTUATOR       # $288.00
-        - SS-CONTROL        # $8.00
-        - SS-IO-EXPAND      # $4.80
-        - SS-ACTUATOR-DRIVER # $19.20
-        - SS-USER-IO        # $0.50
-        - SS-PCB            # $15.00
-        - SS-ENCLOSURE      # $25.00
-      unique:
-        - SS-COMM-BLE       # $12.00
-        - SS-COMM-USB       # $1.50
-        - SS-POWER-AA-HOLDER  # $2.00
-        - SS-POWER-AA-BOOST-3V3  # $2.25
-        - SS-POWER-AA-BOOST-30V  # $2.25
-
-    # Qualitative assessment
-    qualitative:
-      cost:
-        bom: "MEDIUM"
-        certification: "MEDIUM"
-        nre: "MEDIUM"
-      size:
-        physical: "LARGE"        # AA holder adds bulk
-        weight: "HEAVY"          # 4× AA = 96g
-        portability: "HIGH"      # Wireless capable
-      ux:
-        setup: "GOOD"            # Pairing + plug
-        convenience: "BEST"      # Wireless + instant battery swap + wired fallback
-        reliability: "BEST"      # Dual interface fallback
-        battery_anxiety: "NONE"  # Instant AA swap
-        mobility: "EXCELLENT"    # Wireless freedom
-      complexity:
-        hardware: "MODERATE"
-        firmware: "COMPLEX"      # Dual BLE + USB stack
-        power: "MODERATE"        # Boost converters (no charger)
-        mechanical: "COMPLEX"    # AA holder integration
-      timeline:
-        pilot: "MODERATE"        # 7-8 weeks
-        parts_leadtime: "SHORT"  # Standard parts
-        certification: "MODERATE" # FCC 15B + 15C (radio)
-      manufacturing:
-        assembly: "MODERATE"
-        component_count: "HIGH"
-        dfm: "GOOD"
-        yield_risk: "MEDIUM"
-      risk:
-        technical: "MEDIUM"      # BLE + USB integration
-        supply_chain: "LOW"      # AA globally available
-        safety: "LOW"            # AA safe (no Li-ion hazard)
-        timeline: "MEDIUM"
-        cost_overrun: "MEDIUM"
-      market_fit:
-        education: "GOOD"
-        consumer: "EXCELLENT"    # Best flexibility
-        professional: "EXCELLENT" # Reliable dual interface
-        accessibility_ngos: "EXCELLENT"
-        global: "EXCELLENT"      # AA everywhere
-
-    # Quantitative metrics
-    quantitative:
-      cost:
-        bom_subtotal: 379.00      # Core + unique
-        misc_15pct: 56.85
-        bom_total: 435.85
-        bom_target: 220           # Mid-range target
-        bom_range_min: 210
-        bom_range_max: 230
-        certification_cost: 26500  # FCC 15B + 15C (radio), NO UL 2054 (AA exempt)
-        nre_total: 55000
-      size:
-        length_mm: 220            # Slightly longer (AA holder)
-        width_mm: 105             # Slightly wider
-        height_mm: 25             # Taller (AA holder = 15mm height)
-        weight_grams: 550         # 1.21 lbs (heavier due to 4× AA)
-        weight_lbs: 1.21
-      performance:
-        refresh_speed_sec: 1.5
-        battery_life_hrs: 18      # 4× AA = 2500mAh @ 6V, ~250mA avg
-        power_consumption_watts: 1.5  # Lower than USB (efficient boost converters)
-      timeline:
-        design_weeks: 3
-        prototype_weeks: 2
-        pilot_production_weeks: 2.5
-        total_weeks: 7.5
-        certification_weeks: 6     # FCC 15B + 15C (radio testing)
-      manufacturing:
-        component_count: 280
-        assembly_time_min: 20      # More complex (dual interfaces)
-        yield_estimate: 0.95       # Slightly lower (more parts)
-
-    block_diagram_path: "docs/diagrams/arch-c-hybrid-block.png"
-    bom_csv_path: "artifacts/bom/arch-c-hybrid-bom.csv"
-
-  ARCH-D:
-    id: "ARCH-D"
-    name: "Hybrid (Solenoid+Latch)"
-    nickname: "Budget Mobile"
-    market_position: "Budget-Conscious / Long Battery Life / Acceptable UX Trade-off"
+  ARCH_SOL_ECO:
+    id: "ARCH_SOL_ECO"
+    name: "Solenoid Economy (Rotary Cam)"
+    nickname: "Cam Innovation"
+    market_position: "Economy / Budget-Conscious / Best Cost-Performance / Standard Braille Spacing"
+    strategy_note: "ECO tier focus: EXTREME LOW RISK + FASTEST TIME TO MARKET. Uses COTS solenoids (2-week lead, globally available) to eliminate supply chain risk. 50% cost savings vs piezo ($216 vs $436 production BOM). Cam mechanism proven in automotive/robotics applications."
+    note: "Replaces ARCH-D (violated braille spacing). Rotary cam mechanism achieves standard 2.5mm spacing with COTS solenoids."
 
     # Requirements traceability
     driven_by_requirements:
       - id: "PRD-SCHED-002-ASMP"
         target: "COTS mandate (≤4 week lead time) → Use COTS solenoid (Takaha BS-0420N-01)"
       - id: "PRD-POWER-004-ASMP"
-        target: "AA battery life (8 hours) → Solenoid+latch = 1.53W (marginal fit vs piezo 2.16W)"
-      - id: "PRD-FUNC-003-ARCH-C-EXCEPT"
-        target: "Allow 4mm actuator (relaxed from 2.3mm), 3.5mm cell pitch, 280mm device"
+        target: "AA battery life (8 hours) → Solenoid+cam = 1.53W (marginal fit)"
       - id: "PRD-COST-001-ASMP"
-        target: "Low BOM target ($150-180) via actuator cost savings (solenoid $131 vs piezo $288)"
+        target: "Lowest BOM target ($165-216) via actuator cost savings (solenoid $96 vs piezo $288)"
+      - id: "PRD-FUNC-001"
+        target: "Standard 2.5mm braille spacing (ADA 703.3) - preserves muscle memory"
 
-    # Subsystem mapping
+    # Subsystem mapping (production BOM - steel molds)
     subsystems:
       core:
-        - SS-ACTUATOR-SOLENOID  # $96.00 (192× @ $0.50 ea, vs piezo $288)
-        - SS-ACTUATOR-LATCH     # $13.00 (global latch plate + latch solenoid)
+        - SS-ACTUATOR-SOLENOID  # $96.00 (192× @ $0.50 ea, COTS Takaha BS-0420N-01)
+        - SS-ACTUATOR-CAM       # $14.40 (3× cam discs per char @ $0.15 ea, steel mold)
+        - SS-ACTUATOR-PISTON    # $19.20 (6× piston rods per char @ $0.10 ea, steel mold)
+        - SS-ACTUATOR-BUSHING   # $15.36 (6× linear bushings per char @ $0.08 ea, steel mold)
+        - SS-ACTUATOR-CAM-HOUSING # $16.00 (1× housing per char @ $0.50 ea, steel mold)
+        - SS-ACTUATOR-SPRING    # $3.84 (6× compression springs per char @ $0.02 ea)
         - SS-CONTROL            # $8.00
         - SS-IO-EXPAND          # $4.80
-        - SS-ACTUATOR-DRIVER-2CH # $4.80 (2 channels vs 8 channels = $19.20 savings)
+        - SS-ACTUATOR-DRIVER-2CH # $2.40 (3× ULN2803A for 2-channel architecture)
         - SS-USER-IO            # $0.50
-        - SS-PCB                # $18.00 (4-layer, slightly larger for 280mm device)
-        - SS-ENCLOSURE          # $30.00 (larger for 280mm length)
+        - SS-PCB                # $15.00
+        - SS-ENCLOSURE          # $8.00 (injection molded production)
       unique:
         - SS-COMM-BLE           # $12.00
         - SS-COMM-USB           # $1.50
@@ -273,104 +175,88 @@ architectures:
     # Qualitative assessment
     qualitative:
       cost:
-        bom: "LOW-MEDIUM"
+        bom: "LOW"               # $216 production (50% savings vs piezo)
         certification: "MEDIUM"
-        nre: "MEDIUM"
+        nre: "MEDIUM-HIGH"       # $70K-90K steel tooling
       size:
-        physical: "VERY LARGE"   # 280mm length (40% longer than ARCH-B/C)
-        weight: "HEAVY"          # 4× AA + solenoids
+        physical: "SMALL"        # 198mm (standard ADA spacing, not 280mm)
+        weight: "MEDIUM"         # 4× AA + cam mechanism
         portability: "HIGH"      # Wireless capable
       ux:
-        setup: "GOOD"            # Pairing + plug
-        convenience: "GOOD"      # Wireless + instant battery swap
+        setup: "GOOD"            # Pairing + plug (dual interface)
+        convenience: "BEST"      # Wireless + instant battery swap + wired fallback
         reliability: "BEST"      # Dual interface fallback
-        battery_anxiety: "NONE"  # Instant AA swap + longest battery life (8hrs vs 4hrs ARCH-C)
+        battery_anxiety: "NONE"  # Instant AA swap
         mobility: "EXCELLENT"    # Wireless freedom
-        refresh_speed: "SLOW"    # 5.2-second refresh (vs 1.5-sec piezo) due to sequential actuation
+        refresh_speed: "ACCEPTABLE" # 2.4 sec (vs 1.5 sec piezo, good for beginners)
       complexity:
-        hardware: "COMPLEX"      # Latch mechanism adds complexity
-        firmware: "COMPLEX"      # Dual BLE + USB + sequential latch control
-        power: "MODERATE"        # Boost converter (12V, not 30V)
-        mechanical: "VERY COMPLEX" # Latch plate + detents + alignment
+        hardware: "MODERATE"
+        firmware: "COMPLEX"      # Dual BLE + USB stack
+        power: "MODERATE"        # Boost converters (no charger)
+        mechanical: "COMPLEX"    # Cam mechanism + layer offsets + piston alignment
       timeline:
-        pilot: "MODERATE"        # 7-8 weeks (COTS solenoids available)
-        parts_leadtime: "SHORT"  # All COTS (solenoid 2-week lead time)
+        pilot: "FAST"            # 10 weeks total, but COTS parts (2-week lead) enable early prototyping
+        parts_leadtime: "SHORTEST" # All COTS (solenoid 2-week lead time, fastest among all architectures)
         certification: "MODERATE" # FCC 15B + 15C (radio)
       manufacturing:
-        assembly: "COMPLEX"      # Latch mechanism requires precision alignment
-        component_count: "HIGH"
-        dfm: "FAIR"              # Latch mechanism tolerances critical
-        yield_risk: "HIGH"       # Latch alignment/friction issues
+        assembly: "MODERATE"     # Modular 6-dot subassemblies (snap-together)
+        component_count: "MEDIUM"
+        dfm: "EXCELLENT"         # Injection molding scalable, ±0.2mm tolerance OK
+        yield_risk: "MEDIUM"     # Cam mechanism prototype validation needed
       risk:
-        technical: "HIGH"        # Latch mechanism unproven (needs prototype validation)
-        supply_chain: "LOW"      # AA + COTS solenoids globally available
+        technical: "LOW"         # COTS solenoids (proven), cam mechanisms proven (automotive/robotics), modular design
+        supply_chain: "LOWEST"   # AA + COTS solenoids globally available, 2-week lead time (fastest)
         safety: "LOW"            # AA safe (no Li-ion hazard), 12V low voltage
-        timeline: "MEDIUM"       # Latch prototyping adds risk
-        cost_overrun: "LOW"      # Actuators well-defined cost ($131 vs $288)
+        timeline: "LOW"          # COTS parts minimize risk, modular assembly de-risks production
+        cost_overrun: "LOWEST"   # Actuators well-defined cost ($96 COTS vs $288 custom piezo)
       market_fit:
-        education: "EXCELLENT"   # Low cost + AA batteries
-        consumer: "FAIR"         # Slow refresh (5.2 sec) may frustrate users
-        professional: "POOR"     # Slow refresh unacceptable for professionals
+        education: "EXCELLENT"   # Low cost + AA batteries + standard spacing
+        consumer: "EXCELLENT"    # Best flexibility (wireless + wired) + affordable
+        professional: "GOOD"     # Standard spacing + reliable (acceptable refresh)
         accessibility_ngos: "EXCELLENT" # Low cost + long battery life
         global: "EXCELLENT"      # AA everywhere
 
-    # Quantitative metrics
+    # Quantitative metrics (production volume - steel molds)
     quantitative:
       cost:
-        bom_subtotal: 195.10      # Core + unique (actuator savings: $157)
-        misc_15pct: 29.27
-        bom_total: 224.37         # 48% lower than ARCH-C ($435.85)
+        bom_subtotal: 187.75      # Actuators $152 + Control/PCB/Enclosure $35.75
+        misc_15pct: 28.16         # Passives, connectors
+        bom_total: 215.90         # Production BOM (50% savings vs piezo)
         bom_target: 165           # Low-mid range target
         bom_range_min: 150
         bom_range_max: 180
         certification_cost: 26500  # FCC 15B + 15C (radio), NO UL 2054 (AA exempt)
-        nre_total: 60000          # Higher than ARCH-C due to latch prototyping
+        nre_total: 70000          # $70K-90K steel tooling (higher than piezo, justified by lower BOM)
       size:
-        length_mm: 280            # 40% longer (3.5mm cell pitch vs 2.5mm)
-        width_mm: 105             # Same as ARCH-C
-        height_mm: 25             # Same as ARCH-C (AA holder)
-        weight_grams: 580         # 1.28 lbs (heavier due to solenoids + latch plate)
-        weight_lbs: 1.28
+        length_mm: 198            # Standard ADA spacing (32 chars × 6.2mm)
+        width_mm: 105             # Slightly wider (cam mechanism)
+        height_mm: 25             # Same as AA holder
+        weight_grams: 550         # 1.21 lbs (4× AA + cam mechanism)
+        weight_lbs: 1.21
       performance:
-        refresh_speed_sec: 5.2    # Sequential 2-channel actuation (vs 1.5 sec ARCH-C)
-        battery_life_hrs: 8       # 4× AA = 15Wh, 1.53W avg → 8 hrs (vs 4 hrs ARCH-C piezo)
-        power_consumption_watts: 1.53  # Solenoid+latch (2 channels) marginal fit
+        refresh_speed_sec: 2.4    # 8-way parallel actuation (acceptable for beginners)
+        battery_life_hrs: 8       # 4× AA = 15Wh, 1.53W avg → 8 hrs
+        power_consumption_watts: 1.53  # Solenoid+cam (2 channels) marginal fit
       timeline:
         design_weeks: 3
-        prototype_weeks: 3        # Latch mechanism prototyping
-        pilot_production_weeks: 2.5
-        total_weeks: 8.5
+        prototype_weeks: 3        # Cam mechanism prototyping (SLA 3D print)
+        pilot_production_weeks: 4 # Proto molds (soft tooling)
+        total_weeks: 10
         certification_weeks: 6     # FCC 15B + 15C (radio testing)
       manufacturing:
-        component_count: 280
-        assembly_time_min: 25      # More complex (latch mechanism)
-        yield_estimate: 0.90       # Lower yield (latch alignment issues)
+        component_count: 320       # Higher count (cam parts) but modular assembly
+        assembly_time_min: 20      # Modular 6-dot subassemblies (snap-together)
+        yield_estimate: 0.94       # Medium yield (cam mechanism validation)
 
-    block_diagram_path: "docs/diagrams/arch-d-solenoid-latch-block.png"
-    bom_csv_path: "artifacts/bom/arch-d-solenoid-latch-bom.csv"
+    block_diagram_path: "docs/diagrams/arch-sol-eco-cam-block.png"
+    bom_csv_path: "artifacts/bom/arch-sol-eco-cam-bom.csv"
 
-    # Trade-off notes
-    trade_offs:
-      pros:
-        - "Lowest BOM cost ($224 vs $435 ARCH-C, 48% savings)"
-        - "COTS solenoids (2-week lead time, meets PRD-SCHED-002-ASMP)"
-        - "Longest battery life (8 hours vs 4 hours ARCH-C piezo)"
-        - "AA batteries globally available (no charger needed)"
-        - "Fits AA power budget (1.53W vs 1.5W max, marginal)"
-      cons:
-        - "Slow refresh (5.2 sec vs 1.5 sec piezo) - may frustrate fast readers"
-        - "Very large device (280mm vs 200mm, 40% longer) - less portable"
-        - "Heavy (1.28 lbs vs 1.21 lbs ARCH-C)"
-        - "Latch mechanism unproven (high technical risk, requires prototyping)"
-        - "Complex mechanical assembly (latch alignment critical, lower yield)"
-        - "Low DFM (detent tolerances, friction issues)"
-      recommendation: "Prototype latch mechanism in Week 3-4 to validate feasibility. If latch works: ARCH-D is best low-cost option. If latch fails: Fallback to ARCH-C with 6× AA (10.5Wh → 2.1W budget → piezo fits)."
-
-  ARCH-A:
-    id: "ARCH-A"
-    name: "Wireless (Premium)"
+  ARCH_PIEZO_DLX:
+    id: "ARCH_PIEZO_DLX"
+    name: "Piezo Deluxe (Wireless)"
     nickname: "Premium Pro"
-    market_position: "Premium / Mobile Professional / Sleek Design"
+    market_position: "Premium / Mobile Professional / Sleek Design / Rechargeable"
+    strategy_note: "DLX tier focus: BEST USABILITY + CONVENIENCE. BLE wireless (no cable clutter) + Li-ion rechargeable (no battery swapping). Fastest refresh speed (1.5 sec). Premium UX justifies higher BOM ($449) and Li-ion safety certification."
 
     # Requirements traceability
     driven_by_requirements:
@@ -414,6 +300,7 @@ architectures:
         reliability: "GOOD"      # BLE can drop (no fallback)
         battery_anxiety: "HIGH"  # Forgot to charge?
         mobility: "EXCELLENT"    # Truly wireless
+        refresh_speed: "FAST"    # 1.5 sec (best performance)
       complexity:
         hardware: "MODERATE"
         firmware: "MODERATE"     # BLE only (simpler than dual stack)
@@ -437,7 +324,7 @@ architectures:
       market_fit:
         education: "POOR"        # Too expensive
         consumer: "EXCELLENT"    # Premium wireless UX
-        professional: "GOOD"     # Mobile use cases
+        professional: "EXCELLENT" # Fast refresh + mobile use cases
         accessibility_ngos: "GOOD"
         global: "FAIR"           # Charger voltage varies (110V/220V)
 
@@ -473,8 +360,8 @@ architectures:
         assembly_time_min: 18
         yield_estimate: 0.96
 
-    block_diagram_path: "docs/diagrams/arch-a-wireless-block.png"
-    bom_csv_path: "artifacts/bom/arch-a-wireless-bom.csv"
+    block_diagram_path: "docs/diagrams/arch-piezo-dlx-wireless-block.png"
+    bom_csv_path: "artifacts/bom/arch-piezo-dlx-wireless-bom.csv"
 
 # ============================================================================
 # COMPARISON DIMENSIONS (for auto-generating comparison tables)

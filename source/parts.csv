@@ -21,3 +21,8 @@ SS-ACTUATOR-SOLENOID,TBD-SOLENOID-01,Takaha,BS-0420N-01,"Solenoid 4mm dia, 1mm s
 SS-ACTUATOR-LATCH,CUSTOM-LATCH-01,Custom,LATCH-PLATE-V1,"Global latch plate (3D print ABS) + latch solenoid",1,10.50,10.00,1,Y,Mechanical,"Latch plate $10 (3D print with 192 detent holes) + latch solenoid $0.50 (Takaha BS-0420N-01)"
 SS-ACTUATOR-DRIVER-2CH,296-1781-5-ND,TI,ULN2803A,"8-channel Darlington array (for 2-ch architecture)",1,0.80,0.65,4,Y,DIP18,"Same as SS-ACTUATOR-DRIVER but fewer qty (12 vs 24 chips) for 2-channel design"
 SS-POWER-AA-BOOST-12V,296-50464-1-ND,TI,TPS61088,"Boost 6V→12V, 2.5A switch (solenoid overdrive)",1,2.25,1.95,6,Y,VQFN16,"Lower voltage than 30V piezo (easier isolation, less EMI)"
+SS-ACTUATOR-CAM,CUSTOM-CAM-01,Custom,CAM-DISC-STEEL,"Rotary cam disc (injection molded, steel mold)",1,0.15,0.12,6,Y,Mechanical,"Production cost @ 10K+ volume, cam profile for ±45° rotation"
+SS-ACTUATOR-PISTON,CUSTOM-PISTON-01,Custom,PISTON-ROD-STEEL,"Piston rod (injection molded, steel mold)",1,0.10,0.08,6,Y,Mechanical,"Production cost @ 10K+ volume, 0.7mm stroke"
+SS-ACTUATOR-BUSHING,CUSTOM-BUSHING-01,Custom,BUSHING-STEEL,"Linear bushing (injection molded, steel mold)",1,0.08,0.06,6,Y,Mechanical,"Production cost @ 10K+ volume, or COTS brass alternative"
+SS-ACTUATOR-CAM-HOUSING,CUSTOM-HOUSING-01,Custom,HOUSING-STEEL,"Cam housing (injection molded, steel mold)",1,0.50,0.40,6,Y,Mechanical,"Production cost @ 10K+ volume, snap-together assembly"
+SS-ACTUATOR-SPRING,CUSTOM-SPRING-01,Custom,SPRING-COMP-01,"Compression spring for piston return",1,0.02,0.015,2,Y,Mechanical,"Standard COTS spring"

@@ -99,8 +99,8 @@ def generate_architecture_md(archs, subsys, parts):
 
     # Executive Summary
     output.append("## Executive Summary\n\n")
-    output.append("This document presents 4 alternative architectures for a 32-character braille display device:\n\n")
-    arch_ids = ['ARCH-B', 'ARCH-C', 'ARCH-D', 'ARCH-A']
+    arch_ids = list(archs['architectures'].keys())
+    output.append(f"This document presents {len(arch_ids)} alternative architectures for a 32-character braille display device:\n\n")
     for arch_id in arch_ids:
         arch = archs['architectures'][arch_id]
         output.append(f"- **{arch['name']} ({arch_id}):** {arch['market_position']} - Target BOM ${arch['quantitative']['cost']['bom_target']}\n")
@@ -263,8 +263,10 @@ def generate_architecture_md(archs, subsys, parts):
 
     # Cost Comparison
     output.append("### Cost Comparison\n\n")
-    output.append("| Metric | ARCH-B | ARCH-C | ARCH-D | ARCH-A |\n")
-    output.append("|--------|---------|---------|---------|----------|\n")
+    header = "| Metric | " + " | ".join(arch_ids) + " |\n"
+    sep = "|--------|" + "|".join(["---------" for _ in arch_ids]) + "|\n"
+    output.append(header)
+    output.append(sep)
     for arch_id in arch_ids:
         arch = archs['architectures'][arch_id]
         c = arch['quantitative']['cost']
@@ -484,7 +486,7 @@ def generate_comparison_matrix(archs):
     output.append(f"**Generated:** {datetime.now().strftime('%Y-%m-%d')}\n")
     output.append(f"**Source:** source/architectures.yaml v{archs['metadata']['version']}\n\n")
 
-    arch_ids = ['ARCH-B', 'ARCH-C', 'ARCH-D', 'ARCH-A']
+    arch_ids = list(archs['architectures'].keys())
 
     # Iterate through comparison dimensions
     for dim in archs['comparison_dimensions']:
@@ -493,8 +495,10 @@ def generate_comparison_matrix(archs):
         # Qualitative
         if dim['qualitative']:
             output.append("### Qualitative\n\n")
-            output.append(f"| Metric | ARCH-B | ARCH-C | ARCH-D | ARCH-A |\n")
-            output.append(f"|--------|---------|---------|---------|----------|\n")
+            header = "| Metric | " + " | ".join(arch_ids) + " |\n"
+            sep = "|--------|" + "|".join(["---------" for _ in arch_ids]) + "|\n"
+            output.append(header)
+            output.append(sep)
 
             for metric in dim['qualitative']:
                 row = [metric.replace('_', ' ').title()]
@@ -512,8 +516,10 @@ def generate_comparison_matrix(archs):
         # Quantitative
         if dim['quantitative']:
             output.append("### Quantitative\n\n")
-            output.append(f"| Metric | ARCH-B | ARCH-C | ARCH-D | ARCH-A |\n")
-            output.append(f"|--------|---------|---------|---------|----------|\n")
+            header = "| Metric | " + " | ".join(arch_ids) + " |\n"
+            sep = "|--------|" + "|".join(["---------" for _ in arch_ids]) + "|\n"
+            output.append(header)
+            output.append(sep)
 
             for metric in dim['quantitative']:
                 row = [metric.replace('_', ' ').title()]
@@ -570,12 +576,11 @@ def main():
     print("\nGenerating BOMs...")
     Path('artifacts/bom').mkdir(exist_ok=True)
 
-    arch_list = [
-        ('ARCH-B', 'arch-b-wired-bom.csv'),
-        ('ARCH-C', 'arch-c-hybrid-bom.csv'),
-        ('ARCH-D', 'arch-d-solenoid-latch-bom.csv'),
-        ('ARCH-A', 'arch-a-wireless-bom.csv')
-    ]
+    # Generate filename from architecture ID (e.g., ARCH_PIEZO_ECO → arch-piezo-eco-bom.csv)
+    arch_list = []
+    for arch_id in archs['architectures'].keys():
+        filename = arch_id.lower().replace('_', '-') + '-bom.csv'
+        arch_list.append((arch_id, filename))
 
     bom_summary = []
     for arch_id, filename in arch_list:

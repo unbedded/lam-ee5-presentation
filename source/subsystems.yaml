@@ -296,10 +296,13 @@ subsystems_unique:
       expected_hf_emissions_mhz: 0  # DC protection circuit (comparator-based)
       emi_concerns: "SAFETY-CRITICAL - Must be in series with battery, trace from cell to protection IC to system must handle full load current (3A)"
 
+  # ARCH-D subsystems (OBSOLETE - replaced by ARCH_SOL_ECO cam mechanism)
   SS-ACTUATOR-SOLENOID:
     name: "Solenoid Actuator Array (COTS)"
     description: "192 dots (32 cells × 6 dots), 4mm diameter COTS solenoids"
     used_in: ["ARCH-D"]
+    status: "OBSOLETE"
+    note: "ARCH-D violated braille spacing (3.5mm vs 2.5mm standard). Replaced by ARCH_SOL_ECO cam mechanism."
     requirements: ["PRD-FUNC-001", "PRD-FUNC-003-ARCH-C-EXCEPT", "PRD-SCHED-002-ASMP"]
     part_ref: "TBD-SOLENOID-01"
     quantity: 192
@@ -316,6 +319,8 @@ subsystems_unique:
     name: "Global Latch Mechanism"
     description: "Global latch plate + latch solenoid to hold all 192 dots in position"
     used_in: ["ARCH-D"]
+    status: "OBSOLETE"
+    note: "ARCH-D violated braille spacing (3.5mm vs 2.5mm standard). Replaced by ARCH_SOL_ECO cam mechanism."
     requirements: ["PRD-POWER-004-ASMP"]
     part_ref: "CUSTOM-LATCH-01"
     quantity: 1
@@ -328,6 +333,70 @@ subsystems_unique:
       expected_hf_emissions_mhz: 0.5  # Low-freq latch engage/disengage (once per 5-second refresh)
       emi_concerns: "LOW - Single solenoid, low duty cycle (6.8%), flyback diode required"
     mechanical_notes: "CRITICAL: Latch plate requires ±0.1mm alignment tolerance with detent pins. Friction between plate and detents must be <0.2N to avoid jamming. Prototype testing required (Week 3-4)."
+
+  # ARCH_SOL_ECO subsystems (Rotary Cam Mechanism - replaces ARCH-D)
+  SS-ACTUATOR-SOLENOID:
+    name: "Solenoid Actuator Array (COTS)"
+    description: "192× COTS solenoids for rotary cam actuation, 4mm diameter"
+    used_in: ["ARCH_SOL_ECO"]
+    requirements: ["PRD-FUNC-001", "PRD-SCHED-002-ASMP"]
+    part_ref: "TBD-SOLENOID-01"
+    quantity: 192
+    rationale: "Takaha BS-0420N-01: 4mm dia, 1mm stroke, 0.5N force, 2-week lead time, $0.50 ea @ 100 qty. Used for perpendicular cam actuation (horizontal solenoid → vertical dot displacement)."
+    pcb_specs:
+      layers_required: 2  # Top + Bottom (low-voltage solenoid control)
+      min_trace_width_mil: 12  # 12mil (0.3mm) for 50mA continuous solenoid current
+      min_spacing_mil: 12  # 12mil spacing
+      hv_clearance_mil: 20  # 20mil for 12V (lower than 30V piezo)
+      expected_hf_emissions_mhz: 1  # ~1 MHz switching (overdrive PWM pulses)
+      emi_concerns: "MEDIUM - Inductive load, requires flyback diodes on each solenoid to suppress back-EMF spikes"
+
+  SS-ACTUATOR-CAM:
+    name: "Rotary Cam Disc Array"
+    description: "Cam discs for converting horizontal solenoid motion → vertical piston motion"
+    used_in: ["ARCH_SOL_ECO"]
+    requirements: ["PRD-FUNC-001"]
+    part_ref: "CUSTOM-CAM-01"
+    quantity: 96  # 3 cams per character × 32 characters
+    rationale: "Injection molded cam discs (steel mold @ $0.15 ea production). Converts solenoid stroke → ±45° rotation → piston vertical displacement. 3 layers per character (opposing pairs for 6 dots)."
+    mechanical_notes: "Cam profile design critical for smooth acceleration curve. Prototype with SLA 3D print (±0.1mm tolerance) for validation. Production uses injection molding (±0.2mm tolerance)."
+
+  SS-ACTUATOR-PISTON:
+    name: "Piston Rod Array"
+    description: "Vertical piston rods for braille dot actuation"
+    used_in: ["ARCH_SOL_ECO"]
+    requirements: ["PRD-FUNC-001"]
+    part_ref: "CUSTOM-PISTON-01"
+    quantity: 192  # 6 pistons per character × 32 characters
+    rationale: "Injection molded piston rods (steel mold @ $0.10 ea production). 0.7mm stroke driven by cam rotation."
+    mechanical_notes: "Piston alignment critical (must slide freely in bushing with <0.05mm radial clearance). Compression spring provides return force."
+
+  SS-ACTUATOR-BUSHING:
+    name: "Linear Bushing Array"
+    description: "Linear bushings for piston alignment"
+    used_in: ["ARCH_SOL_ECO"]
+    requirements: ["PRD-FUNC-001"]
+    part_ref: "CUSTOM-BUSHING-01"
+    quantity: 192  # 6 bushings per character × 32 characters
+    rationale: "Injection molded bushings (steel mold @ $0.08 ea production) or COTS brass bushings. Prevents piston binding during vertical motion."
+
+  SS-ACTUATOR-CAM-HOUSING:
+    name: "Cam Housing Array"
+    description: "Housing for cam mechanism assembly"
+    used_in: ["ARCH_SOL_ECO"]
+    requirements: ["PRD-FUNC-001"]
+    part_ref: "CUSTOM-HOUSING-01"
+    quantity: 32  # 1 housing per character
+    rationale: "Injection molded housing (steel mold @ $0.50 ea production). Snap-together modular 6-dot subassemblies."
+
+  SS-ACTUATOR-SPRING:
+    name: "Compression Spring Array"
+    description: "Return springs for piston retraction"
+    used_in: ["ARCH_SOL_ECO"]
+    requirements: ["PRD-FUNC-001"]
+    part_ref: "CUSTOM-SPRING-01"
+    quantity: 192  # 6 springs per character × 32 characters
+    rationale: "Compression springs (@ $0.02 ea). Provides piston return force when cam rotates back."
 
   SS-ACTUATOR-DRIVER-2CH:
     name: "Actuator Driver Array (2-channel)"
