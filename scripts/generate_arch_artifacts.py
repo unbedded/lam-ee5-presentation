@@ -409,7 +409,7 @@ def generate_bom_csv(arch_id, arch, subsys, parts):
 
     rows = []
     rows.append(['Line', 'Subsystem_ID', 'Subsystem_Name', 'Digikey_PN', 'MFR', 'MFR_PN', 'Description',
-                 'Qty', 'Unit_Price_100', 'Line_Total', 'Leadtime_Weeks', 'ROHS', 'Notes'])
+                 'Qty', 'Unit_Price_1000', 'Line_Total', 'Leadtime_Weeks', 'ROHS', 'Notes'])
 
     line_num = 1
     subtotal = 0
@@ -420,7 +420,9 @@ def generate_bom_csv(arch_id, arch, subsys, parts):
         part = get_part_details(ss_id, parts)
         if ss and part:
             qty = ss['quantity']
-            unit_price = float(part['Unit_Price_100'])
+            # Use production volume pricing (Unit_Price_1000) instead of pilot (Unit_Price_100)
+            unit_price = float(part['Unit_Price_1000'])
+            unit_price_pilot = float(part['Unit_Price_100'])
             line_total = qty * unit_price
             subtotal += line_total
 
@@ -447,7 +449,9 @@ def generate_bom_csv(arch_id, arch, subsys, parts):
         part = get_part_details(ss_id, parts)
         if ss and part:
             qty = ss['quantity']
-            unit_price = float(part['Unit_Price_100'])
+            # Use production volume pricing (Unit_Price_1000) instead of pilot (Unit_Price_100)
+            unit_price = float(part['Unit_Price_1000'])
+            unit_price_pilot = float(part['Unit_Price_100'])
             line_total = qty * unit_price
             subtotal += line_total
 

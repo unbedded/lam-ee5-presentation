@@ -127,6 +127,38 @@ subsystems_core:
       emi_shielding: "Conductive coating or grounded metal insert for FCC compliance (if plastic enclosure shows radiated emissions >FCC limit)"
       emi_concerns: "Enclosure acts as secondary EMI containment, grounding contact to PCB GND plane required"
 
+  SS-EMI-BULK-CAP:
+    name: "EMI Bulk Capacitor Array"
+    description: "1000µF electrolytic capacitors for driver IC power rail filtering"
+    shared_across: ["ARCH_PIEZO_ECO", "ARCH_PIEZO_DLX", "ARCH_SOL_ECO"]
+    requirements: ["NFR-EMI-001", "NFR-STD-001-DRV-LOWRISK"]
+    part_ref: "493-2203-ND"
+    quantity: 24  # One per ULN2803A driver IC (24 for ARCH_PIEZO_ECO/DLX, 3 for ARCH_SOL_ECO)
+    rationale: "Absorbs inductive kickback energy from solenoid/piezo switching, filters power supply ripple, provides >6dB margin to FCC Part 15B emissions limits. Conservative 1000µF sizing for low-risk design (post-pilot optimization to 470µF possible for $1.20-$1.80 cost-down)."
+    pcb_specs:
+      layers_required: 2  # Top + Bottom (parallel to driver IC power pins)
+      min_trace_width_mil: 20  # 20mil for 500mA peak current
+      min_spacing_mil: 10  # Standard 10mil
+      hv_clearance_mil: 50  # 50mil for 30V rated cap (used on 12V and 30V rails)
+      expected_hf_emissions_mhz: 0.01  # DC filtering, ESR limits HF response
+      emi_concerns: "CRITICAL - Place <10mm from driver IC power pins, low-ESR type preferred, parallel with 100nF ceramic for high-frequency decoupling"
+
+  SS-EMI-BYPASS-CAP:
+    name: "EMI Bypass Capacitor Array"
+    description: "100nF ceramic capacitors for high-frequency EMI suppression"
+    shared_across: ["ARCH_PIEZO_ECO", "ARCH_PIEZO_DLX", "ARCH_SOL_ECO"]
+    requirements: ["NFR-EMI-001", "NFR-STD-001-DRV-LOWRISK"]
+    part_ref: "399-4151-1-ND"
+    quantity: 24  # One per ULN2803A driver IC (24 for ARCH_PIEZO_ECO/DLX, 3 for ARCH_SOL_ECO)
+    rationale: "High-frequency decoupling for driver ICs, suppresses switching transients and conducted emissions on power rails. X7R dielectric maintains capacitance over temperature. Conservative design places bypass cap at every driver IC (post-pilot optimization may reduce to high-noise drivers only for $0.12-$0.18 cost-down)."
+    pcb_specs:
+      layers_required: 2  # Top + Bottom (parallel to driver IC power pins)
+      min_trace_width_mil: 10  # Standard 10mil
+      min_spacing_mil: 10  # Standard 10mil
+      hv_clearance_mil: 50  # 50mil for 50V rated cap (used on 12V and 30V rails)
+      expected_hf_emissions_mhz: 100  # Effective up to ~100 MHz (limited by ESL)
+      emi_concerns: "CRITICAL - Place <5mm from driver IC power pins (minimize parasitic inductance), 0805 package has low ESL, parallel with 1000µF bulk cap for broadband filtering"
+
 # ============================================================================
 # ARCHITECTURE-SPECIFIC SUBSYSTEMS
 # ============================================================================

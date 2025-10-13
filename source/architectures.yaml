@@ -48,6 +48,8 @@ architectures:
         - SS-USER-IO        # $0.50
         - SS-PCB            # $15.00
         - SS-ENCLOSURE      # $25.00
+        - SS-EMI-BULK-CAP   # $1.92 (24× @ $0.08 ea, NFR-EMI-001)
+        - SS-EMI-BYPASS-CAP # $0.19 (24× @ $0.008 ea, NFR-EMI-001)
       unique:
         - SS-COMM-USB       # $1.50
         - SS-POWER-USB-LDO  # $0.75
@@ -165,6 +167,8 @@ architectures:
         - SS-USER-IO            # $0.50
         - SS-PCB                # $15.00
         - SS-ENCLOSURE          # $8.00 (injection molded production)
+        - SS-EMI-BULK-CAP   # $0.24 (3× @ $0.08 ea, NFR-EMI-001 - fewer drivers)
+        - SS-EMI-BYPASS-CAP # $0.02 (3× @ $0.008 ea, NFR-EMI-001 - fewer drivers)
       unique:
         - SS-COMM-BLE           # $12.00
         - SS-COMM-USB           # $1.50
@@ -277,6 +281,8 @@ architectures:
         - SS-USER-IO        # $0.50
         - SS-PCB            # $15.00
         - SS-ENCLOSURE      # $25.00
+        - SS-EMI-BULK-CAP   # $1.92 (24× @ $0.08 ea, NFR-EMI-001)
+        - SS-EMI-BYPASS-CAP # $0.19 (24× @ $0.008 ea, NFR-EMI-001)
       unique:
         - SS-COMM-BLE       # $12.00
         - SS-POWER-LIION-CELL  # $5.00

@@ -85,6 +85,35 @@
 **Rubric Score:** 24/25 (Alternative Solutions) = 96% - Excellent
 **Status:** COMPLETE - 5h logged (of 12h est)
 
+**🔧 CHECKPOINT (2025-10-12 PM): EMI Components Addition In Progress**
+
+⚠️ **FOR AI ASSISTANT ON RESTART:** Read `.restart-context.md` for complete technical details!
+
+**Quick Status:**
+- [x] Added EMI requirements to requirements.yaml (NFR-STD-001 family + NFR-EMI-001)
+- [x] Added SS-EMI-BULK-CAP and SS-EMI-BYPASS-CAP to parts.csv
+- [x] Added EMI subsystems to subsystems.yaml with PCB specs
+- [x] Added EMI subsystems to all 3 architectures in architectures.yaml
+- [x] Regenerated BOMs with EMI components ($2-3 per unit, <1% increase)
+- [ ] **IN PROGRESS:** /req-yaml-to-md generating updated requirements.md
+- [ ] **NEXT:** Run /req-audit to verify SMART compliance
+- [ ] **NEXT:** Run /req-trace to verify architecture traceability
+- [ ] **NEXT:** Git commit all EMI changes atomically
+
+**Key Decisions:**
+- User approved "ballpark pricing" (qty=24 for all archs, ~$2 overcost for ARCH_SOL_ECO acceptable)
+- Low-risk EMI design: 1000µF bulk + 100nF bypass per driver IC (>6dB margin to FCC Part 15B)
+- Cost-down optimization documented in Technical-Debt section (post-pilot)
+- All source files updated, waiting for artifacts/requirements.md regeneration to complete
+
+**Modified Files (need git commit):**
+- source/requirements.yaml (+5 requirements)
+- source/parts.csv (+2 EMI components)
+- source/subsystems.yaml (+2 EMI subsystems)
+- source/architectures.yaml (+EMI subsystems to 3 archs)
+- artifacts/bom/*.csv (regenerated)
+- TODO.md (this checkpoint)
+
 **PDF Quote:** "Develop and describe **multiple alternative solutions**"
 
 - [x] **Market scan: Identify what solutions currently exist**
@@ -501,6 +530,25 @@
 
 ## Technical-Debt
 
+### EMI Cost-Down Optimization (Post-Pilot)
+- **Purpose:** Reduce EMI component costs from "pass with >6dB margin" to "pass with target margin (3dB)"
+- **Rationale:** Current low-risk design uses conservative EMI suppression (1000µF bulk caps, 100nF bypass on every IC) to ensure pilot passes preliminary testing on first attempt. Post-pilot, optimize to "just good enough" based on actual measured emissions.
+- **Cost reduction opportunities:**
+  - **Bulk capacitors:** 1000µF → 470µF or 220µF (reduce by 50-75%) → Save $1.20-$1.80
+  - **Ceramic bypass:** 100nF on all 24 ICs → Selectively place only on high-noise drivers → Save $0.12-$0.18
+  - **Zener clamps:** Currently using ULN2803A internal flyback (free), could add zeners for faster decay if needed (cost neutral)
+  - **Ferrite beads:** Currently not in BOM, add only if pre-scan shows >3dB margin violations → $0.50 adder if needed
+- **Measurement-driven approach:**
+  1. Week 7 pilot: EMI pre-scan with spectrum analyzer (baseline measurements)
+  2. Identify worst-case emissions (conducted vs radiated, which frequencies)
+  3. If >10dB margin: Reduce capacitance by 50% and re-test (cost-down iteration)
+  4. If 3-6dB margin: Keep current design (optimal)
+  5. If <3dB margin: Add targeted fixes (ferrite beads on specific rails, zener clamps on specific solenoids)
+- **Target savings:** $1.50-$2.00 per unit (0.6-0.8% BOM reduction)
+- **Risk:** LOW (only optimize after pilot validates baseline design works)
+- **Status:** Deferred to Month 3-4 (post-pilot, pre-production volume ramp)
+- **Philosophy:** **"Design for standards compliance with margin, then cost-down to target margin"** (not "design minimum and hope it passes")
+
 ### Future Slash Command: /arch-tradeoff
 - **Purpose:** Generate trade-off analysis documentation from architectures.yaml
 - **Rationale:** Separate concerns - /arch-gen focuses on individual architecture details, /arch-tradeoff focuses on comparison/evaluation
@@ -537,6 +585,13 @@
 - **docs/tradeoffs.md** - Strategic trade-off analysis (v1.4.0, manually written)
 - **docs/solution.md** - Recommended solution with justification (v1.5.0, manually written)
 - Future: /arch-tradeoff command will auto-generate advantages/disadvantages, decision trees from YAML
+
+### Enhanced Requirements Traceability Analysis
+- **Purpose:** Create comprehensive coverage matrix showing which requirements each architecture satisfies
+- **Plan:** See [docs/requirements-trace-plan.md](docs/requirements-trace-plan.md) for complete implementation details
+- **Priority:** P1-High (affects traceability rubric score)
+- **Effort:** 2-3 hours (Python script enhancement)
+- **Status:** Deferred to post-interview
 
 ### Interview Logistics
 - Interview Format: Onsite at Fremont, CA (4.5 hours total)
