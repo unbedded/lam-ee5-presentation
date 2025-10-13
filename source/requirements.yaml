@@ -16,14 +16,19 @@
 #   PRD-USER  = User/accessibility requirements
 #   PRD-FUNC  = Functional requirements
 #   PRD-IFACE = Interface/connectivity requirements
+#   PRD-MECH  = Mechanical design requirements (derived from ADA 703.3)
+#   PRD-POWER = Power/battery requirements
+#   NFR-STD   = Non-functional standards/compliance requirements
+#   NFR-EMI   = EMI/EMC requirements
 
 metadata:
   project: "Lam Research - Braille Display EE Concept Evaluation"
-  version: "2.0.0"
-  date: "2025-10-08"
+  version: "2.3.0"
+  date: "2025-10-12"
   author: "Spencer Barrett"
   source_doc: "reference/interview/Interview Overview and Concept Evaluation - EE Presentation.pdf"
   source_email: "reference/interview/interview-confirmation-email.md"
+  changelog: "v2.3.0: Removed PRD-FUNC-003-ARCH-C-EXCEPT (architectural design decision, not requirement) - moved to architecture docs"
 
   scope:
     in_scope:
@@ -170,12 +175,10 @@ requirements:
       Our 32-cell device will be slightly larger/heavier, but target ≤1.3 lbs is achievable.
 
       SIZE VARIANCE BY ARCHITECTURE:
-      - ARCH-A (Li-ion BLE): 198mm × 100mm × 15mm (6.2mm cell spacing, piezo actuators)
-      - ARCH-B (USB wired): 198mm × 100mm × 15mm (6.2mm cell spacing, piezo actuators)
-      - ARCH-C (AA hybrid): 280mm × 100mm × 15mm (8.75mm cell spacing, 4mm solenoid, 3.5mm dot pitch)
-        → See PRD-FUNC-003-ARCH-C-EXCEPT for ARCH-C size exception rationale
-      - ARCH-D (Solenoid+latch): Same as ARCH-C (280mm, 3.5mm dot pitch, size exception)
-      - ARCH-E (Offset solenoid): 198mm × 100mm × 25mm (6.2mm cell spacing, staggered solenoid grid)
+      - ARCH_SOL_ECO: 280mm × 100mm × 15mm (8.75mm cell spacing, 4mm COTS solenoid, 3.5mm dot pitch)
+        → Trade-off documented in v1.3.0 architecture docs: timeline compliance (2-week COTS) vs device size
+      - ARCH_PIEZO_ECO: 198mm × 100mm × 15mm (6.2mm cell spacing, piezo actuators, 2.5mm pitch)
+      - ARCH_PIEZO_DLX: 198mm × 100mm × 15mm (6.2mm cell spacing, piezo actuators, 2.5mm pitch)
     risk_level: MEDIUM
     customer_validation_needed: YES
     sensitivity_range: "Weight: 0.5-1.5 lbs (230-680g), Length: 200-280mm (by architecture), Width: 100mm, Height: 15mm"
@@ -197,48 +200,183 @@ requirements:
   # --------------------------------------------------------------------------
 
   PRD-IFACE-001:
-    title: "Cell Phone Connectivity - Text Input to Braille Output"
+    title: "Cell Phone Connectivity - Pairing and Connection"
     source: "PDF p.2 - Function"
-    pdf_verbatim: "device connects to a cell phone - receives text source from phone and displays as appropriate Braille text"
-    status: "VAGUE - protocol and text format unspecified"
-    why_vague: "No interface protocol (BLE? USB? WiFi? wired?), no text encoding (ASCII? Unicode?), no pairing process specified"
+    pdf_verbatim: "device connects to a cell phone"
+    status: "VAGUE - connection method unspecified"
+    why_vague: "No interface protocol specified (BLE? USB? WiFi? wired?), no pairing process specified"
+    testable: NO
+    priority: "P0-Critical"
+    category: "Interface"
+
+  PRD-IFACE-002:
+    title: "Text Data Reception - Braille Output"
+    source: "PDF p.2 - Function"
+    pdf_verbatim: "receives text source from phone and displays as appropriate Braille text"
+    status: "VAGUE - data format and encoding unspecified"
+    why_vague: "No text encoding specified (ASCII? Unicode?), no braille translation method (Grade 1? Grade 2?), no data protocol"
     testable: NO
     priority: "P0-Critical"
     category: "Interface"
 
   PRD-IFACE-001-ASMP:
     parent: "PRD-IFACE-001"
-    title: "Multi-Interface Connectivity Strategy"
-    pdf_says: "device connects to a cell phone - receives text source"
-    our_assumption: "Primary interface: BLE (wireless, universal on modern phones). Secondary: USB-C wired (charging + data fallback, also low-cost option for future). Text format: ASCII (English Grade 1 braille), Unicode deferred to v2.0."
+    title: "Multi-Interface Connectivity Strategy (Physical Layer)"
+    pdf_says: "device connects to a cell phone"
+    our_assumption: "Primary: BLE wireless. Secondary: USB-C wired. Portfolio approach: 3 architectures."
     rationale: |
-      'Portable companion device' suggests wireless (BLE) for mobility, BUT wired (USB-C) is
-      valid low-cost alternative (no battery, tethered = still portable, just less convenient).
-
       PORTFOLIO APPROACH (v1.3.0 will design multiple architectures):
-      - Architecture A: BLE-only (most portable, requires battery, wireless freedom)
-      - Architecture B: USB-C wired (no battery, tethered to phone, lowest cost $100-150 BOM savings)
-      - Architecture C: BLE + USB-C hybrid (battery for wireless, USB for charging/fallback, best UX)
+      - ARCH-A: BLE-only (wireless, battery required, most portable)
+      - ARCH-B: USB-C wired (no battery, tethered, lowest cost $100-150 BOM savings)
+      - ARCH-C: BLE + USB-C hybrid (best UX, highest cost $250-300 BOM)
 
-      Text format: ASCII initially (simpler firmware, covers English Grade 1 braille),
-      Unicode support deferred to v2.0 (adds complexity, requires lookup tables).
+      Connection requirements differ by architecture:
+      - BLE: Requires pairing via iOS/Android Bluetooth settings
+      - USB-C: Plug-and-play, no pairing required
     risk_level: HIGH
     customer_validation_needed: YES
     sensitivity_range: "BLE-only, USB-C-only, or BLE+USB hybrid"
-    impact_if_wrong: "BLE-only eliminates low-cost wired option. USB-C-only eliminates wireless UX. Hybrid is most flexible but highest cost."
+    impact_if_wrong: "BLE-only eliminates low-cost wired option. USB-C-only eliminates wireless UX."
     test_plan: "v1.3.0 interface architecture comparison (BLE vs USB-C vs hybrid), v1.4.0 cost/UX trade-offs"
     priority: "P0-Critical"
     category: "Interface"
     acceptance_criteria:
-      - "Protocol options: BLE 5.0+ (wireless) OR USB-C (wired) OR both (hybrid)"
-      - "Text format: ASCII (English, Grade 1 braille), 8-bit encoding"
+      - "Physical interface options: BLE 5.0+ (wireless) OR USB-C (wired) OR both (hybrid)"
       - "Cross-platform: iOS + Android compatibility"
-      - "Pairing/connection: <30 seconds (BLE), plug-and-play (USB-C)"
-      - "Data integrity: Text received without corruption, CRC or checksum"
+      - "Pairing time: <30 seconds (BLE)"
+      - "Connection time: <2 seconds (USB-C plug-in)"
     alternative_scenarios:
       - "Scenario A (BLE-only): Wireless, requires battery, $200-250 BOM"
-      - "Scenario B (USB-C wired): Tethered, no battery, $100-150 BOM (great low-cost option!)"
-      - "Scenario C (Hybrid BLE+USB): Best UX, highest cost $250-300 BOM"
+      - "Scenario B (USB-C wired): Tethered, no battery, $100-150 BOM"
+      - "Scenario C (Hybrid): Best UX, highest cost $250-300 BOM"
+
+  PRD-IFACE-002-ASMP:
+    parent: "PRD-IFACE-002"
+    title: "Text Format and Braille Translation"
+    pdf_says: "receives text source and displays as Braille"
+    our_assumption: "ASCII text input (8-bit), Grade 1 braille translation (direct character mapping), Unicode deferred to v2.0"
+    rationale: |
+      Grade 1 braille: Direct character-to-braille mapping (simpler firmware, faster development)
+      - 26 letters + 10 digits + punctuation = ~50 characters
+      - 1:1 mapping (no contractions)
+      - ASCII covers English text (98% of pilot use cases)
+
+      Grade 2 braille (contracted): Deferred to v2.0 (requires complex contraction rules)
+      Unicode support: Deferred to v2.0 (adds complexity, lookup tables, multi-byte encoding)
+    requirement: "Device shall accept ASCII text (8-bit encoding) and display as Grade 1 braille (uncontracted)"
+    risk_level: MEDIUM
+    customer_validation_needed: YES
+    impact_if_wrong: "If Grade 2 contracted braille required, adds firmware complexity (2-3 weeks development)"
+    test_plan: "v1.3.0 firmware design (ASCII→braille lookup table), v1.4.0 user testing with English text"
+    priority: "P0-Critical"
+    category: "Interface"
+    acceptance_criteria:
+      - "Text format: ASCII (8-bit encoding, 0x20-0x7E printable characters)"
+      - "Braille translation: Grade 1 (uncontracted, direct character mapping)"
+      - "Character set: 26 letters + 10 digits + ~20 punctuation/symbols"
+      - "Translation table: 1:1 ASCII-to-braille mapping (ISO 11548-1)"
+      - "Data integrity: CRC or checksum for error detection"
+    verification_method: "Test (ASCII text transmission, braille output validation with blind users)"
+
+  PRD-IFACE-003-ASMP:
+    parent: "PRD-IFACE-001-ASMP"
+    title: "USB-C HID Device Class (Driverless Operation)"
+    pdf_says: "N/A (derived from USB-C wired architecture)"
+    our_assumption: "USB-C wired device shall enumerate as HID class (Braille Display usage page 0x41) for driverless iOS/Android support"
+    rationale: |
+      iOS/Android require HID class for braille displays to work with built-in screen readers:
+      - iOS VoiceOver: Supports HID braille displays natively (no custom driver allowed)
+      - Android TalkBack: Supports HID braille displays (Android 4.1+)
+      - HID class: Plug-and-play, no App Store apps required
+      - USB HID v1.11 Braille Display Usage (Usage Page 0x41)
+
+      Alternative (CDC/Custom): Would require custom driver or app (NOT allowed on iOS)
+    requirement: "Device shall enumerate as USB HID class device with Braille Display usage page (0x41)"
+    risk_level: HIGH
+    customer_validation_needed: YES
+    impact_if_wrong: "Non-HID device won't work with iOS VoiceOver (iOS rejects non-HID braille displays)"
+    test_plan: "v1.3.0 firmware USB HID descriptor, Week 5-6 test with iOS VoiceOver + Android TalkBack"
+    priority: "P0-Critical"
+    category: "Interface"
+    acceptance_criteria:
+      - "USB device class: HID (0x03)"
+      - "HID usage page: Braille Display (0x41)"
+      - "HID report descriptor: Braille cells (32 cells × 6 dots = 192 bits)"
+      - "Enumeration time: <2 seconds after USB plug-in"
+      - "iOS VoiceOver: Automatic detection (no user config)"
+      - "Android TalkBack: Automatic detection (no user config)"
+    verification_method: "Test (iOS VoiceOver auto-detect, Android TalkBack auto-detect, USB analyzer)"
+    derived_from: "PRD-IFACE-001-ASMP (USB-C architecture)"
+    traces_to: "ARCH-B firmware, USB descriptor"
+
+  PRD-IFACE-004-ASMP:
+    parent: "PRD-IFACE-001-ASMP"
+    title: "BLE HID Over GATT Protocol (Wireless)"
+    pdf_says: "N/A (derived from BLE wireless architecture)"
+    our_assumption: "BLE wireless device shall use HID Over GATT profile (standard Bluetooth HID, not Serial Port Profile)"
+    rationale: |
+      iOS/Android support BLE HID Over GATT natively:
+      - iOS: HID Over GATT supported (iOS 7+)
+      - Android: HID Over GATT supported (Android 4.4+)
+      - Standard Bluetooth profile (no custom app required)
+      - Pairing: Standard iOS/Android Bluetooth settings
+
+      Alternative (Serial Port Profile SPP): Would require custom app (NOT preferred)
+    requirement: "Device shall implement BLE HID Over GATT profile (not SPP)"
+    risk_level: MEDIUM
+    customer_validation_needed: YES
+    impact_if_wrong: "SPP would require custom app development ($20K-30K, 2-3 months), App Store approval risk"
+    test_plan: "v1.3.0 BLE firmware (HID Over GATT), Week 5-6 test pairing with iOS/Android"
+    priority: "P0-Critical"
+    category: "Interface"
+    acceptance_criteria:
+      - "BLE profile: HID Over GATT"
+      - "Pairing: iOS/Android Bluetooth settings (no custom app)"
+      - "Reconnection: Automatic after initial pairing"
+      - "Latency: <100ms text-to-braille update"
+      - "BLE security: Encrypted link (LE Secure Connections)"
+    verification_method: "Test (iOS pairing, Android pairing, latency measurement with Bluetooth sniffer)"
+    derived_from: "PRD-IFACE-001-ASMP (BLE architecture)"
+    traces_to: "ARCH-A, ARCH-C firmware, BLE stack config"
+
+  PRD-IFACE-005-ASMP:
+    parent: "PRD-IFACE-003-ASMP"
+    title: "iPhone USB-C Power Budget Assumption (CRITICAL RISK)"
+    pdf_says: "N/A (derived from USB-C wired + iPhone compatibility assumption)"
+    our_assumption: "iPhone 15+ USB-C port provides ≥500mA @ 5V for USB accessories (standard USB 2.0 bus-powered spec)"
+    rationale: |
+      CRITICAL ASSUMPTION - REQUIRES HARDWARE VALIDATION:
+      - iPhone 15/16 have USB-C port (USB 2.0 data speed, NOT USB 3.0)
+      - USB 2.0 spec: 500mA @ 5V = 2.5W for bus-powered devices
+      - UNKNOWN: Does iPhone limit accessory power to save battery?
+      - UNKNOWN: Does iPhone support USB OTG power output in all modes?
+      - UNKNOWN: Does iPhone require MFi (Made for iPhone) certification for accessories?
+
+      RISK: If iPhone provides <500mA or requires MFi, USB-C wired architecture may FAIL on iPhone.
+
+      Android USB-C: Generally follows USB 2.0 spec (500mA OTG power), lower risk.
+    requirement: "Device shall operate on ≥500mA @ 5V from iPhone 15+ USB-C port (USB 2.0 bus-powered mode)"
+    risk_level: CRITICAL
+    customer_validation_needed: YES
+    impact_if_wrong: |
+      If iPhone provides <500mA:
+      - USB-C wired architecture FAILS on iPhone (only works on Android/PC)
+      - Lose ~50% of mobile market (iOS users)
+      - Mitigation options:
+        1. Reduce power consumption <iPhone limit (may require different actuators, lower performance)
+        2. Add external battery pack (defeats "wired simplicity" advantage)
+        3. Eliminate iPhone USB-C support (BLE-only for iOS, USB-C for Android only)
+    test_plan: "Week 5-6 prototype testing: Measure actual power draw on iPhone 15/16 USB-C port with USB power analyzer. Test USB enumeration and power negotiation."
+    priority: "P0-Critical"
+    category: "Interface"
+    acceptance_criteria:
+      - "Power draw: ≤500mA @ 5V average (USB 2.0 spec)"
+      - "Peak power: <900mA for <1 second (USB spec allows brief transients)"
+      - "iPhone 15/16: Device enumerates and operates normally"
+      - "USB power analyzer: Confirms <500mA average during reading"
+    verification_method: "Test (iPhone 15/16 hardware test, USB power analyzer measurement, 8-hour reading simulation)"
+    derived_from: "PRD-IFACE-003-ASMP (USB-C HID), PRD-POWER-003-ASMP (USB power budget)"
+    traces_to: "ARCH-B risk analysis, Week 5-6 testing plan"
 
   # --------------------------------------------------------------------------
   # COST
@@ -431,44 +569,6 @@ requirements:
       - "US ADA Section 703.3"
       - "reference/standards/braille-dimensions-standards.md"
 
-  PRD-FUNC-003-ARCH-C-EXCEPT:
-    parent: "PRD-FUNC-003"
-    title: "Size Exception for ARCH-C (COTS Solenoid)"
-    pdf_says: "N/A (derived exception from PRD-SCHED-002-ASMP COTS mandate)"
-    our_assumption: "ARCH-C (Hybrid AA battery) relaxes actuator size constraint to 4mm diameter (from 2.3mm) to enable COTS solenoid use"
-    rationale: |
-      Conflict between requirements:
-      - PRD-SCHED-002-ASMP: COTS mandate (≤4 week lead time) → NO COTS piezo at 2-3mm diameter
-      - PRD-FUNC-003: Actuator size ≤2.3mm (derived from 2.5mm dot pitch)
-      - PRD-POWER-004-ASMP: AA battery life 8 hours → piezo (2.16W) EXCEEDS 1.5W budget by 46%
-
-      Resolution for ARCH-C only:
-      - Use COTS solenoid (Takaha BS-0420N-01, 4mm dia, $0.60 ea, 2-week lead time)
-      - Relax cell pitch: 2.5mm → 3.5mm (4mm actuator + 0.5mm clearance)
-      - Device length: 200mm → 280mm (32 cells × 8.75mm spacing)
-      - Actuator power: Solenoid+latch (2 channels) = 1.53W (fits 1.5W AA budget marginally)
-      - Cost savings: $131 vs $288 piezo (54% reduction)
-
-      ADA compliance: US ADA 703.3 allows cell spacing 2.3-3.8mm (3.5mm is WITHIN spec).
-
-      ARCH-A (Li-ion) and ARCH-B (USB) can still use piezo (2.3mm) if timeline relaxed for custom sourcing.
-    requirement: "ARCH-C only: Allow 4mm actuator diameter, 3.5mm cell pitch, 280mm device length"
-    risk_level: MEDIUM
-    customer_validation_needed: YES
-    impact_if_wrong: "If customer requires <250mm device length, ARCH-C is eliminated. Must use ARCH-A (Li-ion) or ARCH-B (USB wired) instead."
-    test_plan: "docs/cots-timeline-analysis.md shows COTS solenoid 4mm is only option. User testing: 3.5mm pitch within ADA spec (2.3-3.8mm)."
-    priority: "P1-High"
-    category: "Function"
-    acceptance_criteria:
-      - "ARCH-C actuator: 4mm diameter COTS solenoid (Takaha BS-0420N-01 or equivalent)"
-      - "ARCH-C cell pitch: 3.5mm (within ADA 2.3-3.8mm spec)"
-      - "ARCH-C device length: 280mm (32 cells × 8.75mm = 280mm)"
-      - "ARCH-A/ARCH-B: Retain 2.5mm pitch, 2.3mm actuator (200mm device length)"
-    verification_method: "Analysis (dimensional stack-up), Test (user tactile sensitivity at 3.5mm pitch)"
-    derived_from: "PRD-SCHED-002-ASMP (COTS mandate), PRD-POWER-004-ASMP (AA power budget)"
-    traces_to: "ARCH-C design, solenoid+latch architecture, docs/cots-timeline-analysis.md"
-    ada_compliance_note: "US ADA 703.3 allows 2.3-3.8mm cell spacing (3.5mm is compliant)"
-
   # --------------------------------------------------------------------------
   # STANDARDS & COMPLIANCE
   # --------------------------------------------------------------------------
@@ -477,21 +577,184 @@ requirements:
     title: "North America Regulatory Compliance (UL + FCC)"
     source: "Derived from metadata.scope (standards awareness)"
     description: "Device shall be designed for compliance with North America standards (certification post-pilot)"
-    priority: "P1-High"
+    priority: "P0-Critical"
     category: "Compliance"
     standards:
       - "UL 62368-1 (Electrical safety - ICT equipment)"
       - "UL 2054 (Battery safety - if BLE architecture)"
       - "FCC Part 15 Class B (EMI emissions)"
       - "FCC Part 15C (Radio emissions - if BLE)"
-    rationale: "Phase 1 targets North America market. Design for compliance, certify post-pilot (Month 3-4)."
+    rationale: "Phase 1 targets North America market. Design for compliance, certify post-pilot (Month 3-4). 2-month timeline constraint requires LOW-RISK design approach (pass preliminary testing on first attempt)."
     acceptance_criteria:
       - "Design complies with UL 62368-1 safety requirements"
-      - "PCB layout follows FCC Part 15B best practices (shielding, filtering)"
+      - "PCB layout follows FCC Part 15B best practices (4-layer with ground plane, EMI filtering)"
       - "Use pre-certified BLE modules (FCC ID) if BLE architecture"
       - "Use pre-certified battery packs (UL listed) if BLE architecture"
-    verification_method: "Analysis (design review), Inspection (component selection), Test (post-pilot certification)"
-    cost_impact: "$23K-45K, 3-4 months (post-pilot)"
+      - "Inductive kickback suppression on all solenoid/relay circuits (flyback diodes or zener clamps)"
+      - "Power supply bulk capacitors (1000µF) and ceramic bypass (100nF) at each driver IC"
+    verification_method: "Analysis (design review), Inspection (component selection), Test (preliminary emissions at pilot, full certification post-pilot)"
+    cost_impact: "$26K (UL + FCC Class B + FCC Part 15C if BLE), 3-4 months (post-pilot)"
+
+  NFR-STD-001-ASMP-TARGET:
+    parent: "NFR-STD-001"
+    title: "Target Market Assumption - USA (North America)"
+    pdf_says: "N/A (standards awareness in scope)"
+    our_assumption: "Target market: USA (North America) → UL + FCC compliance required. International markets (CE, PSE, CCC) deferred to post-pilot."
+    rationale: |
+      PDF does not specify target geography. USA is assumed based on:
+      - US ADA Section 703.3 braille standards referenced (PRD-FUNC-001)
+      - Lam Research headquarters: Fremont, CA (USA-based company)
+      - North America is largest accessibility tech market (~40% global)
+      - Single market focus reduces certification cost/complexity for pilot phase
+
+      International expansion (CE/EU, PSE/Japan, CCC/China) deferred to Month 3+ after pilot validation.
+    requirement: "Design for USA (North America) regulatory compliance first. International markets deferred to post-pilot."
+    risk_level: MEDIUM
+    customer_validation_needed: YES
+    impact_if_wrong: "If EU/Asia required in pilot, add $15K-30K certification cost (CE + PSE + CCC) and 2-4 month timeline impact."
+    test_plan: "v1.4.0 certification cost analysis (USA vs international), v1.5.0 timeline impact if multi-region required"
+    priority: "P1-High"
+    category: "Compliance"
+    acceptance_criteria:
+      - "UL 62368-1 (Electrical safety)"
+      - "UL 2054 (Battery safety if Li-ion)"
+      - "FCC Part 15 Class B (EMI emissions)"
+      - "FCC Part 15C (Radio emissions if BLE)"
+    verification_method: "Analysis (market research), Inspection (confirm customer target market)"
+    derived_from: "NFR-STD-001 (North America compliance)"
+
+  NFR-STD-001-DRV-PRELIM:
+    parent: "NFR-STD-001"
+    title: "Preliminary Standards Testing - Pilot Phase Gate"
+    pdf_says: "N/A (derived from PRD-SCHED-001 2-month timeline + high-volume production requirement)"
+    our_assumption: "Pilot units (100-500) must pass PRELIMINARY standards testing (pre-scan emissions, basic safety) before scaling to production. This validates low-risk design approach."
+    rationale: |
+      Timeline constraint: 2 months to pilot → Month 3-4 for full certification → Month 5+ for volume production.
+      Risk mitigation: Pilot units must pass preliminary testing to avoid costly redesign delays.
+
+      Preliminary testing (pilot phase):
+      - EMI pre-scan (FCC Part 15B) using spectrum analyzer ($5K in-house test)
+      - Safety inspection (UL checklist review, no formal certification yet)
+      - Functional validation (braille spacing, actuation force, user testing)
+
+      Full certification (post-pilot):
+      - FCC Part 15 Class B (3rd-party test lab, $8K-12K)
+      - UL 62368-1 (3rd-party NRTL, $15K-25K)
+      - FCC Part 15C if BLE ($3K-5K additional)
+
+      **CRITICAL:** If pilot fails preliminary testing, redesign required → 4-6 week delay → misses volume ramp timeline.
+    requirement: "Pilot units must pass preliminary emissions pre-scan (<6 dB margin to FCC Part 15B limits) and safety checklist review before volume production authorization."
+    risk_level: HIGH
+    customer_validation_needed: YES
+    impact_if_wrong: "Pilot fails preliminary testing → Redesign required (4-6 weeks) → Volume production delayed to Month 6-7 → Customer deadline missed."
+    test_plan: "v1.3.0 low-risk design (4-layer PCB, ground plane, pre-certified modules), Week 7 pilot preliminary EMI pre-scan, Week 8 safety checklist review"
+    priority: "P0-Critical"
+    category: "Compliance"
+    acceptance_criteria:
+      - "EMI pre-scan: <6 dB margin to FCC Part 15 Class B limits (30-230 MHz conducted, 30 MHz-1 GHz radiated)"
+      - "Safety checklist: 100% compliance with UL 62368-1 design guidelines (spacing, creepage, markings)"
+      - "Inductive kickback: <50V transient spikes on power rails (measured with oscilloscope)"
+      - "Power supply ripple: <100mV pk-pk on 5V rail during actuation (acceptable for digital logic)"
+    verification_method: "Test (in-house EMI pre-scan with spectrum analyzer, oscilloscope power quality measurements), Inspection (UL checklist review)"
+    derived_from: "PRD-SCHED-001 (2-month timeline), PRD-VOL-001 (high-volume production), NFR-STD-001 (compliance requirement)"
+    traces_to: "Week 7-8 pilot testing plan, v1.5.0 path-to-production timeline"
+
+  NFR-STD-001-DRV-LOWRISK:
+    parent: "NFR-STD-001"
+    title: "Low-Risk Design for Standards Compliance"
+    pdf_says: "N/A (derived from PRD-SCHED-001 2-month timeline constraint)"
+    our_assumption: "Timeline constraint (2 months to pilot, Month 3-4 for certification) requires LOW-RISK design approach: use proven techniques to pass standards on first attempt (no redesign cycles)."
+    rationale: |
+      2-month pilot timeline + Month 3-4 certification → NO TIME for redesign if standards testing fails.
+      Low-risk design principles:
+
+      1. **EMI Suppression (FCC Part 15B):**
+         - 4-layer PCB with continuous ground plane (Layer 2)
+         - Isolated power planes (Layer 3): 30V / 12V / 5V / 3.3V separation
+         - Inductive kickback suppression: Flyback diodes or zener clamps on all solenoid circuits
+         - Bulk capacitors (1000µF) + ceramic bypass (100nF) at each driver IC (24× ULN2803A)
+         - Pre-certified BLE module (FCC ID) if wireless architecture
+
+      2. **Safety (UL 62368-1):**
+         - HV clearance: 50 mil (1.27mm) for 30V piezo drivers, 20 mil (0.51mm) for 12V solenoid drivers
+         - Battery protection: UL-listed Li-ion packs with BMS (if ARCH_PIEZO_DLX)
+         - Enclosure: Adequate ventilation, no sharp edges, flame-retardant material (UL94 V-0 or V-1)
+         - Markings: UL, FCC, CE logos (placeholder for pilot, official after certification)
+
+      3. **Architecture Selection Criteria:**
+         - PREFER: Architectures with lower EMI risk (wired USB over BLE, solenoid 12V over piezo 30V)
+         - PREFER: Pre-certified modules (BLE with FCC ID) over discrete RF design
+         - AVOID: Custom switching regulators (use linear LDOs where feasible, lower EMI)
+         - AVOID: High-frequency switching (piezo 30V boost @ 500 kHz → higher EMI risk)
+
+      **TRADE-OFF:** Low-risk design may increase cost (4-layer PCB $15 vs 2-layer $8, pre-cert BLE $12 vs discrete $5),
+      but ELIMINATES redesign risk ($50K+ cost, 4-6 week delay if standards fail).
+    requirement: "All architectures shall use low-risk design techniques proven to pass FCC Part 15B and UL 62368-1 on first attempt."
+    risk_level: CRITICAL
+    customer_validation_needed: NO
+    impact_if_wrong: "High-risk design (2-layer PCB, discrete RF, no EMI filtering) → 50% chance of standards failure → $50K+ redesign cost + 4-6 week delay → Customer deadline missed."
+    test_plan: "v1.3.0 architecture designs incorporate low-risk techniques, v1.4.0 trade-off analysis quantifies cost delta (low-risk vs high-risk), Week 7-8 pilot preliminary testing validates approach"
+    priority: "P0-Critical"
+    category: "Compliance"
+    acceptance_criteria:
+      - "4-layer PCB with ground plane (all architectures)"
+      - "Inductive kickback suppression (flyback diodes or zener clamps on all inductive loads)"
+      - "Pre-certified BLE module with FCC ID (if wireless architecture)"
+      - "UL-listed Li-ion battery pack with BMS (if rechargeable battery architecture)"
+      - "Power supply filtering: 1000µF bulk + 100nF ceramic at each driver IC"
+      - "HV clearance: ≥50 mil for 30V, ≥20 mil for 12V"
+    verification_method: "Analysis (design review checklist), Inspection (PCB layout review, BOM component selection), Test (preliminary EMI pre-scan at pilot)"
+    derived_from: "PRD-SCHED-001 (2-month timeline), NFR-STD-001 (compliance requirement), PRD-VOL-001 (high-volume production)"
+    traces_to: "v1.3.0 architecture designs (PCB layer count, EMI filtering, module selection), v1.4.0 cost/risk trade-offs"
+
+  NFR-EMI-001:
+    title: "FCC Part 15 Class B Emissions - Low Risk Design"
+    source: "Derived from NFR-STD-001-DRV-LOWRISK (low-risk compliance strategy)"
+    description: "Device shall be designed with >6 dB margin to FCC Part 15 Class B emissions limits using proven EMI suppression techniques"
+    priority: "P0-Critical"
+    category: "EMI/EMC"
+    standards:
+      - "FCC Part 15 Class B (conducted emissions 150 kHz - 30 MHz)"
+      - "FCC Part 15 Class B (radiated emissions 30 MHz - 1 GHz)"
+    rationale: |
+      FCC Part 15 Class B is the most stringent emissions standard (residential use).
+      >6 dB margin ensures robustness to manufacturing variations, worst-case operating conditions, and test lab measurement uncertainty.
+
+      **EMI RISK FACTORS:**
+      - Inductive kickback from 192 solenoids (31.5V spikes without suppression)
+      - Switching regulators (boost converters 5V→12V or 5V→30V at 500 kHz)
+      - High dI/dt currents (192 solenoids @ 0.63A = 121A peak without multiplexing)
+      - MCU clock harmonics (STM32F407 @ 168 MHz)
+      - BLE radio (2.4 GHz if wireless architecture)
+
+      **EMI SUPPRESSION TECHNIQUES (MANDATORY):**
+      1. 4-layer PCB with continuous ground plane (Layer 2) → Return path for all high-frequency currents
+      2. Isolated power planes (Layer 3) → Separate 30V / 12V / 5V / 3.3V to minimize coupling
+      3. Inductive kickback suppression → Flyback diodes (ULN2803A internal) or zener clamps
+      4. Bulk capacitors (1000µF) + ceramic bypass (100nF) at each driver IC → Filter switching transients
+      5. Pre-certified BLE module (FCC ID) → Eliminates RF design risk
+      6. Ferrite beads on power rails → Suppress high-frequency noise coupling
+    requirement: "Design shall achieve >6 dB margin to FCC Part 15 Class B limits in preliminary testing (pilot phase)"
+    risk_level: CRITICAL
+    customer_validation_needed: NO
+    impact_if_wrong: "Standards failure → $50K redesign cost (PCB respin, component changes) + 4-6 week delay → Volume production delayed to Month 6-7."
+    test_plan: "Week 7 pilot preliminary EMI pre-scan (in-house spectrum analyzer), identify worst-case emissions, verify >6 dB margin. If <3 dB margin, add EMI fixes before full certification."
+    priority: "P0-Critical"
+    category: "EMI/EMC"
+    acceptance_criteria:
+      - "Conducted emissions (150 kHz - 30 MHz): <6 dB margin to FCC Part 15 Class B QP limits"
+      - "Radiated emissions (30 MHz - 1 GHz): <6 dB margin to FCC Part 15 Class B QP limits"
+      - "Inductive kickback transients: <50V pk on power rails (no damage to ICs)"
+      - "Power supply ripple: <100mV pk-pk on 5V rail during worst-case actuation"
+    verification_method: "Test (preliminary EMI pre-scan at pilot using spectrum analyzer, oscilloscope power quality measurements), Test (full FCC Part 15 Class B certification at 3rd-party lab post-pilot)"
+    derived_from: "NFR-STD-001 (FCC compliance), NFR-STD-001-DRV-LOWRISK (low-risk design mandate)"
+    traces_to: "PCB design (4-layer with ground plane), BOM (flyback diodes, bulk capacitors, ferrite beads), Week 7-8 preliminary testing"
+    design_guidelines:
+      - "PCB layout: 4-layer minimum (signal/GND/power/signal), 6-mil trace/space, ground pour on top/bottom"
+      - "Solenoid drivers: Use ULN2803A internal flyback diodes (pin 10 to +5V), add 1000µF bulk cap per IC"
+      - "Switching regulators: Add ferrite bead + 10µF output cap on boost converters"
+      - "BLE module: Use pre-certified module (Raytac MDBT50Q with FCC ID 2AF8Q-MDBT50Q)"
+      - "Enclosure: Plastic (no shielding needed for Class B residential use)"
 
   NFR-STD-002:
     title: "Accessibility Standards Compliance (US ADA)"
@@ -510,6 +773,159 @@ requirements:
       - "Actuator size: ≤2.3mm diameter (derived from spacing)"
     verification_method: "Inspection (mechanical measurements), Test (user validation with sight-impaired testers)"
     traces_to_existing: "PRD-FUNC-001, PRD-FUNC-003"
+
+  # --------------------------------------------------------------------------
+  # MECHANICAL DESIGN REQUIREMENTS (Derived from ADA 703.3)
+  # --------------------------------------------------------------------------
+
+  PRD-MECH-001:
+    title: "Dot Diameter - ADA 703.3 Compliance"
+    source: "Derived from US ADA Section 703.3 + reference/standards/braille-dimensions-standards.md"
+    description: "Braille dot diameter shall be 1.5-1.6 mm per US ADA 703.3"
+    priority: "P0-Critical"
+    category: "Mechanical"
+    requirement: "Dot diameter: 1.5 mm ±0.1 mm (target 1.5 mm nominal)"
+    rationale: |
+      US ADA 703.3 specifies dot diameter 0.059-0.063 inches (1.5-1.6 mm).
+      Tactile sensitivity requirement - dots must be large enough for finger detection but small enough for 2.5mm pitch.
+      Actuator tip diameter must match dot diameter for proper tactile feedback.
+    acceptance_criteria:
+      - "Dot diameter: 1.5 mm ±0.1 mm (measured with calipers)"
+      - "Actuator tip: Hemispherical or domed geometry"
+      - "Tolerance: ±0.1 mm (manufacturing capability)"
+    verification_method: "Inspection (caliper measurement), Test (user tactile sensitivity validation)"
+    standards_reference: "US ADA Section 703.3"
+    traces_to: "Actuator selection, mechanical design, PRD-FUNC-001"
+    derived_from: "NFR-STD-002 (ADA compliance)"
+
+  PRD-MECH-002:
+    title: "Dot Height (Raised Position) - ADA 703.3"
+    source: "Derived from US ADA Section 703.3 + reference/standards/braille-dimensions-standards.md"
+    description: "Braille dot height (raised position) shall be 0.64-0.94 mm per US ADA 703.3"
+    priority: "P0-Critical"
+    category: "Mechanical"
+    requirement: "Dot height: 0.5-0.7 mm (target 0.6 mm nominal, within ADA 0.64-0.94 mm range)"
+    rationale: |
+      US ADA 703.3 specifies dot height 0.025-0.037 inches (0.64-0.94 mm).
+      Target 0.5-0.7 mm provides margin for manufacturing tolerances while remaining within ADA spec.
+      Higher dots (0.7 mm) = easier to read, but requires more actuator force/stroke.
+      Lower dots (0.5 mm) = lower force, but may be harder to feel (still compliant at 0.64 mm ADA min).
+      Actuator must provide ≥0.7 mm stroke to ensure 0.5-0.7 mm dot height after assembly tolerances.
+    acceptance_criteria:
+      - "Dot height (raised): 0.5-0.7 mm above surrounding surface"
+      - "ADA compliance: Within 0.64-0.94 mm specification"
+      - "Actuator stroke: ≥0.7 mm (provides margin for assembly tolerances)"
+    verification_method: "Inspection (profilometer measurement), Test (user tactile sensitivity validation)"
+    standards_reference: "US ADA Section 703.3"
+    traces_to: "Actuator selection (stroke requirement), mechanical design, PRD-FUNC-003"
+    derived_from: "NFR-STD-002 (ADA compliance)"
+
+  PRD-MECH-003:
+    title: "Dot Spacing Within Cell - ADA 703.3"
+    source: "Derived from US ADA Section 703.3 + reference/standards/braille-dimensions-standards.md"
+    description: "Dot spacing within braille cell shall be 2.3-2.5 mm per US ADA 703.3"
+    priority: "P0-Critical"
+    category: "Mechanical"
+    requirement: "Dot pitch (within cell): 2.5 mm center-to-center (target, within ADA 2.3-2.5 mm range)"
+    rationale: |
+      US ADA 703.3 specifies dot spacing 0.090-0.100 inches (2.3-2.5 mm) within cell.
+      2.5 mm pitch is standard North American spacing (0.1 inch).
+      This spacing drives actuator size constraint: actuator diameter ≤ (2.5 mm pitch - margin) ≈ 2.3 mm max.
+
+      Braille cell layout (2 columns × 3 rows):
+      - Column spacing: 2.5 mm (dot 1 to dot 4)
+      - Row spacing: 2.5 mm (dot 1 to dot 2 to dot 3)
+
+      CRITICAL DESIGN DRIVER: Actuator diameter ≤2.3 mm to fit 2.5 mm pitch with clearance.
+    acceptance_criteria:
+      - "Dot pitch (within cell): 2.5 mm ±0.1 mm center-to-center"
+      - "ADA compliance: Within 2.3-2.5 mm specification"
+      - "Actuator diameter: ≤2.3 mm (enables 2.5 mm pitch with 0.2 mm clearance)"
+    verification_method: "Inspection (CMM or caliper measurement), Test (user reading comprehension validation)"
+    standards_reference: "US ADA Section 703.3"
+    traces_to: "Actuator size constraint (≤2.3 mm), mechanical design, PRD-FUNC-001"
+    derived_from: "NFR-STD-002 (ADA compliance)"
+    design_impact: "This is THE critical constraint: actuator diameter ≤2.3 mm eliminates most COTS actuators"
+
+  PRD-MECH-004:
+    title: "Cell Spacing (Horizontal Between Characters) - ADA 703.3"
+    source: "Derived from US ADA Section 703.3 + reference/standards/braille-dimensions-standards.md"
+    description: "Horizontal spacing between adjacent braille cells shall be 6.1-7.6 mm per US ADA 703.3"
+    priority: "P0-Critical"
+    category: "Mechanical"
+    requirement: "Cell pitch (horizontal): 6.0-6.2 mm center-to-center (target, within ADA 6.1-7.6 mm range)"
+    rationale: |
+      US ADA 703.3 specifies cell spacing 0.241-0.300 inches (6.1-7.6 mm) between corresponding dots in adjacent cells.
+      6.0-6.2 mm pitch is typical for refreshable braille displays (balance between compactness and readability).
+
+      DEVICE LENGTH CALCULATION:
+      - 32 cells × 6.2 mm pitch = 198 mm display width (nominal design for 2.5mm dot pitch)
+      - Plus margins: ~200-210 mm total device width
+      - Architecture-specific variations (e.g., ARCH_SOL_ECO with 4mm actuators) documented in v1.3.0 architecture docs
+    acceptance_criteria:
+      - "Cell pitch: 6.0-6.2 mm ±0.2 mm center-to-center (nominal 2.5mm dot pitch architectures)"
+      - "ADA compliance: Within 6.1-7.6 mm specification"
+      - "Device length varies by architecture (see v1.3.0 architecture docs for ARCH_SOL_ECO trade-offs)"
+    verification_method: "Inspection (CMM or caliper measurement), Test (user reading speed validation)"
+    standards_reference: "US ADA Section 703.3"
+    traces_to: "Device dimensions, mechanical layout, PRD-SIZE-001-ASMP"
+    derived_from: "NFR-STD-002 (ADA compliance)"
+
+  PRD-MECH-005:
+    title: "Dot Shape - Hemispherical Dome"
+    source: "Derived from US ADA Section 703.3 + reference/standards/braille-dimensions-standards.md"
+    description: "Braille dot shape shall be domed/hemispherical for tactile sensitivity"
+    priority: "P0-Critical"
+    category: "Mechanical"
+    requirement: "Dot shape: Hemispherical dome or rounded (NOT flat-topped)"
+    rationale: |
+      US ADA 703.3 and BANA guidelines specify "domed or rounded" dot shape.
+      Tactile sensitivity requirement: smooth dome provides clear tactile feedback for finger scanning.
+      Flat-topped dots are harder to detect and distinguish.
+
+      Actuator tip geometry must be hemispherical or rounded to create proper dot shape.
+      Machining/molding must maintain dome geometry (not sharp edges or flat spots).
+    acceptance_criteria:
+      - "Dot shape: Hemispherical or rounded dome"
+      - "No flat spots: Dome radius ≥0.5 mm"
+      - "Surface finish: Smooth (no sharp edges or burrs)"
+    verification_method: "Inspection (visual + profilometer), Test (user tactile sensitivity validation)"
+    standards_reference: "US ADA Section 703.3, BANA guidelines"
+    traces_to: "Actuator tip design, mechanical design, PRD-FUNC-003"
+    derived_from: "NFR-STD-002 (ADA compliance)"
+
+  PRD-MECH-006:
+    title: "Dot Holding Force - Tactile Feedback"
+    source: "Derived from literature + reference/standards/braille-dimensions-standards.md (not ADA standard)"
+    description: "Braille dot shall maintain raised position under 50-100 grams finger pressure"
+    priority: "P1-High"
+    category: "Mechanical"
+    requirement: "Holding force: 50-100 grams (actuator must maintain raised position under finger pressure)"
+    rationale: |
+      NOT formally standardized by ADA, but literature suggests 50-100 grams force for tactile feedback.
+
+      Actuator must:
+      - Maintain raised position under finger scanning pressure (~50-100g typical)
+      - Not collapse or depress when user touches dot
+      - Provide consistent tactile feedback across all 192 dots
+
+      Lower force (<50g): Dots may collapse under finger pressure (poor UX)
+      Higher force (>100g): Harder to actuate (more power, larger actuator, higher cost)
+
+      This drives actuator selection:
+      - Piezo: High holding force (stiff material, no power required to hold)
+      - Solenoid: Requires latch mechanism to hold without continuous power (see ARCH-C solenoid+latch design)
+    acceptance_criteria:
+      - "Holding force: 50-100 grams nominal"
+      - "Dot does not collapse under finger pressure (<2 mm depression when 100g applied)"
+      - "Consistent force across all 192 dots (±20% variation acceptable)"
+    verification_method: "Test (force gauge measurement), Test (user tactile feedback validation)"
+    standards_reference: "Literature (not formal ADA standard)"
+    traces_to: "Actuator selection, mechanical design, PRD-FUNC-003"
+    derived_from: "NFR-STD-002 (ADA compliance), literature on braille tactile feedback"
+    risk_level: MEDIUM
+    customer_validation_needed: YES
+    impact_if_wrong: "If <50g, dots collapse under finger (poor UX). If >100g, harder to actuate (power/cost penalty)."
 
   # --------------------------------------------------------------------------
   # POWER / BATTERY LIFE REQUIREMENTS
