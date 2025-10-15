@@ -384,9 +384,13 @@ def generate_architecture_md(archs, subsys, parts):
         arch = archs['architectures'][arch_id]
         layers, drivers = calculate_pcb_layers(arch, subsys)
 
-        # Determine HV voltage based on subsystems
-        hv_voltage = "30V" if any('30V' in d for d in drivers) else ("12V" if any('12V' in d for d in drivers) else "5V")
-        hv_clearance = "50 mil" if hv_voltage == "30V" else "20 mil"
+        # Determine HV voltage based on subsystems (check subsystem IDs directly for accuracy)
+        has_200v = any(ss_id in ['SS-ACTUATOR-DRIVER', 'SS-POWER-USB-BOOST', 'SS-POWER-AA-BOOST-200V']
+                      for ss_id in arch['subsystems']['core'] + arch['subsystems']['unique'])
+        has_12v = 'SS-POWER-AA-BOOST-12V' in arch['subsystems']['unique']
+
+        hv_voltage = "200V" if has_200v else ("12V" if has_12v else "5V")
+        hv_clearance = "100 mil" if hv_voltage == "200V" else ("20 mil" if hv_voltage == "12V" else "10 mil")
 
         # Determine max emissions
         has_ble = any('BLE' in ss_id for ss_id in arch['subsystems']['unique'])
@@ -412,7 +416,7 @@ def generate_architecture_md(archs, subsys, parts):
     output.append("\n**Layer Stack (all 4-layer architectures):**\n\n")
     output.append("- Layer 1 (Top): Signal routing (6 mil min trace/space for MCU fanout)\n")
     output.append("- Layer 2 (GND): Continuous ground plane (FCC Part 15B requirement)\n")
-    output.append("- Layer 3 (Power): Isolated planes for 30V / 12V / 5V / 3.3V\n")
+    output.append("- Layer 3 (Power): Isolated planes for 200V HV / 12V / 5V / 3.3V (voltage depends on architecture)\n")
     output.append("- Layer 4 (Bottom): Signal routing\n\n")
     output.append("**Cost Impact:** 4-layer PCB ~$15 vs 2-layer ~$8 (but 2-layer would fail FCC emissions)\n\n")
 

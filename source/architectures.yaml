@@ -27,7 +27,7 @@ architectures:
     name: "Piezo Economy (Wired)"
     nickname: "Value Desk"
     market_position: "Entry-level / Education / Desktop / Low-cost Piezo"
-    strategy_note: "ECO tier (piezo variant): LOWEST RISK + SIMPLEST DESIGN. USB-C wired eliminates battery complexity. Fastest piezo option to market (6 weeks). Higher BOM ($420) than SOL_ECO but proven piezo technology (zero technical risk)."
+    strategy_note: "ECO tier (piezo variant): USB-C wired eliminates battery complexity. CRITICAL TECHNICAL RISK: 200V bimorph piezo drive voltage requires specialized HV boost converter (flyback topology) and HV driver ICs (ULN2803A inadequate at 50V max). Actuator cost $288 stable, but power supply and driver cost increased $9/unit. 6-week timeline achievable if HV components sourced quickly."
 
     # Requirements traceability
     driven_by_requirements:
@@ -72,9 +72,9 @@ architectures:
         battery_anxiety: "NONE"
         mobility: "POOR"
       complexity:
-        hardware: "SIMPLE"
+        hardware: "COMPLEX"      # 200V HV design: PCB clearances, 4-layer stack, conformal coating
         firmware: "SIMPLE"
-        power: "TRIVIAL"
+        power: "COMPLEX"         # 200V flyback converter, HV driver ICs, extreme EMI suppression
         mechanical: "SIMPLE"
       timeline:
         pilot: "FASTEST"
@@ -86,11 +86,11 @@ architectures:
         dfm: "EXCELLENT"
         yield_risk: "LOW"
       risk:
-        technical: "LOW"
+        technical: "HIGH"        # 200V HV power supply design (flyback topology, isolation, EMI), HV driver ICs (discrete MOSFET arrays)
         supply_chain: "LOW"
-        safety: "LOW"
-        timeline: "LOW"
-        cost_overrun: "LOW"
+        safety: "MEDIUM"         # 200V high voltage requires conformal coating, creepage/clearance per IPC-2221
+        timeline: "MEDIUM"       # HV component sourcing may extend leadtime
+        cost_overrun: "MEDIUM"   # HV components cost 4-6× more than initially estimated
       market_fit:
         education: "EXCELLENT"
         consumer: "FAIR"
@@ -253,7 +253,7 @@ architectures:
     name: "Piezo Deluxe (Wireless)"
     nickname: "Premium Pro"
     market_position: "Premium / Mobile Professional / Sleek Design / Rechargeable"
-    strategy_note: "DLX tier focus: BEST USABILITY + CONVENIENCE. BLE wireless (no cable clutter) + Li-ion rechargeable (no battery swapping). Fastest refresh speed (1.5 sec). Premium UX justifies higher BOM ($449) and Li-ion safety certification."
+    strategy_note: "DLX tier focus: BEST USABILITY + CONVENIENCE. BLE wireless (no cable clutter) + Li-ion rechargeable (no battery swapping). Fastest refresh speed (1.5 sec). CRITICAL TECHNICAL RISK: 200V bimorph piezo drive voltage + Li-ion battery create dual high-risk systems. Requires specialized HV boost converter (flyback topology) and HV driver ICs. Premium UX justifies higher BOM and certification costs, but HV design complexity may delay timeline."
 
     # Requirements traceability
     driven_by_requirements:
@@ -301,9 +301,9 @@ architectures:
         mobility: "EXCELLENT"    # Truly wireless
         refresh_speed: "FAST"    # 1.5 sec (best performance)
       complexity:
-        hardware: "MODERATE"
+        hardware: "COMPLEX"      # 200V HV design + BLE wireless + Li-ion battery
         firmware: "MODERATE"     # BLE only (simpler than dual stack)
-        power: "COMPLEX"         # Charger + fuel gauge + thermal mgmt
+        power: "VERY COMPLEX"    # 200V flyback converter + Li-ion charger + fuel gauge + thermal mgmt + HV driver ICs
         mechanical: "MODERATE"   # Integrated battery pack
       timeline:
         pilot: "MODERATE"        # 8 weeks
@@ -315,11 +315,11 @@ architectures:
         dfm: "GOOD"
         yield_risk: "MEDIUM"
       risk:
-        technical: "MEDIUM"      # BLE pairing UX
-        supply_chain: "MEDIUM"   # Li-ion sourcing
-        safety: "HIGH"           # Li-ion thermal runaway risk
-        timeline: "MEDIUM-HIGH"
-        cost_overrun: "MEDIUM-HIGH"
+        technical: "HIGH"        # 200V HV power supply + BLE wireless + Li-ion battery (triple complexity)
+        supply_chain: "MEDIUM"   # Li-ion sourcing + HV component availability
+        safety: "VERY HIGH"      # 200V high voltage + Li-ion thermal runaway risk (dual hazard)
+        timeline: "HIGH"         # HV component sourcing + UL 2054 + FCC 15C certification
+        cost_overrun: "HIGH"     # HV components cost 4-6× more + Li-ion pack + BLE module
       market_fit:
         education: "POOR"        # Too expensive
         consumer: "EXCELLENT"    # Premium wireless UX
