@@ -1,0 +1,122 @@
+# Decision Tree Logic for Architecture Selection
+# Purpose: Define "When X Wins" decision rules for trade-off analysis
+# Used by: scripts/extract_tradeoff_data.py → generates decision tree diagram
+
+metadata:
+  version: "1.0.0"
+  date: "2025-10-15"
+  author: "Spencer Barrett"
+  purpose: "Decision tree showing when each architecture wins based on constraints"
+
+# Decision tree structure (evaluated in order)
+decision_tree:
+  - node_id: "wireless_required"
+    question: "Wireless REQUIRED?"
+    condition:
+      type: "boolean"
+      description: "Does customer require BLE wireless connectivity?"
+    if_yes:
+      winner: "ARCH_PIEZO_DLX"
+      rationale: "Only BLE option (nRF52840 pre-certified FCC)"
+      stop: true  # Terminal node - decision made
+    if_no:
+      next_node: "cost_threshold"
+
+  - node_id: "cost_threshold"
+    question: "Cost < $300 target?"
+    condition:
+      type: "threshold"
+      metric: "bom_cost"
+      operator: "<"
+      value: 300
+      units: "USD"
+    if_yes:
+      winner: "ARCH_SOL_ECO"
+      rationale: "$277 lowest BOM (50% savings vs piezo)"
+      stop: true
+    if_no:
+      next_node: "timeline_threshold"
+
+  - node_id: "timeline_threshold"
+    question: "Timeline < 8 weeks?"
+    condition:
+      type: "threshold"
+      metric: "timeline_weeks"
+      operator: "<"
+      value: 8
+      units: "weeks"
+    if_yes:
+      winner: "ARCH_PIEZO_ECO"
+      rationale: "Fastest to market (simplest electrical integration)"
+      stop: true
+    if_no:
+      next_node: "volume_threshold"
+
+  - node_id: "volume_threshold"
+    question: "Volume > 10K units?"
+    condition:
+      type: "threshold"
+      metric: "production_volume"
+      operator: ">"
+      value: 10000
+      units: "units"
+    if_yes:
+      winner: "ARCH_SOL_ECO"
+      rationale: "Best scaling (mechanical cost-down potential)"
+      stop: true
+    if_no:
+      next_node: "default"
+
+  - node_id: "default"
+    question: "DEFAULT"
+    condition:
+      type: "default"
+      description: "No specific constraints matched"
+    winner: "ARCH_PIEZO_ECO"
+    rationale: "Most robust across scenarios"
+    stop: true
+
+# Summary of when each architecture wins
+architecture_win_conditions:
+  ARCH_PIEZO_ECO:
+    wins_when:
+      - "Timeline < 8 weeks (fastest electrical integration)"
+      - "Wireless NOT required (cable acceptable)"
+      - "Standard pitch REQUIRED (ADA 703.3 compliance)"
+      - "Most scenarios (robust choice)"
+    fails_when:
+      - "Wireless required (no BLE - only USB-C)"
+      - "Cost < $300 target (exceeds budget)"
+      - "Actuator sourcing fails (no COTS piezo available)"
+
+  ARCH_SOL_ECO:
+    wins_when:
+      - "Cost < $300 budget (lowest BOM: $277)"
+      - "Volume > 10K units (mechanical scaling)"
+      - "Mechanical innovation acceptable (3.5mm pitch pilot-ok)"
+      - "Cost-sensitive markets (China, India)"
+    fails_when:
+      - "Standard pitch REQUIRED (3.5mm violates ADA 703.3)"
+      - "Tooling NRE unacceptable ($70K-90K steel tooling)"
+      - "Mechanical complexity risk averse"
+
+  ARCH_PIEZO_DLX:
+    wins_when:
+      - "Wireless REQUIRED (only BLE architecture)"
+      - "Premium positioning (US/EU market)"
+      - "UX differentiation critical (wireless freedom)"
+      - "Higher price point acceptable ($450+)"
+    fails_when:
+      - "Cost < $400 budget (highest BOM: $449)"
+      - "Li-ion certification unacceptable (UN38.3 shipping)"
+      - "Timeline < 10 weeks (BLE certification delay)"
+
+# Key insight message
+key_insight:
+  title: "No single 'best' architecture"
+  message: |
+    Selection depends on YOUR specific constraints:
+    • Wireless requirement → Only PIEZO_DLX has BLE
+    • Cost-constrained → SOL_ECO wins ($277 vs $420-442)
+    • Time-constrained → PIEZO_ECO fastest (8-10 wks)
+    • Volume scaling → SOL_ECO mechanical cost-down potential

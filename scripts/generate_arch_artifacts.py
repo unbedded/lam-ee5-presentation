@@ -58,6 +58,40 @@ def calculate_pcb_layers(arch_data, subsys_db):
 
     return max_layers, layer_drivers
 
+def calculate_bom_total(arch, subsys, parts):
+    """Calculate BOM total by summing parts from subsystems (SSOT from parts.csv)"""
+    subtotal = 0
+
+    # Core subsystems
+    for ss_id in arch['subsystems']['core']:
+        ss = subsys['subsystems_core'].get(ss_id) or subsys['subsystems_unique'].get(ss_id)
+        part = get_part_details(ss_id, parts)
+        if ss and part:
+            qty = ss['quantity']
+            unit_price = float(part['Unit_Price_1000'])
+            line_total = qty * unit_price
+            subtotal += line_total
+
+    # Unique subsystems
+    for ss_id in arch['subsystems']['unique']:
+        ss = subsys['subsystems_unique'].get(ss_id)
+        part = get_part_details(ss_id, parts)
+        if ss and part:
+            qty = ss['quantity']
+            unit_price = float(part['Unit_Price_1000'])
+            line_total = qty * unit_price
+            subtotal += line_total
+
+    # Add 15% misc overhead
+    misc_15pct = subtotal * 0.15
+    total = subtotal + misc_15pct
+
+    return {
+        'subtotal': subtotal,
+        'misc_15pct': misc_15pct,
+        'total': total
+    }
+
 def format_qualitative(value):
     """Format qualitative ratings with emoji"""
     mapping = {
@@ -117,7 +151,9 @@ def generate_architecture_md(archs, subsys, parts):
         nickname = arch['nickname']
         market = arch['market_position'].split('/')[0].strip()
         bom_target = f"${q['cost']['bom_target']}"
-        bom_actual = f"${q['cost']['bom_total']:.2f}"
+        # Calculate BOM actual from parts.csv (SSOT)
+        bom_calc = calculate_bom_total(arch, subsys, parts)
+        bom_actual = f"${bom_calc['total']:.2f}"
         timeline = f"{q['timeline']['total_weeks']} weeks"
         output.append(f"| {arch_id} | {nickname} | {market} | {bom_target} | {bom_actual} | {timeline} |\n")
     output.append("\n---\n\n")
@@ -210,10 +246,12 @@ def generate_architecture_md(archs, subsys, parts):
 
         output.append("**Cost:**\n\n")
         c = quant['cost']
-        output.append(f"- BOM Subtotal: ${c['bom_subtotal']:.2f}\n")
-        output.append(f"- Misc 15%: ${c['misc_15pct']:.2f}\n")
-        output.append(f"- **BOM Total: ${c['bom_total']:.2f}** (Target: ${c['bom_target']}, Range: ${c['bom_range_min']}-${c['bom_range_max']})\n")
-        gap = c['bom_total'] - c['bom_target']
+        # Calculate BOM from parts.csv (SSOT)
+        bom_calc = calculate_bom_total(arch, subsys, parts)
+        output.append(f"- BOM Subtotal: ${bom_calc['subtotal']:.2f}\n")
+        output.append(f"- Misc 15%: ${bom_calc['misc_15pct']:.2f}\n")
+        output.append(f"- **BOM Total: ${bom_calc['total']:.2f}** (Target: ${c['bom_target']}, Range: ${c['bom_range_min']}-${c['bom_range_max']})\n")
+        gap = bom_calc['total'] - c['bom_target']
         gap_pct = (gap / c['bom_target']) * 100
         output.append(f"- **Cost Gap: ${gap:.2f} ({gap_pct:.0f}% over target)** ⚠️\n")
         output.append(f"- Certification: ${c['certification_cost']:,}\n")
@@ -261,60 +299,53 @@ def generate_architecture_md(archs, subsys, parts):
     # Architecture Comparison Matrix
     output.append("## Architecture Comparison Matrix\n\n")
 
+    # Precompute BOM totals for all architectures
+    bom_totals = {}
+    for arch_id in arch_ids:
+        arch = archs['architectures'][arch_id]
+        bom_calc = calculate_bom_total(arch, subsys, parts)
+        bom_totals[arch_id] = bom_calc['total']
+
     # Cost Comparison
     output.append("### Cost Comparison\n\n")
     header = "| Metric | " + " | ".join(arch_ids) + " |\n"
     sep = "|--------|" + "|".join(["---------" for _ in arch_ids]) + "|\n"
     output.append(header)
     output.append(sep)
-    for arch_id in arch_ids:
-        arch = archs['architectures'][arch_id]
-        c = arch['quantitative']['cost']
-        if arch_id == 'ARCH-B':
-            output.append(f"| BOM Target | ${c['bom_target']} | ")
-        elif arch_id == 'ARCH-C':
-            output.append(f"${c['bom_target']} | ")
-        elif arch_id == 'ARCH-D':
-            output.append(f"${c['bom_target']} | ")
-        elif arch_id == 'ARCH-A':
-            output.append(f"${c['bom_target']} |\n")
 
+    # BOM Target row
+    row_values = []
     for arch_id in arch_ids:
         arch = archs['architectures'][arch_id]
         c = arch['quantitative']['cost']
-        gap_pct = ((c['bom_total'] - c['bom_target']) / c['bom_target']) * 100
-        if arch_id == 'ARCH-B':
-            output.append(f"| BOM Actual | ${c['bom_total']:.2f} ({gap_pct:.0f}% over) ⚠️ | ")
-        elif arch_id == 'ARCH-C':
-            output.append(f"${c['bom_total']:.2f} ({gap_pct:.0f}% over) ⚠️ | ")
-        elif arch_id == 'ARCH-D':
-            output.append(f"${c['bom_total']:.2f} ({gap_pct:.0f}% over) ⚠️ | ")
-        elif arch_id == 'ARCH-A':
-            output.append(f"${c['bom_total']:.2f} ({gap_pct:.0f}% over) ⚠️ |\n")
+        row_values.append(f"${c['bom_target']}")
+    output.append(f"| BOM Target | {' | '.join(row_values)} |\n")
 
+    # BOM Actual row
+    row_values = []
     for arch_id in arch_ids:
         arch = archs['architectures'][arch_id]
         c = arch['quantitative']['cost']
-        if arch_id == 'ARCH-B':
-            output.append(f"| Certification | ${c['certification_cost']/1000:.0f}K | ")
-        elif arch_id == 'ARCH-C':
-            output.append(f"${c['certification_cost']/1000:.1f}K | ")
-        elif arch_id == 'ARCH-D':
-            output.append(f"${c['certification_cost']/1000:.1f}K | ")
-        elif arch_id == 'ARCH-A':
-            output.append(f"${c['certification_cost']/1000:.0f}K |\n")
+        bom_total = bom_totals[arch_id]
+        gap_pct = ((bom_total - c['bom_target']) / c['bom_target']) * 100
+        row_values.append(f"${bom_total:.2f} ({gap_pct:.0f}% over) ⚠️")
+    output.append(f"| BOM Actual | {' | '.join(row_values)} |\n")
 
+    # Certification row
+    row_values = []
     for arch_id in arch_ids:
         arch = archs['architectures'][arch_id]
         c = arch['quantitative']['cost']
-        if arch_id == 'ARCH-B':
-            output.append(f"| NRE Total | ${c['nre_total']/1000:.0f}K | ")
-        elif arch_id == 'ARCH-C':
-            output.append(f"${c['nre_total']/1000:.0f}K | ")
-        elif arch_id == 'ARCH-D':
-            output.append(f"${c['nre_total']/1000:.0f}K | ")
-        elif arch_id == 'ARCH-A':
-            output.append(f"${c['nre_total']/1000:.0f}K |\n")
+        row_values.append(f"${c['certification_cost']/1000:.0f}K")
+    output.append(f"| Certification | {' | '.join(row_values)} |\n")
+
+    # NRE Total row
+    row_values = []
+    for arch_id in arch_ids:
+        arch = archs['architectures'][arch_id]
+        c = arch['quantitative']['cost']
+        row_values.append(f"${c['nre_total']/1000:.0f}K")
+    output.append(f"| NRE Total | {' | '.join(row_values)} |\n")
 
     output.append("\n")
 
@@ -324,9 +355,10 @@ def generate_architecture_md(archs, subsys, parts):
     for arch_id in arch_ids:
         arch = archs['architectures'][arch_id]
         c = arch['quantitative']['cost']
-        gap = c['bom_total'] - c['bom_target']
+        bom_total = bom_totals[arch_id]
+        gap = bom_total - c['bom_target']
         gap_pct = (gap / c['bom_target']) * 100
-        output.append(f"- **{arch_id}:** ${c['bom_total']:.2f} actual vs ${c['bom_target']} target → **${gap:.2f} gap ({gap_pct:.0f}% over)**\n")
+        output.append(f"- **{arch_id}:** ${bom_total:.2f} actual vs ${c['bom_target']} target → **${gap:.2f} gap ({gap_pct:.0f}% over)**\n")
     output.append("\n")
 
     # Find actuator cost from parts database

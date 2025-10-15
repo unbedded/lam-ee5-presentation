@@ -85,20 +85,24 @@
 **Rubric Score:** 24/25 (Alternative Solutions) = 96% - Excellent
 **Status:** COMPLETE - 5h logged (of 12h est)
 
-**🔧 CHECKPOINT (2025-10-12 PM): EMI Components Addition In Progress**
+**✅ CHECKPOINT COMPLETE (2025-10-15): EMI Requirements Validation**
 
-⚠️ **FOR AI ASSISTANT ON RESTART:** Read `.restart-context.md` for complete technical details!
-
-**Quick Status:**
+**Final Status:**
 - [x] Added EMI requirements to requirements.yaml (NFR-STD-001 family + NFR-EMI-001)
 - [x] Added SS-EMI-BULK-CAP and SS-EMI-BYPASS-CAP to parts.csv
 - [x] Added EMI subsystems to subsystems.yaml with PCB specs
 - [x] Added EMI subsystems to all 3 architectures in architectures.yaml
 - [x] Regenerated BOMs with EMI components ($2-3 per unit, <1% increase)
-- [ ] **IN PROGRESS:** /req-yaml-to-md generating updated requirements.md
-- [ ] **NEXT:** Run /req-audit to verify SMART compliance
-- [ ] **NEXT:** Run /req-trace to verify architecture traceability
-- [ ] **NEXT:** Git commit all EMI changes atomically
+- [x] /req-yaml-to-md validated (requirements.md v2.3.0 up-to-date)
+- [x] /req-audit completed (PASS - 92% SMART, 0 critical issues)
+- [x] /req-trace completed (PASS - 100% reference integrity)
+- [x] Validation reports generated (artifacts/rubric-reports/, gitignored)
+
+**Validation Results:**
+- Requirements database: v2.3.0, 37 requirements, production-ready ✅
+- Audit status: PASS (34/37 fully SMART, v2.3.0 critical issue resolved)
+- Traceability: PASS (7 strategic drivers traced, 30 cross-cutting implicit)
+- Standards coverage: EXCELLENT (UL, FCC, ADA, ISO)
 
 **Key Decisions:**
 - User approved "ballpark pricing" (qty=24 for all archs, ~$2 overcost for ARCH_SOL_ECO acceptable)
@@ -164,7 +168,7 @@
 - [x] Supporting analysis thorough (6 docs: market/actuator/voltage/latch/power/COTS)
 - **Gate Decision:** ✅ READY for v1.4.0 Trade-off Analysis
 
-### <span style="color:red">v1.4.0: Trade-off Analysis (feature/tech-analysis-tradeoffs)</span>
+### <span style="color:blue">v1.4.0: Trade-off Analysis (feature/tech-analysis-tradeoffs)</span>
 **Design Plan Alignment:** Complete Design Step 3 (PDF p.10) - 30/100 points ← **HIGHEST WEIGHT**
 
 **⚠️ PDF REQUIREMENT:** "Evaluate the proposed solutions by discussing their **advantages and disadvantages**, as well as **any other considerations** that influenced your final selection."
@@ -193,9 +197,9 @@
   Time to Market         | 25%    | 7/10   | 9/10   | 5/10   | B fastest (COTS parts)
   Unit Cost (<$50 BOM)   | 20%    | 6/10   | 8/10   | 4/10   | B lowest cost
   Dev Cost (<$50K NRE)   | 10%    | 5/10   | 9/10   | 3/10   | A needs custom tooling
-  Manufacturability      | 20%    | 8/10   | 7/10   | 6/10   | A best DFM
-  Robustness/Reliability | 10%    | 7/10   | 6/10   | 8/10   | C most robust
-  UX/Usability           | 10%    | 8/10   | 7/10   | 9/10   | C best tactile feel
+  Manufacturability      | 20%    | 8/10   | 7/10   | 6/10   | ARCH_PIEZO_ECO: simpler DFM
+  Robustness/Reliability | 10%    | 7/10   | 6/10   | 8/10   | ARCH_PIEZO_DLX: more robust
+  UX/Usability           | 10%    | 8/10   | 7/10   | 9/10   | ARCH_PIEZO_DLX: better tactile
   Safety                 | 5%     | 9/10   | 9/10   | 8/10   | All low voltage
   TOTAL SCORE            | 100%   | X.X    | X.X    | X.X    | Weighted average
   ```
@@ -206,16 +210,25 @@
 - [ ] For EACH architecture, document:
   - [ ] **Advantages** (strengths, what it does well - be specific with data)
   - [ ] **Disadvantages** (weaknesses, limitations, risks - be honest)
-  - [ ] **When it wins** (under what conditions is this the best choice?)
+  - [ ] **When it wins** (under what conditions does this architecture excel?)
   - [ ] **When it fails** (under what conditions does this become unviable?)
 - [ ] Create comparison table showing advantages/disadvantages side-by-side
 
 **Step 3: Quantitative Comparison**
+- [ ] **⚠️ ACTUATOR SOURCING RISK ANALYSIS (CRITICAL - affects ALL architectures)**
+  - [ ] Document the crisis: NO COTS actuators found meeting 2.5mm pitch + force requirements
+  - [ ] Create three-path analysis table (resources/calculations/actuator-sourcing-risk.xlsx)
+    - Path A (COTS search): $5K cost, 2 weeks, 20% probability
+    - Path B (Custom quickturn): $25K-50K NRE, 2-4 weeks, 90% probability
+    - Path C (Spec relaxation): $0, 0 weeks, 100% probability (but violates ADA 703.3)
+  - [ ] Timeline impact analysis: Best case (+0 wks), Likely case (+4 wks), Worst case (+8 wks)
+  - [ ] Probability-weighted expected value: Timeline & NRE cost
+  - [ ] **Key message:** "This is THE critical path risk - all architectures blocked without resolution"
 - [ ] Create comparison matrix in resources/calculations/
   - [ ] Cost comparison (BOM estimates for each architecture)
   - [ ] Power budget calculations (actuators + MCU + communication)
   - [ ] Size/complexity metrics (component count, PCB area estimate)
-  - [ ] Timeline feasibility (parts lead time, assembly complexity)
+  - [ ] Timeline feasibility (parts lead time, assembly complexity, actuator sourcing)
 - [ ] Build resources/calculations/power-budget.xlsx
   - Calculate power for all 3 architectures
   - Battery life estimates
@@ -231,8 +244,8 @@
 - [ ] **⚠️ SENSITIVITY ANALYSIS (REQUIRED):**
   - [ ] "What if cost doubles?" - Which architecture is most robust?
   - [ ] "What if timeline compresses to 1 month?" - Which is fastest to implement?
-  - [ ] "What if key component unavailable?" - Which has best alternates?
-  - [ ] "What if volume targets change (1K vs 100K)?" - Which scales best?
+  - [ ] "What if key component unavailable?" - Which has better supply chain alternates?
+  - [ ] "What if volume targets change (1K vs 100K)?" - Which scales better?
   - [ ] Create sensitivity comparison matrix
 - [ ] **"Other Considerations" Analysis:**
   - [ ] Supply chain availability (lead times, single-source risks)
@@ -248,25 +261,72 @@
   - [ ] **Weighted scoring results** (which architecture scores highest?)
   - [ ] **Sensitivity analysis** ("what if" scenarios - how evaluation changes)
   - [ ] **"Other considerations"** (supply chain, expertise, tooling)
-  - [ ] **Final recommendation** with data-driven justification (decision based on evaluation)
+  - [ ] **Portfolio strategy** showing when each architecture wins (decision framework based on constraints)
+    - Example: "ARCH_PIEZO_ECO wins if cost < $450 AND timeline > 8 weeks"
+    - Example: "ARCH_SOL_ECO wins if mechanical simplicity prioritized AND cost < $300"
+    - Example: "ARCH_PIEZO_DLX wins if wireless required AND budget allows $450+"
 - [ ] Run /rubric-eval for Category 3 assessment (Trade-off Analysis: 30 pts)
   - Generates artifacts/rubric-reports/v1.4.0-tradeoffs-eval.md
 
-### <span style="color:red">v1.5.0: Recommended Solution (feature/tech-analysis-solution)</span>
+### <span style="color:red">v1.5.0: Production Transition Process (feature/tech-analysis-production)</span>
 **Design Plan Alignment:** Complete Design Step 4 (PDF p.10) - 20/100 points
 
-- [ ] Select and justify final architecture (data-driven from v1.4.0 analysis)
-- [ ] Create detailed block diagram (resources/diagrams/final-architecture.png)
-- [ ] Draft preliminary schematic concepts (resources/schematics/)
-  - [ ] Power supply schematic concept
-  - [ ] MCU/FPGA core schematic concept
-  - [ ] I/O expansion schematic concept
-  - [ ] Communication interface schematic concept
-- [ ] Power supply design considerations (voltage rails, regulation, battery management)
-- [ ] Thermal analysis (worst-case power dissipation, cooling strategy)
-- [ ] Production timeline detail (update resources/calculations/timeline-gantt.xlsx)
-- [ ] Risk mitigation strategies (timeline, cost, technical, supply chain)
-- [ ] Create docs/solution.md with production plan (reference diagrams/schematics/calculations)
+**Key Message:** "Same production process, but actuator sourcing is THE critical path risk"
+
+**⚠️ CRITICAL PATH RISK (SHARED ACROSS ALL ARCHITECTURES):**
+- **Week 0-2: Actuator Sourcing Crisis Resolution**
+  - [ ] Document the problem: NO COTS actuators found that meet 2.5mm pitch + force requirements
+  - [ ] Three-path strategy (parallel effort):
+    - **Path A (Low Cost, High Risk):** Intensive COTS search (obscure suppliers, overseas, custom inquiries)
+      - Budget: $5K inquiry costs, Timeline: 2 weeks, Probability: 20%
+    - **Path B (High Cost, Low Risk):** Custom actuator 2-week quickturn (piezo OR solenoid)
+      - Budget: $25K-50K NRE, Timeline: 2-4 weeks, Probability: 90%
+    - **Path C (Spec Compromise):** Relax 2.5mm pitch → 3.5mm (violates ADA 703.3 but pilot-acceptable)
+      - Budget: $0, Timeline: 0 weeks, Probability: 100% (but requirements violated)
+  - [ ] Decision point: By end of Week 2, commit to one path
+  - [ ] **THIS IS THE MAKE-OR-BREAK DECISION** - Without actuator, ALL architectures fail
+
+- [ ] Define common production process (8-12 weeks, architecture-agnostic base)
+  - Week 0-2: **Actuator sourcing resolution** (CRITICAL PATH)
+  - Week 3-4: Detailed design (schematic capture, PCB layout, BOM lock)
+  - Week 5-6: Prototype build (fab, assembly, debug)
+  - Week 7-9: Pilot production (10-100 units, yield validation)
+  - Week 10-12: Compliance & handoff (testing, documentation, manufacturing transfer)
+
+- [ ] Create master Gantt chart with architecture-specific timeline impacts
+  - **Base case (IF COTS actuator found Week 0-2):** 8 weeks total
+  - **ARCH_PIEZO_ECO:** +0 weeks (simplest electrical integration)
+  - **ARCH_SOL_ECO:** +2 weeks (mechanical cam tooling)
+  - **ARCH_PIEZO_DLX:** +1 week (BLE certification testing)
+  - **Custom actuator case:** +8 weeks (design, fab, validation) → 16-20 week timeline
+
+- [ ] Create decision tree diagram (resources/diagrams/production-timeline-risk.png)
+  - Show three timelines: COTS found (8-10 wks), Custom quickturn (12-14 wks), Custom standard (16-20 wks)
+- [ ] Create shared preliminary schematic concepts applicable across architectures (resources/schematics/)
+  - [ ] Power supply schematic concept (5V/3.3V rails - common to all)
+  - [ ] MCU core schematic concept (STM32 - common to all)
+  - [ ] Driver IC schematic concept (ULN2803A - common to all)
+  - [ ] Communication interface options (USB-C vs BLE module - architecture-specific)
+- [ ] Power supply design considerations (voltage rails, regulation, battery management - architecture-specific)
+- [ ] Thermal analysis (worst-case power dissipation, cooling strategy - per architecture)
+- [ ] Production timeline detail per architecture (update resources/calculations/timeline-gantt.xlsx)
+  - ARCH_PIEZO_ECO: 8-10 weeks (COTS piezo if available)
+  - ARCH_SOL_ECO: 10-12 weeks (mechanical tooling for cam)
+  - ARCH_PIEZO_DLX: 10-12 weeks (BLE certification)
+- [ ] Risk mitigation strategies (detailed breakdown)
+  - [ ] **PRIMARY RISK (ALL ARCHITECTURES):** Actuator sourcing
+    - Mitigation: Triple-path parallel effort (COTS search + Custom quote + Spec relaxation backup)
+    - Contingency: $50K budget allocated for custom actuator NRE
+    - Timeline impact: +8 weeks if custom required
+  - [ ] **ARCH_PIEZO_ECO risks:** Piezo driver voltage (200V boost converter design)
+  - [ ] **ARCH_SOL_ECO risks:** Mechanical cam tooling (CNC programming, tolerance stack-up)
+  - [ ] **ARCH_PIEZO_DLX risks:** BLE certification (FCC testing, schedule slip)
+
+- [ ] Create docs/production-process.md with:
+  - Architecture-agnostic production flow
+  - Actuator sourcing crisis analysis (THE ELEPHANT IN THE ROOM)
+  - Decision framework: "Pick architecture AFTER actuator sourcing resolves"
+  - Timeline scenarios: Best case (8 wks) vs Likely case (12 wks) vs Worst case (20 wks)
 - [ ] Run /rubric-eval for Category 4 assessment (Path to Production: 20 pts)
   - Generates artifacts/rubric-reports/v1.5.0-solution-eval.md
 
@@ -279,9 +339,9 @@
 
 ### Phase Gate: v1.0.0 → v2.0.0
 - [ ] All technical analysis tasks complete
-- [ ] Quality metrics met (3+ architectures analyzed)
+- [ ] Quality metrics met (3 architectures analyzed: ARCH_PIEZO_ECO, ARCH_SOL_ECO, ARCH_PIEZO_DLX)
 - [ ] Trade-off analysis complete with quantitative data
-- [ ] Recommended solution selected and justified
+- [ ] Portfolio strategy defined with decision framework (not "best" - context-dependent selection)
 
 ---
 
@@ -295,7 +355,14 @@
   - Define Q&A readiness criteria (anticipate 10+ questions, prepare answers)
 
 ### <span style="color:red">v2.2.0: Presentation Structure (feature/presentation-structure)</span>
-- [ ] Create source/presentation.pptx (master slides)
+
+**Workflow:** See README.md "Building Presentation" section for Markdown → PPTX workflow
+
+- [ ] Create slide content in source/presentation-slides.md (Markdown with YAML frontmatter)
+- [ ] Generate initial PPTX: `make presentation`
+- [ ] Review and iterate in Markdown (fast editing, version controlled)
+- [ ] Checkpoint commit: "Final Markdown before manual polish"
+- [ ] ONE-WAY conversion: Open source/presentation.pptx in PowerPoint for manual refinement
 - [ ] Slide 1: Title slide (30 sec)
 - [ ] Slides 2-3: Problem statement & challenge (2-3 min)
   - 32 chars, 6 dots, 192 control signals
@@ -314,7 +381,7 @@
     - **Key phrases:**
       - "Not about 'best power supply with uber-clean output'"
       - "Balance cost/reliability/performance/timeline"
-      - "Simplification is innovation (USB-C wired = -$100 BOM)"
+      - "Simplification is innovation (ARCH_PIEZO_ECO wired = simpler than wireless)"
       - "Know when SW replaces HW complexity"
     - **See:** docs/presentation-key-messages.md (complete talking points)
     - **See:** docs/requirements-philosophy-alignment.md (how requirements support this)
@@ -323,28 +390,44 @@
     - Highlight customer_validation_needed flags
 - [ ] Slides 7-12: Solution alternatives presentation (8-10 min)
   - Reference Slide 5 philosophy (portfolio driven by sensitivity ranges)
-  - 3+ architectures with block diagrams
+  - 3 architectures with block diagrams
   - Each architecture optimizes DIFFERENT trade-off:
-    - Architecture A: Optimizes UX (BLE wireless)
-    - Architecture B: Optimizes cost (USB-C wired - value engineering!)
-    - Architecture C: Optimizes flexibility (hybrid)
+    - ARCH_PIEZO_ECO: Optimizes simplicity & timeline (wired, standard piezo)
+    - ARCH_SOL_ECO: Optimizes mechanical innovation (rotary cam, volume scaling)
+    - ARCH_PIEZO_DLX: Optimizes user experience (BLE wireless, premium features)
   - Component selection rationale
   - Pros/cons for each (trace to alternative_scenarios in requirements.yaml)
 - [ ] Slides 13-16: Trade-off comparison (5-7 min)
   - Comparison matrix (cost, power, size, complexity, timeline)
   - Quantitative data (power budgets, BOM costs)
   - Risk assessment
-- [ ] Slides 17-20: Recommended solution with justification (5-7 min)
-  - Final architecture selected
-  - Data-driven justification
-  - Detailed block diagram
-  - Preliminary schematics
+- [ ] Slides 17-20: Solution selection framework (5-7 min)
+  - **Key message:** "Which architecture wins depends on YOUR constraints"
+  - Decision tree: Cost threshold, timeline threshold, feature requirements
+  - Example scenarios:
+    - "If cost < $400 AND time < 8 weeks → ARCH_PIEZO_ECO"
+    - "If wireless required → ARCH_PIEZO_DLX (only option)"
+    - "If volume > 10K units → ARCH_SOL_ECO (best scaling)"
+  - Detailed block diagrams for each architecture
+  - Shared preliminary schematics (power, MCU, drivers)
 - [ ] Slides 21-23: Path to production timeline (3-5 min)
-  - 2-month Gantt chart
-  - Critical path
+  - Week-by-week Gantt chart (8-12 weeks base case)
+  - **Critical path: Actuator sourcing (Week 0-2) gates everything**
   - Manufacturing plan (DFM, sourcing, testing)
-- [ ] Slides 24-25: Risk mitigation strategies (2-3 min)
-- [ ] Slide 26: Summary & Q&A (30 sec)
+- [ ] Slide 24: **Actuator Sourcing - THE Critical Path Risk** (2-3 min) ⚠️ NEW
+  - **Problem:** No COTS actuators found (2.5mm pitch + force requirements)
+  - **Three-path strategy diagram:**
+    - Path A: COTS search ($5K, 2 wks, 20% success)
+    - Path B: Custom quickturn ($25K-50K NRE, 2-4 wks, 90% success)
+    - Path C: Spec relaxation ($0, 0 wks, 100% but violates ADA)
+  - **Timeline impact:** +0 to +8 weeks depending on path
+  - **Key message:** "All 3 architectures blocked without actuator - this is make-or-break"
+- [ ] Slide 25: Other risk mitigation strategies (2-3 min)
+- [ ] Slide 26: Summary (30 sec)
+  - 3 viable architectures (cost/innovation/UX trade-offs)
+  - Selection depends on customer priorities
+  - **Critical path: Actuator sourcing must resolve Week 0-2**
+- [ ] Slide 27: Q&A
 
 ### <span style="color:red">v2.3.0: Visual Materials (feature/presentation-visuals)</span>
 - [ ] Finalize block diagrams for each architecture (export from resources/diagrams/)
@@ -403,6 +486,10 @@
 
 ### <span style="color:red">v3.3.0: Pre-Interview Checklist (feature/delivery-checklist)</span>
 ⚠️ **CRITICAL DEADLINE: OCT 20, 2025 (MONDAY)** - Presentation due 24hrs before interview!
+
+**⚠️ 24-HOUR RULE:** Interview Oct 21 (Tue) → Presentation must be EMAILED by EOD Oct 20 (Mon)
+- USB drives NOT supported per Lam security policy
+- Late submission = No digital content = Failed interview
 
 **Digital Checklist (Email Oct 20):**
 - [ ] **OCT 20 (BY EOD MONDAY):** Email presentation & appendices to Nathan Briggs

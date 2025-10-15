@@ -34,113 +34,93 @@
 
 ---
 
-## Part 1: Evaluation Framework - How to Score Options
+## Part 1: Visual Comparison Framework - Show Trade-offs, Not Scores
 
-### Step 1: Define Evaluation Criteria (What Matters?)
+**Key Philosophy:** Requirements are too vague to assign precise weights. Instead, show **relative strengths visually** and let stakeholders decide based on their priorities.
 
-**For EE projects, typical criteria:**
+### Step 1: Define Evaluation Dimensions (What Matters?)
 
-| Criterion | Why It Matters | Typical Weight |
-|-----------|----------------|----------------|
-| **Time to Market** | Meeting customer deadline | 20-30% |
-| **Unit Cost (BOM)** | Product pricing, margins | 15-25% |
-| **Development Cost (NRE)** | Budget constraints, ROI | 10-20% |
-| **Manufacturability (DFM)** | Yield, scalability to volume | 15-25% |
-| **Power Consumption** | Battery life, portability | 5-15% |
-| **Reliability/MTBF** | Warranty costs, reputation | 5-15% |
-| **UX/Usability** | Customer satisfaction | 5-15% |
-| **Risk (Technical/Timeline)** | Probability of success | 10-20% |
-| **Supply Chain** | Component availability | 5-10% |
+**For EE projects, typical dimensions:**
 
-**Must sum to 100%**
+| Dimension | Why It Matters | Data Source |
+|-----------|----------------|-------------|
+| **Cost (BOM)** | Product pricing, margins | Quantitative (architectures.yaml) |
+| **Timeline** | Meeting customer deadline | Quantitative (architectures.yaml) |
+| **UX/Usability** | Customer satisfaction | Qualitative rating |
+| **Manufacturability** | Yield, scalability to volume | Qualitative rating |
+| **Robustness/Reliability** | Warranty costs, reputation | Qualitative rating |
+| **Supply Chain Risk** | Component availability | Qualitative rating |
+| **Power Efficiency** | Battery life, portability | Quantitative (architectures.yaml) |
+| **Complexity** | Development risk, debugging | Qualitative rating |
 
-### Step 2: Make Assumptions (Document What You Don't Know)
+**Result:** 8-dimension spider/radar chart showing trade-off profile
 
-**Example Assumption Framework:**
+### Step 2: Generate Visualizations from YAML Data
 
-```markdown
-## Evaluation Assumptions
+**Automated Chart Generation:**
 
-**⚠️ NOTE:** The assignment does not specify customer type, market, or budget.
-The following assumptions were made based on context clues. If assumptions are
-incorrect, the recommended solution may change (see Sensitivity Analysis).
+```bash
+# Run Python script to generate charts from architectures.yaml
+python3 scripts/generate_tradeoff_charts.py
 
-### Market Assumption
-- **Assumption:** Target market is China/India accessibility market
-- **Rationale:** "Low-cost, high-volume" suggests emerging market price sensitivity
-- **Impact if wrong:** If US/EU market, unit cost tolerance increases +$30-50
-
-### Stakeholder Priority Assumption (Weights)
-- **Time to Market: 30%** - 2-month constraint explicitly stated (FIXED)
-- **Unit Cost: 25%** - "Low-cost" is primary requirement
-- **Manufacturability: 20%** - "High-volume" requires good DFM
-- **Development Cost: 15%** - Pilot budget assumed limited
-- **Risk/Reliability: 10%** - Important but secondary to cost/time
-
-### Budget Assumptions
-- **Unit Cost Target: <$50 BOM** - Based on competitor braille display pricing
-- **Development Budget: <$50K NRE** - Typical for 2-month pilot project
-- **Timeline: 2 months (FIXED)** - Explicitly stated, non-negotiable
-
-### Customer Type Assumption
-- **Assumption:** External customer (B2C accessibility market)
-- **Rationale:** "Companion device" suggests consumer product
-- **Impact if wrong:** If internal customer, risk tolerance changes significantly
+# Output files (resources/diagrams/):
+#   • architecture-radar-comparison.png   (Spider chart - 8 dimensions)
+#   • architecture-cost-comparison.png    (Bar chart - BOM costs)
+#   • architecture-timeline-comparison.png (Bar chart - timelines)
+#   • architecture-decision-tree.png      (Decision framework)
 ```
 
-### Step 3: Score Each Architecture (The Fundamental Facts)
+**Chart Types:**
 
-**Use 1-10 scale with rationale:**
+1. **Spider/Radar Chart** (8 dimensions, all 3 architectures overlaid)
+   - Shows relative strengths at a glance
+   - No single "best" - each has different profile
+   - Visual reinforces "it depends on your priorities" message
 
-```markdown
-## Architecture Scoring
+2. **Bar Charts** (Quantitative comparisons)
+   - Cost comparison (pilot BOM)
+   - Timeline comparison (weeks to pilot production)
+   - Easy to present, clear winners per dimension
 
-### Architecture A: Piezo Actuator + MCU + BLE
+3. **Decision Tree Diagram** ("When X Wins" visual)
+   - Flowchart: "Wireless required?" → ARCH_PIEZO_DLX
+   - "Cost < $300?" → ARCH_SOL_ECO
+   - "Timeline < 8 wks?" → ARCH_PIEZO_ECO
 
-| Criterion | Score | Rationale |
-|-----------|-------|-----------|
-| Time to Market | 7/10 | 8 weeks (custom piezo sourcing adds 2 weeks) |
-| Unit Cost | 6/10 | $45 BOM (piezo arrays expensive) |
-| Dev Cost | 5/10 | $30K NRE (custom driver circuits) |
-| Manufacturability | 8/10 | Good DFM (SMT assembly, no moving parts) |
-| Power | 8/10 | 150mW avg (piezo efficient) |
-| Reliability | 9/10 | Excellent (solid state, proven tech) |
-| UX | 8/10 | Good tactile response |
-| Risk | 7/10 | Low technical risk (proven), medium supply risk |
-| Supply Chain | 6/10 | 2 suppliers for custom piezo (medium risk) |
+### Step 3: Advantages & Disadvantages (Honest Assessment)
 
-**Advantages:**
-- Best reliability (no moving parts)
-- Low power consumption
-- Good tactile feedback
+**For EACH architecture, document:**
 
-**Disadvantages:**
-- Higher unit cost ($45 vs target $30-40)
-- Custom piezo sourcing (8-week lead time)
-- Higher NRE ($30K for driver design)
+- ✅ **Advantages** (strengths, what it does well - be specific with data)
+- ❌ **Disadvantages** (weaknesses, limitations, risks - be honest)
+- 🏆 **When it wins** (under what conditions does this architecture excel?)
+- ⚠️ **When it fails** (under what conditions does this become unviable?)
 
-**When This Wins:**
-- If reliability is critical (medical/government)
-- If power budget is tight (<200mW)
-- If volume is high (>50K units, cost amortizes)
-```
-
-### Step 4: Calculate Weighted Scores
+**Example:**
 
 ```markdown
-## Weighted Scoring Results
+## ARCH_PIEZO_ECO: Piezo Economy (USB-C Wired)
 
-| Criterion | Weight | Arch A | Arch B | Arch C |
-|-----------|--------|--------|--------|--------|
-| Time to Market | 30% | 7 → 2.1 | 9 → 2.7 | 5 → 1.5 |
-| Unit Cost | 25% | 6 → 1.5 | 8 → 2.0 | 4 → 1.0 |
-| Dev Cost | 15% | 5 → 0.75 | 9 → 1.35 | 3 → 0.45 |
-| Manufacturability | 20% | 8 → 1.6 | 7 → 1.4 | 6 → 1.2 |
-| Risk/Reliability | 10% | 7 → 0.7 | 6 → 0.6 | 8 → 0.8 |
-|-----------|--------|--------|--------|--------|
-| **TOTAL** | **100%** | **6.65** | **8.05** | **4.95** |
+### Advantages
+- ✅ Fastest to market (8-10 weeks - simplest electrical design)
+- ✅ Proven technology (piezo monopoly in commercial braille displays)
+- ✅ Standard 2.5mm pitch (preserves muscle memory, ADA compliant)
+- ✅ No battery complexity (USB-C powered, simpler BOM)
 
-**Under stated assumptions: Architecture B wins (8.05/10)**
+### Disadvantages
+- ❌ Needs COTS piezo at 2.5mm pitch (not found yet - sourcing risk)
+- ❌ Higher cost ($420 vs $277 for ARCH_SOL_ECO)
+- ❌ Tethered to phone (USB-C cable reduces portability)
+
+### When This Wins
+- If timeline < 8 weeks (fastest electrical integration)
+- If wireless NOT required (cable acceptable)
+- If standard pitch REQUIRED (ADA 703.3 compliance critical)
+
+### When This Fails
+- If wireless required (no BLE - only USB-C)
+- If cost < $300 target (exceeds budget)
+- If actuator sourcing fails (no COTS piezo available)
 ```
 
 ---
@@ -300,43 +280,71 @@ For premium market + better UX → Battery powered (better experience)
 
 ---
 
-## Part 4: Final Recommendation - Data-Driven Decision
+## Part 4: Portfolio Strategy - "It Depends on YOUR Constraints"
+
+**Key Message:** No universal "best" architecture - selection depends on customer priorities
+
+### Decision Framework (Visual: Decision Tree)
 
 ```markdown
-## Recommended Solution: Architecture B (Solenoid + MCU + USB-C)
+## Portfolio Strategy: Which Architecture Wins Under What Conditions?
 
-### Selection Rationale
+### Decision Logic
 
-**Based on stated assumptions:**
-- Scores highest (8.05/10) under assumed stakeholder priorities
-- Most robust to changing priorities (wins 2/4 value scenarios)
-- Most robust to external changes (wins 4/4 constraint scenarios)
-- Meets 2-month timeline (6 weeks total, 2-week buffer)
-- Meets cost target ($30 BOM < $50 target)
-- Low development risk ($15K NRE, proven technology)
+IF wireless REQUIRED:
+  → ARCH_PIEZO_DLX (only BLE option)
 
-### When This Recommendation Changes
+ELSE IF cost < $300:
+  → ARCH_SOL_ECO (lowest BOM: $277)
 
-**Recommend Architecture A instead if:**
-- Reliability becomes paramount (>30% weight)
-- Volume scales above 200K units (NRE amortizes)
-- Customer is government/medical (proven tech critical)
+ELSE IF timeline < 8 weeks:
+  → ARCH_PIEZO_ECO (fastest to market: 8-10 wks)
 
-**Recommend Architecture C instead if:**
-- Premium market positioning (US/EU)
-- UX differentiation is competitive advantage
-- Higher price point acceptable ($150-200 retail)
+ELSE IF volume > 10K units:
+  → ARCH_SOL_ECO (best scaling via mechanical cost-down)
 
-### Assumptions That Drive This Decision
+ELSE:
+  → ARCH_PIEZO_ECO (most robust across scenarios)
 
-**CRITICAL ASSUMPTIONS (verify with stakeholders):**
-1. **Market:** China/India emerging market (cost-sensitive)
-2. **Customer:** External B2C (not internal project)
-3. **Volume:** 10K-50K units/year (mid-range production)
-4. **Timeline:** 2 months is hard deadline (non-negotiable)
-5. **Power:** USB-C parasitic acceptable (no battery needed)
 
-**If any assumption is incorrect, re-run analysis with adjusted weights.**
+### When Each Architecture Wins
+
+**ARCH_PIEZO_ECO Wins:**
+- Timeline < 8 weeks (fastest electrical integration)
+- Wireless NOT required (cable acceptable)
+- Standard pitch REQUIRED (ADA 703.3 compliance)
+- Most scenarios (robust choice)
+
+**ARCH_SOL_ECO Wins:**
+- Cost < $300 budget (lowest BOM: $277)
+- Volume > 10K units (mechanical scaling)
+- Mechanical innovation acceptable (3.5mm pitch pilot-ok)
+- Cost-sensitive markets (China, India)
+
+**ARCH_PIEZO_DLX Wins:**
+- Wireless REQUIRED (only BLE architecture)
+- Premium positioning (US/EU market)
+- UX differentiation critical (wireless freedom)
+- Higher price point acceptable ($450+)
+
+
+### Critical Assumptions to Validate
+
+**MUST verify with stakeholders before architecture selection:**
+1. **Wireless requirement?** (Hard constraint - only DLX has BLE)
+2. **Cost threshold?** ($300? $400? $500? - drives SOL_ECO vs PIEZO)
+3. **Timeline flexibility?** (8 weeks? 10 weeks? 12 weeks? - drives PIEZO_ECO)
+4. **Volume target?** (1K pilot? 10K production? 100K volume? - affects scaling)
+5. **Actuator pitch?** (2.5mm strict? 3.5mm pilot-acceptable? - enables SOL_ECO)
+
+**Recommendation Process:**
+1. Present spider chart showing 8-dimension trade-offs
+2. Show bar charts (cost, timeline) - quantitative comparison
+3. Walk through decision tree - "Tell me your constraints, I'll tell you the winner"
+4. Validate critical assumptions with stakeholders
+5. Make architecture selection based on THEIR priorities
+
+**Philosophy:** Give stakeholders the facts they need to decide, not a single "answer"
 ```
 
 ---
@@ -381,20 +389,21 @@ When you create `docs/tradeoffs.md`, use this structure:
 
 Before marking v1.4.0 complete:
 
-- [ ] Define 7-10 evaluation criteria
-- [ ] Assign weights that sum to 100% (justify each)
-- [ ] Document all assumptions (market, customer, budget, priorities)
-- [ ] Score each architecture on each criterion (1-10 with rationale)
-- [ ] Document advantages & disadvantages for each architecture
-- [ ] Calculate weighted total scores
-- [ ] Run 4 stakeholder value sensitivity scenarios
-- [ ] Run 4 external constraint sensitivity scenarios
-- [ ] Address "other considerations" (supply chain, expertise, tooling)
-- [ ] Make final recommendation with data-driven justification
-- [ ] Create `docs/tradeoffs.md` with all analysis
+- [ ] Define 8 evaluation dimensions (cost, timeline, UX, mfg, robust, supply, power, complexity)
+- [ ] Generate spider/radar chart (`python3 scripts/generate_tradeoff_charts.py`)
+- [ ] Generate cost comparison bar chart (from YAML data)
+- [ ] Generate timeline comparison bar chart (from YAML data)
+- [ ] Generate decision tree diagram ("When X Wins" visual)
+- [ ] Document advantages & disadvantages for EACH architecture (honest assessment)
+- [ ] Document "When it wins" conditions for each architecture
+- [ ] Document "When it fails" conditions for each architecture
+- [ ] Run sensitivity analysis (4 "what if" scenarios showing how winner changes)
+- [ ] Address "other considerations" (supply chain, expertise, tooling, risk)
+- [ ] Create portfolio strategy section ("It depends on YOUR constraints")
+- [ ] Create `docs/tradeoffs.md` with all analysis and visuals
 - [ ] Run `/rubric-eval` to verify 30/30 points
 
-**Deliverable:** Trade-off analysis that gives stakeholders the facts they need to make informed decisions, even when priorities are unclear.
+**Deliverable:** Visual trade-off analysis that gives stakeholders the facts they need to make informed decisions, with decision framework showing when each architecture wins.
 
 ---
 

@@ -68,7 +68,7 @@ This repository contains preparation materials for the Lam Research Electrical E
 │   └── table-style.tex
 ├── CLAUDE.md                  # Project instructions for Claude Code
 ├── TODO.md                    # Phase-based task checklist (gitflow workflow)
-├── SESSION-LOG.md             # Daily session tracking
+├── TIME-LOG.md                # Phase-based time tracking (used by /status)
 ├── VERSION                    # Semantic version tracking
 ├── Makefile                   # Build system for PDFs (TBD)
 └── README.md                  # This file
@@ -88,10 +88,10 @@ This repository contains preparation materials for the Lam Research Electrical E
 - **Workflow:** `TODO.md` - Phase-by-phase tasks with version numbers
 ```
 
-### Daily Workflow (1 hour sessions)
-1. **Start:** Read SESSION-LOG.md "Next Task"
+### Daily Workflow
+1. **Start:** Check TODO.md for current phase tasks
 2. **Work:** Focus on current phase task
-3. **End:** Update SESSION-LOG.md with progress & time
+3. **End:** Log time to TIME-LOG.md (use /status command)
 
 ### Workflow
 
@@ -126,6 +126,45 @@ make clean            # Remove generated PDFs
 make rebuild          # Clean and rebuild
 make list             # Show all files
 make help             # Show all available commands
+```
+
+### Building Presentation
+
+**Workflow: Markdown → PPTX (automated) → Manual polish (one-way)**
+
+**Phase 1: Markdown-based rapid iteration (v2.1-v2.2)**
+```bash
+make presentation              # Generate PPTX from Markdown
+make presentation-pdf          # Export PPTX to PDF for review
+```
+
+**Phase 2: Manual refinement (v2.3-v2.4) - ONE-WAY conversion**
+```bash
+# WARNING: After opening in PowerPoint, don't regenerate from Markdown!
+# Manual edits will be lost if you run `make presentation` again.
+
+# Edit source/presentation.pptx directly in PowerPoint
+# Add complex layouts, custom formatting, diagrams
+# Final export: File → Export → PDF → artifacts/presentation.pdf
+```
+
+**Presentation structure:**
+- `source/presentation-slides.md` - Slide content (Markdown with YAML frontmatter)
+- `source/presentation.pptx` - Generated PPTX (Phase 1) → Manual PPTX (Phase 2)
+- `resources/style/lam-theme.pptx` - Pandoc reference template (optional)
+- `resources/diagrams/*.png` - Slide images (referenced in Markdown)
+- `artifacts/presentation.pdf` - Final export for email (v3.2.0)
+
+**Image references in Markdown:**
+```markdown
+![Architecture comparison](../resources/diagrams/arch-comparison.png)
+```
+
+**Pandoc command (automated by Makefile):**
+```bash
+pandoc source/presentation-slides.md \
+  --reference-doc=resources/style/lam-theme.pptx \
+  -o source/presentation.pptx
 ```
 
 ### Interview Format

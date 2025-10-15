@@ -1,30 +1,30 @@
-Subsystem,Digikey_PN,MFR,MFR_PN,Description,Qty_Per_Unit,Unit_Price_100,Unit_Price_1000,Leadtime_Weeks,ROHS,Package,Notes
-SS-ACTUATOR,TBD-PIEZO-01,TBD,TBD-PIEZO-2MM,"Piezoelectric actuator 2mm dia, 0.5mm stroke",1,1.50,1.20,8,Y,Custom,"Need vendor quote - placeholder cost, critical size ≤2.3mm"
-SS-CONTROL,497-14367-ND,STMicro,STM32F407VGT6,"ARM Cortex-M4 168MHz, 1MB Flash, 192KB RAM, 140 GPIO",1,8.00,7.20,12,Y,LQFP100,"Main MCU, check stock (long leadtime)"
-SS-IO-EXPAND,MCP23017-E/SP-ND,Microchip,MCP23017-E/SP,"16-bit I2C I/O expander, 1.6MHz",1,1.20,0.95,6,Y,DIP28,"Also available in SOIC/QFN for SMT"
-SS-ACTUATOR-DRIVER,296-1781-5-ND,TI,ULN2803A,"8-channel Darlington array, 50V, 500mA",1,0.80,0.65,4,Y,DIP18,"Also SOIC available"
-SS-COMM-BLE,1597-MDBT50Q-1MV2-ND,Raytac,MDBT50Q-1MV2,"nRF52840 module, BLE 5.0, pre-certified FCC/CE",1,12.00,10.50,10,Y,Module,"Pre-cert FCC ID: 2AF8Q-MDBT50Q (saves $20K cert)"
-SS-COMM-USB,2073-USB4105-GF-A-ND,GCT,USB4105-GF-A,"USB-C receptacle 16-pin, mid-mount",1,1.50,1.20,6,Y,SMT,"USB 2.0 Full Speed capable"
-SS-POWER-USB-LDO,296-38833-1-ND,TI,TPS73633,"LDO 5V→3.3V, 400mA, low noise",1,0.75,0.60,4,Y,SOT23-5,"For logic power rail"
-SS-POWER-USB-BOOST,296-50464-1-ND,TI,TPS61088,"Boost conv 5V→30V, 2.5A switch, 100mA out",1,2.25,1.95,6,Y,VQFN16,"For actuator HV rail (30V)"
-SS-POWER-AA-HOLDER,36-2466K-ND,Keystone,2466,"4×AA battery holder, PCB mount",1,2.00,1.75,2,Y,Thru-hole,"Dimensions: 60×55×15mm"
-SS-POWER-AA-BOOST-3V3,296-50464-1-ND,TI,TPS61088,"Boost/buck 6V→3.3V, buck-boost mode",1,2.25,1.95,6,Y,VQFN16,"Same chip as USB boost (design reuse)"
-SS-POWER-AA-BOOST-30V,296-50464-1-ND,TI,TPS61088,"Boost 6V→30V, 2.5A switch, 100mA out",1,2.25,1.95,6,Y,VQFN16,"Same chip as USB boost (design reuse)"
-SS-POWER-LIION-CELL,TBD-18650-01,TBD,TBD-18650-2500,"18650 Li-ion cell 2500mAh 3.7V nominal",1,5.00,4.00,8,Y,18650,"Need UL listed pack, check lead time"
-SS-POWER-LIION-CHARGER,296-38713-1-ND,TI,BQ24075RGTT,"Li-ion charger IC, USB input, 1.5A",1,3.00,2.50,4,Y,VQFN16,"USB-C charging"
-SS-POWER-LIION-PROTECTION,TBD-PROTECTION-01,TBD,TBD-BMS-1S,"1S Li-ion protection IC, overcharge/discharge",1,1.50,1.20,4,Y,SOT23-6,"Battery safety circuit"
-SS-POWER-LIION-GAUGE,296-41985-1-ND,TI,BQ27441DRZT-G1A,"Fuel gauge IC, I2C, SOC estimation",1,2.50,2.00,6,Y,SON10,"Battery % indicator"
-SS-USER-IO-BUTTON,CKN12221-ND,C&K,KMR221NGLFS,"Tactile switch, 160gf, 1M+ cycles",1,0.25,0.18,2,Y,SMT,"4.5×4.5mm footprint"
-SS-PCB-4LAYER,CUSTOM-PCB-01,PCBWay,PCB-4L-200x100,"4-layer PCB 200×100mm, ENIG finish",1,15.00,12.00,3,Y,Board,"Quote for qty 100 (pilot), 1.6mm thick"
-SS-ENCLOSURE-3DP,CUSTOM-ENCL-01,Shapeways,3DP-SLS-NYLON,"3D print SLS nylon, natural finish",1,25.00,25.00,2,Y,Mechanical,"Pilot only, ~200×100×25mm, switch to injection mold for production"
-SS-ACTUATOR-SOLENOID,CUSTOM-SOL-01,Custom OEM,SOL-4MM-1MM-5V-FLAT,"Solenoid 4mm shaft dia, 1mm stroke, flat plunger face, 5VDC 0.5A",1,2.75,0.50,12,Y,Open-Frame,"Production: Custom OEM $0.50 @ 1K+ (12-week lead, MOQ 1000). Pilot: Olimex PUSH-PULL-SOLENOID-5V $2.73 @ 100 (4-week lead, Digikey stock, 5mm stroke mech-limited to 1mm). Flat face for cam contact, PRD-FUNC-003-ARCH-C-EXCEPT (4mm size relaxation)"
-SS-ACTUATOR-LATCH,CUSTOM-LATCH-01,Custom,LATCH-PLATE-V1,"Global latch plate (3D print ABS) + latch solenoid",1,10.50,10.00,1,Y,Mechanical,"Latch plate $10 (3D print with 192 detent holes) + latch solenoid $0.50 (Takaha BS-0420N-01)"
-SS-ACTUATOR-DRIVER-2CH,296-1781-5-ND,TI,ULN2803A,"8-channel Darlington array (for 2-ch architecture)",1,0.80,0.65,4,Y,DIP18,"Same as SS-ACTUATOR-DRIVER but fewer qty (12 vs 24 chips) for 2-channel design"
-SS-POWER-AA-BOOST-12V,296-50464-1-ND,TI,TPS61088,"Boost 6V→12V, 2.5A switch (solenoid overdrive)",1,2.25,1.95,6,Y,VQFN16,"Lower voltage than 30V piezo (easier isolation, less EMI)"
-SS-ACTUATOR-CAM,CUSTOM-CAM-01,Custom,CAM-DISC-STEEL,"Rotary cam disc (injection molded, steel mold)",1,0.15,0.12,6,Y,Mechanical,"Production cost @ 10K+ volume, cam profile for ±45° rotation"
-SS-ACTUATOR-PISTON,CUSTOM-PISTON-01,Custom,PISTON-ROD-STEEL,"Piston rod (injection molded, steel mold)",1,0.10,0.08,6,Y,Mechanical,"Production cost @ 10K+ volume, 0.7mm stroke"
-SS-ACTUATOR-BUSHING,CUSTOM-BUSHING-01,Custom,BUSHING-STEEL,"Linear bushing (injection molded, steel mold)",1,0.08,0.06,6,Y,Mechanical,"Production cost @ 10K+ volume, or COTS brass alternative"
-SS-ACTUATOR-CAM-HOUSING,CUSTOM-HOUSING-01,Custom,HOUSING-STEEL,"Cam housing (injection molded, steel mold)",1,0.50,0.40,6,Y,Mechanical,"Production cost @ 10K+ volume, snap-together assembly"
-SS-ACTUATOR-SPRING,CUSTOM-SPRING-01,Custom,SPRING-COMP-01,"Compression spring for piston return",1,0.02,0.015,2,Y,Mechanical,"Standard COTS spring"
-SS-EMI-BULK-CAP,493-2203-ND,Nichicon,UVR1H102MHD,"Electrolytic capacitor 1000µF 50V 20% radial",1,0.10,0.08,2,Y,Radial,"Bulk cap for driver IC power rail filtering (EMI suppression, inductive kickback energy absorption). Place one per ULN2803A IC (24 total for ARCH_SOL_ECO, 3 ICs; varies by architecture). NFR-EMI-001 compliance."
-SS-EMI-BYPASS-CAP,399-4151-1-ND,Kemet,C0805C104K5RACTU,"Ceramic capacitor 100nF 50V X7R 0805",1,0.01,0.008,2,Y,SMT-0805,"Ceramic bypass for driver IC (EMI suppression, high-frequency decoupling). Place one per ULN2803A IC (24 total for ARCH_PIEZO_ECO/DLX, 3 for ARCH_SOL_ECO). NFR-EMI-001 compliance."
+Subsystem,Digikey_PN,MFR,MFR_PN,Description,Qty_Per_Unit,Unit_Price_100,Unit_Price_1000,Leadtime_Weeks,Leadtime_Weeks_Pilot,ROHS,Package,Notes
+SS-ACTUATOR,TBD-PIEZO-01,TBD,TBD-PIEZO-2MM,"Piezoelectric actuator 2mm dia, 0.5mm stroke",1,1.50,1.20,8,8,Y,Custom,"Need vendor quote - placeholder cost, critical size ≤2.3mm"
+SS-CONTROL,497-14367-ND,STMicro,STM32F407VGT6,"ARM Cortex-M4 168MHz, 1MB Flash, 192KB RAM, 140 GPIO",1,8.00,7.20,12,2,Y,LQFP100,"Main MCU, check stock (long leadtime)"
+SS-IO-EXPAND,MCP23017-E/SP-ND,Microchip,MCP23017-E/SP,"16-bit I2C I/O expander, 1.6MHz",1,1.20,0.95,6,2,Y,DIP28,Also available in SOIC/QFN for SMT
+SS-ACTUATOR-DRIVER,296-1781-5-ND,TI,ULN2803A,"8-channel Darlington array, 50V, 500mA",1,0.80,0.65,4,2,Y,DIP18,Also SOIC available
+SS-COMM-BLE,1597-MDBT50Q-1MV2-ND,Raytac,MDBT50Q-1MV2,"nRF52840 module, BLE 5.0, pre-certified FCC/CE",1,12.00,10.50,10,4,Y,Module,Pre-cert FCC ID: 2AF8Q-MDBT50Q (saves $20K cert)
+SS-COMM-USB,2073-USB4105-GF-A-ND,GCT,USB4105-GF-A,"USB-C receptacle 16-pin, mid-mount",1,1.50,1.20,6,2,Y,SMT,USB 2.0 Full Speed capable
+SS-POWER-USB-LDO,296-38833-1-ND,TI,TPS73633,"LDO 5V→3.3V, 400mA, low noise",1,0.75,0.60,4,2,Y,SOT23-5,For logic power rail
+SS-POWER-USB-BOOST,296-50464-1-ND,TI,TPS61088,"Boost conv 5V→30V, 2.5A switch, 100mA out",1,2.25,1.95,6,2,Y,VQFN16,For actuator HV rail (30V)
+SS-POWER-AA-HOLDER,36-2466K-ND,Keystone,2466,"4×AA battery holder, PCB mount",1,2.00,1.75,2,2,Y,Thru-hole,Dimensions: 60×55×15mm
+SS-POWER-AA-BOOST-3V3,296-50464-1-ND,TI,TPS61088,"Boost/buck 6V→3.3V, buck-boost mode",1,2.25,1.95,6,2,Y,VQFN16,Same chip as USB boost (design reuse)
+SS-POWER-AA-BOOST-30V,296-50464-1-ND,TI,TPS61088,"Boost 6V→30V, 2.5A switch, 100mA out",1,2.25,1.95,6,2,Y,VQFN16,Same chip as USB boost (design reuse)
+SS-POWER-LIION-CELL,TBD-18650-01,TBD,TBD-18650-2500,18650 Li-ion cell 2500mAh 3.7V nominal,1,5.00,4.00,8,6,Y,18650,"Need UL listed pack, check lead time"
+SS-POWER-LIION-CHARGER,296-38713-1-ND,TI,BQ24075RGTT,"Li-ion charger IC, USB input, 1.5A",1,3.00,2.50,4,2,Y,VQFN16,USB-C charging
+SS-POWER-LIION-PROTECTION,TBD-PROTECTION-01,TBD,TBD-BMS-1S,"1S Li-ion protection IC, overcharge/discharge",1,1.50,1.20,4,2,Y,SOT23-6,Battery safety circuit
+SS-POWER-LIION-GAUGE,296-41985-1-ND,TI,BQ27441DRZT-G1A,"Fuel gauge IC, I2C, SOC estimation",1,2.50,2.00,6,2,Y,SON10,Battery % indicator
+SS-USER-IO-BUTTON,CKN12221-ND,C&K,KMR221NGLFS,"Tactile switch, 160gf, 1M+ cycles",1,0.25,0.18,2,2,Y,SMT,4.5×4.5mm footprint
+SS-PCB-4LAYER,CUSTOM-PCB-01,PCBWay,PCB-4L-200x100,"4-layer PCB 200×100mm, ENIG finish",1,15.00,12.00,3,2,Y,Board,"Quote for qty 100 (pilot), 1.6mm thick"
+SS-ENCLOSURE-3DP,CUSTOM-ENCL-01,Shapeways,3DP-SLS-NYLON,"3D print SLS nylon, natural finish",1,25.00,25.00,2,2,Y,Mechanical,"Pilot only, ~200×100×25mm, switch to injection mold for production"
+SS-ACTUATOR-SOLENOID,CUSTOM-SOL-01,Custom OEM,SOL-4MM-1MM-5V-FLAT,"Solenoid 4mm shaft dia, 1mm stroke, flat plunger face, 5VDC 0.5A",1,2.75,0.50,12,4,Y,Open-Frame,"Production: Custom OEM $0.50 @ 1K+ (12-week lead, MOQ 1000). Pilot: Olimex PUSH-PULL-SOLENOID-5V $2.73 @ 100 (4-week lead, Digikey stock, 5mm stroke mech-limited to 1mm). Flat face for cam contact, PRD-FUNC-003-ARCH-C-EXCEPT (4mm size relaxation)"
+SS-ACTUATOR-LATCH,CUSTOM-LATCH-01,Custom,LATCH-PLATE-V1,Global latch plate (3D print ABS) + latch solenoid,1,10.50,10.00,1,1,Y,Mechanical,Latch plate $10 (3D print with 192 detent holes) + latch solenoid $0.50 (Takaha BS-0420N-01)
+SS-ACTUATOR-DRIVER-2CH,296-1781-5-ND,TI,ULN2803A,8-channel Darlington array (for 2-ch architecture),1,0.80,0.65,4,2,Y,DIP18,Same as SS-ACTUATOR-DRIVER but fewer qty (12 vs 24 chips) for 2-channel design
+SS-POWER-AA-BOOST-12V,296-50464-1-ND,TI,TPS61088,"Boost 6V→12V, 2.5A switch (solenoid overdrive)",1,2.25,1.95,6,2,Y,VQFN16,"Lower voltage than 30V piezo (easier isolation, less EMI)"
+SS-ACTUATOR-CAM,CUSTOM-CAM-01,Custom,CAM-DISC-STEEL,"Rotary cam disc (injection molded, steel mold)",1,0.15,0.12,6,6,Y,Mechanical,"Production cost @ 10K+ volume, cam profile for ±45° rotation"
+SS-ACTUATOR-PISTON,CUSTOM-PISTON-01,Custom,PISTON-ROD-STEEL,"Piston rod (injection molded, steel mold)",1,0.10,0.08,6,6,Y,Mechanical,"Production cost @ 10K+ volume, 0.7mm stroke"
+SS-ACTUATOR-BUSHING,CUSTOM-BUSHING-01,Custom,BUSHING-STEEL,"Linear bushing (injection molded, steel mold)",1,0.08,0.06,6,4,Y,Mechanical,"Production cost @ 10K+ volume, or COTS brass alternative"
+SS-ACTUATOR-CAM-HOUSING,CUSTOM-HOUSING-01,Custom,HOUSING-STEEL,"Cam housing (injection molded, steel mold)",1,0.50,0.40,6,6,Y,Mechanical,"Production cost @ 10K+ volume, snap-together assembly"
+SS-ACTUATOR-SPRING,CUSTOM-SPRING-01,Custom,SPRING-COMP-01,Compression spring for piston return,1,0.02,0.015,2,2,Y,Mechanical,Standard COTS spring
+SS-EMI-BULK-CAP,493-2203-ND,Nichicon,UVR1H102MHD,Electrolytic capacitor 1000µF 50V 20% radial,1,0.10,0.08,2,2,Y,Radial,"Bulk cap for driver IC power rail filtering (EMI suppression, inductive kickback energy absorption). Place one per ULN2803A IC (24 total for ARCH_SOL_ECO, 3 ICs; varies by architecture). NFR-EMI-001 compliance."
+SS-EMI-BYPASS-CAP,399-4151-1-ND,Kemet,C0805C104K5RACTU,Ceramic capacitor 100nF 50V X7R 0805,1,0.01,0.008,2,2,Y,SMT-0805,"Ceramic bypass for driver IC (EMI suppression, high-frequency decoupling). Place one per ULN2803A IC (24 total for ARCH_PIEZO_ECO/DLX, 3 for ARCH_SOL_ECO). NFR-EMI-001 compliance."

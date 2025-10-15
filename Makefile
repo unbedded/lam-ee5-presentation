@@ -75,10 +75,27 @@ arch-gen:
 	@python3 scripts/generate_arch_artifacts.py
 	@echo "✅ Architecture artifacts generated"
 
-# Generate all artifacts (architecture + requirements)
+# Generate trade-off analysis charts (two-stage pipeline)
+# Stage 1: Extract data from YAML sources into JSON
+tradeoff-extract:
+	@echo "Extracting trade-off data from YAML sources..."
+	@python3 scripts/extract_tradeoff_data.py
+	@echo "✅ Data extracted to data/tradeoff-data.json"
+
+# Stage 2: Plot charts from extracted JSON data
+tradeoff-plot:
+	@echo "Plotting trade-off charts from JSON data..."
+	@python3 scripts/plot_tradeoff_charts.py
+	@echo "✅ Charts plotted to resources/diagrams/"
+
+# Full pipeline: Extract → Plot
+tradeoff-charts: tradeoff-extract tradeoff-plot
+	@echo "✅ Trade-off analysis complete"
+
+# Generate all artifacts (architecture + requirements + charts)
 # NOTE: Requirement artifacts use Claude Code slash commands:
 #   /req-yaml-to-md, /req-audit, /req-trace, /req-risk-report
-artifacts: arch-gen
+artifacts: arch-gen tradeoff-charts
 	@echo "✅ All artifacts generated"
 
 # ============================================================================
@@ -126,7 +143,51 @@ clean:
 # Rebuild target - clean and rebuild all
 rebuild: clean all
 
-# Build only presentation materials
+# ============================================================================
+# PRESENTATION GENERATION - Markdown → PPTX workflow
+# ============================================================================
+
+# Generate PPTX from Markdown (Phase 1: automated generation)
+pptx: source/presentation-slides.md
+	@echo "Generating presentation.pptx from Markdown..."
+	@if [ ! -f resources/style/lam-theme.pptx ]; then \
+		echo "  Note: resources/style/lam-theme.pptx not found, using default Pandoc theme"; \
+		pandoc source/presentation-slides.md -o source/presentation.pptx; \
+	else \
+		echo "  Using theme: resources/style/lam-theme.pptx"; \
+		pandoc source/presentation-slides.md \
+			--reference-doc=resources/style/lam-theme.pptx \
+			-o source/presentation.pptx; \
+	fi
+	@echo "✓ source/presentation.pptx generated"
+	@echo ""
+	@echo "⚠️  WARNING: This is automated generation (Phase 1)"
+	@echo "   After manual editing in PowerPoint, DO NOT regenerate from Markdown!"
+	@echo "   Manual edits will be lost."
+
+# Export PPTX to PDF (for review or final delivery)
+pptx-pdf: source/presentation.pptx
+	@echo "Exporting presentation to PDF..."
+	@if command -v libreoffice >/dev/null 2>&1; then \
+		libreoffice --headless --convert-to pdf \
+			--outdir artifacts source/presentation.pptx; \
+		echo "✓ artifacts/presentation.pdf exported (LibreOffice)"; \
+	elif command -v soffice >/dev/null 2>&1; then \
+		soffice --headless --convert-to pdf \
+			--outdir artifacts source/presentation.pptx; \
+		echo "✓ artifacts/presentation.pdf exported (OpenOffice)"; \
+	else \
+		echo "❌ Error: LibreOffice or OpenOffice required for PPTX → PDF conversion"; \
+		echo "   Install: sudo apt-get install libreoffice"; \
+		exit 1; \
+	fi
+
+# Clean presentation files
+presentation-clean:
+	rm -f source/presentation.pptx artifacts/presentation.pdf
+	@echo "Cleaned presentation files"
+
+# Build only presentation materials (Markdown->PDF, legacy)
 presentation: artifacts/presentation.pdf
 	@echo "Presentation PDF ready for interview"
 
@@ -215,11 +276,19 @@ help:
 	@echo ""
 	@echo "Artifact Generation (Python):"
 	@echo "  make arch-gen                - Generate architecture docs/BOMs from YAML/CSV"
-	@echo "  make artifacts               - Generate all artifacts (arch + requirements)"
+	@echo "  make tradeoff-extract        - Extract trade-off data (YAML → JSON)"
+	@echo "  make tradeoff-plot           - Plot charts from JSON data"
+	@echo "  make tradeoff-charts         - Full pipeline (extract + plot)"
+	@echo "  make artifacts               - Generate all artifacts (arch + requirements + charts)"
+	@echo ""
+	@echo "Presentation Generation (Markdown → PPTX → PDF):"
+	@echo "  make pptx       - Generate PPTX from Markdown (Phase 1: automated)"
+	@echo "  make pptx-pdf        - Export PPTX to PDF (requires LibreOffice)"
+	@echo "  make presentation-clean      - Remove presentation.pptx and presentation.pdf"
 	@echo ""
 	@echo "PDF Conversion (Pandoc):"
 	@echo "  make all                     - Convert all .md files to PDF"
-	@echo "  make presentation            - Build only presentation PDF"
+	@echo "  make presentation            - Build only presentation PDF (legacy Markdown->PDF)"
 	@echo "  make analysis                - Build only technical analysis PDF"
 	@echo "  make rubrics                 - Build only rubric PDFs"
 	@echo "  make clean                   - Remove all PDF files"
@@ -252,4 +321,4 @@ help:
 	@echo "    /req-trace         - Generate traceability matrix"
 	@echo "    /req-risk-report   - Risk-rank assumptions"
 
-.PHONY: all clean rebuild presentation analysis rubrics print print-to email-pres list check help arch-gen artifacts
+.PHONY: all clean rebuild presentation presentation-pptx pptx-pdf presentation-clean analysis rubrics print print-to email-pres list check help arch-gen tradeoff-extract tradeoff-plot tradeoff-charts artifacts

@@ -101,9 +101,6 @@ architectures:
     # Quantitative metrics
     quantitative:
       cost:
-        bom_subtotal: 365.00      # Core + unique subsystems
-        misc_15pct: 54.75         # Passives, connectors, misc
-        bom_total: 419.75         # Subtotal + misc
         bom_target: 125           # Target (need cost reduction!)
         bom_range_min: 100
         bom_range_max: 150
@@ -170,8 +167,7 @@ architectures:
         - SS-EMI-BULK-CAP   # $0.24 (3× @ $0.08 ea, NFR-EMI-001 - fewer drivers)
         - SS-EMI-BYPASS-CAP # $0.02 (3× @ $0.008 ea, NFR-EMI-001 - fewer drivers)
       unique:
-        - SS-COMM-BLE           # $12.00
-        - SS-COMM-USB           # $1.50
+        - SS-COMM-USB           # $1.50 (wired only - no BLE radio)
         - SS-POWER-AA-HOLDER    # $2.00
         - SS-POWER-AA-BOOST-3V3 # $2.25
         - SS-POWER-AA-BOOST-12V # $2.25 (12V for solenoid overdrive, not 30V for piezo)
@@ -187,21 +183,21 @@ architectures:
         weight: "MEDIUM"         # 4× AA + cam mechanism
         portability: "HIGH"      # Wireless capable
       ux:
-        setup: "GOOD"            # Pairing + plug (dual interface)
-        convenience: "BEST"      # Wireless + instant battery swap + wired fallback
-        reliability: "BEST"      # Dual interface fallback
+        setup: "BEST"            # Plug and play (wired USB-C)
+        convenience: "GOOD"      # Wired only, but instant AA battery swap
+        reliability: "BEST"      # Wired connection (no radio dropouts)
         battery_anxiety: "NONE"  # Instant AA swap
-        mobility: "EXCELLENT"    # Wireless freedom
+        mobility: "FAIR"         # Wired limits mobility
         refresh_speed: "ACCEPTABLE" # 2.4 sec (vs 1.5 sec piezo, good for beginners)
       complexity:
         hardware: "MODERATE"
-        firmware: "COMPLEX"      # Dual BLE + USB stack
+        firmware: "SIMPLE"       # USB-C only (no BLE stack)
         power: "MODERATE"        # Boost converters (no charger)
         mechanical: "COMPLEX"    # Cam mechanism + layer offsets + piston alignment
       timeline:
         pilot: "FAST"            # 10 weeks total, but COTS parts (2-week lead) enable early prototyping
         parts_leadtime: "SHORTEST" # All COTS (solenoid 2-week lead time, fastest among all architectures)
-        certification: "MODERATE" # FCC 15B + 15C (radio)
+        certification: "FAST"    # FCC 15B only (wired, no radio)
       manufacturing:
         assembly: "MODERATE"     # Modular 6-dot subassemblies (snap-together)
         component_count: "MEDIUM"
@@ -223,13 +219,10 @@ architectures:
     # Quantitative metrics (production volume - steel molds)
     quantitative:
       cost:
-        bom_subtotal: 187.75      # Actuators $152 + Control/PCB/Enclosure $35.75
-        misc_15pct: 28.16         # Passives, connectors
-        bom_total: 215.90         # Production BOM (50% savings vs piezo)
         bom_target: 165           # Low-mid range target
         bom_range_min: 150
         bom_range_max: 180
-        certification_cost: 26500  # FCC 15B + 15C (radio), NO UL 2054 (AA exempt)
+        certification_cost: 20000  # FCC 15B only (wired, no radio)
         nre_total: 70000          # $70K-90K steel tooling (higher than piezo, justified by lower BOM)
       size:
         length_mm: 198            # Standard ADA spacing (32 chars × 6.2mm)
@@ -246,7 +239,7 @@ architectures:
         prototype_weeks: 3        # Cam mechanism prototyping (SLA 3D print)
         pilot_production_weeks: 4 # Proto molds (soft tooling)
         total_weeks: 10
-        certification_weeks: 6     # FCC 15B + 15C (radio testing)
+        certification_weeks: 4     # FCC 15B only (wired, no radio)
       manufacturing:
         component_count: 320       # Higher count (cam parts) but modular assembly
         assembly_time_min: 20      # Modular 6-dot subassemblies (snap-together)
@@ -337,9 +330,6 @@ architectures:
     # Quantitative metrics
     quantitative:
       cost:
-        bom_subtotal: 390.50      # Core + unique
-        misc_15pct: 58.58
-        bom_total: 449.08
         bom_target: 225           # Premium target
         bom_range_min: 200
         bom_range_max: 250

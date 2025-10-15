@@ -1,0 +1,303 @@
+{
+  "metadata": {
+    "version": "1.1.0",
+    "generated": "2025-10-15",
+    "source_files": [
+      "source/architectures.yaml",
+      "source/decision-logic.yaml",
+      "artifacts/bom/*.csv"
+    ],
+    "note": "Costs from BOM CSV files. Timelines = max(parts leadtime) + assembly + certification from parts.csv and architectures.yaml."
+  },
+  "architectures": {
+    "ARCH_PIEZO_ECO": {
+      "id": "ARCH_PIEZO_ECO",
+      "name": "Piezo Economy (Wired)",
+      "nickname": "Value Desk",
+      "color": "#2E86AB"
+    },
+    "ARCH_SOL_ECO": {
+      "id": "ARCH_SOL_ECO",
+      "name": "Solenoid Economy (Rotary Cam)",
+      "nickname": "Cam Innovation",
+      "color": "#A23B72"
+    },
+    "ARCH_PIEZO_DLX": {
+      "id": "ARCH_PIEZO_DLX",
+      "name": "Piezo Deluxe (Wireless)",
+      "nickname": "Premium Pro",
+      "color": "#F18F01"
+    }
+  },
+  "spider_chart": {
+    "dimensions": [
+      "Cost (lower better)",
+      "Timeline (faster better)",
+      "UX/Usability",
+      "Manufacturability",
+      "Robustness",
+      "Supply Chain (lower risk)",
+      "Power Efficiency (lower better)",
+      "Simplicity (lower complexity)"
+    ],
+    "data": {
+      "ARCH_PIEZO_ECO": [
+        5.0,
+        10.0,
+        7.6,
+        8.25,
+        9.0,
+        1.0,
+        5.0,
+        5.0
+      ],
+      "ARCH_SOL_ECO": [
+        5.0,
+        0.0,
+        7.83,
+        6.75,
+        9.0,
+        1.0,
+        5.0,
+        5.0
+      ],
+      "ARCH_PIEZO_DLX": [
+        5.0,
+        5.0,
+        6.67,
+        6.0,
+        5.6,
+        4.0,
+        5.0,
+        5.0
+      ]
+    }
+  },
+  "cost_chart": [
+    {
+      "arch_id": "ARCH_SOL_ECO",
+      "name": "Solenoid Economy (Rotary Cam)",
+      "cost": 240.75,
+      "breakdown": {
+        "Actuators": 152.03,
+        "Control": 11.0,
+        "Power": 5.65,
+        "Communication": 1.2,
+        "Mechanical": 37.36,
+        "EMI": 2.11,
+        "Misc": 31.4
+      },
+      "order": 0
+    },
+    {
+      "arch_id": "ARCH_PIEZO_ECO",
+      "name": "Piezo Economy (Wired)",
+      "cost": 345.26,
+      "breakdown": {
+        "Actuators": 246.0,
+        "Control": 11.0,
+        "Power": 2.55,
+        "Communication": 1.2,
+        "Mechanical": 37.36,
+        "EMI": 2.11,
+        "Misc": 45.03
+      },
+      "order": 1
+    },
+    {
+      "arch_id": "ARCH_PIEZO_DLX",
+      "name": "Piezo Deluxe (Wireless)",
+      "cost": 364.17,
+      "breakdown": {
+        "Actuators": 246.0,
+        "Control": 11.0,
+        "Power": 9.7,
+        "Communication": 10.5,
+        "Mechanical": 37.36,
+        "EMI": 2.11,
+        "Misc": 47.5
+      },
+      "order": 2
+    }
+  ],
+  "timeline_chart": [
+    {
+      "arch_id": "ARCH_SOL_ECO",
+      "name": "Solenoid Economy (Rotary Cam)",
+      "timeline_low": 10.0,
+      "timeline_high": 14.0,
+      "max_leadtime_weeks": 6.0,
+      "certification_weeks": 4.0,
+      "order": 0
+    },
+    {
+      "arch_id": "ARCH_PIEZO_ECO",
+      "name": "Piezo Economy (Wired)",
+      "timeline_low": 10.0,
+      "timeline_high": 14.0,
+      "max_leadtime_weeks": 8.0,
+      "certification_weeks": 4.0,
+      "order": 1
+    },
+    {
+      "arch_id": "ARCH_PIEZO_DLX",
+      "name": "Piezo Deluxe (Wireless)",
+      "timeline_low": 11.0,
+      "timeline_high": 19.0,
+      "max_leadtime_weeks": 8.0,
+      "certification_weeks": 8.0,
+      "order": 2
+    }
+  ],
+  "actuator_assumptions": {
+    "ARCH_PIEZO_ECO": {
+      "unit_price": 1.2,
+      "qty": 192,
+      "total_cost": 230.4,
+      "notes": "Need vendor quote - placeholder cost, critical size \u22642.3mm"
+    },
+    "ARCH_SOL_ECO": {
+      "unit_price": 0.5,
+      "qty": 192,
+      "total_cost": 96.0,
+      "notes": "Production: Custom OEM $0.50 @ 1K+ (12-week lead, MOQ 1000). Pilot: Olimex PUSH-PULL-SOLENOID-5V $2.73 @ 100 (4-week lead, Digikey stock, 5mm stroke mech-limited to 1mm). Flat face for cam contact, PRD-FUNC-003-ARCH-C-EXCEPT (4mm size relaxation)"
+    },
+    "ARCH_PIEZO_DLX": {
+      "unit_price": 1.2,
+      "qty": 192,
+      "total_cost": 230.4,
+      "notes": "Need vendor quote - placeholder cost, critical size \u22642.3mm"
+    }
+  },
+  "decision_tree": [
+    {
+      "node_id": "wireless_required",
+      "question": "Wireless REQUIRED?",
+      "condition": {
+        "type": "boolean",
+        "description": "Does customer require BLE wireless connectivity?"
+      },
+      "if_yes": {
+        "winner": "ARCH_PIEZO_DLX",
+        "rationale": "Only BLE option (nRF52840 pre-certified FCC)",
+        "stop": true
+      },
+      "if_no": {
+        "next_node": "cost_threshold"
+      }
+    },
+    {
+      "node_id": "cost_threshold",
+      "question": "Cost < $300 target?",
+      "condition": {
+        "type": "threshold",
+        "metric": "bom_cost",
+        "operator": "<",
+        "value": 300,
+        "units": "USD"
+      },
+      "if_yes": {
+        "winner": "ARCH_SOL_ECO",
+        "rationale": "$277 lowest BOM (50% savings vs piezo)",
+        "stop": true
+      },
+      "if_no": {
+        "next_node": "timeline_threshold"
+      }
+    },
+    {
+      "node_id": "timeline_threshold",
+      "question": "Timeline < 8 weeks?",
+      "condition": {
+        "type": "threshold",
+        "metric": "timeline_weeks",
+        "operator": "<",
+        "value": 8,
+        "units": "weeks"
+      },
+      "if_yes": {
+        "winner": "ARCH_PIEZO_ECO",
+        "rationale": "Fastest to market (simplest electrical integration)",
+        "stop": true
+      },
+      "if_no": {
+        "next_node": "volume_threshold"
+      }
+    },
+    {
+      "node_id": "volume_threshold",
+      "question": "Volume > 10K units?",
+      "condition": {
+        "type": "threshold",
+        "metric": "production_volume",
+        "operator": ">",
+        "value": 10000,
+        "units": "units"
+      },
+      "if_yes": {
+        "winner": "ARCH_SOL_ECO",
+        "rationale": "Best scaling (mechanical cost-down potential)",
+        "stop": true
+      },
+      "if_no": {
+        "next_node": "default"
+      }
+    },
+    {
+      "node_id": "default",
+      "question": "DEFAULT",
+      "condition": {
+        "type": "default",
+        "description": "No specific constraints matched"
+      },
+      "winner": "ARCH_PIEZO_ECO",
+      "rationale": "Most robust across scenarios",
+      "stop": true
+    }
+  ],
+  "architecture_win_conditions": {
+    "ARCH_PIEZO_ECO": {
+      "wins_when": [
+        "Timeline < 8 weeks (fastest electrical integration)",
+        "Wireless NOT required (cable acceptable)",
+        "Standard pitch REQUIRED (ADA 703.3 compliance)",
+        "Most scenarios (robust choice)"
+      ],
+      "fails_when": [
+        "Wireless required (no BLE - only USB-C)",
+        "Cost < $300 target (exceeds budget)",
+        "Actuator sourcing fails (no COTS piezo available)"
+      ]
+    },
+    "ARCH_SOL_ECO": {
+      "wins_when": [
+        "Cost < $300 budget (lowest BOM: $277)",
+        "Volume > 10K units (mechanical scaling)",
+        "Mechanical innovation acceptable (3.5mm pitch pilot-ok)",
+        "Cost-sensitive markets (China, India)"
+      ],
+      "fails_when": [
+        "Standard pitch REQUIRED (3.5mm violates ADA 703.3)",
+        "Tooling NRE unacceptable ($70K-90K steel tooling)",
+        "Mechanical complexity risk averse"
+      ]
+    },
+    "ARCH_PIEZO_DLX": {
+      "wins_when": [
+        "Wireless REQUIRED (only BLE architecture)",
+        "Premium positioning (US/EU market)",
+        "UX differentiation critical (wireless freedom)",
+        "Higher price point acceptable ($450+)"
+      ],
+      "fails_when": [
+        "Cost < $400 budget (highest BOM: $449)",
+        "Li-ion certification unacceptable (UN38.3 shipping)",
+        "Timeline < 10 weeks (BLE certification delay)"
+      ]
+    }
+  },
+  "key_insight": {
+    "title": "No single 'best' architecture",
+    "message": "Selection depends on YOUR specific constraints:\n\u2022 Wireless requirement \u2192 Only PIEZO_DLX has BLE\n\u2022 Cost-constrained \u2192 SOL_ECO wins ($277 vs $420-442)\n\u2022 Time-constrained \u2192 PIEZO_ECO fastest (8-10 wks)\n\u2022 Volume scaling \u2192 SOL_ECO mechanical cost-down potential\n"
+  }
+}
