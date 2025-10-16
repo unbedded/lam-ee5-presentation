@@ -63,7 +63,7 @@ From `source/requirements.yaml`:
 
 | Technology | Size | Force | Speed | Hold Power | Cost (192×) | Voltage | Verdict |
 |------------|------|-------|-------|------------|-------------|---------|---------|
-| **[Piezo](#1-piezoelectric-bender-baseline)** | 2mm ✅ | 0.5-1.5N ✅ | 10-50ms ✅ | ~0W ✅ | $288 ⚠️ | 20-30V | ✅ **BASELINE** |
+| **[Piezo](#1-piezoelectric-bender-baseline)** | 2mm ✅ | 0.5-1.5N ✅ | 10-50ms ✅ | ~0W ✅ | $288 ⚠️ | 100-200V ❌ | ⚠️ **BASELINE (EMI RISK)** |
 | **[Solenoid](#2-miniature-solenoid-linear-pullpush)** | 4mm ❌ | 0.5-2.0N ✅ | 20-100ms ✅ | 9.6-19W ❌ | $96-154 ✅ | 5V ✅ | ⚠️ **If size relaxed** |
 | **[Solenoid (Latching)](#2-miniature-solenoid-linear-pullpush)** | 4mm ❌ | 0.5-2.0N ✅ | 20-100ms ✅ | ~0W ✅ | $192-288 ⚠️ | 5V ✅ | ⚠️ **If size relaxed** |
 | **[SMA Wire](#3-shape-memory-alloy-sma-wire)** | 0.15mm ✅ | 0.1-0.5N ❌ | 700-1500ms ❌ | 38-96W ❌ | $19-58 ✅ | 3-5V ✅ | ❌ **Too slow/weak** |
@@ -81,7 +81,7 @@ From `source/requirements.yaml`:
 
 ### 1. Piezoelectric Bender (Baseline)
 
-**VERDICT:** ✅ **BASELINE** - Only technology meeting ALL requirements, but expensive
+**VERDICT:** ⚠️ **BASELINE (WITH EMI RISK)** - Only technology meeting size/force/speed requirements, but expensive + EMI concerns
 
 **Technology:** Piezo ceramic bimorph bender (two piezo layers bonded together)
 
@@ -93,8 +93,8 @@ From `source/requirements.yaml`:
 | Stroke | 0.5-0.7mm | ✅ Meets requirement |
 | Force | 0.5-1.5 N (50-150 gf) | ✅ EXCELLENT |
 | Response time | 10-50ms | ✅ FASTEST |
-| Drive voltage | 20-30V | ⚠️ High (needs boost converter) |
-| Drive current | 1-5mA peak | ✅ Low (capacitive load) |
+| Drive voltage | 100-200V | ❌ **VERY HIGH** (needs HV boost converter + isolation) |
+| Drive current | 1-20mA peak | ✅ Low (capacitive load, higher during fast switching) |
 | Hold power | ~0W | ✅ Near-zero (holds position) |
 | **Unit cost** | **$1.50 @ 100 qty** | ⚠️ HIGH |
 | **Cost (192 dots)** | **$288 @ 100 qty** | ⚠️ 69% of BOM |
@@ -105,17 +105,21 @@ From `source/requirements.yaml`:
 | Pros ✅ | Cons ❌ |
 |---------|---------|
 | Fastest response time (10-50ms) | **HIGH COST** (biggest driver of BOM overrun) |
-| Near-zero hold power (critical for battery) | Requires 20-30V power supply (boost converter, HV traces) |
-| Small size (2mm diameter achievable) | Capacitive load creates inductive kickback (EMI concerns) |
+| Near-zero hold power (critical for battery) | **VERY HIGH VOLTAGE** (100-200V, complex HV boost converter) |
+| Small size (2mm diameter achievable) | **EXTREME EMI RISK** (192 unshielded 200V antennas, see piezo-emi-design-analysis.md) |
 | High force in small package | Brittle ceramic (vibration/shock sensitivity) |
 | Proven technology in existing braille displays | Limited vendor availability for custom small sizes |
+| Capacitive load = low power | Higher driver cost ($3 vs $0.65 for HV ICs) |
 
 #### PCB Impact
 
-- **4-layer PCB required** (30V HV isolation)
-- 50mil HV clearance
-- Snubber diodes for inductive kickback
-- High-frequency emissions: ~0.5-2 MHz (switching transients)
+- **4-layer PCB MANDATORY** (200V HV isolation + GND plane for FCC)
+- **100mil HV clearance** (IPC-2221 Class 2 for 200V coated board)
+- **Conformal coating required** (creepage/clearance protection)
+- **NO flyback diodes** (capacitive load, not inductive)
+- **Sequential firing required** (8-way parallel + 1ms slew rate, see piezo-emi-design-analysis.md)
+- **High-frequency emissions:** 10-50 MHz (capacitive dV/dt switching transients)
+- **Pre-compliance EMI testing MANDATORY** before pilot production
 
 #### Cost Reduction Path
 
