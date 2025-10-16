@@ -1,0 +1,16 @@
+Line,Subsystem_ID,Subsystem_Name,Digikey_PN,MFR,MFR_PN,Description,Qty,Unit_Price_1000,Line_Total,Leadtime_Weeks,ROHS,Notes
+1,SS-ACTUATOR,Braille Actuator Array,TBD-PIEZO-01,TBD,TBD-PIEZO-2MM,"Bimorph piezoelectric actuator 2mm dia, 0.5mm stroke, 100-200VDC drive",192,1.20,230.40,8,Y,"Need vendor quote - placeholder cost, critical size ≤2.3mm, HIGH VOLTAGE RISK"
+2,SS-CONTROL,Main Control Unit (MCU),497-14367-ND,STMicro,STM32F407VGT6,"ARM Cortex-M4 168MHz, 1MB Flash, 192KB RAM, 140 GPIO",1,7.20,7.20,12,Y,"Main MCU, check stock (long leadtime)"
+3,SS-IO-EXPAND,I/O Expander Array,MCP23017-E/SP-ND,Microchip,MCP23017-E/SP,"16-bit I2C I/O expander, 1.6MHz",4,0.95,3.80,6,Y,Also available in SOIC/QFN for SMT
+4,SS-ACTUATOR-DRIVER,Actuator High-Voltage Driver Array,TBD-HV-DRIVER,TBD,TBD-HV-DRV-200V,"High-voltage driver for piezo (200V+, capacitive load), 8-channel",24,3.00,72.00,8,Y,ULN2803A (50V max) INADEQUATE for 200V piezo! Need HV driver IC or discrete MOSFET array. COST ESTIMATE $3 (vs $0.65). MAJOR TECHNICAL RISK.
+5,SS-USER-IO,User Interface Buttons,CKN12221-ND,C&K,KMR221NGLFS,"Tactile switch, 160gf, 1M+ cycles",2,0.18,0.36,2,Y,4.5×4.5mm footprint
+6,SS-PCB,Main PCB (4-layer),CUSTOM-PCB-01,PCBWay,PCB-4L-200x100,"4-layer PCB 200×100mm, ENIG finish",1,12.00,12.00,3,Y,"Quote for qty 100 (pilot), 1.6mm thick"
+7,SS-ENCLOSURE,Mechanical Enclosure,CUSTOM-ENCL-01,Shapeways,3DP-SLS-NYLON,"3D print SLS nylon, natural finish",1,25.00,25.00,2,Y,"Pilot only, ~200×100×25mm, switch to injection mold for production"
+8,SS-EMI-BULK-CAP,EMI Bulk Capacitor Array,493-2203-ND,Nichicon,UVR1H102MHD,Electrolytic capacitor 1000µF 50V 20% radial,24,0.08,1.92,2,Y,"Bulk cap for driver IC power rail filtering (EMI suppression, inductive kickback energy absorption). Place one per ULN2803A IC (24 total for ARCH_SOL_ECO, 3 ICs; varies by architecture). NFR-EMI-001 compliance."
+9,SS-EMI-BYPASS-CAP,EMI Bypass Capacitor Array,399-4151-1-ND,Kemet,C0805C104K5RACTU,Ceramic capacitor 100nF 50V X7R 0805,24,0.01,0.19,2,Y,"Ceramic bypass for driver IC (EMI suppression, high-frequency decoupling). Place one per ULN2803A IC (24 total for ARCH_PIEZO_ECO/DLX, 3 for ARCH_SOL_ECO). NFR-EMI-001 compliance."
+10,SS-COMM-USB,USB-C Communication Interface,2073-USB4105-GF-A-ND,GCT,USB4105-GF-A,"USB-C receptacle 16-pin, mid-mount",1,1.20,1.20,6,Y,USB 2.0 Full Speed capable
+11,SS-POWER-USB-LDO,USB Power - LDO (5V→3.3V),296-38833-1-ND,TI,TPS73633,"LDO 5V→3.3V, 400mA, low noise",1,0.60,0.60,4,Y,For logic power rail
+12,SS-POWER-USB-BOOST,USB Power - Boost (5V→200V),TBD-HV-BOOST,TBD,TBD-BOOST-200V,Boost conv 5V→200V for piezo drive (capacitive load),1,6.50,6.50,10,Y,"TPS61088 maxes at ~40V! Need specialized HV boost (e.g., flyback topology). COST ESTIMATE $6.50 (vs $1.95). MAJOR TECHNICAL RISK."
+---,---,---,---,---,---,SUBTOTAL,---,---,361.17,---,---,---
+---,---,---,---,---,---,Misc 15%,---,---,54.18,---,---,"Passives, connectors"
+---,---,---,---,---,---,TOTAL,---,---,415.35,---,---,---

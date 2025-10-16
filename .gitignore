@@ -5,6 +5,10 @@ artifacts/
 # EXCEPTION: Phase gate rubric reports are versioned (capture state at phase completion)
 !artifacts/rubric-reports/
 !artifacts/rubric-reports/*.md
+# EXCEPTION: BOMs and architecture docs are versioned (SSOT-derived outputs)
+!artifacts/bom/
+!artifacts/bom/*.csv
+!artifacts/architecture*.md
 
 # OS Files
 .DS_Store
