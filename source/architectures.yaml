@@ -282,6 +282,7 @@ architectures:
         - SS-POWER-LIION-CHARGER  # $3.00
         - SS-POWER-LIION-PROTECTION  # $1.50
         - SS-POWER-LIION-GAUGE  # $2.50
+        - SS-POWER-LIION-BOOST-200V  # $6.50
 
     # Qualitative assessment
     qualitative:

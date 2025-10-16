@@ -14,6 +14,7 @@ SS-POWER-LIION-CELL,TBD-18650-01,TBD,TBD-18650-2500,18650 Li-ion cell 2500mAh 3.
 SS-POWER-LIION-CHARGER,296-38713-1-ND,TI,BQ24075RGTT,"Li-ion charger IC, USB input, 1.5A",1,3.00,2.50,4,2,Y,VQFN16,USB-C charging
 SS-POWER-LIION-PROTECTION,TBD-PROTECTION-01,TBD,TBD-BMS-1S,"1S Li-ion protection IC, overcharge/discharge",1,1.50,1.20,4,2,Y,SOT23-6,Battery safety circuit
 SS-POWER-LIION-GAUGE,296-41985-1-ND,TI,BQ27441DRZT-G1A,"Fuel gauge IC, I2C, SOC estimation",1,2.50,2.00,6,2,Y,SON10,Battery % indicator
+SS-POWER-LIION-BOOST-200V,TBD-HV-BOOST,TBD,TBD-BOOST-200V,"Boost conv 3.7V→200V for piezo drive from Li-ion (capacitive load)",1,8.00,6.50,10,6,Y,TBD,"TPS61088 maxes at ~40V! Need specialized HV boost (likely flyback topology for 200V). Battery-powered 200V generation adds efficiency constraints. COST ESTIMATE $6.50. MAJOR TECHNICAL RISK."
 SS-USER-IO-BUTTON,CKN12221-ND,C&K,KMR221NGLFS,"Tactile switch, 160gf, 1M+ cycles",1,0.25,0.18,2,2,Y,SMT,4.5×4.5mm footprint
 SS-PCB-4LAYER,CUSTOM-PCB-01,PCBWay,PCB-4L-200x100,"4-layer PCB 200×100mm, ENIG finish",1,15.00,12.00,3,2,Y,Board,"Quote for qty 100 (pilot), 1.6mm thick"
 SS-ENCLOSURE-3DP,CUSTOM-ENCL-01,Shapeways,3DP-SLS-NYLON,"3D print SLS nylon, natural finish",1,25.00,25.00,2,2,Y,Mechanical,"Pilot only, ~200×100×25mm, switch to injection mold for production"

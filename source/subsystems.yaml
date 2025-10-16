@@ -330,6 +330,38 @@ subsystems_unique:
       expected_hf_emissions_mhz: 0  # DC protection circuit (comparator-based)
       emi_concerns: "SAFETY-CRITICAL - Must be in series with battery, trace from cell to protection IC to system must handle full load current (3A)"
 
+  SS-POWER-LIION-GAUGE:
+    name: "Fuel Gauge IC"
+    description: "Battery SOC estimation"
+    used_in: ["ARCH_PIEZO_DLX"]
+    requirements: ["PRD-SIZE-001-ASMP"]
+    part_ref: "296-41985-1-ND"
+    quantity: 1
+    rationale: "TI BQ27441: I2C interface, SOC % for user display"
+    pcb_specs:
+      layers_required: 2  # Top + Bottom (I2C + sense resistor)
+      min_trace_width_mil: 10  # Standard 10mil for I2C
+      min_spacing_mil: 10  # Standard 10mil
+      hv_clearance_mil: 10  # Standard low-voltage
+      expected_hf_emissions_mhz: 0.4  # I2C Fast Mode 400 kHz
+      emi_concerns: "LOW - I2C communication, requires kelvin sensing of battery current shunt resistor (4-wire measurement)"
+
+  SS-POWER-LIION-BOOST-200V:
+    name: "Li-ion Power - Boost (3.7V→200V)"
+    description: "Actuator HV power from Li-ion battery (200V for bimorph piezo)"
+    used_in: ["ARCH_PIEZO_DLX"]
+    requirements: ["PRD-SIZE-001-ASMP"]
+    part_ref: "TBD-HV-BOOST"
+    quantity: 1
+    rationale: "TPS61088 maxes at ~40V! Need specialized HV boost (likely flyback topology for 200V). COST ESTIMATE $6.50 (vs $1.95). MAJOR TECHNICAL RISK - complex magnetics design, safety isolation, battery-powered 200V generation."
+    pcb_specs:
+      layers_required: 4  # Top + Bottom + GND + 200V HV (flyback/boost needs GND plane, isolated 200V plane)
+      min_trace_width_mil: 30  # 30mil (0.76mm) for switch current
+      min_spacing_mil: 20  # 20mil spacing for high-current traces
+      hv_clearance_mil: 100  # 100mil for 200V output (IPC-2221: 0.6mm/V for coated board)
+      expected_hf_emissions_mhz: 5  # HV flyback/boost switching, likely 100-500 kHz + harmonics to ~50 MHz
+      emi_concerns: "VERY HIGH - 200V boost/flyback creates extreme EMI. Requires: (1) Shielded inductor/transformer, (2) Snubber networks on HV switch node, (3) Y-capacitors for common-mode filtering, (4) CISPR 32 Class B compliance testing mandatory. Battery-powered adds efficiency constraints."
+
   # ARCH-D subsystems (OBSOLETE - replaced by ARCH_SOL_ECO cam mechanism)
   SS-ACTUATOR-SOLENOID:
     name: "Solenoid Actuator Array (COTS)"
