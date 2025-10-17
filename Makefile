@@ -86,7 +86,7 @@ tradeoff-extract:
 tradeoff-plot:
 	@echo "Plotting trade-off charts from JSON data..."
 	@python3 scripts/plot_tradeoff_charts.py
-	@echo "✅ Charts plotted to resources/diagrams/"
+	@echo "✅ Charts plotted to source/images/"
 
 # Full pipeline: Extract → Plot
 tradeoff-charts: tradeoff-extract tradeoff-plot
