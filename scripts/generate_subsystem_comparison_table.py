@@ -6,13 +6,18 @@ This creates a visual comparison showing which architectures use which subsystem
 especially highlighting communication (BLE vs USB) and power (Li-ion, AA, USB) differences.
 
 Outputs:
-    resources/diagrams/subsystem-comparison-table.png
+    source/images/subsystem-comparison-table.png
 """
 
 import yaml
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from pathlib import Path
+
+# Configuration
+OUTPUT_DIR = Path("source/images")
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+OUTPUT_FILE = OUTPUT_DIR / "subsystem-comparison-table.png"
 
 # Load architectures
 with open('source/architectures.yaml', 'r') as f:
@@ -144,5 +149,5 @@ fig.text(0.5, 0.02,
          ha='center', fontsize=8, style='italic', color='gray')
 
 plt.tight_layout(rect=[0, 0.04, 1, 0.98])
-plt.savefig('resources/diagrams/subsystem-comparison-table.png', dpi=300, bbox_inches='tight')
-print("✓ Generated: resources/diagrams/subsystem-comparison-table.png")
+plt.savefig(OUTPUT_FILE, dpi=300, bbox_inches='tight')
+print(f"✓ Generated: {OUTPUT_FILE}")

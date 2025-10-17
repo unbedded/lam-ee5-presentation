@@ -11,10 +11,10 @@ Usage:
     python3 scripts/generate_tradeoff_charts.py
 
 Outputs:
-    resources/diagrams/architecture-radar-comparison.png
-    resources/diagrams/architecture-cost-comparison.png
-    resources/diagrams/architecture-timeline-comparison.png
-    resources/diagrams/architecture-decision-tree.png
+    source/images/architecture-radar-comparison.png
+    source/images/architecture-cost-comparison.png
+    source/images/architecture-timeline-comparison.png
+    source/images/architecture-decision-tree.png
 """
 
 import yaml
@@ -25,7 +25,7 @@ from pathlib import Path
 
 # Configuration
 ARCHITECTURES_YAML = Path("source/architectures.yaml")
-OUTPUT_DIR = Path("resources/diagrams")
+OUTPUT_DIR = Path("source/images")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # Color scheme for each architecture (presentation-friendly)

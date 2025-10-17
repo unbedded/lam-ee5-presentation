@@ -14,10 +14,10 @@ Inputs:
     data/tradeoff-data.json (from extract_tradeoff_data.py)
 
 Outputs:
-    resources/diagrams/architecture-radar-comparison.png
-    resources/diagrams/architecture-cost-comparison.png
-    resources/diagrams/architecture-timeline-comparison.png
-    resources/diagrams/architecture-decision-tree.png
+    source/images/architecture-radar-comparison.png
+    source/images/architecture-cost-comparison.png
+    source/images/architecture-timeline-comparison.png
+    source/images/architecture-decision-tree.png
 """
 
 import json
@@ -28,7 +28,7 @@ from pathlib import Path
 
 # Configuration
 INPUT_JSON = Path("data/tradeoff-data.json")
-OUTPUT_DIR = Path("resources/diagrams")
+OUTPUT_DIR = Path("source/images")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 
