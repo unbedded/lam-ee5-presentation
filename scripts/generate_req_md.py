@@ -133,16 +133,21 @@ for req_id, req in requirements.items():
 for cat_key in categories:
     categories[cat_key].sort()
 
-# Generate hierarchical TOC
-md += "```\n"
+# Generate hierarchical TOC with embedded hyperlinks
+# Use non-breaking spaces and special characters to preserve tree structure
+# while keeping markdown links clickable (NO code block)
 
 # PRD Requirements
 prd_cats = sorted([k for k in categories.keys() if k.startswith('PRD_')])
-md += f"PRD (Production Requirements - {sum(len(categories[k]) for k in prd_cats)} total)\n"
-for cat_key in prd_cats:
+md += f"**PRD (Production Requirements - {sum(len(categories[k]) for k in prd_cats)} total)**\n\n"
+
+for cat_idx, cat_key in enumerate(prd_cats):
     sub_name = cat_key.replace('PRD_', '')
     req_ids = categories[cat_key]
-    md += f"├── {sub_name} ({len(req_ids)} requirements)\n"
+    cat_prefix = "└──" if cat_idx == len(prd_cats)-1 else "├──"
+
+    md += f"{cat_prefix} **{sub_name}** ({len(req_ids)} requirements)\n\n"
+
     for i, req_id in enumerate(req_ids):
         req = requirements[req_id]
         priority = req.get('priority', '')
@@ -161,46 +166,57 @@ for cat_key in prd_cats:
 
         priority_str = '[P0]' if 'P0' in priority else '[P1]' if 'P1' in priority else '[P2]' if 'P2' in priority else ''
 
-        prefix = "└──" if i == len(req_ids)-1 else "├──"
-        md += f"│   {prefix} {req_id} {priority_str}{status_str} {req['title']}\n"
+        req_prefix = "└──" if i == len(req_ids)-1 else "├──"
+
+        # Add proper indentation for nested items
+        if cat_idx == len(prd_cats)-1:
+            indent = "&nbsp;&nbsp;&nbsp;&nbsp;"  # Last category, no vertical line
+        else:
+            indent = "│&nbsp;&nbsp;&nbsp;"  # Vertical line continues
+
+        anchor_link = anchor(req_id)
+        md += f"{indent}{req_prefix} [{req_id}](#{anchor_link}) {priority_str}{status_str} {req['title']}\n\n"
 
 # NFR Requirements
 nfr_cats = sorted([k for k in categories.keys() if k.startswith('NFR')])
 if nfr_cats:
-    md += f"\nNFR (Non-Functional Requirements - {sum(len(categories[k]) for k in nfr_cats if k in categories)} total)\n"
+    md += f"**NFR (Non-Functional Requirements - {sum(len(categories[k]) for k in nfr_cats if k in categories)} total)**\n\n"
+
+    all_nfr_reqs = []
     for cat_key in nfr_cats:
-        if cat_key not in categories:
-            continue
-        req_ids = categories[cat_key]
-        for i, req_id in enumerate(req_ids):
-            req = requirements[req_id]
-            priority = req.get('priority', '')
-            priority_str = '[P0]' if 'P0' in priority else '[P1]' if 'P1' in priority else '[P2]' if 'P2' in priority else ''
+        if cat_key in categories:
+            all_nfr_reqs.extend(categories[cat_key])
 
-            prefix = "└──" if i == len(req_ids)-1 else "├──"
-            md += f"{prefix} {req_id} {priority_str} {req['title']}\n"
+    for i, req_id in enumerate(all_nfr_reqs):
+        req = requirements[req_id]
+        priority = req.get('priority', '')
+        priority_str = '[P0]' if 'P0' in priority else '[P1]' if 'P1' in priority else '[P2]' if 'P2' in priority else ''
 
-md += "```\n\n"
+        prefix = "└──" if i == len(all_nfr_reqs)-1 else "├──"
+        anchor_link = anchor(req_id)
+        md += f"{prefix} [{req_id}](#{anchor_link}) {priority_str} {req['title']}\n\n"
 
-md += "**Navigation:** Click on any requirement ID below to jump to detailed section.\n\n"
+md += "---\n\n"
 
-# Generate clickable links for all requirements
-md += "### Ground Truth Requirements (PDF)\n"
+# Also generate separate categorized lists for quick scanning
+md += "### Quick Navigation by Category\n\n"
+
+md += "**Ground Truth Requirements (PDF)**\n\n"
 for req_id, req in ground_truth:
     anchor_link = anchor(req_id)
     md += f"- [{req_id}](#{anchor_link}): {req['title']}\n"
 
-md += "\n### Derived Assumptions\n"
+md += "\n**Derived Assumptions**\n\n"
 for req_id, req in assumptions:
     anchor_link = anchor(req_id)
     md += f"- [{req_id}](#{anchor_link}): {req['title']}\n"
 
-md += "\n### Mechanical Requirements (ADA 703.3)\n"
+md += "\n**Mechanical Requirements (ADA 703.3)**\n\n"
 for req_id, req in mechanical_reqs:
     anchor_link = anchor(req_id)
     md += f"- [{req_id}](#{anchor_link}): {req['title']}\n"
 
-md += "\n### Standards & Compliance\n"
+md += "\n**Standards & Compliance**\n\n"
 for req_id, req in standards_reqs:
     anchor_link = anchor(req_id)
     md += f"- [{req_id}](#{anchor_link}): {req['title']}\n"
