@@ -70,3 +70,13 @@ dist/
 
 # Archived files (OLD pattern only, not _obsolete directories)
 **/*.OLD
+
+# Marp generated files (regenerate with 'make marp')
+artifacts/presentation-marp.html
+artifacts/presentation-marp.pdf
+source/presentation-marp.pptx
+source/presentation-marp.html
+
+# Keep source Markdown in git:
+# source/presentation-marp.md ← This STAYS in git
+*.~lock.*
