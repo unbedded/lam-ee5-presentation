@@ -150,8 +150,9 @@ rebuild: clean all
 # Generate presentation with Marp (RECOMMENDED: HTML presentation + PDF export)
 marp: source/presentation-marp.md
 	@echo "Generating presentation with Marp..."
-	@echo "Copying images to artifacts/ for HTML presentation..."
-	@cp -f source/images/*.svg source/images/*.png source/images/*.jpg artifacts/ 2>/dev/null || true
+	@echo "Copying images to artifacts/images/ for HTML presentation..."
+	@mkdir -p artifacts/images
+	@cp -f source/images/* artifacts/images/ 2>/dev/null || true
 	@marp source/presentation-marp.md -o artifacts/presentation-marp.html --allow-local-files
 	@marp source/presentation-marp.md -o artifacts/presentation-marp.pdf --allow-local-files --pdf
 	@echo "✓ artifacts/presentation-marp.html generated (HTML presentation)"
@@ -173,7 +174,7 @@ marp: source/presentation-marp.md
 # Clean presentation files
 presentation-clean:
 	rm -f artifacts/presentation-marp.html artifacts/presentation-marp.pdf
-	rm -f artifacts/*.svg artifacts/*.png artifacts/*.jpg
+	rm -rf artifacts/images
 	@echo "Cleaned Marp presentation files and images"
 
 # Build only technical analysis
