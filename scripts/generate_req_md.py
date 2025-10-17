@@ -95,6 +95,118 @@ for item in metadata['scope']['out_of_scope']:
 
 md += f"\n### Rationale\n\n{metadata['rationale']}\n\n---\n\n"
 
+# Build Requirements Hierarchy TOC with hyperlinks
+md += """## Requirements Hierarchy (Hyperlinked TOC)
+
+This hierarchical index provides quick navigation to all requirements in the document. Click any requirement ID to jump to its detailed section.
+
+"""
+
+# Helper function to create markdown anchor from req_id
+def anchor(req_id):
+    # Convert "PRD-SCHED-001" to "prd-sched-001-production-timeline---two-month-release"
+    # Markdown anchors lowercase, replace spaces/special chars with hyphens
+    req = requirements.get(req_id, {})
+    title = req.get('title', '')
+    anchor_text = f"{req_id}: {title}".lower()
+    # Replace special characters
+    anchor_text = anchor_text.replace(' ', '-').replace('/', '-').replace('(', '').replace(')', '').replace(',', '').replace("'", '')
+    anchor_text = anchor_text.replace('±', '').replace('×', '').replace('≤', '').replace('→', '').replace('.', '')
+    return anchor_text
+
+# Organize requirements into categories
+categories = {}
+for req_id, req in requirements.items():
+    # Determine category prefix (e.g., "PRD-SCHED" -> "SCHED")
+    parts = req_id.split('-')
+    if len(parts) >= 2:
+        main_cat = parts[0]  # PRD, NFR
+        sub_cat = parts[1] if len(parts) > 1 else ''  # SCHED, FUNC, MECH, etc.
+
+        cat_key = f"{main_cat}_{sub_cat}" if sub_cat else main_cat
+
+        if cat_key not in categories:
+            categories[cat_key] = []
+        categories[cat_key].append(req_id)
+
+# Sort requirements within each category
+for cat_key in categories:
+    categories[cat_key].sort()
+
+# Generate hierarchical TOC
+md += "```\n"
+
+# PRD Requirements
+prd_cats = sorted([k for k in categories.keys() if k.startswith('PRD_')])
+md += f"PRD (Production Requirements - {sum(len(categories[k]) for k in prd_cats)} total)\n"
+for cat_key in prd_cats:
+    sub_name = cat_key.replace('PRD_', '')
+    req_ids = categories[cat_key]
+    md += f"├── {sub_name} ({len(req_ids)} requirements)\n"
+    for i, req_id in enumerate(req_ids):
+        req = requirements[req_id]
+        priority = req.get('priority', '')
+        risk = req.get('risk_level', '')
+        status = req.get('status', req.get('testable', ''))
+
+        # Format status/risk emoji
+        status_str = ''
+        if 'VAGUE' in str(status):
+            status_str = '[VAGUE]'
+        elif 'CLEAR' in str(status):
+            status_str = '[CLEAR]'
+        elif risk:
+            risk_map = {'CRITICAL': '[CRITICAL]', 'HIGH': '[HIGH]', 'MEDIUM': '[MEDIUM]', 'LOW': '[LOW]'}
+            status_str = risk_map.get(risk, '')
+
+        priority_str = '[P0]' if 'P0' in priority else '[P1]' if 'P1' in priority else '[P2]' if 'P2' in priority else ''
+
+        prefix = "└──" if i == len(req_ids)-1 else "├──"
+        md += f"│   {prefix} {req_id} {priority_str}{status_str} {req['title']}\n"
+
+# NFR Requirements
+nfr_cats = sorted([k for k in categories.keys() if k.startswith('NFR')])
+if nfr_cats:
+    md += f"\nNFR (Non-Functional Requirements - {sum(len(categories[k]) for k in nfr_cats if k in categories)} total)\n"
+    for cat_key in nfr_cats:
+        if cat_key not in categories:
+            continue
+        req_ids = categories[cat_key]
+        for i, req_id in enumerate(req_ids):
+            req = requirements[req_id]
+            priority = req.get('priority', '')
+            priority_str = '[P0]' if 'P0' in priority else '[P1]' if 'P1' in priority else '[P2]' if 'P2' in priority else ''
+
+            prefix = "└──" if i == len(req_ids)-1 else "├──"
+            md += f"{prefix} {req_id} {priority_str} {req['title']}\n"
+
+md += "```\n\n"
+
+md += "**Navigation:** Click on any requirement ID below to jump to detailed section.\n\n"
+
+# Generate clickable links for all requirements
+md += "### Ground Truth Requirements (PDF)\n"
+for req_id, req in ground_truth:
+    anchor_link = anchor(req_id)
+    md += f"- [{req_id}](#{anchor_link}): {req['title']}\n"
+
+md += "\n### Derived Assumptions\n"
+for req_id, req in assumptions:
+    anchor_link = anchor(req_id)
+    md += f"- [{req_id}](#{anchor_link}): {req['title']}\n"
+
+md += "\n### Mechanical Requirements (ADA 703.3)\n"
+for req_id, req in mechanical_reqs:
+    anchor_link = anchor(req_id)
+    md += f"- [{req_id}](#{anchor_link}): {req['title']}\n"
+
+md += "\n### Standards & Compliance\n"
+for req_id, req in standards_reqs:
+    anchor_link = anchor(req_id)
+    md += f"- [{req_id}](#{anchor_link}): {req['title']}\n"
+
+md += "\n---\n\n"
+
 md += """## Ground Truth Requirements (from PDF)
 
 These are requirements **verbatim from the PDF**. Status indicates whether they are directly testable (CLEAR) or require assumptions (VAGUE).
