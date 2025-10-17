@@ -129,6 +129,31 @@ October 2025
 
 ---
 
+# Ground Truth Requirements (Complete)
+
+## All 10 Requirements from PDF Specification
+
+| ID | Requirement | Status | Priority |
+|----|-------------|--------|----------|
+| [PRD-SCHED-001](appendix/requirements.pdf#prd-sched-001-production-timeline---two-month-release) | Production Timeline - Two Month Release | 🟠 VAGUE | 🔴 P0 |
+| [PRD-SIZE-001](appendix/requirements.pdf#prd-size-001-portable-device) | Portable Device | 🟠 VAGUE | 🟠 P1 |
+| [PRD-IFACE-001](appendix/requirements.pdf#prd-iface-001-cell-phone-connectivity---pairing-and-connection) | Cell Phone Connectivity | 🟠 VAGUE | 🔴 P0 |
+| [PRD-IFACE-002](appendix/requirements.pdf#prd-iface-002-text-data-reception---braille-output) | Text Data Reception | 🟠 VAGUE | 🔴 P0 |
+| [PRD-COST-001](appendix/requirements.pdf#prd-cost-001-low-cost-at-volume) | Low Cost at Volume | 🟠 VAGUE | 🔴 P0 |
+| [PRD-VOL-001](appendix/requirements.pdf#prd-vol-001-high-volume-production-design) | High Volume Production Design | 🟠 VAGUE | 🟠 P1 |
+| [PRD-USER-001](appendix/requirements.pdf#prd-user-001-sight-impaired-user) | Sight-Impaired User | ✅ CLEAR | 🔴 P0 |
+| [PRD-FUNC-001](appendix/requirements.pdf#prd-func-001-single-line-braille-display---32-characters-6-dots-each) | 32 chars × 6 dots = 192 actuators | ✅ CLEAR | 🔴 P0 |
+| [PRD-FUNC-002](appendix/requirements.pdf#prd-func-002-braille-line-update-refresh-next-line) | Braille Line Update | 🟠 VAGUE | 🟠 P1 |
+| [PRD-FUNC-003](appendix/requirements.pdf#prd-func-003-braille-dot-actuation---raised-or-lowered) | Raised or Lowered Dots | ✅ CLEAR | 🔴 P0 |
+
+**Status:** 3 CLEAR / 7 VAGUE | **Click requirement ID for detailed specification**
+
+> **TAKEAWAY:** Full requirements analysis in appendix - 38 total (10 ground truth + 19 assumptions + 6 mechanical + 3 standards)
+
+<!-- Links work when presenting HTML from artifacts/ directory. PDF appendix provides full traceability. -->
+
+---
+
 # Commercial Braille Display Market
 
 ## Market Landscape & Technology Monopoly
