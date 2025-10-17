@@ -55,6 +55,27 @@ style: |
     display: block;
     margin: 20px auto;
   }
+  /* Normal text wrapping */
+  p, li, td, th {
+    white-space: normal;
+  }
+  strong {
+    white-space: nowrap;
+  }
+  /* Takeaway message box (use > blockquote at bottom of slide) */
+  blockquote {
+    background-color: #eaf4fb;
+    border-left: 5px solid #2980b9;
+    padding: 12px 20px;
+    margin: 30px 20px 10px 20px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #2c3e50;
+    border-radius: 5px;
+  }
+  blockquote strong {
+    color: #3498db;
+  }
 ---
 
 # Braille Display - Concept Evaluation
@@ -75,13 +96,10 @@ October 2025
 
 1. **Identify Key Technical Requirements** (25 pts)
    - System, electrical, and relevant specifications
-
 2. **Develop Multiple Alternative Solutions** (25 pts)
    - 3 distinct architectures
-
 3. **Evaluate the Proposed Solutions** (30 pts)
    - Advantages, disadvantages, and trade-off analysis
-
 4. **Transition to Volume Production** (20 pts)
    - Process from initial design to pilot production
 
@@ -97,13 +115,15 @@ October 2025
 
 | ID | Requirement | Status | Impact |
 |----|-------------|--------|--------|
-| **PRD-SCHED-001** | "production within two months" | ⚠️ VAGUE | Pilot vs mass? |
-| **PRD-SIZE-001** | "portable companion device" | ⚠️ VAGUE | How big? |
-| **PRD-IFACE-001** | "connects to cell phone" | ⚠️ VAGUE | BLE? USB? |
-| **PRD-COST-001** | "low-cost at volume" | ⚠️ VAGUE | $100? $200? |
-| **PRD-FUNC-001** | "32 chars × 6 dots = 192 dots" | ✅ CLEAR | Core spec |
+| **PRD-SCHED-001** | "production within two months" | VAGUE | Pilot vs mass? |
+| **PRD-SIZE-001** | "portable companion device" | VAGUE | How big? |
+| **PRD-IFACE-001** | "connects to cell phone" | VAGUE | BLE? USB? |
+| **PRD-COST-001** | "low-cost at volume" | VAGUE | $100? $200? |
+| **PRD-FUNC-001** | "32 chars × 6 dots = 192 dots" | CLEAR | Core spec |
 
 **Key Observation:** Only **3 of 9** requirements are CLEAR. **6 are VAGUE.**
+
+> **TAKEAWAY:** I read your spec carefully - 6 requirements need clarification before we commit resources.
 
 <!-- Strategic framing: "I read the spec CAREFULLY and extracted requirements." "6 of 9 are vague - I need YOUR feedback before building the wrong thing." -->
 
@@ -174,6 +194,8 @@ October 2025
   - Simplicity vs. Innovation
 
 **Philosophy:** Balance cost/reliability/performance/timeline
+
+> **TAKEAWAY:** No single "best" solution exists - success means navigating trade-offs intelligently.
 
 <!-- This is the thesis: There is NO "best" architecture. Selection depends on customer priorities. -->
 
@@ -255,7 +277,7 @@ October 2025
 
 | Parameter | Solenoid | Piezo |
 |-----------|----------|-------|
-| **EMI Frequency** | <10 MHz | **500 MHz - 1 GHz** ⚠️ |
+| **EMI Frequency** | <10 MHz | **500 MHz - 1 GHz (HIGH)** |
 | **Antenna Effect** | None | **λ/4 resonance** |
 | **Mitigation Cost** | **$4.32** | **$10.84** (2.5×) |
 | **Cert Risk** | LOW (10%) | HIGH (50%) |
@@ -278,7 +300,7 @@ October 2025
 | | Ferrite beads (192×) | -15 dB | $3.84 |
 | **Enclosure** | Shielded aluminum | -30 dB | $4.00 |
 
-**Total:** 133 dB reduction → **21 dB compliance margin** ✅
+**Total:** 133 dB reduction → **21 dB compliance margin (PASS)**
 
 **Key:** Firmware alone = **68 dB reduction at $0 cost!**
 
@@ -304,11 +326,13 @@ ELSE:
 
 **Key Message:** No "best" architecture, only "best FOR YOUR CONSTRAINTS"
 
+> **TAKEAWAY:** Tell me your priorities (cost/timeline/features) and I'll tell you which architecture wins.
+
 <!-- Tell customer: "Give me your priorities, I'll tell you which architecture wins." -->
 
 ---
 
-# ⚠️ Actuator Sourcing - Critical Path Risk
+# Actuator Sourcing - Critical Path Risk
 
 ## All Architectures Blocked Without Resolution
 
@@ -332,7 +356,7 @@ ELSE:
 ## 8-12 Week Timeline
 
 **Common Production Process:**
-- **Week 0-2:** Actuator sourcing resolution ⚠️ **CRITICAL PATH**
+- **Week 0-2:** Actuator sourcing resolution **[CRITICAL PATH]**
 - **Week 3-4:** Detailed design (schematic, PCB, BOM lock)
 - **Week 5-6:** Prototype build (fab, assembly, debug)
 - **Week 7-9:** Pilot production (10-100 units, yield validation)
