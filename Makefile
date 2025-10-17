@@ -147,6 +147,61 @@ rebuild: clean all
 # PRESENTATION GENERATION - Markdown → PPTX workflow
 # ============================================================================
 
+# Generate presentation with Marp (RECOMMENDED: HTML presentation + PDF export)
+marp: source/presentation-marp.md
+	@echo "Generating presentation with Marp..."
+	@marp source/presentation-marp.md -o artifacts/presentation-marp.html --allow-local-files
+	@marp source/presentation-marp.md -o artifacts/presentation-marp.pdf --allow-local-files --pdf
+	@echo "✓ artifacts/presentation-marp.html generated (HTML presentation)"
+	@echo "✓ artifacts/presentation-marp.pdf generated (PDF for distribution)"
+	@echo ""
+	@echo "RECOMMENDED: Present from HTML (fully editable Markdown source)"
+	@echo ""
+	@echo "Next steps:"
+	@echo "  1. Present: firefox artifacts/presentation-marp.html (press F11 for fullscreen)"
+	@echo "  2. Edit: vim source/presentation-marp.md (then 'make marp' to regenerate)"
+	@echo "  3. Share PDF: artifacts/presentation-marp.pdf"
+	@echo ""
+	@echo "Navigation: Arrow keys, Space=next, Shift+Space=prev"
+	@echo "Font control: Edit 'style:' section in source/presentation-marp.md"
+	@echo ""
+	@echo "⚠️  NOTE: PPTX export exists but slides are NOT EDITABLE (images only)"
+	@echo "   If you need editable PPTX: Upload HTML to Google Slides instead"
+
+# Generate HTML slides with Reveal.js (Alternative: browser-based)
+html: source/presentation-slides.md
+	@echo "Generating HTML presentation with Reveal.js..."
+	@pandoc source/presentation-slides.md \
+		-t revealjs -s \
+		-o source/presentation.html \
+		--slide-level=1 \
+		-V theme=black \
+		-V transition=slide \
+		-V slideNumber=true \
+		-V controlsLayout=bottom-right
+	@echo "✓ source/presentation.html generated"
+	@echo ""
+	@echo "Next steps:"
+	@echo "  1. Open in browser: firefox source/presentation.html"
+	@echo "  2. Navigation: Arrow keys, Space to advance"
+	@echo "  3. Speaker notes: Press 'S' key (opens new window)"
+	@echo "  4. Overview: Press ESC"
+	@echo "  5. Print to PDF: Ctrl+P → Save as PDF"
+	@echo ""
+	@echo "To regenerate: make html"
+
+# Generate PowerPoint outline from Markdown (Alternative: outline-first workflow)
+outline: source/presentation-slides.md
+	@echo "Generating PowerPoint outline from Markdown..."
+	@python3 scripts/md-to-outline.py source/presentation-slides.md source/presentation-outline.txt
+	@echo "✓ source/presentation-outline.txt generated"
+	@echo ""
+	@echo "Next steps:"
+	@echo "  1. Open LibreOffice: libreoffice --impress source/presentation-outline.txt"
+	@echo "  2. Or Google Slides: View → Outline, paste contents"
+	@echo "  3. Edit in Outline View (focus on content, not graphics)"
+	@echo "  4. Save as source/presentation-final.pptx"
+
 # Generate PPTX from Markdown (Phase 1: automated generation)
 pptx: source/presentation-slides.md
 	@echo "Generating presentation.pptx from Markdown..."
