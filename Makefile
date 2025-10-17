@@ -168,78 +168,9 @@ marp: source/presentation-marp.md
 	@echo "⚠️  NOTE: PPTX export exists but slides are NOT EDITABLE (images only)"
 	@echo "   If you need editable PPTX: Upload HTML to Google Slides instead"
 
-# Generate HTML slides with Reveal.js (Alternative: browser-based)
-html: source/presentation-slides.md
-	@echo "Generating HTML presentation with Reveal.js..."
-	@pandoc source/presentation-slides.md \
-		-t revealjs -s \
-		-o source/presentation.html \
-		--slide-level=1 \
-		-V theme=black \
-		-V transition=slide \
-		-V slideNumber=true \
-		-V controlsLayout=bottom-right
-	@echo "✓ source/presentation.html generated"
-	@echo ""
-	@echo "Next steps:"
-	@echo "  1. Open in browser: firefox source/presentation.html"
-	@echo "  2. Navigation: Arrow keys, Space to advance"
-	@echo "  3. Speaker notes: Press 'S' key (opens new window)"
-	@echo "  4. Overview: Press ESC"
-	@echo "  5. Print to PDF: Ctrl+P → Save as PDF"
-	@echo ""
-	@echo "To regenerate: make html"
-
-# Generate PowerPoint outline from Markdown (Alternative: outline-first workflow)
-outline: source/presentation-slides.md
-	@echo "Generating PowerPoint outline from Markdown..."
-	@python3 scripts/md-to-outline.py source/presentation-slides.md source/presentation-outline.txt
-	@echo "✓ source/presentation-outline.txt generated"
-	@echo ""
-	@echo "Next steps:"
-	@echo "  1. Open LibreOffice: libreoffice --impress source/presentation-outline.txt"
-	@echo "  2. Or Google Slides: View → Outline, paste contents"
-	@echo "  3. Edit in Outline View (focus on content, not graphics)"
-	@echo "  4. Save as source/presentation-final.pptx"
-
-# Generate PPTX from Markdown (Phase 1: automated generation)
-pptx: source/presentation-slides.md
-	@echo "Generating presentation.pptx from Markdown..."
-	@if [ ! -f resources/style/lam-theme.pptx ]; then \
-		echo "  Note: resources/style/lam-theme.pptx not found, using default Pandoc theme"; \
-		pandoc source/presentation-slides.md -o source/presentation.pptx; \
-	else \
-		echo "  Using theme: resources/style/lam-theme.pptx"; \
-		pandoc source/presentation-slides.md \
-			--reference-doc=resources/style/lam-theme.pptx \
-			-o source/presentation.pptx; \
-	fi
-	@echo "✓ source/presentation.pptx generated"
-	@echo ""
-	@echo "⚠️  WARNING: This is automated generation (Phase 1)"
-	@echo "   After manual editing in PowerPoint, DO NOT regenerate from Markdown!"
-	@echo "   Manual edits will be lost."
-
-# Export PPTX to PDF (for review or final delivery)
-pptx-pdf: source/presentation.pptx
-	@echo "Exporting presentation to PDF..."
-	@if command -v libreoffice >/dev/null 2>&1; then \
-		libreoffice --headless --convert-to pdf \
-			--outdir artifacts source/presentation.pptx; \
-		echo "✓ artifacts/presentation.pdf exported (LibreOffice)"; \
-	elif command -v soffice >/dev/null 2>&1; then \
-		soffice --headless --convert-to pdf \
-			--outdir artifacts source/presentation.pptx; \
-		echo "✓ artifacts/presentation.pdf exported (OpenOffice)"; \
-	else \
-		echo "❌ Error: LibreOffice or OpenOffice required for PPTX → PDF conversion"; \
-		echo "   Install: sudo apt-get install libreoffice"; \
-		exit 1; \
-	fi
-
-# Clean presentation files
+# Clean presentation files (legacy Pandoc artifacts)
 presentation-clean:
-	rm -f source/presentation.pptx artifacts/presentation.pdf
+	rm -f source/presentation.pptx artifacts/presentation.pdf artifacts/presentation-marp.html artifacts/presentation-marp.pdf
 	@echo "Cleaned presentation files"
 
 # Build only presentation materials (Markdown->PDF, legacy)
@@ -337,10 +268,8 @@ help:
 	@echo "  make artifacts               - Generate all artifacts (arch + requirements + charts)"
 	@echo ""
 	@echo "Presentation Generation:"
-	@echo "  make marp                    - Generate HTML presentation with Marp (RECOMMENDED)"
-	@echo "  make pptx                    - Generate PPTX from Markdown (Pandoc, legacy)"
-	@echo "  make pptx-pdf                - Export PPTX to PDF (requires LibreOffice)"
-	@echo "  make presentation-clean      - Remove presentation.pptx and presentation.pdf"
+	@echo "  make marp                    - Generate HTML presentation with Marp"
+	@echo "  make presentation-clean      - Remove generated presentation files"
 	@echo ""
 	@echo "PDF Conversion (Pandoc):"
 	@echo "  make all                     - Convert all .md files to PDF"
@@ -378,4 +307,4 @@ help:
 	@echo "    /req-trace         - Generate traceability matrix"
 	@echo "    /req-risk-report   - Risk-rank assumptions"
 
-.PHONY: all clean rebuild presentation presentation-pptx pptx-pdf presentation-clean analysis rubrics print print-to email-pres list check help arch-gen tradeoff-extract tradeoff-plot tradeoff-charts artifacts
+.PHONY: all clean rebuild marp presentation presentation-clean analysis rubrics print print-to email-pres list check help arch-gen tradeoff-extract tradeoff-plot tradeoff-charts artifacts

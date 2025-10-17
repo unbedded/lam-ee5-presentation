@@ -1,20 +1,20 @@
 Subsystem,Digikey_PN,MFR,MFR_PN,Description,Qty_Per_Unit,Unit_Price_100,Unit_Price_1000,Leadtime_Weeks,Leadtime_Weeks_Pilot,ROHS,Package,Notes
-SS-ACTUATOR,TBD-PIEZO-01,TBD,TBD-PIEZO-2MM,"Bimorph piezoelectric actuator 2mm dia, 0.5mm stroke, 100-200VDC drive",1,1.50,1.20,8,8,Y,Custom,"Need vendor quote - placeholder cost, critical size ≤2.3mm, HIGH VOLTAGE RISK"
+SS-ACTUATOR,TBD-PIEZO-01,TBD,TBD-PIEZO-2MM,"Bimorph piezoelectric actuator 2mm width × 28mm length cantilever, 0.7mm stroke, 100VDC nominal drive",1,1.50,1.20,8,8,Y,Custom,"Need vendor quote - placeholder cost, critical width ≤2.3mm (from 2.5mm pitch - 1.5mm dot ÷ 2). 28mm length for 0.7mm stroke @ 100V (per actuator-piezo-voltage-options-analysis.md)"
 SS-CONTROL,497-14367-ND,STMicro,STM32F407VGT6,"ARM Cortex-M4 168MHz, 1MB Flash, 192KB RAM, 140 GPIO",1,8.00,7.20,12,2,Y,LQFP100,"Main MCU, check stock (long leadtime)"
 SS-IO-EXPAND,MCP23017-E/SP-ND,Microchip,MCP23017-E/SP,"16-bit I2C I/O expander, 1.6MHz",1,1.20,0.95,6,2,Y,DIP28,Also available in SOIC/QFN for SMT
-SS-ACTUATOR-DRIVER,TBD-HV-DRIVER,TBD,TBD-HV-DRV-200V,"High-voltage driver for piezo (200V+, capacitive load), 8-channel",1,3.50,3.00,8,4,Y,TBD,"ULN2803A (50V max) INADEQUATE for 200V piezo! Need HV driver IC or discrete MOSFET array. COST ESTIMATE $3 (vs $0.65). MAJOR TECHNICAL RISK."
+SS-ACTUATOR-DRIVER,TBD-HV-DRIVER,TBD,TBD-HV-DRV-100V,"High-voltage driver for piezo (100V, capacitive load), 8-channel",1,3.50,3.00,8,4,Y,TBD,"ULN2803A (50V max) INADEQUATE for 100V piezo! Need HV driver IC or discrete MOSFET array (e.g., STD14NM60N 600V). COST ESTIMATE $3 (vs $0.65)."
 SS-COMM-BLE,1597-MDBT50Q-1MV2-ND,Raytac,MDBT50Q-1MV2,"nRF52840 module, BLE 5.0, pre-certified FCC/CE",1,12.00,10.50,10,4,Y,Module,Pre-cert FCC ID: 2AF8Q-MDBT50Q (saves $20K cert)
 SS-COMM-USB,2073-USB4105-GF-A-ND,GCT,USB4105-GF-A,"USB-C receptacle 16-pin, mid-mount",1,1.50,1.20,6,2,Y,SMT,USB 2.0 Full Speed capable
 SS-POWER-USB-LDO,296-38833-1-ND,TI,TPS73633,"LDO 5V→3.3V, 400mA, low noise",1,0.75,0.60,4,2,Y,SOT23-5,For logic power rail
-SS-POWER-USB-BOOST,TBD-HV-BOOST,TBD,TBD-BOOST-200V,"Boost conv 5V→200V for piezo drive (capacitive load)",1,8.00,6.50,10,6,Y,TBD,"TPS61088 maxes at ~40V! Need specialized HV boost (e.g., flyback topology). COST ESTIMATE $6.50 (vs $1.95). MAJOR TECHNICAL RISK."
+SS-POWER-USB-BOOST,TBD-HV-BOOST,TBD,TBD-BOOST-100V,"Boost conv 5V→100V for piezo drive (capacitive load)",1,8.00,6.50,10,6,Y,TBD,"TPS61088 maxes at ~40V! Need specialized HV boost (e.g., TPS61391 or flyback topology). COST ESTIMATE $6.50 (vs $1.95)."
 SS-POWER-AA-HOLDER,36-2466K-ND,Keystone,2466,"4×AA battery holder, PCB mount",1,2.00,1.75,2,2,Y,Thru-hole,Dimensions: 60×55×15mm
 SS-POWER-AA-BOOST-3V3,296-50464-1-ND,TI,TPS61088,"Boost/buck 6V→3.3V, buck-boost mode",1,2.25,1.95,6,2,Y,VQFN16,Same chip as USB boost (design reuse)
-SS-POWER-AA-BOOST-200V,TBD-HV-BOOST,TBD,TBD-BOOST-200V,"Boost conv 6V→200V for piezo drive (capacitive load)",1,8.00,6.50,10,6,Y,TBD,"TPS61088 maxes at ~40V! Need specialized HV boost (e.g., flyback topology). COST ESTIMATE $6.50 (vs $1.95). MAJOR TECHNICAL RISK."
+SS-POWER-AA-BOOST-100V,TBD-HV-BOOST,TBD,TBD-BOOST-100V,"Boost conv 6V→100V for piezo drive (capacitive load)",1,8.00,6.50,10,6,Y,TBD,"TPS61088 maxes at ~40V! Need specialized HV boost (e.g., TPS61391 or flyback topology). COST ESTIMATE $6.50 (vs $1.95)."
 SS-POWER-LIION-CELL,TBD-18650-01,TBD,TBD-18650-2500,18650 Li-ion cell 2500mAh 3.7V nominal,1,5.00,4.00,8,6,Y,18650,"Need UL listed pack, check lead time"
 SS-POWER-LIION-CHARGER,296-38713-1-ND,TI,BQ24075RGTT,"Li-ion charger IC, USB input, 1.5A",1,3.00,2.50,4,2,Y,VQFN16,USB-C charging
 SS-POWER-LIION-PROTECTION,TBD-PROTECTION-01,TBD,TBD-BMS-1S,"1S Li-ion protection IC, overcharge/discharge",1,1.50,1.20,4,2,Y,SOT23-6,Battery safety circuit
 SS-POWER-LIION-GAUGE,296-41985-1-ND,TI,BQ27441DRZT-G1A,"Fuel gauge IC, I2C, SOC estimation",1,2.50,2.00,6,2,Y,SON10,Battery % indicator
-SS-POWER-LIION-BOOST-200V,TBD-HV-BOOST,TBD,TBD-BOOST-200V,"Boost conv 3.7V→200V for piezo drive from Li-ion (capacitive load)",1,8.00,6.50,10,6,Y,TBD,"TPS61088 maxes at ~40V! Need specialized HV boost (likely flyback topology for 200V). Battery-powered 200V generation adds efficiency constraints. COST ESTIMATE $6.50. MAJOR TECHNICAL RISK."
+SS-POWER-LIION-BOOST-100V,TBD-HV-BOOST,TBD,TBD-BOOST-100V,"Boost conv 3.7V→100V for piezo drive from Li-ion (capacitive load)",1,8.00,6.50,10,6,Y,TBD,"TPS61088 maxes at ~40V! Need specialized HV boost (e.g., TPS61391 or flyback topology). Battery-powered 100V generation adds efficiency constraints. COST ESTIMATE $6.50."
 SS-USER-IO-BUTTON,CKN12221-ND,C&K,KMR221NGLFS,"Tactile switch, 160gf, 1M+ cycles",1,0.25,0.18,2,2,Y,SMT,4.5×4.5mm footprint
 SS-PCB-4LAYER,CUSTOM-PCB-01,PCBWay,PCB-4L-200x100,"4-layer PCB 200×100mm, ENIG finish",1,15.00,12.00,3,2,Y,Board,"Quote for qty 100 (pilot), 1.6mm thick"
 SS-ENCLOSURE-3DP,CUSTOM-ENCL-01,Shapeways,3DP-SLS-NYLON,"3D print SLS nylon, natural finish",1,25.00,25.00,2,2,Y,Mechanical,"Pilot only, ~200×100×25mm, switch to injection mold for production"

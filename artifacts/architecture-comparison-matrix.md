@@ -1,6 +1,6 @@
 # Architecture Comparison Matrix
 
-**Generated:** 2025-10-15
+**Generated:** 2025-10-16
 **Source:** source/architectures.yaml v2.0.0
 
 ## Cost

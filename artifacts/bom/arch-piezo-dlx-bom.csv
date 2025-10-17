@@ -1,8 +1,8 @@
 Line,Subsystem_ID,Subsystem_Name,Digikey_PN,MFR,MFR_PN,Description,Qty,Unit_Price_1000,Line_Total,Leadtime_Weeks,ROHS,Notes
-1,SS-ACTUATOR,Braille Actuator Array,TBD-PIEZO-01,TBD,TBD-PIEZO-2MM,"Bimorph piezoelectric actuator 2mm dia, 0.5mm stroke, 100-200VDC drive",192,1.20,230.40,8,Y,"Need vendor quote - placeholder cost, critical size ≤2.3mm, HIGH VOLTAGE RISK"
+1,SS-ACTUATOR,Braille Actuator Array,TBD-PIEZO-01,TBD,TBD-PIEZO-2MM,"Bimorph piezoelectric actuator 2mm width × 28mm length cantilever, 0.7mm stroke, 100VDC nominal drive",192,1.20,230.40,8,Y,"Need vendor quote - placeholder cost, critical width ≤2.3mm (from 2.5mm pitch - 1.5mm dot ÷ 2). 28mm length for 0.7mm stroke @ 100V (per piezo-voltage-options-analysis.md)"
 2,SS-CONTROL,Main Control Unit (MCU),497-14367-ND,STMicro,STM32F407VGT6,"ARM Cortex-M4 168MHz, 1MB Flash, 192KB RAM, 140 GPIO",1,7.20,7.20,12,Y,"Main MCU, check stock (long leadtime)"
 3,SS-IO-EXPAND,I/O Expander Array,MCP23017-E/SP-ND,Microchip,MCP23017-E/SP,"16-bit I2C I/O expander, 1.6MHz",4,0.95,3.80,6,Y,Also available in SOIC/QFN for SMT
-4,SS-ACTUATOR-DRIVER,Actuator High-Voltage Driver Array,TBD-HV-DRIVER,TBD,TBD-HV-DRV-200V,"High-voltage driver for piezo (200V+, capacitive load), 8-channel",24,3.00,72.00,8,Y,ULN2803A (50V max) INADEQUATE for 200V piezo! Need HV driver IC or discrete MOSFET array. COST ESTIMATE $3 (vs $0.65). MAJOR TECHNICAL RISK.
+4,SS-ACTUATOR-DRIVER,Actuator High-Voltage Driver Array,TBD-HV-DRIVER,TBD,TBD-HV-DRV-100V,"High-voltage driver for piezo (100V, capacitive load), 8-channel",24,3.00,72.00,8,Y,"ULN2803A (50V max) INADEQUATE for 100V piezo! Need HV driver IC or discrete MOSFET array (e.g., STD14NM60N 600V). COST ESTIMATE $3 (vs $0.65)."
 5,SS-USER-IO,User Interface Buttons,CKN12221-ND,C&K,KMR221NGLFS,"Tactile switch, 160gf, 1M+ cycles",2,0.18,0.36,2,Y,4.5×4.5mm footprint
 6,SS-PCB,Main PCB (4-layer),CUSTOM-PCB-01,PCBWay,PCB-4L-200x100,"4-layer PCB 200×100mm, ENIG finish",1,12.00,12.00,3,Y,"Quote for qty 100 (pilot), 1.6mm thick"
 7,SS-ENCLOSURE,Mechanical Enclosure,CUSTOM-ENCL-01,Shapeways,3DP-SLS-NYLON,"3D print SLS nylon, natural finish",1,25.00,25.00,2,Y,"Pilot only, ~200×100×25mm, switch to injection mold for production"
@@ -13,7 +13,6 @@ Line,Subsystem_ID,Subsystem_Name,Digikey_PN,MFR,MFR_PN,Description,Qty,Unit_Pric
 12,SS-POWER-LIION-CHARGER,Li-ion Charger IC,296-38713-1-ND,TI,BQ24075RGTT,"Li-ion charger IC, USB input, 1.5A",1,2.50,2.50,4,Y,USB-C charging
 13,SS-POWER-LIION-PROTECTION,Li-ion Protection Circuit,TBD-PROTECTION-01,TBD,TBD-BMS-1S,"1S Li-ion protection IC, overcharge/discharge",1,1.20,1.20,4,Y,Battery safety circuit
 14,SS-POWER-LIION-GAUGE,Fuel Gauge IC,296-41985-1-ND,TI,BQ27441DRZT-G1A,"Fuel gauge IC, I2C, SOC estimation",1,2.00,2.00,6,Y,Battery % indicator
-15,SS-POWER-LIION-BOOST-200V,Li-ion Power - Boost (3.7V→200V),TBD-HV-BOOST,TBD,TBD-BOOST-200V,Boost conv 3.7V→200V for piezo drive from Li-ion (capacitive load),1,6.50,6.50,10,Y,TPS61088 maxes at ~40V! Need specialized HV boost (likely flyback topology for 200V). Battery-powered 200V generation adds efficiency constraints. COST ESTIMATE $6.50. MAJOR TECHNICAL RISK.
----,---,---,---,---,---,SUBTOTAL,---,---,379.57,---,---,---
----,---,---,---,---,---,Misc 15%,---,---,56.94,---,---,"Passives, connectors"
----,---,---,---,---,---,TOTAL,---,---,436.51,---,---,---
+---,---,---,---,---,---,SUBTOTAL,---,---,373.07,---,---,---
+---,---,---,---,---,---,Misc 15%,---,---,55.96,---,---,"Passives, connectors"
+---,---,---,---,---,---,TOTAL,---,---,429.03,---,---,---

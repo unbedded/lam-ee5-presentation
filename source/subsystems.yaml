@@ -18,20 +18,20 @@ subsystems_core:
 
   SS-ACTUATOR:
     name: "Braille Actuator Array"
-    description: "192 bimorph piezo dots (32 cells × 6 dots/cell), 100-200VDC drive, CAPACITIVE LOAD"
+    description: "192 bimorph piezo dots (32 cells × 6 dots/cell), 100VDC nominal drive, CAPACITIVE LOAD"
     shared_across: ["ARCH-A", "ARCH-B", "ARCH-C"]
     requirements: ["PRD-FUNC-001", "PRD-FUNC-003", "NFR-STD-002"]
     part_ref: "TBD-PIEZO-01"
     quantity: 192
-    rationale: "Bimorph piezo: ≤2.3mm size, <100ms fast, low hold power. HIGH VOLTAGE (200V) = MAJOR TECHNICAL RISK!"
+    rationale: "Bimorph piezo: ≤2.3mm size, <100ms fast, low hold power. HIGH VOLTAGE (100V) = MAJOR TECHNICAL RISK!"
     load_characteristics: "CAPACITIVE (10-100nF per actuator). Unlike solenoid (INDUCTIVE), no flyback diodes needed, but high dV/dt switching into capacitive load creates displacement current and EMI."
     pcb_specs:
-      layers_required: 4  # Top + Bottom + GND + 200V HV plane (MANDATORY for isolation and EMI control)
+      layers_required: 4  # Top + Bottom + GND + 100V HV plane (MANDATORY for isolation and EMI control)
       min_trace_width_mil: 10  # Standard 10mil (0.25mm) for low-current piezo control
       min_spacing_mil: 10  # Standard 10mil spacing
-      hv_clearance_mil: 100  # 100mil (2.54mm) clearance for 200V piezo drive (IPC-2221 Class 2: 0.6mm/V × 200V = 120mm, use 100mil coated board)
+      hv_clearance_mil: 100  # 100mil (2.54mm) clearance for 100V piezo drive (IPC-2221 Class 2: 0.6mm/V × 100V = 120mm, use 100mil coated board)
       expected_hf_emissions_mhz: 2  # 1-5 MHz capacitive switching transients (dV/dt into capacitive load)
-      emi_concerns: "HIGH - 200V switching into capacitive piezo loads creates high dV/dt displacement currents. Requires: (1) Dedicated 200V HV plane with wide clearance, (2) Low-ESL bypass caps close to drivers, (3) Controlled slew-rate switching to limit dI/dt"
+      emi_concerns: "HIGH - 100V switching into capacitive piezo loads creates high dV/dt displacement currents. Requires: (1) Dedicated 100V HV plane with wide clearance, (2) Low-ESL bypass caps close to drivers, (3) Controlled slew-rate switching to limit dI/dt"
 
   SS-CONTROL:
     name: "Main Control Unit (MCU)"
@@ -67,20 +67,20 @@ subsystems_core:
 
   SS-ACTUATOR-DRIVER:
     name: "Actuator High-Voltage Driver Array"
-    description: "200V drivers for piezo actuators (CAPACITIVE LOAD)"
+    description: "100V drivers for piezo actuators (CAPACITIVE LOAD)"
     shared_across: ["ARCH-A", "ARCH-B", "ARCH-C"]
     requirements: ["SS-ACTUATOR"]
     part_ref: "TBD-HV-DRIVER"
     quantity: 24
-    rationale: "ULN2803A (50V max) INADEQUATE for 200V! Need specialized HV driver IC or discrete MOSFET array. COST ESTIMATE $3 (vs $0.65). MAJOR TECHNICAL & COST RISK!"
+    rationale: "ULN2803A (50V max) INADEQUATE for 100V! Need specialized HV driver IC or discrete MOSFET array. COST ESTIMATE $3 (vs $0.65). MAJOR TECHNICAL & COST RISK!"
     load_characteristics: "Driving CAPACITIVE load (piezo 10-100nF). No flyback diodes needed (unlike inductive solenoid). Key challenge: High dV/dt creates displacement current → EMI."
     pcb_specs:
-      layers_required: 4  # Top + Bottom + 200V HV plane + GND (isolated HV power distribution, CRITICAL for 200V)
+      layers_required: 4  # Top + Bottom + 100V HV plane + GND (isolated HV power distribution, CRITICAL for 100V)
       min_trace_width_mil: 15  # 15mil (0.38mm) for peak current per channel (lower than solenoid due to capacitive load)
       min_spacing_mil: 15  # 15mil spacing
-      hv_clearance_mil: 100  # 100mil (2.54mm) for 200V (IPC-2221 Class 2: 0.6mm/V × 200V, use 100mil coated board)
+      hv_clearance_mil: 100  # 100mil (2.54mm) for 100V (IPC-2221 Class 2: 0.6mm/V × 100V, use 100mil coated board)
       expected_hf_emissions_mhz: 5  # 1-10 MHz switching transients (capacitive load dV/dt ringing)
-      emi_concerns: "VERY HIGH - 200V switching into capacitive piezo loads. Requires: (1) Controlled slew-rate drivers (RC snubbers or gate resistors), (2) Star-ground HV return, (3) 200V plane isolation from digital GND, (4) Conformal coating for creepage/clearance"
+      emi_concerns: "VERY HIGH - 100V switching into capacitive piezo loads. Requires: (1) Controlled slew-rate drivers (RC snubbers or gate resistors), (2) Star-ground HV return, (3) 100V plane isolation from digital GND, (4) Conformal coating for creepage/clearance"
 
   SS-USER-IO:
     name: "User Interface Buttons"
@@ -219,20 +219,20 @@ subsystems_unique:
       emi_concerns: "LOW - Linear regulator (no switching), requires input/output decoupling caps only"
 
   SS-POWER-USB-BOOST:
-    name: "USB Power - Boost (5V→200V)"
-    description: "Actuator HV power from USB (200V for bimorph piezo)"
+    name: "USB Power - Boost (5V→100V)"
+    description: "Actuator HV power from USB (100V for bimorph piezo)"
     used_in: ["ARCH-B"]
     requirements: ["PRD-IFACE-001-ASMP"]
     part_ref: "TBD-HV-BOOST"
     quantity: 1
-    rationale: "TPS61088 maxes at ~40V! Need specialized HV boost (likely flyback topology for 200V). COST ESTIMATE $6.50 (vs $1.95). MAJOR TECHNICAL RISK - complex magnetics design, safety isolation."
+    rationale: "TPS61088 maxes at ~40V! Need specialized HV boost (likely flyback topology for 100V). COST ESTIMATE $6.50 (vs $1.95). MAJOR TECHNICAL RISK - complex magnetics design, safety isolation."
     pcb_specs:
-      layers_required: 4  # Top + Bottom + GND + 200V HV (switching converter needs GND plane, isolated 200V plane)
+      layers_required: 4  # Top + Bottom + GND + 100V HV (switching converter needs GND plane, isolated 100V plane)
       min_trace_width_mil: 30  # 30mil (0.76mm) for switch current
       min_spacing_mil: 20  # 20mil spacing for high-current traces
-      hv_clearance_mil: 100  # 100mil for 200V output (IPC-2221: 0.6mm/V for coated board)
+      hv_clearance_mil: 100  # 100mil for 100V output (IPC-2221: 0.6mm/V for coated board)
       expected_hf_emissions_mhz: 5  # HV flyback/boost switching, likely 100-500 kHz + harmonics to ~50 MHz
-      emi_concerns: "VERY HIGH - 200V boost/flyback creates extreme EMI. Requires: (1) Shielded inductor/transformer, (2) Snubber networks on HV switch node, (3) Y-capacitors for common-mode filtering, (4) CISPR 32 Class B compliance testing mandatory"
+      emi_concerns: "VERY HIGH - 100V boost/flyback creates extreme EMI. Requires: (1) Shielded inductor/transformer, (2) Snubber networks on HV switch node, (3) Y-capacitors for common-mode filtering, (4) CISPR 32 Class B compliance testing mandatory"
 
   SS-POWER-AA-HOLDER:
     name: "AA Battery Holder (4×AA)"
@@ -266,21 +266,21 @@ subsystems_unique:
       expected_hf_emissions_mhz: 2.5  # Same TPS61088, 1-2.5 MHz switching
       emi_concerns: "HIGH - Same as USB boost converter (tight layout, GND plane, ferrite bead)"
 
-  SS-POWER-AA-BOOST-200V:
-    name: "AA Power - Boost (6V→200V)"
-    description: "Actuator HV power from AA batteries (200V for bimorph piezo)"
+  SS-POWER-AA-BOOST-100V:
+    name: "AA Power - Boost (6V→100V)"
+    description: "Actuator HV power from AA batteries (100V for bimorph piezo)"
     used_in: ["ARCH-C"]
     requirements: ["PRD-SIZE-001-ASMP"]
     part_ref: "TBD-HV-BOOST"
     quantity: 1
-    rationale: "TPS61088 maxes at ~40V! Need specialized HV boost (likely flyback topology for 200V). COST ESTIMATE $6.50 (vs $1.95). MAJOR TECHNICAL RISK - complex magnetics design, safety isolation."
+    rationale: "TPS61088 maxes at ~40V! Need specialized HV boost (likely flyback topology for 100V). COST ESTIMATE $6.50 (vs $1.95). MAJOR TECHNICAL RISK - complex magnetics design, safety isolation."
     pcb_specs:
-      layers_required: 4  # Top + Bottom + GND + 200V HV (flyback/boost needs GND plane, isolated 200V plane)
+      layers_required: 4  # Top + Bottom + GND + 100V HV (flyback/boost needs GND plane, isolated 100V plane)
       min_trace_width_mil: 30  # 30mil (0.76mm) for switch current
       min_spacing_mil: 20  # 20mil spacing for high-current traces
-      hv_clearance_mil: 100  # 100mil for 200V output (IPC-2221: 0.6mm/V for coated board)
+      hv_clearance_mil: 100  # 100mil for 100V output (IPC-2221: 0.6mm/V for coated board)
       expected_hf_emissions_mhz: 5  # HV flyback/boost switching, likely 100-500 kHz + harmonics to ~50 MHz
-      emi_concerns: "VERY HIGH - 200V boost/flyback creates extreme EMI. Requires: (1) Shielded inductor/transformer, (2) Snubber networks on HV switch node, (3) Y-capacitors for common-mode filtering, (4) CISPR 32 Class B compliance testing mandatory"
+      emi_concerns: "VERY HIGH - 100V boost/flyback creates extreme EMI. Requires: (1) Shielded inductor/transformer, (2) Snubber networks on HV switch node, (3) Y-capacitors for common-mode filtering, (4) CISPR 32 Class B compliance testing mandatory"
 
   SS-POWER-LIION-CELL:
     name: "Li-ion Cell (18650)"
@@ -346,21 +346,21 @@ subsystems_unique:
       expected_hf_emissions_mhz: 0.4  # I2C Fast Mode 400 kHz
       emi_concerns: "LOW - I2C communication, requires kelvin sensing of battery current shunt resistor (4-wire measurement)"
 
-  SS-POWER-LIION-BOOST-200V:
-    name: "Li-ion Power - Boost (3.7V→200V)"
-    description: "Actuator HV power from Li-ion battery (200V for bimorph piezo)"
+  SS-POWER-LIION-BOOST-100V:
+    name: "Li-ion Power - Boost (3.7V→100V)"
+    description: "Actuator HV power from Li-ion battery (100V for bimorph piezo)"
     used_in: ["ARCH_PIEZO_DLX"]
     requirements: ["PRD-SIZE-001-ASMP"]
     part_ref: "TBD-HV-BOOST"
     quantity: 1
-    rationale: "TPS61088 maxes at ~40V! Need specialized HV boost (likely flyback topology for 200V). COST ESTIMATE $6.50 (vs $1.95). MAJOR TECHNICAL RISK - complex magnetics design, safety isolation, battery-powered 200V generation."
+    rationale: "TPS61088 maxes at ~40V! Need specialized HV boost (likely flyback topology for 100V). COST ESTIMATE $6.50 (vs $1.95). MAJOR TECHNICAL RISK - complex magnetics design, safety isolation, battery-powered 100V generation."
     pcb_specs:
-      layers_required: 4  # Top + Bottom + GND + 200V HV (flyback/boost needs GND plane, isolated 200V plane)
+      layers_required: 4  # Top + Bottom + GND + 100V HV (flyback/boost needs GND plane, isolated 100V plane)
       min_trace_width_mil: 30  # 30mil (0.76mm) for switch current
       min_spacing_mil: 20  # 20mil spacing for high-current traces
-      hv_clearance_mil: 100  # 100mil for 200V output (IPC-2221: 0.6mm/V for coated board)
+      hv_clearance_mil: 100  # 100mil for 100V output (IPC-2221: 0.6mm/V for coated board)
       expected_hf_emissions_mhz: 5  # HV flyback/boost switching, likely 100-500 kHz + harmonics to ~50 MHz
-      emi_concerns: "VERY HIGH - 200V boost/flyback creates extreme EMI. Requires: (1) Shielded inductor/transformer, (2) Snubber networks on HV switch node, (3) Y-capacitors for common-mode filtering, (4) CISPR 32 Class B compliance testing mandatory. Battery-powered adds efficiency constraints."
+      emi_concerns: "VERY HIGH - 100V boost/flyback creates extreme EMI. Requires: (1) Shielded inductor/transformer, (2) Snubber networks on HV switch node, (3) Y-capacitors for common-mode filtering, (4) CISPR 32 Class B compliance testing mandatory. Battery-powered adds efficiency constraints."
 
   # ARCH-D subsystems (OBSOLETE - replaced by ARCH_SOL_ECO cam mechanism)
   SS-ACTUATOR-SOLENOID:

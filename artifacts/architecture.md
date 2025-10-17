@@ -1,5 +1,5 @@
 # Braille Display - Solution Architectures
-**Generated:** 2025-10-15
+**Generated:** 2025-10-16
 **Source:** source/architectures.yaml v2.0.0
 
 ## Executive Summary
@@ -16,7 +16,7 @@ This document presents 3 alternative architectures for a 32-character braille di
 |--------------|----------|-----------------|------------|------------|----------|
 | ARCH_PIEZO_ECO | Value Desk | Entry-level | $125 | $415.35 | 6 weeks |
 | ARCH_SOL_ECO | Cam Innovation | Economy | $165 | $240.75 | 10 weeks |
-| ARCH_PIEZO_DLX | Premium Pro | Premium | $225 | $436.51 | 8 weeks |
+| ARCH_PIEZO_DLX | Premium Pro | Premium | $225 | $429.03 | 8 weeks |
 
 ---
 
@@ -37,7 +37,7 @@ Entry-level / Education / Desktop / Low-cost Piezo
 **Core Subsystems (Shared):**
 
 - **SS-ACTUATOR:** Braille Actuator Array → TBD-PIEZO-01 (TBD TBD-PIEZO-2MM)
-  - 192 bimorph piezo dots (32 cells × 6 dots/cell), 100-200VDC drive, CAPACITIVE LOAD
+  - 192 bimorph piezo dots (32 cells × 6 dots/cell), 100VDC nominal drive, CAPACITIVE LOAD
   - Qty: 1 × 192 = 192
 - **SS-CONTROL:** Main Control Unit (MCU) → 497-14367-ND (STMicro STM32F407VGT6)
   - Microcontroller for actuator control + text processing
@@ -45,8 +45,8 @@ Entry-level / Education / Desktop / Low-cost Piezo
 - **SS-IO-EXPAND:** I/O Expander Array → MCP23017-E/SP-ND (Microchip MCP23017-E/SP)
   - GPIO expansion (STM32 140 GPIO → 192 total needed)
   - Qty: 1 × 4 = 4
-- **SS-ACTUATOR-DRIVER:** Actuator High-Voltage Driver Array → TBD-HV-DRIVER (TBD TBD-HV-DRV-200V)
-  - 200V drivers for piezo actuators (CAPACITIVE LOAD)
+- **SS-ACTUATOR-DRIVER:** Actuator High-Voltage Driver Array → TBD-HV-DRIVER (TBD TBD-HV-DRV-100V)
+  - 100V drivers for piezo actuators (CAPACITIVE LOAD)
   - Qty: 1 × 24 = 24
 - **SS-USER-IO:** User Interface Buttons → CKN12221-ND (C&K KMR221NGLFS)
   - 2× tactile buttons (UP/DOWN navigation)
@@ -72,8 +72,8 @@ Entry-level / Education / Desktop / Low-cost Piezo
 - **SS-POWER-USB-LDO:** USB Power - LDO (5V→3.3V) → 296-38833-1-ND (TI TPS73633)
   - Logic power from USB
   - Qty: 1 × 1
-- **SS-POWER-USB-BOOST:** USB Power - Boost (5V→200V) → TBD-HV-BOOST (TBD TBD-BOOST-200V)
-  - Actuator HV power from USB (200V for bimorph piezo)
+- **SS-POWER-USB-BOOST:** USB Power - Boost (5V→100V) → TBD-HV-BOOST (TBD TBD-BOOST-100V)
+  - Actuator HV power from USB (100V for bimorph piezo)
   - Qty: 1 × 1
 
 ### Qualitative Assessment
@@ -343,7 +343,7 @@ Premium / Mobile Professional / Sleek Design / Rechargeable
 **Core Subsystems (Shared):**
 
 - **SS-ACTUATOR:** Braille Actuator Array → TBD-PIEZO-01 (TBD TBD-PIEZO-2MM)
-  - 192 bimorph piezo dots (32 cells × 6 dots/cell), 100-200VDC drive, CAPACITIVE LOAD
+  - 192 bimorph piezo dots (32 cells × 6 dots/cell), 100VDC nominal drive, CAPACITIVE LOAD
   - Qty: 1 × 192 = 192
 - **SS-CONTROL:** Main Control Unit (MCU) → 497-14367-ND (STMicro STM32F407VGT6)
   - Microcontroller for actuator control + text processing
@@ -351,8 +351,8 @@ Premium / Mobile Professional / Sleek Design / Rechargeable
 - **SS-IO-EXPAND:** I/O Expander Array → MCP23017-E/SP-ND (Microchip MCP23017-E/SP)
   - GPIO expansion (STM32 140 GPIO → 192 total needed)
   - Qty: 1 × 4 = 4
-- **SS-ACTUATOR-DRIVER:** Actuator High-Voltage Driver Array → TBD-HV-DRIVER (TBD TBD-HV-DRV-200V)
-  - 200V drivers for piezo actuators (CAPACITIVE LOAD)
+- **SS-ACTUATOR-DRIVER:** Actuator High-Voltage Driver Array → TBD-HV-DRIVER (TBD TBD-HV-DRV-100V)
+  - 100V drivers for piezo actuators (CAPACITIVE LOAD)
   - Qty: 1 × 24 = 24
 - **SS-USER-IO:** User Interface Buttons → CKN12221-ND (C&K KMR221NGLFS)
   - 2× tactile buttons (UP/DOWN navigation)
@@ -386,9 +386,6 @@ Premium / Mobile Professional / Sleek Design / Rechargeable
   - Qty: 1 × 1
 - **SS-POWER-LIION-GAUGE:** Fuel Gauge IC → 296-41985-1-ND (TI BQ27441DRZT-G1A)
   - Battery SOC estimation
-  - Qty: 1 × 1
-- **SS-POWER-LIION-BOOST-200V:** Li-ion Power - Boost (3.7V→200V) → TBD-HV-BOOST (TBD TBD-BOOST-200V)
-  - Actuator HV power from Li-ion battery (200V for bimorph piezo)
   - Qty: 1 × 1
 
 ### Qualitative Assessment
@@ -448,10 +445,10 @@ Premium / Mobile Professional / Sleek Design / Rechargeable
 
 **Cost:**
 
-- BOM Subtotal: $379.57
-- Misc 15%: $56.94
-- **BOM Total: $436.51** (Target: $225, Range: $200-$250)
-- **Cost Gap: $211.51 (94% over target)** ⚠️
+- BOM Subtotal: $373.07
+- Misc 15%: $55.96
+- **BOM Total: $429.03** (Target: $225, Range: $200-$250)
+- **Cost Gap: $204.03 (91% over target)** ⚠️
 - Certification: $35,000
 - NRE Total: $70,000
 
@@ -486,7 +483,7 @@ Premium / Mobile Professional / Sleek Design / Rechargeable
 | Metric | ARCH_PIEZO_ECO | ARCH_SOL_ECO | ARCH_PIEZO_DLX |
 |--------|---------|---------|---------|
 | BOM Target | $125 | $165 | $225 |
-| BOM Actual | $415.35 (232% over) ⚠️ | $240.75 (46% over) ⚠️ | $436.51 (94% over) ⚠️ |
+| BOM Actual | $415.35 (232% over) ⚠️ | $240.75 (46% over) ⚠️ | $429.03 (91% over) ⚠️ |
 | Certification | $20K | $20K | $35K |
 | NRE Total | $35K | $70K | $70K |
 
@@ -496,7 +493,7 @@ Premium / Mobile Professional / Sleek Design / Rechargeable
 
 - **ARCH_PIEZO_ECO:** $415.35 actual vs $125 target → **$290.35 gap (232% over)**
 - **ARCH_SOL_ECO:** $240.75 actual vs $165 target → **$75.75 gap (46% over)**
-- **ARCH_PIEZO_DLX:** $436.51 actual vs $225 target → **$211.51 gap (94% over)**
+- **ARCH_PIEZO_DLX:** $429.03 actual vs $225 target → **$204.03 gap (91% over)**
 
 **Primary cost driver:** SS-ACTUATOR ($288.00 for 192× actuators)
 
@@ -515,7 +512,7 @@ Premium / Mobile Professional / Sleek Design / Rechargeable
 |--------------|--------|-------------|-----------|--------------|---------------|
 | ARCH_PIEZO_ECO (Piezo Economy (Wired)) | 4-layer | 200V drivers, USB, boost conv | 6 mil | 100 mil | 168 MHz |
 | ARCH_SOL_ECO (Solenoid Economy (Rotary Cam)) | 4-layer | 12V drivers, USB, boost conv | 6 mil | 20 mil | 168 MHz |
-| ARCH_PIEZO_DLX (Piezo Deluxe (Wireless)) | 4-layer | 200V drivers, BLE (2.4 GHz), boost conv | 6 mil | 100 mil | 2440 MHz |
+| ARCH_PIEZO_DLX (Piezo Deluxe (Wireless)) | 4-layer | 200V drivers, BLE (2.4 GHz) | 6 mil | 100 mil | 2440 MHz |
 
 **Layer Stack (all 4-layer architectures):**
 

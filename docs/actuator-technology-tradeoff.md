@@ -106,7 +106,7 @@ From `source/requirements.yaml`:
 |---------|---------|
 | Fastest response time (10-50ms) | **HIGH COST** (biggest driver of BOM overrun) |
 | Near-zero hold power (critical for battery) | **VERY HIGH VOLTAGE** (100-200V, complex HV boost converter) |
-| Small size (2mm diameter achievable) | **EXTREME EMI RISK** (192 unshielded 200V antennas, see piezo-emi-design-analysis.md) |
+| Small size (2mm diameter achievable) | **EXTREME EMI RISK** (192 unshielded 200V antennas, see actuator-piezo-emi-design-analysis.md) |
 | High force in small package | Brittle ceramic (vibration/shock sensitivity) |
 | Proven technology in existing braille displays | Limited vendor availability for custom small sizes |
 | Capacitive load = low power | Higher driver cost ($3 vs $0.65 for HV ICs) |
@@ -117,7 +117,7 @@ From `source/requirements.yaml`:
 - **100mil HV clearance** (IPC-2221 Class 2 for 200V coated board)
 - **Conformal coating required** (creepage/clearance protection)
 - **NO flyback diodes** (capacitive load, not inductive)
-- **Sequential firing required** (8-way parallel + 1ms slew rate, see piezo-emi-design-analysis.md)
+- **Sequential firing required** (8-way parallel + 1ms slew rate, see actuator-piezo-emi-design-analysis.md)
 - **High-frequency emissions:** 10-50 MHz (capacitive dV/dt switching transients)
 - **Pre-compliance EMI testing MANDATORY** before pilot production
 
