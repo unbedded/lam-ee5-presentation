@@ -403,7 +403,7 @@ Ready to discuss:
 ## Testing All Features
 
 **Images:**
-![Test Image](market-price-vs-chars.svg)
+![Test Image](images/market-price-vs-chars.svg)
 
 **Multi-level bullets:**
 - Level 1: Top level
