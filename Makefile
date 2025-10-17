@@ -168,14 +168,10 @@ marp: source/presentation-marp.md
 	@echo "⚠️  NOTE: PPTX export exists but slides are NOT EDITABLE (images only)"
 	@echo "   If you need editable PPTX: Upload HTML to Google Slides instead"
 
-# Clean presentation files (legacy Pandoc artifacts)
+# Clean presentation files
 presentation-clean:
-	rm -f source/presentation.pptx artifacts/presentation.pdf artifacts/presentation-marp.html artifacts/presentation-marp.pdf
-	@echo "Cleaned presentation files"
-
-# Build only presentation materials (Markdown->PDF, legacy)
-presentation: artifacts/presentation.pdf
-	@echo "Presentation PDF ready for interview"
+	rm -f artifacts/presentation-marp.html artifacts/presentation-marp.pdf
+	@echo "Cleaned Marp presentation files"
 
 # Build only technical analysis
 analysis: artifacts/technical-analysis.pdf
@@ -208,7 +204,7 @@ print-to: $(PDF_FILES)
 	@echo "All PDFs sent to $(PRINTER)"
 
 # Email presentation (usage: make email-pres EMAIL=recruiter@email.com)
-email-pres: artifacts/presentation.pdf
+email-pres: artifacts/presentation-marp.pdf
 	@if [ -z "$(EMAIL)" ]; then \
 		echo "Error: Please specify EMAIL=recruiter@email.com"; \
 		exit 1; \
@@ -217,7 +213,7 @@ email-pres: artifacts/presentation.pdf
 	@echo "Opening email client with attachment..."
 	xdg-email --subject "Lam Research EE Interview - Presentation Materials" \
 	          --body "Please find attached my presentation materials for the upcoming interview." \
-	          --attach artifacts/presentation.pdf \
+	          --attach artifacts/presentation-marp.pdf \
 	          $(EMAIL)
 
 # List all markdown files and PDFs
@@ -273,7 +269,6 @@ help:
 	@echo ""
 	@echo "PDF Conversion (Pandoc):"
 	@echo "  make all                     - Convert all .md files to PDF"
-	@echo "  make presentation            - Build only presentation PDF (legacy Markdown->PDF)"
 	@echo "  make analysis                - Build only technical analysis PDF"
 	@echo "  make rubrics                 - Build only rubric PDFs"
 	@echo "  make clean                   - Remove all PDF files"
@@ -307,4 +302,4 @@ help:
 	@echo "    /req-trace         - Generate traceability matrix"
 	@echo "    /req-risk-report   - Risk-rank assumptions"
 
-.PHONY: all clean rebuild marp presentation presentation-clean analysis rubrics print print-to email-pres list check help arch-gen tradeoff-extract tradeoff-plot tradeoff-charts artifacts
+.PHONY: all clean rebuild marp presentation-clean analysis rubrics print print-to email-pres list check help arch-gen tradeoff-extract tradeoff-plot tradeoff-charts artifacts
