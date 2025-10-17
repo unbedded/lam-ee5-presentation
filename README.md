@@ -130,41 +130,41 @@ make help             # Show all available commands
 
 ### Building Presentation
 
-**Workflow: Markdown → PPTX (automated) → Manual polish (one-way)**
+**Primary Workflow: Marp HTML Presentation (RECOMMENDED)**
 
-**Phase 1: Markdown-based rapid iteration (v2.1-v2.2)**
+Fast, editable Markdown source with 1-second regeneration:
+
 ```bash
-make presentation              # Generate PPTX from Markdown
-make presentation-pdf          # Export PPTX to PDF for review
+# Install Marp CLI (one-time setup)
+npm install -g @marp-team/marp-cli
+
+# Edit → Regenerate → Present workflow
+vim source/presentation-marp.md   # Edit Markdown with CSS styling
+make marp                          # Regenerate (1 second!)
+firefox artifacts/presentation-marp.html  # Present (F11 for fullscreen)
 ```
 
-**Phase 2: Manual refinement (v2.3-v2.4) - ONE-WAY conversion**
+**Presentation structure (Marp):**
+- `source/presentation-marp.md` - Editable Markdown source (in git)
+- `source/market-price-vs-chars.svg` - Images (same directory as .md)
+- `artifacts/presentation-marp.html` - HTML presentation (generated, not in git)
+- `artifacts/presentation-marp.pdf` - PDF export (generated, not in git)
+- `docs/PRESENTATION-FINAL-WORKFLOW.md` - Complete workflow guide
+
+**Key features:**
+- CSS styling in YAML frontmatter (blue theme, table headers, takeaway boxes)
+- 1-second regeneration (`make marp`)
+- Works in any browser (Firefox, Chrome, Edge)
+- Keyboard navigation (Arrow keys, Space, F11 for fullscreen)
+- Version controlled source (only .md in git)
+
+**Alternative: Pandoc PPTX (legacy)**
+
+For PPTX output (not recommended - quality issues, not editable):
+
 ```bash
-# WARNING: After opening in PowerPoint, don't regenerate from Markdown!
-# Manual edits will be lost if you run `make presentation` again.
-
-# Edit source/presentation.pptx directly in PowerPoint
-# Add complex layouts, custom formatting, diagrams
-# Final export: File → Export → PDF → artifacts/presentation.pdf
-```
-
-**Presentation structure:**
-- `source/presentation-slides.md` - Slide content (Markdown with YAML frontmatter)
-- `source/presentation.pptx` - Generated PPTX (Phase 1) → Manual PPTX (Phase 2)
-- `resources/style/lam-theme.pptx` - Pandoc reference template (optional)
-- `resources/diagrams/*.png` - Slide images (referenced in Markdown)
-- `artifacts/presentation.pdf` - Final export for email (v3.2.0)
-
-**Image references in Markdown:**
-```markdown
-![Architecture comparison](../resources/diagrams/arch-comparison.png)
-```
-
-**Pandoc command (automated by Makefile):**
-```bash
-pandoc source/presentation-slides.md \
-  --reference-doc=resources/style/lam-theme.pptx \
-  -o source/presentation.pptx
+make pptx           # Generate PPTX from Markdown (Pandoc)
+make pptx-pdf       # Export PPTX to PDF (requires LibreOffice)
 ```
 
 ### Interview Format
@@ -210,27 +210,32 @@ pandoc source/presentation-slides.md \
     └─ target
         └── artifacts/rubric-reports/assumption-risk-report.md
 
-[/arch-gen]  # Generate architecture documentation with BOMs
-    ├─ source (direct reads)
-    │   ├── source/parts.csv (23 parts with Digikey PNs, costs, lead times)
-    │   ├── source/subsystems.yaml (19 subsystems with electrical/mechanical specs)
-    │   └── source/architectures.yaml (4 architectures with qualitative + quantitative specs)
-    ├─ supporting analysis (referenced in YAML, not parsed by generator)
-    │   ├── source/requirements.yaml (24 requirements driving architecture decisions)
-    │   ├── docs/market-braille-display-scan.md (competitive landscape)
-    │   ├── docs/actuator-technology-tradeoff.md (5 technologies compared)
-    │   ├── docs/actuator-mechanical-latch-concept.md (mechanical analysis for ARCH-D)
-    │   ├── docs/power-budget-analysis.md (detailed calculations)
-    │   ├── docs/cots-timeline-analysis.md (lead time constraints)
-    │   └── artifacts/rubric-reports/req-traceability-report.md (100% coverage)
+[/arch-gen]  # Generate architecture documentation, BOMs, and trade-off charts
+    ├─ source (SSOT - Single Source of Truth)
+    │   ├── source/parts.csv (29 parts: Digikey PNs, costs, leadtimes, ROHS)
+    │   ├── source/subsystems.yaml (19 core + 15 unique subsystems with specs)
+    │   ├── source/architectures.yaml (3 architectures: PIEZO_ECO, SOL_ECO, PIEZO_DLX)
+    │   └── source/decision-logic.yaml (decision tree rules for architecture selection)
+    ├─ pipeline
+    │   ├── scripts/generate_arch_artifacts.py (YAML → MD + CSV)
+    │   ├── scripts/extract_tradeoff_data.py (YAML + CSV → JSON)
+    │   ├── scripts/plot_tradeoff_charts.py (JSON → PNG charts)
+    │   └── scripts/generate_subsystem_comparison_table.py (YAML → PNG table)
+    ├─ intermediate
+    │   └── data/tradeoff-data.json (extracted metrics for plotting)
     └─ target
         ├── artifacts/architecture.md (technical reference: subsystems, specs, BOMs)
-        ├── artifacts/bom/arch-b-wired-bom.csv (BOM for ARCH-B: $420)
-        ├── artifacts/bom/arch-c-hybrid-bom.csv (BOM for ARCH-C: $438)
-        ├── artifacts/bom/arch-d-solenoid-latch-bom.csv (BOM for ARCH-D: $210)
-        ├── artifacts/bom/arch-a-wireless-bom.csv (BOM for ARCH-A: $442)
-        └── artifacts/architecture-comparison-matrix.md (quantitative comparison tables)
-    Note: For strategic analysis with trade-offs/recommendations, see docs/architecture.md (manual)
+        ├── artifacts/bom/arch-piezo-eco-bom.csv ($345.26 - wired, USB-powered)
+        ├── artifacts/bom/arch-sol-eco-bom.csv ($240.75 - wired, AA batteries)
+        ├── artifacts/bom/arch-piezo-dlx-bom.csv ($364.17 - BLE wireless, Li-ion)
+        ├── artifacts/architecture-comparison-matrix.md (quantitative tables)
+        ├── resources/diagrams/architecture-cost-comparison.png (stacked cost bars)
+        ├── resources/diagrams/architecture-timeline-comparison.png (stacked timeline)
+        ├── resources/diagrams/architecture-radar-comparison.png (8-dimension spider)
+        ├── resources/diagrams/architecture-decision-tree.png (selection logic)
+        └── resources/diagrams/subsystem-comparison-table.png (BLE/Power/Actuator)
+    Data flow: parts.csv (SSOT) → BOM CSV → extract → JSON → plot → charts
+    Note: All cost actuals derive from parts.csv (Unit_Price_1000 column)
 
 [/rubric-eval]  # Evaluate phase against interview rubric (0-100 pts)
     ├─ source
