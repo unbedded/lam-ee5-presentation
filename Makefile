@@ -144,6 +144,67 @@ clean:
 rebuild: clean all
 
 # ============================================================================
+# APPENDIX PDF GENERATION - Reference materials for presentation
+# ============================================================================
+
+# Create appendix directory
+artifacts/appendix:
+	@mkdir -p artifacts/appendix
+
+# Convert key markdown files to appendix PDFs
+artifacts/appendix/requirements.pdf: artifacts/requirements.md $(STYLE) | artifacts/appendix
+	@echo "Converting $< -> $@..."
+	$(PANDOC) $< -o $@ $(STD_OPTS)
+	@echo "✓ Created $@"
+
+artifacts/appendix/architecture.pdf: artifacts/architecture.md $(STYLE) | artifacts/appendix
+	@echo "Converting $< -> $@..."
+	$(PANDOC) $< -o $@ $(STD_OPTS)
+	@echo "✓ Created $@"
+
+artifacts/appendix/architecture-comparison.pdf: artifacts/architecture-comparison-matrix.md $(STYLE) | artifacts/appendix
+	@echo "Converting $< -> $@..."
+	$(PANDOC) $< -o $@ $(STD_OPTS)
+	@echo "✓ Created $@"
+
+# Convert CSV BOMs to PDF (via pandoc CSV reader)
+artifacts/appendix/bom-piezo-eco.pdf: artifacts/bom/arch-piezo-eco-bom.csv | artifacts/appendix
+	@echo "Converting $< -> $@..."
+	$(PANDOC) $< -o $@ --pdf-engine=$(PDF_ENGINE) -V geometry:margin=0.5in -V fontsize=9pt -V mainfont="$(FONT)"
+	@echo "✓ Created $@"
+
+artifacts/appendix/bom-sol-eco.pdf: artifacts/bom/arch-sol-eco-bom.csv | artifacts/appendix
+	@echo "Converting $< -> $@..."
+	$(PANDOC) $< -o $@ --pdf-engine=$(PDF_ENGINE) -V geometry:margin=0.5in -V fontsize=9pt -V mainfont="$(FONT)"
+	@echo "✓ Created $@"
+
+artifacts/appendix/bom-piezo-dlx.pdf: artifacts/bom/arch-piezo-dlx-bom.csv | artifacts/appendix
+	@echo "Converting $< -> $@..."
+	$(PANDOC) $< -o $@ --pdf-engine=$(PDF_ENGINE) -V geometry:margin=0.5in -V fontsize=9pt -V mainfont="$(FONT)"
+	@echo "✓ Created $@"
+
+# Generate all appendix PDFs
+appendix: artifacts/appendix/requirements.pdf \
+          artifacts/appendix/architecture.pdf \
+          artifacts/appendix/architecture-comparison.pdf \
+          artifacts/appendix/bom-piezo-eco.pdf \
+          artifacts/appendix/bom-sol-eco.pdf \
+          artifacts/appendix/bom-piezo-dlx.pdf
+	@echo ""
+	@echo "✅ All appendix PDFs generated in artifacts/appendix/"
+	@echo ""
+	@echo "Reference from presentation PDF using relative paths:"
+	@echo "  appendix/requirements.pdf"
+	@echo "  appendix/architecture.pdf"
+	@echo "  appendix/bom-piezo-eco.pdf"
+	@echo ""
+
+# Clean appendix PDFs
+appendix-clean:
+	rm -rf artifacts/appendix
+	@echo "Cleaned appendix PDFs"
+
+# ============================================================================
 # PRESENTATION GENERATION - Markdown → PPTX workflow
 # ============================================================================
 
@@ -273,6 +334,8 @@ help:
 	@echo ""
 	@echo "PDF Conversion (Pandoc):"
 	@echo "  make all                     - Convert all .md files to PDF"
+	@echo "  make appendix                - Generate appendix PDFs (requirements, BOMs, architecture)"
+	@echo "  make appendix-clean          - Remove appendix PDFs"
 	@echo "  make analysis                - Build only technical analysis PDF"
 	@echo "  make rubrics                 - Build only rubric PDFs"
 	@echo "  make clean                   - Remove all PDF files"
@@ -306,4 +369,4 @@ help:
 	@echo "    /req-trace         - Generate traceability matrix"
 	@echo "    /req-risk-report   - Risk-rank assumptions"
 
-.PHONY: all clean rebuild marp presentation-clean analysis rubrics print print-to email-pres list check help arch-gen tradeoff-extract tradeoff-plot tradeoff-charts artifacts
+.PHONY: all clean rebuild marp presentation-clean analysis rubrics print print-to email-pres list check help arch-gen tradeoff-extract tradeoff-plot tradeoff-charts artifacts appendix appendix-clean
