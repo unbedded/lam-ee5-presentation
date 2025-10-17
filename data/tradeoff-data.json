@@ -46,7 +46,7 @@
         10.0,
         7.6,
         8.25,
-        9.0,
+        6.2,
         1.0,
         5.0,
         5.0
@@ -66,7 +66,7 @@
         5.0,
         6.67,
         6.0,
-        5.6,
+        4.4,
         4.0,
         5.0,
         5.0
@@ -92,30 +92,30 @@
     {
       "arch_id": "ARCH_PIEZO_ECO",
       "name": "Piezo Economy (Wired)",
-      "cost": 345.26,
+      "cost": 415.35,
       "breakdown": {
-        "Actuators": 246.0,
+        "Actuators": 302.4,
         "Control": 11.0,
-        "Power": 2.55,
+        "Power": 7.1,
         "Communication": 1.2,
         "Mechanical": 37.36,
         "EMI": 2.11,
-        "Misc": 45.03
+        "Misc": 54.18
       },
       "order": 1
     },
     {
       "arch_id": "ARCH_PIEZO_DLX",
       "name": "Piezo Deluxe (Wireless)",
-      "cost": 364.17,
+      "cost": 429.03,
       "breakdown": {
-        "Actuators": 246.0,
+        "Actuators": 302.4,
         "Control": 11.0,
         "Power": 9.7,
         "Communication": 10.5,
         "Mechanical": 37.36,
         "EMI": 2.11,
-        "Misc": 47.5
+        "Misc": 55.96
       },
       "order": 2
     }
@@ -154,7 +154,7 @@
       "unit_price": 1.2,
       "qty": 192,
       "total_cost": 230.4,
-      "notes": "Need vendor quote - placeholder cost, critical size \u22642.3mm"
+      "notes": "Need vendor quote - placeholder cost, critical width \u22642.3mm (from 2.5mm pitch - 1.5mm dot \u00f7 2). 28mm length for 0.7mm stroke @ 100V (per actuator-piezo-voltage-options-analysis.md)"
     },
     "ARCH_SOL_ECO": {
       "unit_price": 0.5,
@@ -166,7 +166,7 @@
       "unit_price": 1.2,
       "qty": 192,
       "total_cost": 230.4,
-      "notes": "Need vendor quote - placeholder cost, critical size \u22642.3mm"
+      "notes": "Need vendor quote - placeholder cost, critical width \u22642.3mm (from 2.5mm pitch - 1.5mm dot \u00f7 2). 28mm length for 0.7mm stroke @ 100V (per actuator-piezo-voltage-options-analysis.md)"
     }
   },
   "decision_tree": [
