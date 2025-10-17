@@ -151,7 +151,7 @@ rebuild: clean all
 marp: source/presentation-marp.md
 	@echo "Generating presentation with Marp..."
 	@echo "Copying images to artifacts/ for HTML presentation..."
-	@cp -f source/*.svg source/*.png source/*.jpg artifacts/ 2>/dev/null || true
+	@cp -f source/images/*.svg source/images/*.png source/images/*.jpg artifacts/ 2>/dev/null || true
 	@marp source/presentation-marp.md -o artifacts/presentation-marp.html --allow-local-files
 	@marp source/presentation-marp.md -o artifacts/presentation-marp.pdf --allow-local-files --pdf
 	@echo "✓ artifacts/presentation-marp.html generated (HTML presentation)"
