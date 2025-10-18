@@ -317,7 +317,7 @@ table {
 
 ---
 
-# BOM Details - Detailed Cost Breakdown
+# Design EE BOM Tracking
 
 **Full Bill of Materials (CSV format):**
 
@@ -343,7 +343,7 @@ table {
 
 ---
 
-# BOM Cost Comparison
+# Detailed Cost Breakdown
 
 <img src="images/architecture-cost-comparison.png" alt="BOM Cost Comparison" style="max-height: 450px;">
 
