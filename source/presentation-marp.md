@@ -309,7 +309,7 @@ table {
 | **Timeline** | <span class="fail">>8wk (custom >4wk)</span> | <span class="fail">>8wk (custom >4wk)</span> | <span class="fail">>8wk (custom >4wk)</span> |
 | **BOM Actual** | **$505.71** | **$591.99** | **$605.67** |
 | **$/Actuator** | **$1.70** | **$2.00** | **$2.00** |
-| **Key Trade-off** | **Best cost-performance** | Standard approach | Best UX, highest cost |
+| **Key Trade-off** | **ME complexity (lever)** | **EMI risk (λ/4 antenna)** | **EMI + BLE cert risk** |
 
 > **TAKEAWAY:** SOL_ECO wins on cost: $505.71 BOM via 15% actuator savings.
 
