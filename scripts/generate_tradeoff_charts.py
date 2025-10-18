@@ -432,9 +432,9 @@ def generate_cost_chart(architectures, output_path):
     # Create figure
     fig, ax = plt.subplots(figsize=(10, 7))
 
-    # Color scheme for subsystems
+    # Color scheme for subsystems (colorblind-safe, aesthetically pleasing)
     subsys_colors = {
-        "Actuators": "#E63946",      # Red (largest cost driver)
+        "Actuators": "#5B4B8A",      # Deep purple (largest cost driver)
         "Control": "#457B9D",        # Blue
         "Power": "#F4A261",          # Orange
         "Communication": "#2A9D8F",  # Teal
@@ -464,7 +464,7 @@ def generate_cost_chart(architectures, output_path):
     ax.set_title('BOM Cost Comparison (Pilot Quantity)\nSubsystem Breakdown', fontsize=14, weight='bold', pad=15)
     ax.grid(axis='y', linestyle='--', alpha=0.3)
     ax.set_axisbelow(True)
-    ax.legend(loc='upper left', fontsize=9, framealpha=0.9)
+    ax.legend(loc='lower right', fontsize=9, framealpha=0.9)
 
     # Format y-axis as currency
     ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'${x:.0f}'))
