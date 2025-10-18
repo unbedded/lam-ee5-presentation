@@ -304,7 +304,7 @@ table {
 | **Market Position** | Economy / Budget | Entry / Education | Premium / Pro |
 | **Communication** | USB-C (Wired) | USB-C (Wired) | BLE Wireless |
 | **Power Source** | USB Bus-Powered | USB Bus-Powered | Li-ion Battery + Charger |
-| **Actuator Type** | 6-7mm Solenoid | 2mm Piezo | 2mm Piezo |
+| **Actuator Type** | Solenoid-12V | 2mm Piezo-100V | 2mm Piezo-100V |
 | **Mechanical** | Lever (6mm→2.5mm) | Direct drive | Direct drive |
 | **Timeline** | <span class="fail">>8wk (custom >4wk)</span> | <span class="fail">>8wk (custom >4wk)</span> | <span class="fail">>8wk (custom >4wk)</span> |
 | **BOM Actual** | **$505.71** | **$591.99** | **$605.67** |
@@ -347,19 +347,9 @@ table {
 
 <img src="images/architecture-cost-comparison.png" alt="BOM Cost Comparison" style="max-height: 450px;">
 
-**Key Insights:**
-- **SOL_ECO:** $505.71 - Lowest cost via 15% actuator savings ($1.70 vs $2.00)
-- **PIEZO_ECO:** $591.99 - Standard piezo approach, USB-C wired
-- **PIEZO_DLX:** $605.67 - Wireless premium (BLE + Li-ion battery adds $13.68)
-
-**Cost Drivers:**
-- Actuators: 55-65% of total BOM ($326-$384 for 192 pins)
-- Wireless subsystem: BLE module + battery + charger = +$13.68 (PIEZO_DLX)
-- Mechanical subsystem: Lever mechanism = +$0 BOM (SOL_ECO design complexity)
-
 > **TAKEAWAY:** SOL_ECO wins cost via mechanical innovation, not cheaper parts.
 
-<!-- Speaker notes: "All three architectures are over $200 BOM target - this is honest engineering. SOL_ECO wins via mechanical innovation (levers enable cheaper solenoids). PIEZO_DLX wireless premium is only $13.68 - BLE module is pre-certified which saves certification cost. Path to $200: volume pricing (10K units), reduce from 32 to 24 cells (25% savings), value engineering (2-layer PCB)." -->
+<!-- Speaker notes: "Stacked bar shows subsystem breakdown. SOL_ECO $506, PIEZO_ECO $592, PIEZO_DLX $606. All over $200 target - honest engineering. Key insights: Actuators dominate 55-65% of BOM ($326-$384 for 192 pins). SOL_ECO saves 15% on actuators ($1.70 vs $2.00 piezo). PIEZO_DLX wireless premium only $13.68 (BLE + battery + charger). Lever mechanism adds $0 BOM but ME complexity. Path to $200: volume pricing (10K units), reduce 32→24 cells (25% savings), value engineering (2-layer PCB)." -->
 
 ---
 
