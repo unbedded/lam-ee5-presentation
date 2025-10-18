@@ -153,15 +153,23 @@ October 2025
 
 # Actuator Technology Brainstorming
 
+<style scoped>
+table {
+  font-size: 16px;
+}
+table td {
+  white-space: nowrap;
+}
+</style>
 
-| Technology | Size<br>(mm) | Force<br>(N) | Speed<br>(ms) | Hold PWR<br>(W) | $/PIN<br>(USD) | Verdict |
-|------------|--------------|--------------|---------------|-----------------|----------------|---------|
-| **Piezo** | 2 ✅ | 0.5-1.5 ✅ | 10-50 ✅ | ~0 ✅ | 1.50 ⚠️ | ⚠️ **BASELINE (EMI RISK)** |
-| **Solenoid** | 4 ❌ | 0.5-2.0 ✅ | 20-100 ✅ | 9.6-19 ❌ | 0.50-0.80 ✅ | ⚠️ **If size relaxed** |
-| **Solenoid (Latch)** | 4 ❌ | 0.5-2.0 ✅ | 20-100 ✅ | ~0 ✅ | 1.00-1.50 ⚠️ | ⚠️ **If size relaxed** |
-| **SMA Wire** | 0.15 ✅ | 0.1-0.5 ❌ | 700-1500 ❌ | 38-96 ❌ | 0.10-0.30 ✅ | ❌ **Too slow/weak** |
-| **Voice Coil** | 6 ❌ | 0.5-3.0 ✅ | 5-20 ✅ | 9.6-29 ❌ | 2.00-3.00 ❌ | ❌ **Too expensive** |
-| **MEMS** | 2-5 ✅ | 0.001-0.01 ❌ | 1-10 ✅ | ~0 ✅ | 5.00-20.00 ❌ | ❌ **Insufficient force** |
+| Technology | Size (mm) | Force (N) | Speed (ms) | Hold PWR (W) | $/PIN (USD) | Verdict |
+|------------|-----------|-----------|------------|--------------|-------------|---------|
+| **Piezo** | 2&nbsp;✅ | 0.5-1.5&nbsp;✅ | 10-50&nbsp;✅ | ~0&nbsp;✅ | 1.50&nbsp;⚠️ | ⚠️&nbsp;**BASELINE (EMI RISK)** |
+| **Solenoid** | 4&nbsp;❌ | 0.5-2.0&nbsp;✅ | 20-100&nbsp;✅ | 9.6-19&nbsp;❌ | 0.50-0.80&nbsp;✅ | ⚠️&nbsp;**If size relaxed** |
+| **Solenoid (Latch)** | 4&nbsp;❌ | 0.5-2.0&nbsp;✅ | 20-100&nbsp;✅ | ~0&nbsp;✅ | 1.00-1.50&nbsp;⚠️ | ⚠️&nbsp;**If size relaxed** |
+| **SMA Wire** | 0.15&nbsp;✅ | 0.1-0.5&nbsp;❌ | 700-1500&nbsp;❌ | 38-96&nbsp;❌ | 0.10-0.30&nbsp;✅ | ❌&nbsp;**Too slow/weak** |
+| **Voice Coil** | 6&nbsp;❌ | 0.5-3.0&nbsp;✅ | 5-20&nbsp;✅ | 9.6-29&nbsp;❌ | 2.00-3.00&nbsp;❌ | ❌&nbsp;**Too expensive** |
+| **MEMS** | 2-5&nbsp;✅ | 0.001-0.01&nbsp;❌ | 1-10&nbsp;✅ | ~0&nbsp;✅ | 5.00-20.00&nbsp;❌ | ❌&nbsp;**Insufficient force** |
 
 **Key Constraint:** Actuator size ≤2.3mm (derived from 2.5mm ADA braille pitch)
 
