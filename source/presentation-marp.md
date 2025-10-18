@@ -343,6 +343,26 @@ table {
 
 ---
 
+# BOM Cost Comparison
+
+<img src="images/architecture-cost-comparison.png" alt="BOM Cost Comparison" style="max-height: 450px;">
+
+**Key Insights:**
+- **SOL_ECO:** $505.71 - Lowest cost via 15% actuator savings ($1.70 vs $2.00)
+- **PIEZO_ECO:** $591.99 - Standard piezo approach, USB-C wired
+- **PIEZO_DLX:** $605.67 - Wireless premium (BLE + Li-ion battery adds $13.68)
+
+**Cost Drivers:**
+- Actuators: 55-65% of total BOM ($326-$384 for 192 pins)
+- Wireless subsystem: BLE module + battery + charger = +$13.68 (PIEZO_DLX)
+- Mechanical subsystem: Lever mechanism = +$0 BOM (SOL_ECO design complexity)
+
+> **TAKEAWAY:** SOL_ECO wins cost via mechanical innovation, not cheaper parts.
+
+<!-- Speaker notes: "All three architectures are over $200 BOM target - this is honest engineering. SOL_ECO wins via mechanical innovation (levers enable cheaper solenoids). PIEZO_DLX wireless premium is only $13.68 - BLE module is pre-certified which saves certification cost. Path to $200: volume pricing (10K units), reduce from 32 to 24 cells (25% savings), value engineering (2-layer PCB)." -->
+
+---
+
 # Architecture A: ARCH_PIEZO_ECO
 
 ## Piezo Economy (Wired, Standard)

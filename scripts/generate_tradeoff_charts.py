@@ -28,10 +28,10 @@ ARCHITECTURES_YAML = Path("source/architectures.yaml")
 OUTPUT_DIR = Path("source/images")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-# Color scheme for each architecture (presentation-friendly)
+# Color scheme for each architecture (presentation-friendly, colorblind-safe)
 ARCH_COLORS = {
     "ARCH_PIEZO_ECO": "#2E86AB",  # Blue - economy/standard
-    "ARCH_SOL_ECO": "#A23B72",    # Purple - mechanical innovation
+    "ARCH_SOL_ECO": "#06A77D",    # Teal/green - mechanical innovation (was purple/magenta)
     "ARCH_PIEZO_DLX": "#F18F01",  # Orange - premium/deluxe
 }
 
@@ -175,22 +175,16 @@ def extract_spider_data(architectures):
     for arch in architectures:
         quant = arch.get('quantitative', {})
 
-        # Parse cost (e.g., "$420" → 420)
-        cost_str = quant.get('bom_cost_pilot', '0')
-        cost = float(cost_str.replace('$', '').replace(',', ''))
+        # Parse cost - from nested cost.bom_target (not bom_cost_pilot)
+        cost = float(quant.get('cost', {}).get('bom_target', 0))
         costs.append(cost)
 
-        # Parse timeline (e.g., "8-10" → 9 average)
-        timeline_str = quant.get('timeline_weeks', '8')
-        if '-' in timeline_str:
-            low, high = timeline_str.split('-')
-            timeline = (float(low) + float(high)) / 2
-        else:
-            timeline = float(timeline_str)
+        # Parse timeline - from nested timeline.total_weeks (not timeline_weeks)
+        timeline = float(quant.get('timeline', {}).get('total_weeks', 8))
         timelines.append(timeline)
 
-        # Parse power (e.g., "1.47" → 1.47)
-        power = float(quant.get('power_avg_w', 0))
+        # Parse power - from nested performance.power_consumption_watts (not power_avg_w)
+        power = float(quant.get('performance', {}).get('power_consumption_watts', 0))
         powers.append(power)
 
     # Find min/max for normalization
@@ -216,12 +210,12 @@ def extract_spider_data(architectures):
         timeline_score = normalize_to_scale(timeline, timeline_min, timeline_max, lower_is_better=True)
         power_score = normalize_to_scale(power, power_min, power_max, lower_is_better=True)
 
-        # Parse qualitative ratings
-        ux_score = parse_qualitative_rating(qual.get('ux', ''))
-        mfg_score = parse_qualitative_rating(qual.get('manufacturability', ''))
-        robust_score = parse_qualitative_rating(qual.get('robustness', ''))
-        supply_score = 10 - parse_qualitative_rating(qual.get('supply_chain_risk', ''))  # Invert: low risk = high score
-        complexity_score = 10 - parse_qualitative_rating(qual.get('complexity', ''))  # Invert: low complexity = high score
+        # Parse qualitative ratings (updated paths to match architectures.yaml structure)
+        ux_score = parse_qualitative_rating(qual.get('ux', ''))  # Dict with setup/convenience/reliability/etc
+        mfg_score = parse_qualitative_rating(qual.get('manufacturing', ''))  # Was 'manufacturability', now 'manufacturing'
+        robust_score = parse_qualitative_rating(qual.get('ux', {}).get('reliability', ''))  # Use ux.reliability as robustness proxy
+        supply_score = 10 - parse_qualitative_rating(qual.get('risk', {}).get('supply_chain', ''))  # Was 'supply_chain_risk', now nested
+        complexity_score = 10 - parse_qualitative_rating(qual.get('complexity', ''))  # Invert: low complexity = high score (dict with hardware/firmware/power/mechanical)
 
         # Build 8-dimension array
         spider_data[arch_id] = [
