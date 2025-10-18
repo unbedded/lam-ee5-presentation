@@ -134,28 +134,25 @@ October 2025
 
 ---
 
-# Ground Truth Requirements (Complete)
+# Mechanical Requirements (ADA 703.3)
 
-## All 10 Requirements from PDF Specification
+## Design Constraints from US ADA Section 703.3
 
-| ID | Requirement | Status | Priority |
-|----|-------------|--------|----------|
-| [PRD-SCHED-001](appendix/requirements.pdf#prd-sched-001-production-timeline---two-month-release) | Production Timeline - Two Month Release | 🟠 VAGUE | 🔴 P0 |
-| [PRD-SIZE-001](appendix/requirements.pdf#prd-size-001-portable-device) | Portable Device | 🟠 VAGUE | 🟠 P1 |
-| [PRD-IFACE-001](appendix/requirements.pdf#prd-iface-001-cell-phone-connectivity---pairing-and-connection) | Cell Phone Connectivity | 🟠 VAGUE | 🔴 P0 |
-| [PRD-IFACE-002](appendix/requirements.pdf#prd-iface-002-text-data-reception---braille-output) | Text Data Reception | 🟠 VAGUE | 🔴 P0 |
-| [PRD-COST-001](appendix/requirements.pdf#prd-cost-001-low-cost-at-volume) | Low Cost at Volume | 🟠 VAGUE | 🔴 P0 |
-| [PRD-VOL-001](appendix/requirements.pdf#prd-vol-001-high-volume-production-design) | High Volume Production Design | 🟠 VAGUE | 🟠 P1 |
-| [PRD-USER-001](appendix/requirements.pdf#prd-user-001-sight-impaired-user) | Sight-Impaired User | ✅ CLEAR | 🔴 P0 |
-| [PRD-FUNC-001](appendix/requirements.pdf#prd-func-001-single-line-braille-display---32-characters-6-dots-each) | 32 chars × 6 dots = 192 actuators | ✅ CLEAR | 🔴 P0 |
-| [PRD-FUNC-002](appendix/requirements.pdf#prd-func-002-braille-line-update-refresh-next-line) | Braille Line Update | 🟠 VAGUE | 🟠 P1 |
-| [PRD-FUNC-003](appendix/requirements.pdf#prd-func-003-braille-dot-actuation---raised-or-lowered) | Raised or Lowered Dots | ✅ CLEAR | 🔴 P0 |
+**Braille dimension standards ensure tactile readability**
 
-**Status:** 3 CLEAR / 7 VAGUE | **Click requirement ID for detailed specification**
+| REQ-ID | Requirement Title | Specification Range |
+|--------|-------------------|---------------------|
+| [PRD-MECH-001](appendix/requirements.pdf#prd-mech-001-dot-diameter---ada-7033-compliance) | Dot Diameter - ADA 703.3 Compliance | 1.5-1.6 mm |
+| [PRD-MECH-002](appendix/requirements.pdf#prd-mech-002-dot-height-raised-position---ada-7033) | Dot Height (Raised Position) - ADA 703.3 | 0.64-0.94 mm |
+| [PRD-MECH-003](appendix/requirements.pdf#prd-mech-003-dot-spacing-within-cell---ada-7033) | Dot Spacing Within Cell - ADA 703.3 | 2.3-2.5 mm |
+| [PRD-MECH-004](appendix/requirements.pdf#prd-mech-004-cell-spacing-horizontal-between-characters---ada-7033) | Cell Spacing (Horizontal Between Characters) - ADA 703.3 | 6.1-7.6 mm |
+| [PRD-MECH-006](appendix/requirements.pdf#prd-mech-006-dot-holding-force---tactile-feedback) | Dot Holding Force - Tactile Feedback | 50-100 grams |
 
-> **TAKEAWAY:** Full requirements analysis in appendix - 38 total (10 ground truth + 19 assumptions + 6 mechanical + 3 standards)
+**Click requirement ID for detailed specification in appendix**
 
-<!-- Links work when presenting HTML from artifacts/ directory. PDF appendix provides full traceability. -->
+> **TAKEAWAY:** ADA 703.3 defines 4 critical dimensions - these drive actuator pitch and mechanical tolerances.
+
+<!-- ADA 703.3 standards define minimum requirements for braille readability. PRD-MECH-005 (dot shape) intentionally omitted - implicit in actuator design. -->
 
 ---
 
