@@ -238,6 +238,48 @@ What YOU say (with this message):
 
 ---
 
+## 3-2-1 Backup Strategy (Triple Redundancy)
+
+**3 Copies of presentation:**
+1. **Laptop:** `/home/preact/sw/job/lam/ee/artifacts/presentation-marp.html`
+2. **USB Drive:** `presentation-marp.html` + images folder (copy entire artifacts/ dir)
+3. **Cloud:** Email HTML to yourself OR upload to Google Drive
+
+**2 Formats:**
+1. **HTML** (primary - for presenting in browser)
+2. **PDF** (backup - for sharing if browser unavailable)
+
+**1 Offsite:**
+- Email both HTML + PDF to yourself (access from anywhere)
+- Or upload to cloud storage (Google Drive, Dropbox)
+
+**Interview Day File Access:**
+
+**Option 1: Present from Laptop (RECOMMENDED)**
+```bash
+firefox /home/preact/sw/job/lam/ee/artifacts/presentation-marp.html
+# Press F11 for fullscreen
+# Press P for Presenter Mode (notes + timer)
+```
+
+**Option 2: Present from USB Drive**
+1. Before interview: Copy `artifacts/presentation-marp.html` to USB
+2. Also copy `artifacts/images/` folder to USB (presentation needs images)
+3. At interview: Open HTML from USB in any browser
+4. Fallback: If images don't load, use PDF instead
+
+**Option 3: Present from Cloud (Emergency Backup)**
+1. Upload `artifacts/presentation-marp.html` to Google Drive (before interview)
+2. Share link (view-only)
+3. At interview: Open link in browser if laptop/USB fail
+
+**Physical Backup (If Tech Fails):**
+- Printed speaker notes (from this checklist - 16 pages)
+- Printed PDF slides (2 pages/sheet, landscape)
+- Can present from paper notes if all tech fails
+
+---
+
 ## Rubric Alignment (100 Points Total)
 
 | Criterion | Weight | Slides | Strategy |
