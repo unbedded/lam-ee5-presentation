@@ -160,16 +160,19 @@ table {
 table td {
   white-space: nowrap;
 }
+.pass { color: #27ae60; font-weight: bold; }
+.fail { color: #e74c3c; font-weight: bold; }
+.warn { color: #f39c12; font-weight: bold; }
 </style>
 
 | Technology | Size (mm) | Force (N) | Speed (ms) | Hold PWR (W) | $/PIN (USD) | Verdict |
 |------------|-----------|-----------|------------|--------------|-------------|---------|
-| **Piezo** | 2&nbsp;✅ | 0.5-1.5&nbsp;✅ | 10-50&nbsp;✅ | ~0&nbsp;✅ | 1.50&nbsp;⚠️ | ⚠️&nbsp;**BASELINE (EMI RISK)** |
-| **Solenoid** | 4&nbsp;❌ | 0.5-2.0&nbsp;✅ | 20-100&nbsp;✅ | 9.6-19&nbsp;❌ | 0.50-0.80&nbsp;✅ | ⚠️&nbsp;**If size relaxed** |
-| **Solenoid (Latch)** | 4&nbsp;❌ | 0.5-2.0&nbsp;✅ | 20-100&nbsp;✅ | ~0&nbsp;✅ | 1.00-1.50&nbsp;⚠️ | ⚠️&nbsp;**If size relaxed** |
-| **SMA Wire** | 0.15&nbsp;✅ | 0.1-0.5&nbsp;❌ | 700-1500&nbsp;❌ | 38-96&nbsp;❌ | 0.10-0.30&nbsp;✅ | ❌&nbsp;**Too slow/weak** |
-| **Voice Coil** | 6&nbsp;❌ | 0.5-3.0&nbsp;✅ | 5-20&nbsp;✅ | 9.6-29&nbsp;❌ | 2.00-3.00&nbsp;❌ | ❌&nbsp;**Too expensive** |
-| **MEMS** | 2-5&nbsp;✅ | 0.001-0.01&nbsp;❌ | 1-10&nbsp;✅ | ~0&nbsp;✅ | 5.00-20.00&nbsp;❌ | ❌&nbsp;**Insufficient force** |
+| **Piezo** | <span class="pass">2</span> | <span class="pass">0.5-1.5</span> | <span class="pass">10-50</span> | <span class="pass">~0</span> | <span class="fail">1.50</span> | <span class="fail">**BASELINE (EMI RISK)**</span> |
+| **Solenoid** | <span class="fail">4</span> | <span class="pass">0.5-2.0</span> | <span class="pass">20-100</span> | <span class="fail">9.6-19</span> | <span class="pass">0.50-0.80</span> | <span class="fail">**If size relaxed**</span> |
+| **Solenoid (Latch)** | <span class="fail">4</span> | <span class="pass">0.5-2.0</span> | <span class="pass">20-100</span> | <span class="pass">~0</span> | <span class="fail">1.00-1.50</span> | <span class="fail">**If size relaxed**</span> |
+| **SMA Wire** | <span class="pass">0.15</span> | <span class="fail">0.1-0.5</span> | <span class="fail">700-1500</span> | <span class="fail">38-96</span> | <span class="pass">0.10-0.30</span> | <span class="fail">**Too slow/weak**</span> |
+| **Voice Coil** | <span class="fail">6</span> | <span class="pass">0.5-3.0</span> | <span class="pass">5-20</span> | <span class="fail">9.6-29</span> | <span class="fail">2.00-3.00</span> | <span class="fail">**Too expensive**</span> |
+| **MEMS** | <span class="pass">2-5</span> | <span class="fail">0.001-0.01</span> | <span class="pass">1-10</span> | <span class="pass">~0</span> | <span class="fail">5.00-20.00</span> | <span class="fail">**Insufficient force**</span> |
 
 **Key Constraint:** Actuator size ≤2.3mm (derived from 2.5mm ADA braille pitch)
 
