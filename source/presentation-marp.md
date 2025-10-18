@@ -94,51 +94,43 @@ October 2025
 
 **Four-Part Design Process:**
 
-1. **Identify Key Technical Requirements** (25 pts)
+1. **Identify Key Technical Requirements** 
    - System, electrical, and relevant specifications
-2. **Develop Multiple Alternative Solutions** (25 pts)
+2. **Develop Multiple Alternative Solutions** 
    - 3 distinct architectures
-3. **Evaluate the Proposed Solutions** (30 pts)
+3. **Evaluate the Proposed Solutions** 
    - Advantages, disadvantages, and trade-off analysis
-4. **Transition to Volume Production** (20 pts)
+4. **Transition to Volume Production**
    - Process from initial design to pilot production
 
 <!-- Speaker notes: Explicitly map to PDF rubric structure. Emphasize: This is not "find the best solution" - it's "navigate trade-offs and provide decision framework." -->
 
 ---
 
-# Problem Statement
+# Problem Statement - Ground Truth Requirements
 
-## Ground Truth Requirements from PDF
+| ID | Requirement | Assumptions |
+|----|-------------|-------------|
+| [PRD-SCHED-001](appendix/requirements.pdf#prd-sched-001-production-timeline---two-month-release) | Production Timeline - Two Month Release | 🟠 Pilot Prod x300 *(COTS 4x week lead time)* |
+| [PRD-SIZE-001](appendix/requirements.pdf#prd-size-001-portable-device) | Portable Device | 🟠 ≤1.3 lbs (590g), fits in bag |
+| [PRD-IFACE-001](appendix/requirements.pdf#prd-iface-001-cell-phone-connectivity---pairing-and-connection) | Cell Phone Connectivity | 🟠 BLE or USB-C, GATT/HID|
+| [PRD-IFACE-002](appendix/requirements.pdf#prd-iface-002-text-data-reception---braille-output) | Text Data Reception | 🟠 ASCII -> Grade 1 braille|
+| [PRD-COST-001](appendix/requirements.pdf#prd-cost-001-low-cost-at-volume) | Low Cost at Volume | 🟠 $200 ±$100 BOM ($100-$300) |
+| [PRD-VOL-001](appendix/requirements.pdf#prd-vol-001-high-volume-production-design) | High Volume Production Design | 🟠 10k units/month SMT assembly |
+| [PRD-USER-001](appendix/requirements.pdf#prd-user-001-sight-impaired-user) | Sight-Impaired User | ✅ ADA 703.3 |
+| [PRD-FUNC-001](appendix/requirements.pdf#prd-func-001-single-line-braille-display---32-characters-6-dots-each) | 32 chars × 6 dots = 192 actuators | ✅ ADA 703.3 |
+| [PRD-FUNC-002](appendix/requirements.pdf#prd-func-002-braille-line-update-refresh-next-line) | Braille Line Update | 🟠 <2 sec refresh, UP/DOWN buttons |
 
-**"Let me validate I understood correctly BEFORE we proceed..."**
 
-| ID | Requirement | Status |
-|----|-------------|--------|
-| [PRD-SCHED-001](appendix/requirements.pdf#prd-sched-001-production-timeline---two-month-release) | Production Timeline - Two Month Release | 🟠 VAGUE |
-| [PRD-SIZE-001](appendix/requirements.pdf#prd-size-001-portable-device) | Portable Device | 🟠 VAGUE |
-| [PRD-IFACE-001](appendix/requirements.pdf#prd-iface-001-cell-phone-connectivity---pairing-and-connection) | Cell Phone Connectivity | 🟠 VAGUE |
-| [PRD-IFACE-002](appendix/requirements.pdf#prd-iface-002-text-data-reception---braille-output) | Text Data Reception | 🟠 VAGUE |
-| [PRD-COST-001](appendix/requirements.pdf#prd-cost-001-low-cost-at-volume) | Low Cost at Volume | 🟠 VAGUE |
-| [PRD-VOL-001](appendix/requirements.pdf#prd-vol-001-high-volume-production-design) | High Volume Production Design | 🟠 VAGUE |
-| [PRD-USER-001](appendix/requirements.pdf#prd-user-001-sight-impaired-user) | Sight-Impaired User | ✅ CLEAR |
-| [PRD-FUNC-001](appendix/requirements.pdf#prd-func-001-single-line-braille-display---32-characters-6-dots-each) | 32 chars × 6 dots = 192 actuators | ✅ CLEAR |
-| [PRD-FUNC-002](appendix/requirements.pdf#prd-func-002-braille-line-update-refresh-next-line) | Braille Line Update | 🟠 VAGUE |
-| [PRD-FUNC-003](appendix/requirements.pdf#prd-func-003-braille-dot-actuation---raised-or-lowered) | Raised or Lowered Dots | ✅ CLEAR |
+**Click requirement ID for detailed specification**
 
-**Status:** 3 CLEAR / 7 VAGUE | **Click requirement ID for detailed specification**
+> **TAKEAWAY:** 7 requirements need clarification before we commit resources (also Country/CE/ROHS?).
 
-> **TAKEAWAY:** I read your spec carefully - 7 requirements need clarification before we commit resources.
-
-<!-- Strategic framing: "I read the spec CAREFULLY and extracted requirements." "7 of 10 are vague - I need YOUR feedback before building the wrong thing." -->
+<!-- Strategic framing: "I read the spec CAREFULLY and extracted requirements." "7 of 10 are vague - I need YOUR feedback before building the wrong thing."  The most challenging constraint - 2mo deadline -> 4x week leadtime -->
 
 ---
 
-# Mechanical Requirements (ADA 703.3)
-
-## Design Constraints from US ADA Section 703.3
-
-**Braille dimension standards ensure tactile readability**
+# Mechanical Requirements (from US ADA 703.3)
 
 | REQ-ID | Requirement Title | Specification Range |
 |--------|-------------------|---------------------|
@@ -148,62 +140,123 @@ October 2025
 | [PRD-MECH-004](appendix/requirements.pdf#prd-mech-004-cell-spacing-horizontal-between-characters---ada-7033) | Cell Spacing (Horizontal Between Characters) - ADA 703.3 | 6.1-7.6 mm |
 | [PRD-MECH-006](appendix/requirements.pdf#prd-mech-006-dot-holding-force---tactile-feedback) | Dot Holding Force - Tactile Feedback | 50-100 grams |
 
-**Click requirement ID for detailed specification in appendix**
+**Hard requirement - Braille dimension standards ensure tactile readability**
 
-> **TAKEAWAY:** ADA 703.3 defines 4 critical dimensions - these drive actuator pitch and mechanical tolerances.
+> **TAKEAWAY:** ADA 703.3 defines 5 critical dimensions - these drive actuator pitch and mechanical tolerances.
 
-<!-- ADA 703.3 standards define minimum requirements for braille readability. PRD-MECH-005 (dot shape) intentionally omitted - implicit in actuator design. -->
+<!-- ADA 703.3 standards define minimum requirements for braille readability. PRD-MECH-005 (dot shape) intentionally omitted - implicit in actuator design. Click requirement ID for detailed specification in appendix
+-->
+
+---
+
+# Actuator Technology Brainstorming
+
+
+| Technology | Size<br>(mm) | Force<br>(N) | Speed<br>(ms) | Hold PWR<br>(W) | $/PIN<br>(USD) | Verdict |
+|------------|--------------|--------------|---------------|-----------------|----------------|---------|
+| **Piezo** | 2 ✅ | 0.5-1.5 ✅ | 10-50 ✅ | ~0 ✅ | 1.50 ⚠️ | ⚠️ **BASELINE (EMI RISK)** |
+| **Solenoid** | 4 ❌ | 0.5-2.0 ✅ | 20-100 ✅ | 9.6-19 ❌ | 0.50-0.80 ✅ | ⚠️ **If size relaxed** |
+| **Solenoid (Latch)** | 4 ❌ | 0.5-2.0 ✅ | 20-100 ✅ | ~0 ✅ | 1.00-1.50 ⚠️ | ⚠️ **If size relaxed** |
+| **SMA Wire** | 0.15 ✅ | 0.1-0.5 ❌ | 700-1500 ❌ | 38-96 ❌ | 0.10-0.30 ✅ | ❌ **Too slow/weak** |
+| **Voice Coil** | 6 ❌ | 0.5-3.0 ✅ | 5-20 ✅ | 9.6-29 ❌ | 2.00-3.00 ❌ | ❌ **Too expensive** |
+| **MEMS** | 2-5 ✅ | 0.001-0.01 ❌ | 1-10 ✅ | ~0 ✅ | 5.00-20.00 ❌ | ❌ **Insufficient force** |
+
+**Key Constraint:** Actuator size ≤2.3mm (derived from 2.5mm ADA braille pitch)
+
+> **TAKEAWAY:** Only piezo meets ALL requirements, but COTS solenoid saves $0.70-$1.00/pin ($134-192 total) if we relax size to 4mm
+
+<!-- Speaker notes: "Evaluated 5 actuator technologies against hard constraints: size ≤2.3mm, force 50-100gf, speed <100ms, low hold power." "Piezo is ONLY technology meeting all requirements as-is." "BUT - relaxing size constraint 2.3mm→4mm enables COTS solenoids with 47-67% cost savings." "SMA wire too slow (22-48 sec refresh), Voice Coil too expensive ($384-576), MEMS insufficient force." "This is engineering trade-offs in action - there's no perfect solution." Reference: docs/actuator-technology-tradeoff.md for detailed analysis of all 5 technologies. -->
 
 ---
 
 # Commercial Braille Display Market
 
-## Market Landscape & Technology Monopoly
+## Price vs Character Analysis
 
-**Key Finding:** 100% of commercial displays use **custom piezoelectric actuators**
+| Segment | CHAR | Total Pins | Retail Price | Est EE BOM* | $/Pin (BOM) | Example Products |
+|---------|------|------------|--------------|-------------|-------------|------------------|
+| **Budget** | 20 | 160 (8/char) | $449-$515 | $150-$170 | $0.94-$1.06 | Orbit Reader 20, BrailleMe |
+| **Budget** | 40 | 320 (8/char) | ~$800 | ~$265 | ~$0.83 | Orbit Reader 40 |
+| **Mid-Range** | 20 | 160 (8/char) | ~$1,200 | ~$400 | ~$2.50 | Brailliant BI 20x |
+| **Mid-Range** | 40 | 320 (8/char) | ~$1,700 | ~$565 | ~$1.77 | Focus 40, Brailliant BI 40x |
+| **Premium** | 40+ | 320+ (8/char) | $2,000+ | $665+ | ~$2.08+ | Mantis Q40, Graphiti Plus |
 
-| Segment | Example | Characters | Price (USD) | Technology |
-|---------|---------|------------|-------------|------------|
-| **Budget** | Orbit Reader 20 | 20 | $799 | Custom piezo |
-| **Budget** | BrailleMe | 20 | $515 | Custom piezo |
-| **Mid-Range** | Focus 40 | 40 | $1,700 | Custom piezo |
-| **Premium** | Brailliant BI 20X | 20 | $2,199 | Custom piezo |
+- **Our Target:** 32 char × 6 pins = 192 pins @ $200 BOM = **$1.04/pin** (competitive with budget segment) 
+- ***\* List price** = BOM × 3 (EE industry standard markup)*
+- **Key Finding:** 100% of commercial displays use **custom piezoelectric actuators** (8 pins/char)
 
-**Our target:** 32 chars @ $600 USD fills market gap
 
----
 
-# Market Gap Analysis
+> **TAKEAWAY:** Budget segment is $0.83-$1.06/pin - our $1.04/pin target  with 6-pin design
 
-## No Products in 25-35 Character Range at <$1,000 USD
-
-| Technology | Voltage | Size | Cost/Cell | Lead Time | Market |
-|------------|---------|------|-----------|-----------|--------|
-| **Piezo (custom)** | 100-200V | 2-3mm | **$7-20** | 8-12 weeks | **100%** |
-| **Solenoid (COTS)** | 5-12V | 4mm+ | **$2-5** | 2-4 weeks | **0%** |
-
-**Our Opportunity:**
-- **32 characters** (60% more than Orbit Reader 20)
-- **$600 USD retail** ($200 USD BOM target)
-- **COTS components** (≤4 week lead time) ← **UNIQUE**
+<!-- Speaker notes: "Commercial displays use 8 pins/char (6 standard + 2 computer braille), we use 6 pins (Grade 1 only)." "$0.83/pin is market floor (Orbit Reader 40)." "Our $1.04/pin is competitive - middle of budget range." "3× markup validated against Orbit Reader: $449 retail ÷ 3 = $150 BOM ÷ 160 pins = $0.94/pin." Reference: docs/market-braille-display-scan.md for detailed market analysis. -->
 
 ---
 
-# Technical Requirements
+# Market Gap Analysis (Piezo vs COTS Solenoid)
 
-## Design Step 1: Identify Key Technical Requirements (25/100 pts)
+| Technology | Voltage | Size | Cost/Cell | Lead Time | Market Share |
+|------------|---------|------|-----------|-----------|--------------|
+| **Piezo (custom)** | 100-200V | 2-3mm | **$2** | 8-12 weeks | **100%** |
+| **Solenoid (COTS)** | 5-12V | 4mm+ | **$1.7** | 2-4 weeks | **0%** |
 
-**From PDF specification (vague → quantified):**
-- PRD-FUNC-001: 32 characters × 6 dots = 192 actuators
-- PRD-SIZE-001: Portable → <300mm length, <500g weight
-- PRD-COST-001: Low cost → <$500 BOM target
-- PRD-SCHED-001: 2-month timeline → COTS only (≤4 week lead)
+**OUR OPPORTUNITY:**  - **32 characters** (25% fewer pins/char -> Cheaper)  - **$1000 USD retail** ($330 USD BOM @ $1.70/pin target) -
 
-**Standards Compliance:**
-- NFR-STD-001: UL/FCC (North America regulatory)
-- NFR-STD-002: ADA 703.3 (2.5mm dot pitch, 6.2mm cell spacing)
+<div style="display: flex; justify-content: space-around; align-items: center;">
+  <div style="width: 45%;">
+    <img src="images/orbit-reader-20.jpg" style="max-height: 150px;" alt="Orbit Reader 20">
+    <p><strong>Orbit Reader 20</strong><br>20 chars | $799 USD<br>"World's most affordable"</p>
+  </div>
+  <div style="width: 45%;">
+    <img src="images/brailliant-bi-20x.jpg" style="max-height: 150px;" alt="Brailliant BI 20X">
+    <p><strong>Brailliant BI 20X</strong><br>20 chars | $2,199 USD<br>Professional grade</p>
+  </div>
+</div>
 
-**Total: 17 requirements** (9 ground truth + 6 assumptions + 2 standards)
+**Our target:** 32 chars @ $600 USD (60% more characters, competitive pricing)
+
+<!-- Speaker notes: "No COTS-based braille displays exist commercially" - we're breaking piezo monopoly. "ARCH_SOL_ECO at $277 BOM saves 54% cost" vs custom piezo. Emphasize 2-month timeline REQUIRES COTS (can't wait 8-12 weeks). Show physical products to establish credibility. Orbit Reader 20 is education market leader. Brailliant is professional standard. Both use custom piezo actuators. Our 32-cell design fills gap between budget 20-cell and premium 40-cell products. -->
+
+---
+
+# Tech Req Database (S.M.A.R.T goals)
+
+**SMART Criteria:** Specific, Measurable, Achievable, Relevant, Testable
+
+**Key Fields:** Title | Source | Priority (P0/P1/P2) | Status (Clear/Vague) | Acceptance Criteria | Verification | Risk Level
+
+**17 Requirements Grouped by Category:**
+
+- **Timeline:** [PRD-SCHED-001](appendix/requirements.pdf#prd-sched-001-production-timeline---two-month-release) (2mo pilot, COTS ≤4wk lead)
+- **Size/Portability:** [PRD-SIZE-001](appendix/requirements.pdf#prd-size-001-portable-device) (≤1.3 lbs, bag-portable)
+- **Interface:** [PRD-IFACE-001](appendix/requirements.pdf#prd-iface-001-cell-phone-connectivity---pairing-and-connection) (BLE/USB-C) | [PRD-IFACE-002](appendix/requirements.pdf#prd-iface-002-text-data-reception---braille-output) (ASCII→Grade 1 braille)
+- **Cost:** [PRD-COST-001](appendix/requirements.pdf#prd-cost-001-low-cost-at-volume) ($200±$100 BOM, $1.04/pin)
+- **Manufacturing:** [PRD-VOL-001](appendix/requirements.pdf#prd-vol-001-high-volume-production-design) (10k/mo, SMT)
+- **User:** [PRD-USER-001](appendix/requirements.pdf#prd-user-001-sight-impaired-user) (Sight-impaired, ADA 703.3)
+- **Functional:** [PRD-FUNC-001](appendix/requirements.pdf#prd-func-001-single-line-braille-display---32-characters-6-dots-each) (32×6=192 pins) | [PRD-FUNC-002](appendix/requirements.pdf#prd-func-002-braille-line-update-refresh-next-line) (<2s refresh) | [PRD-FUNC-003](appendix/requirements.pdf#prd-func-003-braille-dot-actuation---raised-or-lowered) (Binary actuation)
+- **Mechanical (ADA):** [MECH-001](appendix/requirements.pdf#prd-mech-001-dot-diameter---ada-7033-compliance) (Ø1.5-1.6mm) | [MECH-002](appendix/requirements.pdf#prd-mech-002-dot-height-raised-position---ada-7033) (H0.64-0.94mm) | [MECH-003](appendix/requirements.pdf#prd-mech-003-dot-spacing-within-cell---ada-7033) (2.3-2.5mm) | [MECH-004](appendix/requirements.pdf#prd-mech-004-cell-spacing-horizontal-between-characters---ada-7033) (6.1-7.6mm) | [MECH-006](appendix/requirements.pdf#prd-mech-006-dot-holding-force---tactile-feedback) (50-100g force)
+- **Standards:** [NFR-STD-001](appendix/requirements.pdf#nfr-std-001-north-america-regulatory-compliance-ul--fcc) (UL/FCC) | [NFR-STD-002](appendix/requirements.pdf#nfr-std-002-accessibility-standards-compliance-us-ada) (ADA 703.3)
+
+> **TAKEAWAY:** 9 ground truth + 6 mechanical + 2 standards = 17 requirements, all SMART-testable with quantified acceptance criteria.
+
+<!-- Speaker notes: "Every requirement has SMART structure - not just 'portable', but ≤1.3 lbs with bag-portability test. Not just 'low-cost', but $200±$100 BOM with sensitivity range. This is engineering rigor - assumptions documented, risks quantified, trade-offs tested in v1.4.0." "Click any REQ-ID for full specification in appendix." Reference full database: source/requirements.yaml (1090 lines, auto-generates requirements.md and traceability matrix). -->
+
+---
+
+# Develop Multiple Alternative Solutions
+
+## Design Step 2 of 4 (25/100 pts)
+
+**Phase 2: Alternative Solution Architectures**
+
+This section presents 3 distinct architectures, each optimizing different trade-offs:
+- **Architecture A (ARCH_PIEZO_ECO):** Piezo Economy - Wired, Standard
+- **Architecture B (ARCH_SOL_ECO):** Solenoid Economy - Rotary Cam, Innovative
+- **Architecture C (ARCH_PIEZO_DLX):** Piezo Deluxe - Wireless, Premium UX
+
+**Key Insight:** No single "best" solution - each architecture makes different trade-offs based on customer priorities (cost/timeline/features/compliance).
+
+<!-- Speaker notes: "This is Phase 2 of our 4-part process. We're not looking for THE answer - we're providing a portfolio of solutions, each optimized for different constraints. This is systems engineering - when requirements conflict, show the customer what they get with each choice." -->
 
 ---
 
@@ -211,20 +264,23 @@ October 2025
 
 ## Trade-offs Over Perfection
 
-**Key Principle:** Requirements exist in RANGES, not absolutes
+**CRITICAL CONSTRAINT - Show Stopper:**
+- **2-month production requirement** → REQUIRES COTS components (≤4 week lead time)
+- **Problem:** NO COTS actuators exist meeting ADA 703.3 (2.5mm pitch + 50-100g force)
+- **Result:** Forced to choose between conflicting requirements
 
-**Approach:**
+**Engineering Response - Portfolio Approach:**
 - Portfolio of 3 architectures vs. single point design
-- Each optimizes DIFFERENT trade-off:
-  - Cost vs. UX
-  - Timeline vs. Features
-  - Simplicity vs. Innovation
+- Each optimizes DIFFERENT trade-off when requirements conflict:
+  - **ARCH_PIEZO_ECO:** Meets ADA 703.3 but violates 2mo timeline (8-12 week lead)
+  - **ARCH_SOL_ECO:** Meets 2mo timeline but relaxes ADA spacing (2.5mm→3.5mm)
+  - **ARCH_PIEZO_DLX:** Best UX but highest cost + longest timeline
 
-**Philosophy:** Balance cost/reliability/performance/timeline
+**Philosophy:** When requirements conflict, document trade-offs and let customer prioritize
 
-> **TAKEAWAY:** No single "best" solution exists - success means navigating trade-offs intelligently.
+> **TAKEAWAY:** No COTS actuator exists - portfolio shows consequences of each priority choice.
 
-<!-- This is the thesis: There is NO "best" architecture. Selection depends on customer priorities. -->
+<!-- This is the thesis: 2mo timeline + ADA 703.3 compliance are MUTUALLY EXCLUSIVE with COTS parts. Portfolio shows what you give up for each choice. This is senior-level engineering - document the impossible and provide options. -->
 
 ---
 

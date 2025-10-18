@@ -89,22 +89,25 @@
 
 ## Price Points & Market Segments
 
-### Price vs Cells Analysis
+### Price vs Character Analysis
 
-| Segment | Cells | Retail Price | Est. BOM (3× markup) | $/Cell (BOM) | Example Products |
-|---------|-------|--------------|----------------------|--------------|------------------|
-| **Budget** | 20 | $449-$515 | $150-$170 | $7.50-$8.50 | Orbit Reader 20, BrailleMe |
-| **Budget** | 40 | ~$800 | ~$265 | ~$6.60 | Orbit Reader 40 |
-| **Mid-Range** | 20 | ~$1,200 | ~$400 | ~$20 | Brailliant BI 20x |
-| **Mid-Range** | 40 | ~$1,700 | ~$565 | ~$14 | Focus 40 Blue, Brailliant BI 40x |
-| **Premium** | 40+ | $2,000+ | $665+ | $16+ | Mantis Q40, Graphiti Plus |
+| Segment | CHAR | Total Pins | Retail Price | Est EE BOM* | $/Pin (BOM) | Example Products |
+|---------|------|------------|--------------|-------------|-------------|------------------|
+| **Budget** | 20 | 160 (8/char) | $449-$515 | $150-$170 | $0.94-$1.06 | Orbit Reader 20, BrailleMe |
+| **Budget** | 40 | 320 (8/char) | ~$800 | ~$265 | ~$0.83 | Orbit Reader 40 |
+| **Mid-Range** | 20 | 160 (8/char) | ~$1,200 | ~$400 | ~$2.50 | Brailliant BI 20x |
+| **Mid-Range** | 40 | 320 (8/char) | ~$1,700 | ~$565 | ~$1.77 | Focus 40 Blue, Brailliant BI 40x |
+| **Premium** | 40+ | 320+ (8/char) | $2,000+ | $665+ | ~$2.08+ | Mantis Q40, Graphiti Plus |
+
+*\* List price = BOM × 3 (EE industry standard markup)*
 
 **Key Observations:**
-1. **Budget segment:** $7.50-$8.50/cell BOM (Orbit Reader, BrailleMe)
-   - Our target: $200 BOM ÷ 32 cells = **$6.25/cell** (aggressive, below market)
-2. **Economies of scale:** 40-cell devices have lower $/cell BOM than 20-cell
+1. **Budget segment:** $0.83-$1.06/pin BOM (Orbit Reader, BrailleMe)
+   - Commercial displays use 8 pins/char (6 standard + 2 computer braille)
+   - Our target: $200 BOM ÷ 192 pins (32 char × 6 pins) = **$1.04/pin** (competitive with budget segment)
+2. **Economies of scale:** 40-char devices have lower $/pin BOM than 20-char
 3. **OEM cost discrepancy:** Search result says $35/cell OEM ($4.38/dot)
-   - But 20-cell devices retail $449 → $150 BOM → $7.50/cell
+   - But 20-char devices retail $449 → $150 BOM ÷ 160 pins = $0.94/pin
    - Suggests OEM cost ≠ final BOM cost (add PCB, enclosure, battery, etc.)
 
 ---
@@ -137,11 +140,11 @@
 
 ## Competitive Positioning
 
-### Our 32-Cell Design vs Market
+### Our 32-Character Design vs Market
 
 | Feature | Our Design (Target) | Orbit Reader 20 | BrailleMe | Brailliant BI 20x |
 |---------|---------------------|-----------------|-----------|-------------------|
-| **Cells** | 32 | 20 | 20 | 20 |
+| **Characters** | 32 (192 pins) | 20 (160 pins) | 20 (160 pins) | 20 (160 pins) |
 | **Price (retail)** | $600 (target) | $449 | $515 | $1,200 |
 | **BOM (est.)** | $200 (target) | $150 | $170 | $400 |
 | **Interface** | BLE + USB (hybrid) | BLE + USB | BLE + USB | BLE + USB |
@@ -150,14 +153,15 @@
 | **Timeline** | 2 months (COTS) | Unknown | Unknown | Unknown |
 
 **Value Proposition:**
-- **60% more cells** than Orbit Reader/BrailleMe (32 vs 20)
-- **Competitive price** at $600 retail (vs $449 for 20-cell Orbit Reader)
+- **60% more characters** than Orbit Reader/BrailleMe (32 vs 20)
+- **20% more pins** (192 vs 160) for more text per line
+- **Competitive price** at $600 retail (vs $449 for 20-char Orbit Reader)
 - **AA batteries** = instant swap, no charger anxiety (unique vs all competitors)
 - **COTS mandate** = 2-month timeline (aggressive, risky for custom piezo)
 
 **Competitive Risk:**
-- Orbit Reader 40 (40-cell) at ~$800 retail → More cells, similar price
-- Our 32-cell at $600 may be squeezed between 20-cell ($449) and 40-cell ($800)
+- Orbit Reader 40 (40-char, 320 pins) at ~$800 retail → More chars, similar price
+- Our 32-char at $600 may be squeezed between 20-char ($449) and 40-char ($800)
 - **Differentiation needed:** AA batteries, COTS timeline, or sub-$500 pricing
 
 ---
@@ -179,13 +183,13 @@
 ### 2. Cost Target Validation
 
 **Market data:**
-- Budget segment: $7.50-$8.50/cell BOM (Orbit Reader, BrailleMe)
-- Our target: $6.25/cell BOM (32 cells × $6.25 = $200 BOM)
-- **Conclusion:** Aggressive but achievable (10-25% below market)
+- Budget segment: $0.83-$1.06/pin BOM (Orbit Reader 20-40, BrailleMe)
+- Our target: $1.04/pin BOM (192 pins × $1.04 = $200 BOM)
+- **Conclusion:** Competitive with budget segment (middle of range)
 
 **Actuator cost drivers:**
-- Piezo: $288 (custom 2mm) → $9/cell (69% over target)
-- Solenoid: $131 (COTS 4mm + latch) → $4.09/cell (35% under target) ✅
+- Piezo: $288 (custom 2mm) → $1.50/pin (44% over target)
+- Solenoid: $131 (COTS 4mm + latch) → $0.68/pin (35% under target) ✅
 
 ### 3. COTS Mandate Impact
 
@@ -207,11 +211,11 @@
 
 | Option | Strategy | Price | Target Market | Risk |
 |--------|----------|-------|---------------|------|
-| **A. Premium 32-cell** | Piezo (200V custom) | $800 retail | Professionals | Timeline miss (8-12 weeks) |
-| **B. Budget 32-cell** | Solenoid + latch | $450 retail | Education, NGOs | Latch unproven (HIGH risk) |
-| **C. Hybrid 32-cell** | Piezo (30V custom) | $600 retail | Mainstream | 30V piezo feasibility unknown |
+| **A. Premium 32-char** | Piezo (200V custom) | $800 retail | Professionals | Timeline miss (8-12 weeks) |
+| **B. Budget 32-char** | Solenoid + latch | $450 retail | Education, NGOs | Latch unproven (HIGH risk) |
+| **C. Hybrid 32-char** | Piezo (30V custom) | $600 retail | Mainstream | 30V piezo feasibility unknown |
 
-**RECOMMENDATION:** Pursue Option B (Budget 32-cell, solenoid + latch)
+**RECOMMENDATION:** Pursue Option B (Budget 32-char, solenoid + latch)
 - Only option that meets 2-month COTS mandate
 - Best cost position ($224 BOM → $450-500 retail)
 - Targets underserved education/NGO market (less sensitive to slow 5.2-sec refresh)
@@ -221,13 +225,13 @@
 
 ## Competitor Actuator Technologies (Summary)
 
-| Manufacturer | Technology | Voltage | Size | Cost/Cell (est.) | Lead Time |
-|--------------|------------|---------|------|------------------|-----------|
-| **Orbit Research** | TrueBraille™ piezo | Unknown (likely 120-200V) | Proprietary | $7.50 (budget) | 8-12 weeks (custom) |
-| **Orbit Research** | Tactuator™ multi-level | Unknown | Proprietary | $16+ (premium) | 8-12 weeks (custom) |
-| **HumanWare** | Piezo bimorph | Unknown (likely 200V) | Proprietary | $14-20 | 8-12 weeks (custom) |
-| **Freedom Scientific** | Piezo bimorph | Unknown (likely 200V) | Proprietary | $14-20 | 8-12 weeks (custom) |
-| **HOERBIGER** | Piezo bimorph modules | 8 pins/module | 2.5mm² footprint | $35/cell OEM | 8-12 weeks (custom) |
+| Manufacturer | Technology | Voltage | Size | $/Pin (est.) | Lead Time |
+|--------------|------------|---------|------|--------------|-----------|
+| **Orbit Research** | TrueBraille™ piezo | Unknown (likely 120-200V) | Proprietary | $0.94-$1.06 (budget) | 8-12 weeks (custom) |
+| **Orbit Research** | Tactuator™ multi-level | Unknown | Proprietary | $2.08+ (premium) | 8-12 weeks (custom) |
+| **HumanWare** | Piezo bimorph | Unknown (likely 200V) | Proprietary | $1.77-$2.50 | 8-12 weeks (custom) |
+| **Freedom Scientific** | Piezo bimorph | Unknown (likely 200V) | Proprietary | $1.77-$2.50 | 8-12 weeks (custom) |
+| **HOERBIGER** | Piezo bimorph modules | 8 pins/module | 2.5mm² footprint | $4.38/pin OEM | 8-12 weeks (custom) |
 
 **Universal finding:** ALL commercial braille displays use custom piezo actuators (no COTS)
 
@@ -238,10 +242,10 @@
 1. **Piezo monopoly:** 100% of commercial braille displays use piezoelectric actuators
 2. **Custom tooling required:** No COTS piezo available at 2-3mm size (all custom, 8-12 week lead)
 3. **Voltage challenge:** Literature suggests 200V minimum (our 30V design may be insufficient)
-4. **Budget disruption:** Orbit Reader ($449, 20-cell) and BrailleMe ($515, 20-cell) disrupting $1.2K+ market
-5. **Market gap:** No 32-cell device <$600 with COTS components (opportunity for ARCH-D)
-6. **Cost floor:** $7.50/cell BOM is lowest in market (Orbit Reader 20)
-   - Our target: $6.25/cell BOM (32 cells × $6.25 = $200) — aggressive but achievable with solenoid
+4. **Budget disruption:** Orbit Reader ($449, 20-char) and BrailleMe ($515, 20-char) disrupting $1.2K+ market
+5. **Market gap:** No 32-char device <$600 with COTS components (opportunity for ARCH-D)
+6. **Cost floor:** $0.83/pin BOM is lowest in market (Orbit Reader 40)
+   - Our target: $1.04/pin BOM (192 pins × $1.04 = $200) — competitive with budget segment
 
 **Strategic Decision:**
 - **If 30V piezo feasible:** ARCH-C (hybrid, piezo) at $600 retail (mainstream)
