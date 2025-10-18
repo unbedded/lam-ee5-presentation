@@ -464,7 +464,10 @@ def generate_cost_chart(architectures, output_path):
     ax.set_title('BOM Cost Comparison (Pilot Quantity)\nSubsystem Breakdown', fontsize=14, weight='bold', pad=15)
     ax.grid(axis='y', linestyle='--', alpha=0.3)
     ax.set_axisbelow(True)
-    ax.legend(loc='lower right', fontsize=9, framealpha=0.9)
+
+    # Reverse legend order to match stacking order (bottom to top)
+    handles, labels = ax.get_legend_handles_labels()
+    ax.legend(handles[::-1], labels[::-1], loc='lower right', fontsize=9, framealpha=0.9)
 
     # Format y-axis as currency
     ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'${x:.0f}'))
