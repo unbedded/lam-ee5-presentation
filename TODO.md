@@ -1,33 +1,40 @@
 # Lam Research EE Interview - Project TODO
 
-## 📊 REALISTIC PROJECT STATUS (Updated Oct 17, 2025)
+## 📊 REALISTIC PROJECT STATUS (Updated Oct 18, 2025)
 
-**Time Spent:** 37.75h (through Oct 17)
-**Realistic Remaining:** ~10h (focused on essentials)
-**Interview:** Oct 21, 2025 (Tuesday) - 4 days away
-**Pace Needed:** 2.5 hrs/day @ 4 days = COMFORTABLE ✅
+**Interview:** Oct 21, 2025 (Tuesday) - **3 DAYS AWAY** ⚠️
 
-**Why 10h not 46h?**
-- ✅ v1.3.0 Architecture: COMPLETE (9h logged, 3 architectures with BOMs)
-- ✅ v1.4.0 Trade-offs: COMPLETE (5h logged, EMI analysis IS the trade-off!)
-- ✅ v1.5.0/v1.6.0: SKIP (production path in slides, self-assessment not needed)
-- ✅ v2.2.0 Presentation Structure: COMPLETE (8h logged, Marp HTML working!)
-- ✅ Most artifacts: ALREADY GENERATED (BOMs, requirements, EMI docs)
+**AI Workflow Focus (this TODO):** Track remaining presentation refinement tasks
+**Human Prep Focus (separate doc):** See `docs/interview-prep-checklist.md` for Q&A, delivery coaching, practice workflow
 
-**Remaining Work (10h total):**
-1. Refine slide content + add takeaways (3h) - v2.3.0
-2. Add images/diagrams (1h) - use existing charts
-3. Practice presentation 3x (3h) - timing + Q&A prep
-4. Pre-interview checklist (1h) - pack materials, test laptop
-5. Technical Q&A prep (2h) - review EMI doc, architecture details
+---
+
+**Remaining AI Work (~3-5h):**
+1. ✅ Slide content refinement (DONE - added subsystem differentiators, BOM Details slide, Q&A prep)
+2. ✅ Speaker notes (DONE - all slides have notes, Q&A prep integrated)
+3. ⏳ Add images/diagrams (1-2h) - architecture comparison charts, decision tree
+4. ⏳ Final slide polish (1h) - review all TAKEAWAYs ≤80 chars, check overflow
+5. ⏳ Test presentation flow (1h) - open HTML, verify presenter mode works
 
 **Key Files Ready:**
-- ✅ source/presentation-marp.md (Marp HTML, 20 slides with CSS)
-- ✅ artifacts/presentation-marp.html (1-second regeneration!)
+- ✅ source/presentation-marp.md (29 slides with speaker notes, CSS styled)
+- ✅ artifacts/presentation-marp.html (regenerates in 1 second with `make marp`)
 - ✅ artifacts/presentation-marp.pdf (backup distribution format)
-- ✅ docs/actuator-emi-design-analysis.md (46 KB, comprehensive)
-- ✅ artifacts/bom/*.csv (3 architectures, $245/$415/$429)
-- ✅ artifacts/architecture*.md (all docs generated)
+- ✅ docs/interview-prep-checklist.md (16KB comprehensive prep guide)
+- ✅ artifacts/interview-prep-checklist.pdf (printable backup)
+- ✅ docs/actuator-emi-design-analysis.md (46 KB technical deep-dive)
+- ✅ artifacts/bom/*.csv (3 architectures: $505.71, $591.99, $605.67)
+- ✅ artifacts/architecture.md (auto-generated from YAML)
+
+**Human Prep (not tracked here):**
+- See `docs/interview-prep-checklist.md` for:
+  - Q&A anticipated questions (5 prepared answers)
+  - Timing strategy (30-min breakdown)
+  - Key messages to memorize (systems engineering philosophy)
+  - Practice workflow (days before interview)
+  - Presenter mode technical guide
+
+---
 
 ## <span style="color:green">v0.1.0: Project Setup (feature/project-init)</span>
 - [x] Create directory structure
