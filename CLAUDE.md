@@ -222,6 +222,40 @@ git push origin main
 
 **Enforcement:** Before committing presentation changes, grep for TAKEAWAY and verify all are ≤80 chars.
 
+### Speaker Notes
+**RULE:** Every slide must include speaker notes to guide presentation delivery.
+
+**Format:**
+```markdown
+---
+
+# Slide Title
+
+[slide content]
+
+> **TAKEAWAY:** [key message]
+
+<!-- Speaker notes: [2-3 sentences explaining what to say, emphasize, or reference] -->
+```
+
+**What to include in speaker notes:**
+- Key talking points (what to emphasize verbally)
+- References to supporting documents (e.g., "Reference: docs/architecture.md")
+- Timing guidance (e.g., "30 seconds introduction")
+- Strategic framing (e.g., "Position as honest engineering, not failure")
+- Transitions to next slide
+
+**Example:**
+```markdown
+<!-- Speaker notes: "These are ACTUAL BOM costs from detailed parts sourcing, not back-of-envelope. All 3 architectures currently over target - this is honest engineering. Primary driver: actuators. We have clear cost-down strategies: volume pricing, cell count reduction, value engineering. This is the reality of pilot vs volume economics." -->
+```
+
+**Why it matters:**
+- Ensures consistent messaging across presentation rehearsals
+- Captures strategic framing decisions
+- Documents references for deeper technical questions
+- Makes presentation reproducible by others
+
 ---
 
 

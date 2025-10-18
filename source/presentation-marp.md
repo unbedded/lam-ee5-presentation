@@ -302,7 +302,9 @@ table {
 | Attribute | SOL_ECO | PIEZO_ECO | PIEZO_DLX |
 |-----------|---------|-----------|-----------|
 | **Market Position** | Economy / Budget | Entry / Education | Premium / Pro |
-| **Actuator Type** | 6-7mm Custom solenoid | 2mm Custom piezo | 2mm Custom piezo |
+| **Communication** | USB-C (Wired) | USB-C (Wired) | BLE Wireless |
+| **Power Source** | USB Bus-Powered | USB Bus-Powered | Li-ion Battery + Charger |
+| **Actuator Type** | 6-7mm Solenoid | 2mm Piezo | 2mm Piezo |
 | **Mechanical** | Lever (6mm→2.5mm) | Direct drive | Direct drive |
 | **Timeline** | <span class="fail">>8wk (custom >4wk)</span> | <span class="fail">>8wk (custom >4wk)</span> | <span class="fail">>8wk (custom >4wk)</span> |
 | **BOM Actual** | **$505.71** | **$591.99** | **$605.67** |
@@ -312,6 +314,32 @@ table {
 > **TAKEAWAY:** SOL_ECO wins on cost: $505.71 BOM via 15% actuator savings.
 
 <!-- Speaker notes: "These are ACTUAL BOM costs from detailed parts sourcing, not back-of-envelope. All 3 architectures currently over target - this is honest engineering. Primary driver: actuators ($288 for piezo, $96 for solenoid). ARCH_SOL_ECO wins on cost-performance - only 46% over target. We have clear cost-down strategies: volume pricing, cell count reduction, value engineering. This is the reality of pilot vs volume economics." -->
+
+---
+
+# BOM Details - Detailed Cost Breakdown
+
+**Full Bill of Materials (CSV format):**
+
+- [ARCH_PIEZO_ECO BOM](../artifacts/bom/arch-piezo-eco-bom.csv) - $591.99 total
+- [ARCH_SOL_ECO BOM](../artifacts/bom/arch-sol-eco-bom.csv) - $505.71 total
+- [ARCH_PIEZO_DLX BOM](../artifacts/bom/arch-piezo-dlx-bom.csv) - $605.67 total
+
+**Important Notes:**
+
+- **Prices shown:** Volume pricing (1K+ units)
+- **$/Actuator estimates:** Based on similar components - **need supplier quotes**
+- **Actuator lead time:** 12 weeks (custom fabrication, NO COTS available)
+- **Cost sensitivity:** Actuators represent 55-65% of total BOM
+
+**Next Steps:**
+- Request formal quotes from 3 actuator suppliers (piezo + bistable solenoid)
+- Verify volume pricing at 1K, 5K, 10K quantities
+- Confirm lead time and MOQ requirements
+
+> **TAKEAWAY:** Detailed BOMs available - actuator quotes needed for accuracy.
+
+<!-- Speaker notes: "Click links for full line-item BOMs. All prices are volume estimates (1K+ units). Actuator costs are ESTIMATES based on similar components - we need formal supplier quotes to validate. This is honest engineering - showing our assumptions and where uncertainty exists. Actuators are 55-65% of BOM, so getting accurate quotes is critical path for cost model validation." -->
 
 ---
 
