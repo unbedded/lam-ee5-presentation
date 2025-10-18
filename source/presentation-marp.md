@@ -131,7 +131,7 @@ table {
 | [PRD-FUNC-001](appendix/requirements.pdf#prd-func-001-single-line-braille-display---32-characters-6-dots-each) | 32 chars × 6 dots = 192 actuators | <span class="clear">CLEAR</span> ADA 703.3 |
 | [PRD-FUNC-002](appendix/requirements.pdf#prd-func-002-braille-line-update-refresh-next-line) | Braille Line Update | <span class="vague">VAGUE</span> <2 sec refresh, UP/DOWN buttons |
 
-> **TAKEAWAY:** 7 requirements need clarification before we commit resources (also Country/CE/ROHS?).
+> **TAKEAWAY:** 7 of 10 requirements need clarification before commit.
 
 <!-- Strategic framing: "I read the spec CAREFULLY and extracted requirements." "7 of 10 are vague - I need YOUR feedback before building the wrong thing."  The most challenging constraint - 2mo deadline -> 4x week leadtime -->
 
@@ -149,7 +149,7 @@ table {
 
 **Hard requirement - Braille dimension standards ensure tactile readability**
 
-> **TAKEAWAY:** ADA 703.3 defines 5 critical dimensions - these drive actuator pitch and mechanical tolerances.
+> **TAKEAWAY:** ADA 703.3 defines 5 critical dimensions driving design.
 
 <!-- ADA 703.3 standards define minimum requirements for braille readability. PRD-MECH-005 (dot shape) intentionally omitted - implicit in actuator design. Click requirement ID for detailed specification in appendix
 -->
@@ -183,7 +183,7 @@ table td {
 
 **Solution:** Mechanical lever mechanism enables 6-7mm custom solenoid → 2.5mm pitch compliance
 
-> **TAKEAWAY:** NO COTS actuators found (bistable, <7mm dia). Mechanical levers enable custom solenoids at $0.70-$1.00/pin savings vs piezo
+> **TAKEAWAY:** NO COTS actuators exist - mechanical levers enable solution.
 
 <!-- Speaker notes: "Evaluated 5 actuator technologies against hard constraints: size ≤2.3mm, force 50-100gf, speed <100ms, low hold power." "Piezo is ONLY technology meeting all requirements as-is." "BUT - relaxing size constraint 2.3mm→4mm enables COTS solenoids with 47-67% cost savings." "SMA wire too slow (22-48 sec refresh), Voice Coil too expensive ($384-576), MEMS insufficient force." "This is engineering trade-offs in action - there's no perfect solution." Reference: docs/actuator-technology-tradeoff.md for detailed analysis of all 5 technologies. -->
 
@@ -253,7 +253,7 @@ table td {
 - **Mechanical (ADA):** [MECH-001](appendix/requirements.pdf#prd-mech-001-dot-diameter---ada-7033-compliance) (Ø1.5-1.6mm) | [MECH-002](appendix/requirements.pdf#prd-mech-002-dot-height-raised-position---ada-7033) (H0.64-0.94mm) | [MECH-003](appendix/requirements.pdf#prd-mech-003-dot-spacing-within-cell---ada-7033) (2.3-2.5mm) | [MECH-004](appendix/requirements.pdf#prd-mech-004-cell-spacing-horizontal-between-characters---ada-7033) (6.1-7.6mm) | [MECH-006](appendix/requirements.pdf#prd-mech-006-dot-holding-force---tactile-feedback) (50-100g force)
 - **Standards:** [NFR-STD-001](appendix/requirements.pdf#nfr-std-001-north-america-regulatory-compliance-ul--fcc) (UL/FCC) | [NFR-STD-002](appendix/requirements.pdf#nfr-std-002-accessibility-standards-compliance-us-ada) (ADA 703.3)
 
-> **TAKEAWAY:** 9 ground truth + 6 mechanical + 2 standards = 17 requirements, all SMART-testable with quantified acceptance criteria.
+> **TAKEAWAY:** 17 requirements total, all SMART-testable with acceptance criteria.
 
 <!-- Speaker notes: "Every requirement has SMART structure - not just 'portable', but ≤1.3 lbs with bag-portability test. Not just 'low-cost', but $200±$100 BOM with sensitivity range. This is engineering rigor - assumptions documented, risks quantified, trade-offs tested in v1.4.0." "Click any REQ-ID for full specification in appendix." Reference full database: source/requirements.yaml (1090 lines, auto-generates requirements.md and traceability matrix). -->
 
@@ -283,7 +283,7 @@ table td {
 2. **Value engineering over feature creep** - Same function, lower cost, higher reliability
 3. **Simplification drives reliability** - Fewer components = higher MTBF
 
-> **TAKEAWAY:** No COTS actuators exist (bistable, <7mm dia) - ALL architectures violate 2mo timeline. Portfolio shows cost trade-offs when timeline is impossible.
+> **TAKEAWAY:** NO COTS actuators - ALL architectures violate 2mo timeline.
 
 <!-- This is the thesis: When electrical components can't solve the problem, mechanical innovation can. ARCH_SOL_ECO uses levers to bridge the gap between 6mm COTS actuators and 2.5mm ADA requirement. This is senior-level engineering - recognize when the solution isn't in the electrical domain. Junior engineers design components. Senior engineers design systems with explicit trade-offs. -->
 
@@ -309,7 +309,7 @@ table {
 | **$/Actuator** | **$1.70** | **$2.00** | **$2.00** |
 | **Key Trade-off** | **Best cost-performance** | Standard approach | Best UX, highest cost |
 
-> **TAKEAWAY:** ARCH_SOL_ECO achieves lowest BOM ($505.71) via 15% actuator savings ($1.70 vs $2.00). Primary cost driver: actuators ($326-$384 for 192 pins). Cost reduction paths: volume pricing, reduce to 24 cells (25% savings), value engineering (2-layer PCB).
+> **TAKEAWAY:** SOL_ECO wins on cost: $505.71 BOM via 15% actuator savings.
 
 <!-- Speaker notes: "These are ACTUAL BOM costs from detailed parts sourcing, not back-of-envelope. All 3 architectures currently over target - this is honest engineering. Primary driver: actuators ($288 for piezo, $96 for solenoid). ARCH_SOL_ECO wins on cost-performance - only 46% over target. We have clear cost-down strategies: volume pricing, cell count reduction, value engineering. This is the reality of pilot vs volume economics." -->
 
@@ -467,7 +467,7 @@ ELSE:
 
 **Key Message:** No "best" architecture, only "best FOR YOUR CONSTRAINTS"
 
-> **TAKEAWAY:** Tell me your priorities (cost/timeline/features) and I'll tell you which architecture wins.
+> **TAKEAWAY:** No "best" architecture - depends on YOUR priorities.
 
 <!-- Tell customer: "Give me your priorities, I'll tell you which architecture wins." -->
 

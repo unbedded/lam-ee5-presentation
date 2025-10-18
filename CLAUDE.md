@@ -187,4 +187,41 @@ git push origin main
 
 ---
 
+## PRESENTATION SLIDE RULES
+
+### TAKEAWAY Format
+**CRITICAL RULE:** Every slide TAKEAWAY must be a single punchy sentence **≤80 characters**.
+
+**Format:**
+```
+> **TAKEAWAY:** <single sentence under 80 chars>
+```
+
+**Examples:**
+
+✅ **GOOD** (69 chars):
+```
+> **TAKEAWAY:** SOL_ECO wins on cost: $505.71 BOM via 15% actuator savings.
+```
+
+❌ **BAD** (149 chars - WAY TOO LONG):
+```
+> **TAKEAWAY:** No COTS actuators exist (bistable, <7mm dia) - ALL architectures violate 2mo timeline. Portfolio shows cost trade-offs when timeline is impossible.
+```
+
+✅ **FIXED** (68 chars):
+```
+> **TAKEAWAY:** NO COTS actuators - ALL architectures violate 2mo timeline.
+```
+
+**Why it matters:**
+- TAKEAWAYs appear at bottom of slides in a highlighted box
+- Long TAKEAWAYs get cut off and overflow the slide
+- Single punchy sentence is more memorable and impactful
+- Forces you to identify the ONE key message per slide
+
+**Enforcement:** Before committing presentation changes, grep for TAKEAWAY and verify all are ≤80 chars.
+
+---
+
 
