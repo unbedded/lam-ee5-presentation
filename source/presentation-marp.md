@@ -364,29 +364,19 @@ October 2025
 
 ---
 
-# Evaluate the Proposed Solutions
+# POWER - Architecture Comparison
 
-## Design Step 3 of 4
+## Power Budgets & Battery Life
 
-<img src="images/orbit-reader-20.jpg" style="max-height: 200px;" alt="Orbit Reader 20">
+**[PLACEHOLDER - TO BE COMPLETED]**
 
-<!-- Section title slide - clean delimiter between phases -->
+**Key Topics:**
+- Power consumption comparison (Piezo vs Solenoid)
+- Battery sizing for ARCH_PIEZO_DLX
+- USB-C power delivery requirements
+- Hold power vs actuation power
 
----
-
-# Trade-off Analysis
-
-## Evaluation Framework
-
-| Criterion | Weight | PIEZO_ECO | SOL_ECO | PIEZO_DLX |
-|-----------|--------|-----------|---------|-----------|
-| Time to Market | 25% | 9/10 | 7/10 | 6/10 |
-| Unit Cost | 20% | 8/10 | 9/10 | 6/10 |
-| Manufacturability | 20% | 8/10 | 7/10 | 7/10 |
-| UX/Usability | 10% | 7/10 | 6/10 | 9/10 |
-| Robustness | 10% | 7/10 | 8/10 | 6/10 |
-
-**Weighted Scores:** PIEZO_ECO (8.2), SOL_ECO (7.9), PIEZO_DLX (6.8)
+<!-- Speaker notes: Detailed power analysis comparing all 3 architectures. Piezo: ~0W hold, Solenoid: 9.6-19W hold (or 0W with latch). Battery life calculations for PIEZO_DLX. USB-C PD requirements. -->
 
 ---
 
@@ -428,6 +418,32 @@ October 2025
 **Total:** 133 dB reduction → **21 dB compliance margin (PASS)**
 
 **Key:** Firmware alone = **68 dB reduction at $0 cost!**
+
+---
+
+# Evaluate the Proposed Solutions
+
+## Design Step 3 of 4
+
+<img src="images/orbit-reader-20.jpg" style="max-height: 200px;" alt="Orbit Reader 20">
+
+<!-- Section title slide - clean delimiter between phases -->
+
+---
+
+# Trade-off Analysis
+
+## Evaluation Framework
+
+| Criterion | Weight | PIEZO_ECO | SOL_ECO | PIEZO_DLX |
+|-----------|--------|-----------|---------|-----------|
+| Time to Market | 25% | 9/10 | 7/10 | 6/10 |
+| Unit Cost | 20% | 8/10 | 9/10 | 6/10 |
+| Manufacturability | 20% | 8/10 | 7/10 | 7/10 |
+| UX/Usability | 10% | 7/10 | 6/10 | 9/10 |
+| Robustness | 10% | 7/10 | 8/10 | 6/10 |
+
+**Weighted Scores:** PIEZO_ECO (8.2), SOL_ECO (7.9), PIEZO_DLX (6.8)
 
 ---
 
