@@ -329,12 +329,86 @@ def generate_spider_chart(spider_data, output_path):
     print(f"✓ Generated spider chart: {output_path}")
 
 
+def extract_bom_subsystem_breakdown(arch_id):
+    """
+    Extract subsystem-level cost breakdown from BOM CSV
+
+    Returns:
+        dict: {"Actuators": 384.0, "Control": 11.0, "Power": 8.5, ...}
+    """
+    bom_filename_map = {
+        "ARCH_PIEZO_ECO": "arch-piezo-eco-bom.csv",
+        "ARCH_SOL_ECO": "arch-sol-eco-bom.csv",
+        "ARCH_PIEZO_DLX": "arch-piezo-dlx-bom.csv",
+    }
+
+    bom_file = BOM_DIR / bom_filename_map.get(arch_id, "")
+    if not bom_file.exists():
+        return {}
+
+    # Category mapping (group related subsystems)
+    category_map = {
+        "Actuators": ["SS-ACTUATOR", "SS-ACTUATOR-DRIVER", "SS-ACTUATOR-SOLENOID",
+                      "SS-ACTUATOR-CAM", "SS-ACTUATOR-PISTON", "SS-ACTUATOR-BUSHING",
+                      "SS-ACTUATOR-CAM-HOUSING", "SS-ACTUATOR-SPRING", "SS-ACTUATOR-DRIVER-2CH"],
+        "Control": ["SS-CONTROL", "SS-IO-EXPAND"],
+        "Power": ["SS-POWER-USB-LDO", "SS-POWER-USB-BOOST", "SS-POWER-LIION-CELL",
+                  "SS-POWER-LIION-CHARGER", "SS-POWER-LIION-PROTECTION", "SS-POWER-LIION-GAUGE",
+                  "SS-POWER-LIION-BOOST-200V", "SS-POWER-AA-HOLDER", "SS-POWER-AA-BOOST-3V3",
+                  "SS-POWER-AA-BOOST-12V"],
+        "Communication": ["SS-COMM-USB", "SS-COMM-BLE"],
+        "PCB/Enclosure": ["SS-PCB", "SS-ENCLOSURE"],
+        "EMI": ["SS-EMI-BULK-CAP", "SS-EMI-BYPASS-CAP"],
+        "User IO": ["SS-USER-IO"],
+    }
+
+    # Initialize category totals
+    breakdown = {cat: 0.0 for cat in category_map.keys()}
+    breakdown["Misc 15%"] = 0.0
+
+    # Read CSV
+    with open(bom_file, 'r') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            subsys_id = row.get('Subsystem_ID', '')
+            line_total_str = row.get('Line_Total', '0')
+
+            # Handle SUBTOTAL, Misc, TOTAL rows
+            if subsys_id == '---':
+                desc = row.get('Description', '')
+                if 'Misc 15%' in desc:
+                    try:
+                        breakdown["Misc 15%"] = float(line_total_str)
+                    except ValueError:
+                        pass
+                continue
+
+            # Parse line total
+            try:
+                line_total = float(line_total_str)
+            except ValueError:
+                continue
+
+            # Categorize subsystem
+            categorized = False
+            for category, subsys_list in category_map.items():
+                if subsys_id in subsys_list:
+                    breakdown[category] += line_total
+                    categorized = True
+                    break
+
+            if not categorized and subsys_id:
+                print(f"⚠️  Uncategorized subsystem: {subsys_id} in {arch_id}")
+
+    return breakdown
+
+
 def generate_cost_chart(architectures, output_path):
     """
-    Generate bar chart comparing BOM costs across architectures
+    Generate stacked bar chart comparing BOM costs with subsystem breakdown
     """
     arch_names = []
-    costs = []
+    breakdowns = []
 
     for arch in architectures:
         arch_id = arch.get('id')
@@ -342,30 +416,55 @@ def generate_cost_chart(architectures, output_path):
         short_name = arch_id.replace('ARCH_', '').replace('_', ' ')
         arch_names.append(short_name)
 
-        # Parse cost from actual BOM CSV files
-        cost = extract_bom_cost(arch_id)
-        costs.append(cost)
+        # Get subsystem breakdown
+        breakdown = extract_bom_subsystem_breakdown(arch_id)
+        breakdowns.append(breakdown)
+
+    # Extract all category names (in consistent order)
+    categories = ["Actuators", "Control", "Power", "Communication", "PCB/Enclosure", "EMI", "User IO", "Misc 15%"]
+
+    # Build data matrix for stacking
+    data = {cat: [] for cat in categories}
+    for breakdown in breakdowns:
+        for cat in categories:
+            data[cat].append(breakdown.get(cat, 0))
 
     # Create figure
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=(10, 7))
 
-    # Bar chart
-    colors = [ARCH_COLORS[arch['id']] for arch in architectures]
-    bars = ax.bar(arch_names, costs, color=colors, alpha=0.8, edgecolor='black', linewidth=1.5)
+    # Color scheme for subsystems
+    subsys_colors = {
+        "Actuators": "#E63946",      # Red (largest cost driver)
+        "Control": "#457B9D",        # Blue
+        "Power": "#F4A261",          # Orange
+        "Communication": "#2A9D8F",  # Teal
+        "PCB/Enclosure": "#E9C46A",  # Yellow
+        "EMI": "#A8DADC",            # Light blue
+        "User IO": "#F1FAEE",        # Off-white
+        "Misc 15%": "#999999",       # Gray
+    }
 
-    # Add value labels on bars
-    for bar, cost in zip(bars, costs):
-        height = bar.get_height()
-        ax.text(bar.get_x() + bar.get_width()/2., height,
-                f'${cost:.0f}',
-                ha='center', va='bottom', fontsize=12, weight='bold')
+    # Stacked bar chart
+    bottom = np.zeros(len(arch_names))
+    for cat in categories:
+        values = data[cat]
+        ax.bar(arch_names, values, bottom=bottom, label=cat,
+               color=subsys_colors[cat], edgecolor='white', linewidth=0.5)
+        bottom += np.array(values)
+
+    # Add total labels on top
+    for i, (name, breakdown) in enumerate(zip(arch_names, breakdowns)):
+        total = sum(breakdown.values())
+        ax.text(i, total + 10, f'${total:.0f}',
+                ha='center', va='bottom', fontsize=11, weight='bold')
 
     # Styling
     ax.set_ylabel('Pilot BOM Cost (USD)', fontsize=12, weight='bold')
     ax.set_xlabel('Architecture', fontsize=12, weight='bold')
-    ax.set_title('BOM Cost Comparison (Pilot Quantity)', fontsize=14, weight='bold', pad=15)
-    ax.grid(axis='y', linestyle='--', alpha=0.5)
+    ax.set_title('BOM Cost Comparison (Pilot Quantity)\nSubsystem Breakdown', fontsize=14, weight='bold', pad=15)
+    ax.grid(axis='y', linestyle='--', alpha=0.3)
     ax.set_axisbelow(True)
+    ax.legend(loc='upper left', fontsize=9, framealpha=0.9)
 
     # Format y-axis as currency
     ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'${x:.0f}'))
@@ -374,7 +473,7 @@ def generate_cost_chart(architectures, output_path):
     plt.savefig(output_path, dpi=300, bbox_inches='tight')
     plt.close()
 
-    print(f"✓ Generated cost chart: {output_path}")
+    print(f"✓ Generated cost chart with subsystem breakdown: {output_path}")
 
 
 def generate_timeline_chart(architectures, output_path):
