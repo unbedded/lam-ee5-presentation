@@ -113,19 +113,24 @@ October 2025
 
 **"Let me validate I understood correctly BEFORE we proceed..."**
 
-| ID | Requirement | Status | Impact |
-|----|-------------|--------|--------|
-| **PRD-SCHED-001** | "production within two months" | VAGUE | Pilot vs mass? |
-| **PRD-SIZE-001** | "portable companion device" | VAGUE | How big? |
-| **PRD-IFACE-001** | "connects to cell phone" | VAGUE | BLE? USB? |
-| **PRD-COST-001** | "low-cost at volume" | VAGUE | $100? $200? |
-| **PRD-FUNC-001** | "32 chars × 6 dots = 192 dots" | CLEAR | Core spec |
+| ID | Requirement | Status |
+|----|-------------|--------|
+| [PRD-SCHED-001](appendix/requirements.pdf#prd-sched-001-production-timeline---two-month-release) | Production Timeline - Two Month Release | 🟠 VAGUE |
+| [PRD-SIZE-001](appendix/requirements.pdf#prd-size-001-portable-device) | Portable Device | 🟠 VAGUE |
+| [PRD-IFACE-001](appendix/requirements.pdf#prd-iface-001-cell-phone-connectivity---pairing-and-connection) | Cell Phone Connectivity | 🟠 VAGUE |
+| [PRD-IFACE-002](appendix/requirements.pdf#prd-iface-002-text-data-reception---braille-output) | Text Data Reception | 🟠 VAGUE |
+| [PRD-COST-001](appendix/requirements.pdf#prd-cost-001-low-cost-at-volume) | Low Cost at Volume | 🟠 VAGUE |
+| [PRD-VOL-001](appendix/requirements.pdf#prd-vol-001-high-volume-production-design) | High Volume Production Design | 🟠 VAGUE |
+| [PRD-USER-001](appendix/requirements.pdf#prd-user-001-sight-impaired-user) | Sight-Impaired User | ✅ CLEAR |
+| [PRD-FUNC-001](appendix/requirements.pdf#prd-func-001-single-line-braille-display---32-characters-6-dots-each) | 32 chars × 6 dots = 192 actuators | ✅ CLEAR |
+| [PRD-FUNC-002](appendix/requirements.pdf#prd-func-002-braille-line-update-refresh-next-line) | Braille Line Update | 🟠 VAGUE |
+| [PRD-FUNC-003](appendix/requirements.pdf#prd-func-003-braille-dot-actuation---raised-or-lowered) | Raised or Lowered Dots | ✅ CLEAR |
 
-**Key Observation:** Only **3 of 9** requirements are CLEAR. **6 are VAGUE.**
+**Status:** 3 CLEAR / 7 VAGUE | **Click requirement ID for detailed specification**
 
-> **TAKEAWAY:** I read your spec carefully - 6 requirements need clarification before we commit resources.
+> **TAKEAWAY:** I read your spec carefully - 7 requirements need clarification before we commit resources.
 
-<!-- Strategic framing: "I read the spec CAREFULLY and extracted requirements." "6 of 9 are vague - I need YOUR feedback before building the wrong thing." -->
+<!-- Strategic framing: "I read the spec CAREFULLY and extracted requirements." "7 of 10 are vague - I need YOUR feedback before building the wrong thing." -->
 
 ---
 
