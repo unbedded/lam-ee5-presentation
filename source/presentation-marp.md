@@ -112,6 +112,9 @@ October 2025
 # Problem Statement - Ground Truth Requirements
 
 <style scoped>
+table {
+  font-size: 16px;
+}
 .vague { color: #f39c12; font-weight: bold; }
 .clear { color: #27ae60; font-weight: bold; }
 </style>
@@ -127,9 +130,6 @@ October 2025
 | [PRD-USER-001](appendix/requirements.pdf#prd-user-001-sight-impaired-user) | Sight-Impaired User | <span class="clear">CLEAR</span> ADA 703.3 |
 | [PRD-FUNC-001](appendix/requirements.pdf#prd-func-001-single-line-braille-display---32-characters-6-dots-each) | 32 chars × 6 dots = 192 actuators | <span class="clear">CLEAR</span> ADA 703.3 |
 | [PRD-FUNC-002](appendix/requirements.pdf#prd-func-002-braille-line-update-refresh-next-line) | Braille Line Update | <span class="vague">VAGUE</span> <2 sec refresh, UP/DOWN buttons |
-
-
-**Click requirement ID for detailed specification**
 
 > **TAKEAWAY:** 7 requirements need clarification before we commit resources (also Country/CE/ROHS?).
 
@@ -289,9 +289,7 @@ table td {
 
 ---
 
-# Architecture Overview - BOM Reality Check
-
-## 3 Architectures, 3 Different Trade-offs
+# Architecture Overview - 3 Architectures, 3 Trade-offs
 
 <style scoped>
 .pass { color: #27ae60; font-weight: bold; }
@@ -311,16 +309,7 @@ table {
 | **$/Actuator** | **$1.70** | **$2.00** | **$2.00** |
 | **Key Trade-off** | **Best cost-performance** | Standard approach | Best UX, highest cost |
 
-**Key Finding:** ARCH_SOL_ECO achieves lowest BOM ($505.71) and lowest actuator cost ($1.70 vs $2.00)
-
-**Primary Cost Driver:** Actuators ($384 piezo vs $326.40 solenoid for 192 pins = $2.00 vs $1.70 each)
-
-**Cost Reduction Strategy:**
-- Actuator volume pricing (1K+ quotes vs current 100-qty pricing)
-- Reduce cell count (32→24 cells = 25% actuator savings)
-- Value engineering (2-layer PCB, simpler enclosure)
-
-> **TAKEAWAY:** ARCH_SOL_ECO at $505.71 is 32% over competitive $2/pin benchmark ($384 BOM), but offers 15% actuator cost savings vs piezo.
+> **TAKEAWAY:** ARCH_SOL_ECO achieves lowest BOM ($505.71) via 15% actuator savings ($1.70 vs $2.00). Primary cost driver: actuators ($326-$384 for 192 pins). Cost reduction paths: volume pricing, reduce to 24 cells (25% savings), value engineering (2-layer PCB).
 
 <!-- Speaker notes: "These are ACTUAL BOM costs from detailed parts sourcing, not back-of-envelope. All 3 architectures currently over target - this is honest engineering. Primary driver: actuators ($288 for piezo, $96 for solenoid). ARCH_SOL_ECO wins on cost-performance - only 46% over target. We have clear cost-down strategies: volume pricing, cell count reduction, value engineering. This is the reality of pilot vs volume economics." -->
 
