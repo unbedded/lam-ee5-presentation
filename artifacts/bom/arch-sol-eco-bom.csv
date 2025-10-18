@@ -1,5 +1,5 @@
 Line,Subsystem_ID,Subsystem_Name,Digikey_PN,MFR,MFR_PN,Description,Qty,Unit_Price_1000,Line_Total,Leadtime_Weeks,ROHS,Notes
-1,SS-ACTUATOR-SOLENOID,Solenoid Actuator Array (COTS),CUSTOM-SOL-01,Custom OEM,SOL-4MM-1MM-5V-FLAT,"Solenoid 4mm shaft dia, 1mm stroke, flat plunger face, 5VDC 0.5A",192,0.50,96.00,12,Y,"Production: Custom OEM $0.50 @ 1K+ (12-week lead, MOQ 1000). Pilot: Olimex PUSH-PULL-SOLENOID-5V $2.73 @ 100 (4-week lead, Digikey stock, 5mm stroke mech-limited to 1mm). Flat face for cam contact, PRD-FUNC-003-ARCH-C-EXCEPT (4mm size relaxation)"
+1,SS-ACTUATOR-SOLENOID,Solenoid Actuator Array (Custom Bistable),CUSTOM-SOL-01,Custom OEM,SOL-6MM-1MM-BISTABLE,"Custom bistable solenoid 6-7mm dia, 1mm stroke, flat plunger face, 5VDC 0.5A",192,1.70,326.40,12,Y,"Custom OEM $1.70 @ 1K+ (12-week lead, MOQ 1000). NO COTS bistable solenoids <7mm dia available. Bistable (latching) for zero hold power. Flat face for cam/lever contact. Lever mechanism reduces 6mm→2.5mm pitch."
 2,SS-ACTUATOR-CAM,Rotary Cam Disc Array,CUSTOM-CAM-01,Custom,CAM-DISC-STEEL,"Rotary cam disc (injection molded, steel mold)",96,0.12,11.52,6,Y,"Production cost @ 10K+ volume, cam profile for ±45° rotation"
 3,SS-ACTUATOR-PISTON,Piston Rod Array,CUSTOM-PISTON-01,Custom,PISTON-ROD-STEEL,"Piston rod (injection molded, steel mold)",192,0.08,15.36,6,Y,"Production cost @ 10K+ volume, 0.7mm stroke"
 4,SS-ACTUATOR-BUSHING,Linear Bushing Array,CUSTOM-BUSHING-01,Custom,BUSHING-STEEL,"Linear bushing (injection molded, steel mold)",192,0.06,11.52,6,Y,"Production cost @ 10K+ volume, or COTS brass alternative"
@@ -17,6 +17,6 @@ Line,Subsystem_ID,Subsystem_Name,Digikey_PN,MFR,MFR_PN,Description,Qty,Unit_Pric
 16,SS-POWER-AA-HOLDER,AA Battery Holder (4×AA),36-2466K-ND,Keystone,2466,"4×AA battery holder, PCB mount",1,1.75,1.75,2,Y,Dimensions: 60×55×15mm
 17,SS-POWER-AA-BOOST-3V3,AA Power - Boost (6V→3.3V),296-50464-1-ND,TI,TPS61088,"Boost/buck 6V→3.3V, buck-boost mode",1,1.95,1.95,6,Y,Same chip as USB boost (design reuse)
 18,SS-POWER-AA-BOOST-12V,AA Power - Boost (6V→12V),296-50464-1-ND,TI,TPS61088,"Boost 6V→12V, 2.5A switch (solenoid overdrive)",1,1.95,1.95,6,Y,"Lower voltage than 30V piezo (easier isolation, less EMI)"
----,---,---,---,---,---,SUBTOTAL,---,---,209.35,---,---,---
----,---,---,---,---,---,Misc 15%,---,---,31.40,---,---,"Passives, connectors"
----,---,---,---,---,---,TOTAL,---,---,240.75,---,---,---
+---,---,---,---,---,---,SUBTOTAL,---,---,439.75,---,---,---
+---,---,---,---,---,---,Misc 15%,---,---,65.96,---,---,"Passives, connectors"
+---,---,---,---,---,---,TOTAL,---,---,505.71,---,---,---

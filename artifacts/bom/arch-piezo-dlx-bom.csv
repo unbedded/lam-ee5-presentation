@@ -1,5 +1,5 @@
 Line,Subsystem_ID,Subsystem_Name,Digikey_PN,MFR,MFR_PN,Description,Qty,Unit_Price_1000,Line_Total,Leadtime_Weeks,ROHS,Notes
-1,SS-ACTUATOR,Braille Actuator Array,TBD-PIEZO-01,TBD,TBD-PIEZO-2MM,"Bimorph piezoelectric actuator 2mm width × 28mm length cantilever, 0.7mm stroke, 100VDC nominal drive",192,1.20,230.40,8,Y,"Need vendor quote - placeholder cost, critical width ≤2.3mm (from 2.5mm pitch - 1.5mm dot ÷ 2). 28mm length for 0.7mm stroke @ 100V (per actuator-piezo-voltage-options-analysis.md)"
+1,SS-ACTUATOR,Braille Actuator Array,TBD-PIEZO-01,TBD,TBD-PIEZO-2MM,"Bimorph piezoelectric actuator 2mm width × 28mm length cantilever, 0.7mm stroke, 100VDC nominal drive",192,2.00,384.00,12,Y,"Custom OEM $2.00 @ 1K+ (12-week lead, MOQ 1000). NO COTS available. Critical width ≤2.3mm (from 2.5mm pitch - 1.5mm dot ÷ 2). 28mm length for 0.7mm stroke @ 100V."
 2,SS-CONTROL,Main Control Unit (MCU),497-14367-ND,STMicro,STM32F407VGT6,"ARM Cortex-M4 168MHz, 1MB Flash, 192KB RAM, 140 GPIO",1,7.20,7.20,12,Y,"Main MCU, check stock (long leadtime)"
 3,SS-IO-EXPAND,I/O Expander Array,MCP23017-E/SP-ND,Microchip,MCP23017-E/SP,"16-bit I2C I/O expander, 1.6MHz",4,0.95,3.80,6,Y,Also available in SOIC/QFN for SMT
 4,SS-ACTUATOR-DRIVER,Actuator High-Voltage Driver Array,TBD-HV-DRIVER,TBD,TBD-HV-DRV-100V,"High-voltage driver for piezo (100V, capacitive load), 8-channel",24,3.00,72.00,8,Y,"ULN2803A (50V max) INADEQUATE for 100V piezo! Need HV driver IC or discrete MOSFET array (e.g., STD14NM60N 600V). COST ESTIMATE $3 (vs $0.65)."
@@ -13,6 +13,6 @@ Line,Subsystem_ID,Subsystem_Name,Digikey_PN,MFR,MFR_PN,Description,Qty,Unit_Pric
 12,SS-POWER-LIION-CHARGER,Li-ion Charger IC,296-38713-1-ND,TI,BQ24075RGTT,"Li-ion charger IC, USB input, 1.5A",1,2.50,2.50,4,Y,USB-C charging
 13,SS-POWER-LIION-PROTECTION,Li-ion Protection Circuit,TBD-PROTECTION-01,TBD,TBD-BMS-1S,"1S Li-ion protection IC, overcharge/discharge",1,1.20,1.20,4,Y,Battery safety circuit
 14,SS-POWER-LIION-GAUGE,Fuel Gauge IC,296-41985-1-ND,TI,BQ27441DRZT-G1A,"Fuel gauge IC, I2C, SOC estimation",1,2.00,2.00,6,Y,Battery % indicator
----,---,---,---,---,---,SUBTOTAL,---,---,373.07,---,---,---
----,---,---,---,---,---,Misc 15%,---,---,55.96,---,---,"Passives, connectors"
----,---,---,---,---,---,TOTAL,---,---,429.03,---,---,---
+---,---,---,---,---,---,SUBTOTAL,---,---,526.67,---,---,---
+---,---,---,---,---,---,Misc 15%,---,---,79.00,---,---,"Passives, connectors"
+---,---,---,---,---,---,TOTAL,---,---,605.67,---,---,---

@@ -1,5 +1,5 @@
 # Braille Display - Solution Architectures
-**Generated:** 2025-10-17
+**Generated:** 2025-10-18
 **Source:** source/architectures.yaml v2.0.0
 
 ## Executive Summary
@@ -14,9 +14,9 @@ This document presents 3 alternative architectures for a 32-character braille di
 
 | Architecture | Nickname | Market Position | BOM Target | BOM Actual | Timeline |
 |--------------|----------|-----------------|------------|------------|----------|
-| ARCH_PIEZO_ECO | Value Desk | Entry-level | $125 | $415.35 | 6 weeks |
-| ARCH_SOL_ECO | Cam Innovation | Economy | $165 | $240.75 | 10 weeks |
-| ARCH_PIEZO_DLX | Premium Pro | Premium | $225 | $429.03 | 8 weeks |
+| ARCH_PIEZO_ECO | Value Desk | Entry-level | $125 | $591.99 | 6 weeks |
+| ARCH_SOL_ECO | Cam Innovation | Economy | $165 | $505.71 | 10 weeks |
+| ARCH_PIEZO_DLX | Premium Pro | Premium | $225 | $605.67 | 8 weeks |
 
 ---
 
@@ -132,10 +132,10 @@ Entry-level / Education / Desktop / Low-cost Piezo
 
 **Cost:**
 
-- BOM Subtotal: $361.17
-- Misc 15%: $54.18
-- **BOM Total: $415.35** (Target: $125, Range: $100-$150)
-- **Cost Gap: $290.35 (232% over target)** ⚠️
+- BOM Subtotal: $514.77
+- Misc 15%: $77.22
+- **BOM Total: $591.99** (Target: $125, Range: $100-$150)
+- **Cost Gap: $466.99 (374% over target)** ⚠️
 - Certification: $20,000
 - NRE Total: $35,000
 
@@ -171,17 +171,17 @@ Economy / Budget-Conscious / Best Cost-Performance / Standard Braille Spacing
 
 ### Requirements Traceability
 
-- **PRD-SCHED-002-ASMP:** COTS mandate (≤4 week lead time) → Use COTS solenoid (Takaha BS-0420N-01)
+- **PRD-SCHED-002-ASMP:** Custom actuator (12-week lead) → VIOLATES 2mo timeline requirement
 - **PRD-POWER-004-ASMP:** AA battery life (8 hours) → Solenoid+cam = 1.53W (marginal fit)
-- **PRD-COST-001-ASMP:** Lowest BOM target ($165-216) via actuator cost savings (solenoid $96 vs piezo $288)
+- **PRD-COST-001-ASMP:** Lowest BOM target ($165-216) via actuator cost savings (solenoid $326.40 vs piezo $384)
 - **PRD-FUNC-001:** Standard 2.5mm braille spacing (ADA 703.3) - preserves muscle memory
 
 ### Subsystem Breakdown
 
 **Core Subsystems (Shared):**
 
-- **SS-ACTUATOR-SOLENOID:** Solenoid Actuator Array (COTS) → CUSTOM-SOL-01 (Custom OEM SOL-4MM-1MM-5V-FLAT)
-  - 192× COTS solenoids for rotary cam actuation, 4mm diameter
+- **SS-ACTUATOR-SOLENOID:** Solenoid Actuator Array (Custom Bistable) → CUSTOM-SOL-01 (Custom OEM SOL-6MM-1MM-BISTABLE)
+  - 192× custom bistable solenoids for rotary cam actuation, 6-7mm diameter
   - Qty: 1 × 192 = 192
 - **SS-ACTUATOR-CAM:** Rotary Cam Disc Array → CUSTOM-CAM-01 (Custom CAM-DISC-STEEL)
   - Cam discs for converting horizontal solenoid motion → vertical piston motion
@@ -264,8 +264,8 @@ Economy / Budget-Conscious / Best Cost-Performance / Standard Braille Spacing
 
 **Timeline:**
 
-- Pilot: 💚 FAST
-- Parts Leadtime: SHORTEST
+- Pilot: LONG
+- Parts Leadtime: LONG
 - Certification: 💚 FAST
 
 **Manufacturing:**
@@ -277,11 +277,11 @@ Economy / Budget-Conscious / Best Cost-Performance / Standard Braille Spacing
 
 **Risk:**
 
-- Technical: 💚 LOW
-- Supply Chain: LOWEST
+- Technical: 🟡 MEDIUM
+- Supply Chain: 🟡 MEDIUM
 - Safety: 💚 LOW
-- Timeline: 💚 LOW
-- Cost Overrun: LOWEST
+- Timeline: 🟡 MEDIUM
+- Cost Overrun: 💚 LOW
 
 **Market Fit:**
 
@@ -295,10 +295,10 @@ Economy / Budget-Conscious / Best Cost-Performance / Standard Braille Spacing
 
 **Cost:**
 
-- BOM Subtotal: $209.35
-- Misc 15%: $31.40
-- **BOM Total: $240.75** (Target: $165, Range: $150-$180)
-- **Cost Gap: $75.75 (46% over target)** ⚠️
+- BOM Subtotal: $439.75
+- Misc 15%: $65.96
+- **BOM Total: $505.71** (Target: $165, Range: $150-$180)
+- **Cost Gap: $340.71 (206% over target)** ⚠️
 - Certification: $20,000
 - NRE Total: $70,000
 
@@ -445,10 +445,10 @@ Premium / Mobile Professional / Sleek Design / Rechargeable
 
 **Cost:**
 
-- BOM Subtotal: $373.07
-- Misc 15%: $55.96
-- **BOM Total: $429.03** (Target: $225, Range: $200-$250)
-- **Cost Gap: $204.03 (91% over target)** ⚠️
+- BOM Subtotal: $526.67
+- Misc 15%: $79.00
+- **BOM Total: $605.67** (Target: $225, Range: $200-$250)
+- **Cost Gap: $380.67 (169% over target)** ⚠️
 - Certification: $35,000
 - NRE Total: $70,000
 
@@ -483,7 +483,7 @@ Premium / Mobile Professional / Sleek Design / Rechargeable
 | Metric | ARCH_PIEZO_ECO | ARCH_SOL_ECO | ARCH_PIEZO_DLX |
 |--------|---------|---------|---------|
 | BOM Target | $125 | $165 | $225 |
-| BOM Actual | $415.35 (232% over) ⚠️ | $240.75 (46% over) ⚠️ | $429.03 (91% over) ⚠️ |
+| BOM Actual | $591.99 (374% over) ⚠️ | $505.71 (206% over) ⚠️ | $605.67 (169% over) ⚠️ |
 | Certification | $20K | $20K | $35K |
 | NRE Total | $35K | $70K | $70K |
 
@@ -491,11 +491,11 @@ Premium / Mobile Professional / Sleek Design / Rechargeable
 
 **All architectures currently OVER BOM target:**
 
-- **ARCH_PIEZO_ECO:** $415.35 actual vs $125 target → **$290.35 gap (232% over)**
-- **ARCH_SOL_ECO:** $240.75 actual vs $165 target → **$75.75 gap (46% over)**
-- **ARCH_PIEZO_DLX:** $429.03 actual vs $225 target → **$204.03 gap (91% over)**
+- **ARCH_PIEZO_ECO:** $591.99 actual vs $125 target → **$466.99 gap (374% over)**
+- **ARCH_SOL_ECO:** $505.71 actual vs $165 target → **$340.71 gap (206% over)**
+- **ARCH_PIEZO_DLX:** $605.67 actual vs $225 target → **$380.67 gap (169% over)**
 
-**Primary cost driver:** SS-ACTUATOR ($288.00 for 192× actuators)
+**Primary cost driver:** SS-ACTUATOR ($480.00 for 192× actuators)
 
 **Cost reduction strategies (for v1.4.0 Trade-off Analysis):**
 

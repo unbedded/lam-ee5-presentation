@@ -82,7 +82,7 @@ style: |
 
 **Electrical Engineering Design for Portable Cell Phone Companion Device**
 
-<img src="images/orbit-reader-20.jpg" style="max-height: 200px;" alt="Orbit Reader 20">
+<img src="images/orbit-reader-20_20percent.jpg" alt="Orbit Reader 20">
 
 Spencer Barrett
 LAM Research EE5 Interview
@@ -111,17 +111,22 @@ October 2025
 
 # Problem Statement - Ground Truth Requirements
 
+<style scoped>
+.vague { color: #f39c12; font-weight: bold; }
+.clear { color: #27ae60; font-weight: bold; }
+</style>
+
 | ID | Requirement | Assumptions |
 |----|-------------|-------------|
-| [PRD-SCHED-001](appendix/requirements.pdf#prd-sched-001-production-timeline---two-month-release) | Production Timeline - Two Month Release | 🟠 Pilot Prod x300 *(COTS 4x week lead time)* |
-| [PRD-SIZE-001](appendix/requirements.pdf#prd-size-001-portable-device) | Portable Device | 🟠 ≤1.3 lbs (590g), fits in bag |
-| [PRD-IFACE-001](appendix/requirements.pdf#prd-iface-001-cell-phone-connectivity---pairing-and-connection) | Cell Phone Connectivity | 🟠 BLE or USB-C, GATT/HID|
-| [PRD-IFACE-002](appendix/requirements.pdf#prd-iface-002-text-data-reception---braille-output) | Text Data Reception | 🟠 ASCII -> Grade 1 braille|
-| [PRD-COST-001](appendix/requirements.pdf#prd-cost-001-low-cost-at-volume) | Low Cost at Volume | 🟠 $200 ±$100 BOM ($100-$300) |
-| [PRD-VOL-001](appendix/requirements.pdf#prd-vol-001-high-volume-production-design) | High Volume Production Design | 🟠 10k units/month SMT assembly |
-| [PRD-USER-001](appendix/requirements.pdf#prd-user-001-sight-impaired-user) | Sight-Impaired User | ✅ ADA 703.3 |
-| [PRD-FUNC-001](appendix/requirements.pdf#prd-func-001-single-line-braille-display---32-characters-6-dots-each) | 32 chars × 6 dots = 192 actuators | ✅ ADA 703.3 |
-| [PRD-FUNC-002](appendix/requirements.pdf#prd-func-002-braille-line-update-refresh-next-line) | Braille Line Update | 🟠 <2 sec refresh, UP/DOWN buttons |
+| [PRD-SCHED-001](appendix/requirements.pdf#prd-sched-001-production-timeline---two-month-release) | Production Timeline - Two Month Release | <span class="vague">VAGUE</span> Pilot Prod x300 *(COTS 4x week lead time)* |
+| [PRD-SIZE-001](appendix/requirements.pdf#prd-size-001-portable-device) | Portable Device | <span class="vague">VAGUE</span> ≤1.3 lbs (590g), fits in bag |
+| [PRD-IFACE-001](appendix/requirements.pdf#prd-iface-001-cell-phone-connectivity---pairing-and-connection) | Cell Phone Connectivity | <span class="vague">VAGUE</span> BLE or USB-C, GATT/HID|
+| [PRD-IFACE-002](appendix/requirements.pdf#prd-iface-002-text-data-reception---braille-output) | Text Data Reception | <span class="vague">VAGUE</span> ASCII -> Grade 1 braille|
+| [PRD-COST-001](appendix/requirements.pdf#prd-cost-001-low-cost-at-volume) | Low Cost at Volume | <span class="vague">VAGUE</span> $200 ±$100 BOM ($100-$300) |
+| [PRD-VOL-001](appendix/requirements.pdf#prd-vol-001-high-volume-production-design) | High Volume Production Design | <span class="vague">VAGUE</span> 10k units/month SMT assembly |
+| [PRD-USER-001](appendix/requirements.pdf#prd-user-001-sight-impaired-user) | Sight-Impaired User | <span class="clear">CLEAR</span> ADA 703.3 |
+| [PRD-FUNC-001](appendix/requirements.pdf#prd-func-001-single-line-braille-display---32-characters-6-dots-each) | 32 chars × 6 dots = 192 actuators | <span class="clear">CLEAR</span> ADA 703.3 |
+| [PRD-FUNC-002](appendix/requirements.pdf#prd-func-002-braille-line-update-refresh-next-line) | Braille Line Update | <span class="vague">VAGUE</span> <2 sec refresh, UP/DOWN buttons |
 
 
 **Click requirement ID for detailed specification**
@@ -176,17 +181,15 @@ table td {
 
 **Key Constraint:** Actuator size ≤2.3mm (derived from 2.5mm ADA braille pitch)
 
-**Solution:** Mechanical lever mechanism enables 6mm COTS solenoid → 2.5mm pitch compliance
+**Solution:** Mechanical lever mechanism enables 6-7mm custom solenoid → 2.5mm pitch compliance
 
-> **TAKEAWAY:** Piezo meets requirements natively, but mechanical levers enable COTS solenoids at $0.70-$1.00/pin savings ($134-192 total)
+> **TAKEAWAY:** NO COTS actuators found (bistable, <7mm dia). Mechanical levers enable custom solenoids at $0.70-$1.00/pin savings vs piezo
 
 <!-- Speaker notes: "Evaluated 5 actuator technologies against hard constraints: size ≤2.3mm, force 50-100gf, speed <100ms, low hold power." "Piezo is ONLY technology meeting all requirements as-is." "BUT - relaxing size constraint 2.3mm→4mm enables COTS solenoids with 47-67% cost savings." "SMA wire too slow (22-48 sec refresh), Voice Coil too expensive ($384-576), MEMS insufficient force." "This is engineering trade-offs in action - there's no perfect solution." Reference: docs/actuator-technology-tradeoff.md for detailed analysis of all 5 technologies. -->
 
 ---
 
-# Commercial Braille Display Market
-
-## Price vs Character Analysis
+# Commercial Braille Display Market (Price vs Character)
 
 | Segment | CHAR | Total Pins | Retail Price | Est EE BOM* | $/Pin (BOM) | Example Products |
 |---------|------|------------|--------------|-------------|-------------|------------------|
@@ -199,8 +202,6 @@ table td {
 - **Our Target:** 32 char × 6 pins = 192 pins @ $200 BOM = **$1.04/pin** (competitive with budget segment) 
 - ***\* List price** = BOM × 3 (EE industry standard markup)*
 - **Key Finding:** 100% of commercial displays use **custom piezoelectric actuators** (8 pins/char)
-
-
 
 > **TAKEAWAY:** Budget segment is $0.83-$1.06/pin - our $1.04/pin target  with 6-pin design
 
@@ -219,11 +220,11 @@ table td {
 
 <div style="display: flex; justify-content: space-around; align-items: center;">
   <div style="width: 45%;">
-    <img src="images/orbit-reader-20.jpg" style="max-height: 150px;" alt="Orbit Reader 20">
+    <img src="images/orbit-reader-20_15percent.jpg" alt="Orbit Reader 20">
     <p><strong>Orbit Reader 20</strong><br>20 chars | $799 USD<br>"World's most affordable"</p>
   </div>
   <div style="width: 45%;">
-    <img src="images/brailliant-bi-20x.jpg" style="max-height: 150px;" alt="Brailliant BI 20X">
+    <img src="images/brailliant-bi-20x_15percent.jpg" alt="Brailliant BI 20X">
     <p><strong>Brailliant BI 20X</strong><br>20 chars | $2,199 USD<br>Professional grade</p>
   </div>
 </div>
@@ -262,7 +263,7 @@ table td {
 
 ## Design Step 2 of 4
 
-<img src="images/orbit-reader-20.jpg" style="max-height: 200px;" alt="Orbit Reader 20">
+<img src="images/orbit-reader-20_20percent.jpg" alt="Orbit Reader 20">
 
 <!-- Section title slide - clean delimiter between phases -->
 
@@ -274,26 +275,15 @@ table td {
 
 **CRITICAL CONSTRAINT - Show Stopper:**
 - **2-month production requirement** → REQUIRES COTS components (≤4 week lead time)
-- **Problem:** NO COTS actuators exist at 2.5mm pitch (ADA 703.3 requirement)
-- **Solution:** ARCH_SOL_ECO uses mechanical levers (6mm COTS → 2.5mm output)
+- **Problem:** NO COTS actuators exist - searched 6-7mm solenoids, 2mm piezos - all custom >4wk
+- **Reality:** ALL architectures require custom actuators → >8 week timeline (violates 2mo requirement)
 
 **Core Principles:**
 1. **Requirements exist in RANGES, not absolutes** - $100-$300 BOM (not "$200")
 2. **Value engineering over feature creep** - Same function, lower cost, higher reliability
 3. **Simplification drives reliability** - Fewer components = higher MTBF
 
-**Engineering Response - Portfolio Approach:**
-
-| Attribute | SOL_ECO | PIEZO_ECO | PIEZO_DLX |
-|-----------|---------|-----------|-----------|
-| **Actuator Type** | 6mm COTS solenoid + lever | 2mm Custom piezo | 2mm Custom piezo |
-| **Mechanical** | Lever mechanism (6mm→2.5mm) | Direct drive | Direct drive |
-| **ADA 703.3 Compliance** | ✅ 2.5mm pitch via lever | ✅ 2.5mm pitch native | ✅ 2.5mm pitch native |
-| **Timeline** | ✅ 2mo (COTS ≤4wk) | ❌ 8-12 weeks (custom) | ❌ 10-12 weeks (custom + BLE) |
-| **Cost** | ✅ Lowest BOM | ⚠️ Medium BOM | ❌ Highest BOM |
-| **Innovation** | Mechanical lever design | Standard electrical | Wireless UX |
-
-> **TAKEAWAY:** Mechanical innovation (levers) solves the impossible - ARCH_SOL_ECO achieves both 2mo timeline AND ADA 703.3 compliance.
+> **TAKEAWAY:** No COTS actuators exist (bistable, <7mm dia) - ALL architectures violate 2mo timeline. Portfolio shows cost trade-offs when timeline is impossible.
 
 <!-- This is the thesis: When electrical components can't solve the problem, mechanical innovation can. ARCH_SOL_ECO uses levers to bridge the gap between 6mm COTS actuators and 2.5mm ADA requirement. This is senior-level engineering - recognize when the solution isn't in the electrical domain. Junior engineers design components. Senior engineers design systems with explicit trade-offs. -->
 
@@ -303,24 +293,34 @@ table td {
 
 ## 3 Architectures, 3 Different Trade-offs
 
-| Architecture | Market Position | BOM Actual | GAP* | Timeline | Key Trade-off |
-|--------------|-----------------|------------|------|----------|---------------|
-| **ARCH_PIEZO_ECO** | Entry-level / Education | **$415.35** | +116% | 6 weeks | Fastest, but most over budget |
-| **ARCH_SOL_ECO** | Economy / Budget | **$240.75** | +25% | 10 weeks | **Best cost-performance** |
-| **ARCH_PIEZO_DLX** | Premium / Mobile Pro | **$429.03** | +123% | 8 weeks | Best UX, highest cost |
+<style scoped>
+.pass { color: #27ae60; font-weight: bold; }
+.fail { color: #e74c3c; font-weight: bold; }
+table {
+  font-size: 18px;
+}
+</style>
 
-***\* GAP relative to competition $2/pin × 192 pins = $384 BOM***
+| Attribute | SOL_ECO | PIEZO_ECO | PIEZO_DLX |
+|-----------|---------|-----------|-----------|
+| **Market Position** | Economy / Budget | Entry / Education | Premium / Pro |
+| **Actuator Type** | 6-7mm Custom solenoid | 2mm Custom piezo | 2mm Custom piezo |
+| **Mechanical** | Lever (6mm→2.5mm) | Direct drive | Direct drive |
+| **Timeline** | <span class="fail">>8wk (custom >4wk)</span> | <span class="fail">>8wk (custom >4wk)</span> | <span class="fail">>8wk (custom >4wk)</span> |
+| **BOM Actual** | **$505.71** | **$591.99** | **$605.67** |
+| **$/Actuator** | **$1.70** | **$2.00** | **$2.00** |
+| **Key Trade-off** | **Best cost-performance** | Standard approach | Best UX, highest cost |
 
-**Key Finding:** ARCH_SOL_ECO closest to market competitive pricing
+**Key Finding:** ARCH_SOL_ECO achieves lowest BOM ($505.71) and lowest actuator cost ($1.70 vs $2.00)
 
-**Primary Cost Driver:** Actuators ($288 piezo vs $96 solenoid for 192 pins)
+**Primary Cost Driver:** Actuators ($384 piezo vs $326.40 solenoid for 192 pins = $2.00 vs $1.70 each)
 
 **Cost Reduction Strategy:**
 - Actuator volume pricing (1K+ quotes vs current 100-qty pricing)
 - Reduce cell count (32→24 cells = 25% actuator savings)
 - Value engineering (2-layer PCB, simpler enclosure)
 
-> **TAKEAWAY:** ARCH_SOL_ECO at $240.75 is only 25% over competitive $2/pin benchmark ($384 BOM).
+> **TAKEAWAY:** ARCH_SOL_ECO at $505.71 is 32% over competitive $2/pin benchmark ($384 BOM), but offers 15% actuator cost savings vs piezo.
 
 <!-- Speaker notes: "These are ACTUAL BOM costs from detailed parts sourcing, not back-of-envelope. All 3 architectures currently over target - this is honest engineering. Primary driver: actuators ($288 for piezo, $96 for solenoid). ARCH_SOL_ECO wins on cost-performance - only 46% over target. We have clear cost-down strategies: volume pricing, cell count reduction, value engineering. This is the reality of pilot vs volume economics." -->
 
@@ -347,15 +347,15 @@ table td {
 ## Solenoid Economy (Lever Mechanism, Innovative)
 
 **Key Features:**
-- 6mm COTS solenoids + mechanical lever mechanism
+- 6-7mm custom bistable solenoids + mechanical lever mechanism
 - Mechanical innovation (lever reduces 6mm→2.5mm actuation)
-- ✅ Achieves ADA 703.3 compliance (2.5mm pitch) via leverage
-- ✅ Meets 2mo timeline (COTS ≤4wk lead)
+- Achieves ADA 703.3 compliance (2.5mm pitch) via leverage
+- Custom actuators >4wk lead (violates 2mo timeline)
 - Trades electrical complexity for mechanical simplicity
 
-**BOM:** $240.75 (pilot) | **Timeline:** 10 weeks
+**BOM:** $505.71 (pilot) | **Timeline:** >8 weeks
 
-**Optimizes:** Cost + Timeline (COTS parts, competitive pricing)
+**Optimizes:** Lowest cost ($1.70/actuator vs $2.00 piezo)
 
 ---
 
@@ -436,7 +436,7 @@ table td {
 
 ## Design Step 3 of 4
 
-<img src="images/orbit-reader-20.jpg" style="max-height: 200px;" alt="Orbit Reader 20">
+<img src="images/orbit-reader-20_20percent.jpg" alt="Orbit Reader 20">
 
 <!-- Section title slide - clean delimiter between phases -->
 
@@ -507,7 +507,7 @@ ELSE:
 
 ## Design Step 4 of 4
 
-<img src="images/orbit-reader-20.jpg" style="max-height: 200px;" alt="Orbit Reader 20">
+<img src="images/orbit-reader-20_20percent.jpg" alt="Orbit Reader 20">
 
 <!-- Section title slide - clean delimiter between phases -->
 

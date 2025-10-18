@@ -41,7 +41,7 @@ architectures:
     # Subsystem mapping
     subsystems:
       core:
-        - SS-ACTUATOR       # $288.00
+        - SS-ACTUATOR       # $384.00 (192× @ $2.00 ea, Custom piezo TBD-PIEZO-2MM, 12-week lead)
         - SS-CONTROL        # $8.00
         - SS-IO-EXPAND      # $4.80
         - SS-ACTUATOR-DRIVER # $19.20
@@ -135,24 +135,24 @@ architectures:
     name: "Solenoid Economy (Rotary Cam)"
     nickname: "Cam Innovation"
     market_position: "Economy / Budget-Conscious / Best Cost-Performance / Standard Braille Spacing"
-    strategy_note: "ECO tier focus: EXTREME LOW RISK + FASTEST TIME TO MARKET. Uses COTS solenoids (2-week lead, globally available) to eliminate supply chain risk. 50% cost savings vs piezo ($216 vs $436 production BOM). Cam mechanism proven in automotive/robotics applications."
-    note: "Replaces ARCH-D (violated braille spacing). Rotary cam mechanism achieves standard 2.5mm spacing with COTS solenoids."
+    strategy_note: "ECO tier focus: BEST COST-PERFORMANCE. Uses custom bistable solenoids (6-7mm dia, 12-week lead) with mechanical lever mechanism to achieve 2.5mm pitch. 15% cost savings vs piezo ($326.40 vs $384.00 actuators). Cam mechanism proven in automotive/robotics applications. NO COTS actuators exist (bistable, <7mm dia)."
+    note: "Replaces ARCH-D (violated braille spacing). Rotary cam mechanism achieves standard 2.5mm spacing with custom bistable solenoids (6-7mm dia reduced to 2.5mm pitch via leverage)."
 
     # Requirements traceability
     driven_by_requirements:
       - id: "PRD-SCHED-002-ASMP"
-        target: "COTS mandate (≤4 week lead time) → Use COTS solenoid (Takaha BS-0420N-01)"
+        target: "Custom actuator (12-week lead) → VIOLATES 2mo timeline requirement"
       - id: "PRD-POWER-004-ASMP"
         target: "AA battery life (8 hours) → Solenoid+cam = 1.53W (marginal fit)"
       - id: "PRD-COST-001-ASMP"
-        target: "Lowest BOM target ($165-216) via actuator cost savings (solenoid $96 vs piezo $288)"
+        target: "Lowest BOM target ($165-216) via actuator cost savings (solenoid $326.40 vs piezo $384)"
       - id: "PRD-FUNC-001"
         target: "Standard 2.5mm braille spacing (ADA 703.3) - preserves muscle memory"
 
     # Subsystem mapping (production BOM - steel molds)
     subsystems:
       core:
-        - SS-ACTUATOR-SOLENOID  # $96.00 (192× @ $0.50 ea, COTS Takaha BS-0420N-01)
+        - SS-ACTUATOR-SOLENOID  # $326.40 (192× @ $1.70 ea, Custom bistable SOL-6MM-1MM-BISTABLE, 12-week lead)
         - SS-ACTUATOR-CAM       # $14.40 (3× cam discs per char @ $0.15 ea, steel mold)
         - SS-ACTUATOR-PISTON    # $19.20 (6× piston rods per char @ $0.10 ea, steel mold)
         - SS-ACTUATOR-BUSHING   # $15.36 (6× linear bushings per char @ $0.08 ea, steel mold)
@@ -195,8 +195,8 @@ architectures:
         power: "MODERATE"        # Boost converters (no charger)
         mechanical: "COMPLEX"    # Cam mechanism + layer offsets + piston alignment
       timeline:
-        pilot: "FAST"            # 10 weeks total, but COTS parts (2-week lead) enable early prototyping
-        parts_leadtime: "SHORTEST" # All COTS (solenoid 2-week lead time, fastest among all architectures)
+        pilot: "LONG"            # 12+ weeks (custom actuators), similar to piezo architectures
+        parts_leadtime: "LONG" # Custom solenoids 12-week lead time, NO COTS available
         certification: "FAST"    # FCC 15B only (wired, no radio)
       manufacturing:
         assembly: "MODERATE"     # Modular 6-dot subassemblies (snap-together)
@@ -204,11 +204,11 @@ architectures:
         dfm: "EXCELLENT"         # Injection molding scalable, ±0.2mm tolerance OK
         yield_risk: "MEDIUM"     # Cam mechanism prototype validation needed
       risk:
-        technical: "LOW"         # COTS solenoids (proven), cam mechanisms proven (automotive/robotics), modular design
-        supply_chain: "LOWEST"   # AA + COTS solenoids globally available, 2-week lead time (fastest)
+        technical: "MEDIUM"      # Custom solenoids (12-week lead), cam mechanisms proven (automotive/robotics), modular design
+        supply_chain: "MEDIUM"   # AA globally available but custom solenoids 12-week lead time
         safety: "LOW"            # AA safe (no Li-ion hazard), 12V low voltage
-        timeline: "LOW"          # COTS parts minimize risk, modular assembly de-risks production
-        cost_overrun: "LOWEST"   # Actuators well-defined cost ($96 COTS vs $288 custom piezo)
+        timeline: "MEDIUM"       # Custom actuators increase risk, modular assembly de-risks production
+        cost_overrun: "LOW"      # Actuators lower cost vs piezo ($326.40 vs $384.00)
       market_fit:
         education: "EXCELLENT"   # Low cost + AA batteries + standard spacing
         consumer: "EXCELLENT"    # Best flexibility (wireless + wired) + affordable
@@ -267,7 +267,7 @@ architectures:
     # Subsystem mapping
     subsystems:
       core:
-        - SS-ACTUATOR       # $288.00
+        - SS-ACTUATOR       # $384.00 (192× @ $2.00 ea, Custom piezo TBD-PIEZO-2MM, 12-week lead)
         - SS-CONTROL        # $8.00
         - SS-IO-EXPAND      # $4.80
         - SS-ACTUATOR-DRIVER # $19.20

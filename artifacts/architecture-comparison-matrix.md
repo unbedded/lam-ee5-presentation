@@ -1,6 +1,6 @@
 # Architecture Comparison Matrix
 
-**Generated:** 2025-10-17
+**Generated:** 2025-10-18
 **Source:** source/architectures.yaml v2.0.0
 
 ## Cost
@@ -89,8 +89,8 @@
 
 | Metric | ARCH_PIEZO_ECO | ARCH_SOL_ECO | ARCH_PIEZO_DLX |
 |--------|---------|---------|---------|
-| Pilot | 💚 FASTEST | 💚 FAST | 🟡 MODERATE |
-| Parts Leadtime | 💚 SHORT | SHORTEST | 🟡 MEDIUM |
+| Pilot | 💚 FASTEST | LONG | 🟡 MODERATE |
+| Parts Leadtime | 💚 SHORT | LONG | 🟡 MEDIUM |
 | Certification | 💚 FAST | 💚 FAST | 🔴 SLOW |
 
 ### Quantitative
@@ -128,11 +128,11 @@
 
 | Metric | ARCH_PIEZO_ECO | ARCH_SOL_ECO | ARCH_PIEZO_DLX |
 |--------|---------|---------|---------|
-| Technical | 🔴 HIGH | 💚 LOW | 🔴 HIGH |
-| Supply Chain | 💚 LOW | LOWEST | 🟡 MEDIUM |
+| Technical | 🔴 HIGH | 🟡 MEDIUM | 🔴 HIGH |
+| Supply Chain | 💚 LOW | 🟡 MEDIUM | 🟡 MEDIUM |
 | Safety | 🟡 MEDIUM | 💚 LOW | VERY HIGH |
-| Timeline | 🟡 MEDIUM | 💚 LOW | 🔴 HIGH |
-| Cost Overrun | 🟡 MEDIUM | LOWEST | 🔴 HIGH |
+| Timeline | 🟡 MEDIUM | 🟡 MEDIUM | 🔴 HIGH |
+| Cost Overrun | 🟡 MEDIUM | 💚 LOW | 🔴 HIGH |
 
 ---
 

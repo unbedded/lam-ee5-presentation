@@ -402,13 +402,13 @@ subsystems_unique:
 
   # ARCH_SOL_ECO subsystems (Rotary Cam Mechanism - replaces ARCH-D)
   SS-ACTUATOR-SOLENOID:
-    name: "Solenoid Actuator Array (COTS)"
-    description: "192× COTS solenoids for rotary cam actuation, 4mm diameter"
+    name: "Solenoid Actuator Array (Custom Bistable)"
+    description: "192× custom bistable solenoids for rotary cam actuation, 6-7mm diameter"
     used_in: ["ARCH_SOL_ECO"]
     requirements: ["PRD-FUNC-001", "PRD-SCHED-002-ASMP"]
-    part_ref: "TBD-SOLENOID-01"
+    part_ref: "CUSTOM-SOL-01"
     quantity: 192
-    rationale: "Takaha BS-0420N-01: 4mm dia, 1mm stroke, 0.5N force, 2-week lead time, $0.50 ea @ 100 qty. Used for perpendicular cam actuation (horizontal solenoid → vertical dot displacement)."
+    rationale: "Custom bistable SOL-6MM-1MM-BISTABLE: 6-7mm dia, 1mm stroke, 12-week lead, $1.70 ea @ 1K+ qty. NO COTS bistable solenoids <7mm dia available. Used for perpendicular cam actuation (horizontal solenoid → vertical dot displacement via leverage)."
     pcb_specs:
       layers_required: 2  # Top + Bottom (low-voltage solenoid control)
       min_trace_width_mil: 12  # 12mil (0.3mm) for 50mA continuous solenoid current
