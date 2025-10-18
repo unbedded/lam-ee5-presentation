@@ -245,18 +245,9 @@ October 2025
 
 # Develop Multiple Alternative Solutions
 
-## Design Step 2 of 4 (25/100 pts)
+## Design Step 2 of 4
 
-**Phase 2: Alternative Solution Architectures**
-
-This section presents 3 distinct architectures, each optimizing different trade-offs:
-- **Architecture A (ARCH_PIEZO_ECO):** Piezo Economy - Wired, Standard
-- **Architecture B (ARCH_SOL_ECO):** Solenoid Economy - Rotary Cam, Innovative
-- **Architecture C (ARCH_PIEZO_DLX):** Piezo Deluxe - Wireless, Premium UX
-
-**Key Insight:** No single "best" solution - each architecture makes different trade-offs based on customer priorities (cost/timeline/features/compliance).
-
-<!-- Speaker notes: "This is Phase 2 of our 4-part process. We're not looking for THE answer - we're providing a portfolio of solutions, each optimized for different constraints. This is systems engineering - when requirements conflict, show the customer what they get with each choice." -->
+<!-- Section title slide - clean delimiter between phases -->
 
 ---
 
@@ -269,6 +260,11 @@ This section presents 3 distinct architectures, each optimizing different trade-
 - **Problem:** NO COTS actuators exist meeting ADA 703.3 (2.5mm pitch + 50-100g force)
 - **Result:** Forced to choose between conflicting requirements
 
+**Core Principles:**
+1. **Requirements exist in RANGES, not absolutes** - $100-$300 BOM (not "$200")
+2. **Value engineering over feature creep** - Same function, lower cost, higher reliability
+3. **Simplification drives reliability** - Fewer components = higher MTBF
+
 **Engineering Response - Portfolio Approach:**
 - Portfolio of 3 architectures vs. single point design
 - Each optimizes DIFFERENT trade-off when requirements conflict:
@@ -276,11 +272,34 @@ This section presents 3 distinct architectures, each optimizing different trade-
   - **ARCH_SOL_ECO:** Meets 2mo timeline but relaxes ADA spacing (2.5mm→3.5mm)
   - **ARCH_PIEZO_DLX:** Best UX but highest cost + longest timeline
 
-**Philosophy:** When requirements conflict, document trade-offs and let customer prioritize
-
 > **TAKEAWAY:** No COTS actuator exists - portfolio shows consequences of each priority choice.
 
-<!-- This is the thesis: 2mo timeline + ADA 703.3 compliance are MUTUALLY EXCLUSIVE with COTS parts. Portfolio shows what you give up for each choice. This is senior-level engineering - document the impossible and provide options. -->
+<!-- This is the thesis: 2mo timeline + ADA 703.3 compliance are MUTUALLY EXCLUSIVE with COTS parts. Portfolio shows what you give up for each choice. This is senior-level engineering - document the impossible and provide options. Junior engineers design components. Senior engineers design systems with explicit trade-offs. -->
+
+---
+
+# Architecture Overview - BOM Reality Check
+
+## 3 Architectures, 3 Different Trade-offs
+
+| Architecture | Market Position | BOM Target | BOM Actual | Gap | Timeline | Key Trade-off |
+|--------------|-----------------|------------|------------|-----|----------|---------------|
+| **ARCH_PIEZO_ECO** | Entry-level / Education | $125 | **$415.35** | +232% | 6 weeks | Fastest, but most over budget |
+| **ARCH_SOL_ECO** | Economy / Budget | $165 | **$240.75** | +46% | 10 weeks | **Best cost-performance** |
+| **ARCH_PIEZO_DLX** | Premium / Mobile Pro | $225 | **$429.03** | +91% | 8 weeks | Best UX, highest cost |
+
+**Key Finding:** All architectures currently over BOM target
+
+**Primary Cost Driver:** Actuators ($288 piezo vs $96 solenoid for 192 pins)
+
+**Cost Reduction Strategy:**
+- Actuator volume pricing (1K+ quotes vs current 100-qty pricing)
+- Reduce cell count (32→24 cells = 25% actuator savings)
+- Value engineering (2-layer PCB, simpler enclosure)
+
+> **TAKEAWAY:** ARCH_SOL_ECO has best cost-performance (only 46% over target vs 232% and 91%).
+
+<!-- Speaker notes: "These are ACTUAL BOM costs from detailed parts sourcing, not back-of-envelope. All 3 architectures currently over target - this is honest engineering. Primary driver: actuators ($288 for piezo, $96 for solenoid). ARCH_SOL_ECO wins on cost-performance - only 46% over target. We have clear cost-down strategies: volume pricing, cell count reduction, value engineering. This is the reality of pilot vs volume economics." -->
 
 ---
 
@@ -329,6 +348,14 @@ This section presents 3 distinct architectures, each optimizing different trade-
 **BOM:** $442 (pilot) | **Timeline:** 10-12 weeks
 
 **Optimizes:** User experience (wireless convenience)
+
+---
+
+# Evaluate the Proposed Solutions
+
+## Design Step 3 of 4
+
+<!-- Section title slide - clean delimiter between phases -->
 
 ---
 
@@ -431,6 +458,14 @@ ELSE:
 **This is MAKE-OR-BREAK** - All 3 architectures depend on resolution
 
 <!-- THE ELEPHANT IN THE ROOM - address head-on. $50K NRE budget allocated. -->
+
+---
+
+# NEXT STEPS - Initial Design to Pilot Production
+
+## Design Step 4 of 4
+
+<!-- Section title slide - clean delimiter between phases -->
 
 ---
 
