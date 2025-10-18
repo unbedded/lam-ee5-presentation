@@ -21,10 +21,12 @@ import yaml
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import numpy as np
+import csv
 from pathlib import Path
 
 # Configuration
 ARCHITECTURES_YAML = Path("source/architectures.yaml")
+BOM_DIR = Path("artifacts/bom")
 OUTPUT_DIR = Path("source/images")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -132,6 +134,47 @@ def normalize_to_scale(value, min_val, max_val, lower_is_better=False):
     return normalized
 
 
+def extract_bom_cost(arch_id):
+    """
+    Extract actual BOM cost from CSV file in artifacts/bom/
+
+    Args:
+        arch_id: Architecture ID (e.g., "ARCH_PIEZO_ECO")
+
+    Returns:
+        float: Total BOM cost, or 0 if file not found
+    """
+    # Map architecture ID to BOM filename
+    bom_filename_map = {
+        "ARCH_PIEZO_ECO": "arch-piezo-eco-bom.csv",
+        "ARCH_SOL_ECO": "arch-sol-eco-bom.csv",
+        "ARCH_PIEZO_DLX": "arch-piezo-dlx-bom.csv",
+    }
+
+    bom_file = BOM_DIR / bom_filename_map.get(arch_id, "")
+
+    if not bom_file.exists():
+        print(f"⚠️  BOM file not found: {bom_file}")
+        return 0
+
+    # Read CSV and extract TOTAL from last line
+    with open(bom_file, 'r') as f:
+        reader = csv.reader(f)
+        rows = list(reader)
+
+        # Last row should have format: ---,---,---,---,---,---,TOTAL,---,---,<cost>,---,---,---
+        last_row = rows[-1]
+        for i, cell in enumerate(last_row):
+            if cell == "TOTAL" and i + 3 < len(last_row):
+                try:
+                    return float(last_row[i + 3])
+                except ValueError:
+                    pass
+
+    print(f"⚠️  Could not parse TOTAL from {bom_file}")
+    return 0
+
+
 def load_architectures():
     """Load and parse architectures.yaml"""
     with open(ARCHITECTURES_YAML, 'r') as f:
@@ -174,9 +217,10 @@ def extract_spider_data(architectures):
 
     for arch in architectures:
         quant = arch.get('quantitative', {})
+        arch_id = arch.get('id')
 
-        # Parse cost - from nested cost.bom_target (not bom_cost_pilot)
-        cost = float(quant.get('cost', {}).get('bom_target', 0))
+        # Parse cost - from actual BOM CSV files in artifacts/bom/ (not YAML targets)
+        cost = extract_bom_cost(arch_id)
         costs.append(cost)
 
         # Parse timeline - from nested timeline.total_weeks (not timeline_weeks)
@@ -298,9 +342,8 @@ def generate_cost_chart(architectures, output_path):
         short_name = arch_id.replace('ARCH_', '').replace('_', ' ')
         arch_names.append(short_name)
 
-        # Parse cost
-        cost_str = arch.get('quantitative', {}).get('bom_cost_pilot', '0')
-        cost = float(cost_str.replace('$', '').replace(',', ''))
+        # Parse cost from actual BOM CSV files
+        cost = extract_bom_cost(arch_id)
         costs.append(cost)
 
     # Create figure
