@@ -82,6 +82,8 @@ style: |
 
 **Electrical Engineering Design for Portable Cell Phone Companion Device**
 
+<img src="images/orbit-reader-20.jpg" style="max-height: 200px;" alt="Orbit Reader 20">
+
 Spencer Barrett
 LAM Research EE5 Interview
 October 2025
@@ -163,7 +165,9 @@ October 2025
 
 **Key Constraint:** Actuator size ≤2.3mm (derived from 2.5mm ADA braille pitch)
 
-> **TAKEAWAY:** Only piezo meets ALL requirements, but COTS solenoid saves $0.70-$1.00/pin ($134-192 total) if we relax size to 4mm
+**Solution:** Mechanical lever mechanism enables 6mm COTS solenoid → 2.5mm pitch compliance
+
+> **TAKEAWAY:** Piezo meets requirements natively, but mechanical levers enable COTS solenoids at $0.70-$1.00/pin savings ($134-192 total)
 
 <!-- Speaker notes: "Evaluated 5 actuator technologies against hard constraints: size ≤2.3mm, force 50-100gf, speed <100ms, low hold power." "Piezo is ONLY technology meeting all requirements as-is." "BUT - relaxing size constraint 2.3mm→4mm enables COTS solenoids with 47-67% cost savings." "SMA wire too slow (22-48 sec refresh), Voice Coil too expensive ($384-576), MEMS insufficient force." "This is engineering trade-offs in action - there's no perfect solution." Reference: docs/actuator-technology-tradeoff.md for detailed analysis of all 5 technologies. -->
 
@@ -247,6 +251,8 @@ October 2025
 
 ## Design Step 2 of 4
 
+<img src="images/orbit-reader-20.jpg" style="max-height: 200px;" alt="Orbit Reader 20">
+
 <!-- Section title slide - clean delimiter between phases -->
 
 ---
@@ -257,8 +263,8 @@ October 2025
 
 **CRITICAL CONSTRAINT - Show Stopper:**
 - **2-month production requirement** → REQUIRES COTS components (≤4 week lead time)
-- **Problem:** NO COTS actuators exist meeting ADA 703.3 (2.5mm pitch + 50-100g force)
-- **Result:** Forced to choose between conflicting requirements
+- **Problem:** NO COTS actuators exist at 2.5mm pitch (ADA 703.3 requirement)
+- **Solution:** ARCH_SOL_ECO uses mechanical levers (6mm COTS → 2.5mm output)
 
 **Core Principles:**
 1. **Requirements exist in RANGES, not absolutes** - $100-$300 BOM (not "$200")
@@ -266,15 +272,19 @@ October 2025
 3. **Simplification drives reliability** - Fewer components = higher MTBF
 
 **Engineering Response - Portfolio Approach:**
-- Portfolio of 3 architectures vs. single point design
-- Each optimizes DIFFERENT trade-off when requirements conflict:
-  - **ARCH_PIEZO_ECO:** Meets ADA 703.3 but violates 2mo timeline (8-12 week lead)
-  - **ARCH_SOL_ECO:** Meets 2mo timeline but relaxes ADA spacing (2.5mm→3.5mm)
-  - **ARCH_PIEZO_DLX:** Best UX but highest cost + longest timeline
 
-> **TAKEAWAY:** No COTS actuator exists - portfolio shows consequences of each priority choice.
+| Attribute | SOL_ECO | PIEZO_ECO | PIEZO_DLX |
+|-----------|---------|-----------|-----------|
+| **Actuator Type** | 6mm COTS solenoid + lever | 2mm Custom piezo | 2mm Custom piezo |
+| **Mechanical** | Lever mechanism (6mm→2.5mm) | Direct drive | Direct drive |
+| **ADA 703.3 Compliance** | ✅ 2.5mm pitch via lever | ✅ 2.5mm pitch native | ✅ 2.5mm pitch native |
+| **Timeline** | ✅ 2mo (COTS ≤4wk) | ❌ 8-12 weeks (custom) | ❌ 10-12 weeks (custom + BLE) |
+| **Cost** | ✅ Lowest BOM | ⚠️ Medium BOM | ❌ Highest BOM |
+| **Innovation** | Mechanical lever design | Standard electrical | Wireless UX |
 
-<!-- This is the thesis: 2mo timeline + ADA 703.3 compliance are MUTUALLY EXCLUSIVE with COTS parts. Portfolio shows what you give up for each choice. This is senior-level engineering - document the impossible and provide options. Junior engineers design components. Senior engineers design systems with explicit trade-offs. -->
+> **TAKEAWAY:** Mechanical innovation (levers) solves the impossible - ARCH_SOL_ECO achieves both 2mo timeline AND ADA 703.3 compliance.
+
+<!-- This is the thesis: When electrical components can't solve the problem, mechanical innovation can. ARCH_SOL_ECO uses levers to bridge the gap between 6mm COTS actuators and 2.5mm ADA requirement. This is senior-level engineering - recognize when the solution isn't in the electrical domain. Junior engineers design components. Senior engineers design systems with explicit trade-offs. -->
 
 ---
 
@@ -282,13 +292,15 @@ October 2025
 
 ## 3 Architectures, 3 Different Trade-offs
 
-| Architecture | Market Position | BOM Target | BOM Actual | Gap | Timeline | Key Trade-off |
-|--------------|-----------------|------------|------------|-----|----------|---------------|
-| **ARCH_PIEZO_ECO** | Entry-level / Education | $125 | **$415.35** | +232% | 6 weeks | Fastest, but most over budget |
-| **ARCH_SOL_ECO** | Economy / Budget | $165 | **$240.75** | +46% | 10 weeks | **Best cost-performance** |
-| **ARCH_PIEZO_DLX** | Premium / Mobile Pro | $225 | **$429.03** | +91% | 8 weeks | Best UX, highest cost |
+| Architecture | Market Position | BOM Actual | GAP* | Timeline | Key Trade-off |
+|--------------|-----------------|------------|------|----------|---------------|
+| **ARCH_PIEZO_ECO** | Entry-level / Education | **$415.35** | +116% | 6 weeks | Fastest, but most over budget |
+| **ARCH_SOL_ECO** | Economy / Budget | **$240.75** | +25% | 10 weeks | **Best cost-performance** |
+| **ARCH_PIEZO_DLX** | Premium / Mobile Pro | **$429.03** | +123% | 8 weeks | Best UX, highest cost |
 
-**Key Finding:** All architectures currently over BOM target
+***\* GAP relative to competition $2/pin × 192 pins = $384 BOM***
+
+**Key Finding:** ARCH_SOL_ECO closest to market competitive pricing
 
 **Primary Cost Driver:** Actuators ($288 piezo vs $96 solenoid for 192 pins)
 
@@ -297,7 +309,7 @@ October 2025
 - Reduce cell count (32→24 cells = 25% actuator savings)
 - Value engineering (2-layer PCB, simpler enclosure)
 
-> **TAKEAWAY:** ARCH_SOL_ECO has best cost-performance (only 46% over target vs 232% and 91%).
+> **TAKEAWAY:** ARCH_SOL_ECO at $240.75 is only 25% over competitive $2/pin benchmark ($384 BOM).
 
 <!-- Speaker notes: "These are ACTUAL BOM costs from detailed parts sourcing, not back-of-envelope. All 3 architectures currently over target - this is honest engineering. Primary driver: actuators ($288 for piezo, $96 for solenoid). ARCH_SOL_ECO wins on cost-performance - only 46% over target. We have clear cost-down strategies: volume pricing, cell count reduction, value engineering. This is the reality of pilot vs volume economics." -->
 
@@ -321,17 +333,18 @@ October 2025
 
 # Architecture B: ARCH_SOL_ECO
 
-## Solenoid Economy (Rotary Cam, Innovative)
+## Solenoid Economy (Lever Mechanism, Innovative)
 
 **Key Features:**
-- 4mm COTS solenoids + rotary cam mechanism
-- Mechanical innovation (motorcycle engine concept)
+- 6mm COTS solenoids + mechanical lever mechanism
+- Mechanical innovation (lever reduces 6mm→2.5mm actuation)
+- ✅ Achieves ADA 703.3 compliance (2.5mm pitch) via leverage
+- ✅ Meets 2mo timeline (COTS ≤4wk lead)
 - Trades electrical complexity for mechanical simplicity
-- 3.5mm pitch (relaxed spacing - pilot acceptable)
 
-**BOM:** $277 (pilot) | **Timeline:** 10-12 weeks
+**BOM:** $240.75 (pilot) | **Timeline:** 10 weeks
 
-**Optimizes:** Volume scaling (mechanical cost-down potential)
+**Optimizes:** Cost + Timeline (COTS parts, competitive pricing)
 
 ---
 
@@ -354,6 +367,8 @@ October 2025
 # Evaluate the Proposed Solutions
 
 ## Design Step 3 of 4
+
+<img src="images/orbit-reader-20.jpg" style="max-height: 200px;" alt="Orbit Reader 20">
 
 <!-- Section title slide - clean delimiter between phases -->
 
@@ -464,6 +479,8 @@ ELSE:
 # NEXT STEPS - Initial Design to Pilot Production
 
 ## Design Step 4 of 4
+
+<img src="images/orbit-reader-20.jpg" style="max-height: 200px;" alt="Orbit Reader 20">
 
 <!-- Section title slide - clean delimiter between phases -->
 
