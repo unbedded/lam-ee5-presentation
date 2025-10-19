@@ -308,10 +308,10 @@ table {
 | **Mechanical** | Lever (6mm→2.5mm) | Direct drive | Direct drive |
 | **Timeline** | <span class="fail">>8wk (custom >4wk)</span> | <span class="fail">>8wk (custom >4wk)</span> | <span class="fail">>8wk (custom >4wk)</span> |
 | **BOM Actual** | **$505.71** | **$591.99** | **$605.67** |
-| **$/Actuator** | **$1.70** | **$2.00** | **$2.00** |
+| **$/Actuator\*** | **$1.70**\* | **$2.00**\* | **$2.00**\* |
 | **Key Trade-off** | **ME complexity (lever)** | **EMI risk (λ/4 antenna)** | **EMI + BLE cert risk** |
 
-> **TAKEAWAY:** SOL_ECO wins on cost: $505.71 BOM via 15% actuator savings.
+> **TAKEAWAY:** SOL_ECO wins on cost: $505.71 BOM via 15% actuator savings. *(\*estimate cost basis at volume)*
 
 <!-- Speaker notes: "These are ACTUAL BOM costs from detailed parts sourcing, not back-of-envelope. All 3 architectures currently over target - this is honest engineering. Primary driver: actuators ($288 for piezo, $96 for solenoid). ARCH_SOL_ECO wins on cost-performance - only 46% over target. We have clear cost-down strategies: volume pricing, cell count reduction, value engineering. This is the reality of pilot vs volume economics." -->
 
@@ -699,6 +699,34 @@ table {
 <img src="images/orbit-reader-20_20percent.jpg" alt="Orbit Reader 20">
 
 <!-- Section title slide - clean delimiter between phases -->
+
+---
+
+# Architecture Overview - 3 Architectures, 3 Trade-offs
+
+<style scoped>
+.pass { color: #27ae60; font-weight: bold; }
+.fail { color: #e74c3c; font-weight: bold; }
+table {
+  font-size: 18px;
+}
+</style>
+
+| Attribute | SOL_ECO | PIEZO_ECO | PIEZO_DLX |
+|-----------|---------|-----------|-----------|
+| **Market Position** | Economy / Budget | Entry / Education | Premium / Pro |
+| **Communication** | USB-C (Wired) | USB-C (Wired) | BLE Wireless |
+| **Power Source** | USB Bus-Powered | USB Bus-Powered | Li-ion Battery + Charger |
+| **Actuator Type** | Solenoid-12V | 2mm Piezo-100V | 2mm Piezo-100V |
+| **Mechanical** | Lever (6mm→2.5mm) | Direct drive | Direct drive |
+| **Timeline** | <span class="fail">>8wk (custom >4wk)</span> | <span class="fail">>8wk (custom >4wk)</span> | <span class="fail">>8wk (custom >4wk)</span> |
+| **BOM Actual** | **$505.71** | **$591.99** | **$605.67** |
+| **$/Actuator\*** | **$1.70**\* | **$2.00**\* | **$2.00**\* |
+| **Key Trade-off** | **ME complexity (lever)** | **EMI risk (λ/4 antenna)** | **EMI + BLE cert risk** |
+
+> **TAKEAWAY:** SOL_ECO wins on cost: $505.71 BOM via 15% actuator savings. *(\*estimate cost basis at volume)*
+
+<!-- Speaker notes: "These are ACTUAL BOM costs from detailed parts sourcing, not back-of-envelope. All 3 architectures currently over target - this is honest engineering. Primary driver: actuators ($288 for piezo, $96 for solenoid). ARCH_SOL_ECO wins on cost-performance - only 46% over target. We have clear cost-down strategies: volume pricing, cell count reduction, value engineering. This is the reality of pilot vs volume economics." -->
 
 ---
 
