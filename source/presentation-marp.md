@@ -760,7 +760,18 @@ table {
 
 # Decision Framework
 
-## "It Depends on YOUR Priorities"
+## The Best Design Depends on What the Client Values
+
+**Several competing requirements must be resolved:**
+- **Cost** - BOM targets, volume pricing, actuator sourcing
+- **Complexity** - Electrical vs mechanical trade-offs
+- **Time-to-Market** - Custom vs COTS components, lead times
+- **Usability/UX** - Wireless freedom, battery life, portability
+- **Features** - Connectivity options (BLE vs USB-C)
+- **Manufacturability** - Assembly complexity, tolerances, yield
+- **Robustness** - EMI margins, component ratings, reliability
+
+**Decision Tree Based on YOUR Priorities:**
 
 ```
 IF wireless required:
@@ -775,8 +786,6 @@ ELSE IF timeline < 8 weeks:
 ELSE:
   → ARCH_PIEZO_ECO (most robust)
 ```
-
-**Key Message:** No "best" architecture, only "best FOR YOUR CONSTRAINTS"
 
 > **TAKEAWAY:** No "best" architecture - depends on YOUR priorities.
 
