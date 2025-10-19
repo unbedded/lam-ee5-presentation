@@ -116,6 +116,17 @@ architectures:
         refresh_speed_sec: 1.5    # Full 32-cell line update
         battery_life_hrs: null    # N/A (bus-powered)
         power_consumption_watts: 2.5  # From USB-C 5V
+      power:
+        energy_per_refresh_J: 12.96  # 2.16W × 6s (10 lines/min reading rate)
+        peak_power_during_refresh_W: 2.16  # Continuous refresh (capacitor leakage)
+        avg_power_continuous_W: 2.16  # Same as peak (must refresh constantly)
+        reading_rate_lines_per_min: 10  # Beginner pace assumption
+        refresh_interval_sec: 6  # Time between line changes
+      emi:
+        firmware_reduction_dB: -68  # Slew-rate (-40dB) + sequential firing (-28dB)
+        hardware_mitigation_cost_USD: 10.84  # Ferrite beads + twisted pairs + shielding
+        fcc_part15b_margin_dB: 20  # Margin above FCC Class B limit @ 30-88 MHz
+        compliance_risk_pct: 50  # HIGH risk (λ/4 antenna @ 1.67 GHz)
       timeline:
         design_weeks: 2
         prototype_weeks: 2
@@ -232,8 +243,19 @@ architectures:
         weight_lbs: 1.21
       performance:
         refresh_speed_sec: 2.4    # 8-way parallel actuation (acceptable for beginners)
-        battery_life_hrs: 8       # 4× AA = 15Wh, 1.53W avg → 8 hrs
-        power_consumption_watts: 1.53  # Solenoid+cam (2 channels) marginal fit
+        battery_life_hrs: 15      # Updated: 4× AA = 15Wh, 0.63W avg (worst-case) → 15 hrs
+        power_consumption_watts: 0.63  # Updated: Bistable operation (worst-case, 100% dots change)
+      power:
+        energy_per_refresh_J: 23.2  # 192 dots × 121mJ per pulse (worst-case, 100% dots change)
+        peak_power_during_refresh_W: 19.3  # Peak during 1.2s actuation (24 groups × 8 parallel)
+        avg_power_continuous_W: 0.63  # 23.2J / 6s (bistable - only pulses during line changes)
+        reading_rate_lines_per_min: 10  # Beginner pace assumption
+        refresh_interval_sec: 6  # Time between line changes
+      emi:
+        firmware_reduction_dB: -68  # Flyback diode slew-rate (-40dB) + sequential firing (-28dB)
+        hardware_mitigation_cost_USD: 0.30  # Just flyback diodes (3× @ $0.10 ea)
+        fcc_part15b_margin_dB: 15  # Margin above FCC Class B limit (lower than piezo due to inductive kick)
+        compliance_risk_pct: 30  # MEDIUM risk (inductive transients, but clamped by flyback)
       timeline:
         design_weeks: 3
         prototype_weeks: 3        # Cam mechanism prototyping (SLA 3D print)
@@ -344,8 +366,19 @@ architectures:
         weight_lbs: 0.99
       performance:
         refresh_speed_sec: 1.5
-        battery_life_hrs: 10      # 2500mAh Li-ion @ 250mA avg
-        power_consumption_watts: 1.0  # BLE efficient
+        battery_life_hrs: 4.3     # Updated: 2500mAh Li-ion (9.25Wh), 2.16W → 4.3 hrs
+        power_consumption_watts: 2.16  # Updated: Continuous refresh (capacitor leakage)
+      power:
+        energy_per_refresh_J: 12.96  # 2.16W × 6s (10 lines/min reading rate)
+        peak_power_during_refresh_W: 2.16  # Continuous refresh (capacitor leakage)
+        avg_power_continuous_W: 2.16  # Same as peak (must refresh constantly)
+        reading_rate_lines_per_min: 10  # Beginner pace assumption
+        refresh_interval_sec: 6  # Time between line changes
+      emi:
+        firmware_reduction_dB: -68  # Slew-rate (-40dB) + sequential firing (-28dB)
+        hardware_mitigation_cost_USD: 10.84  # Ferrite beads + twisted pairs + shielding
+        fcc_part15b_margin_dB: 20  # Margin above FCC Class B limit @ 30-88 MHz
+        compliance_risk_pct: 50  # HIGH risk (λ/4 antenna @ 1.67 GHz)
       timeline:
         design_weeks: 3
         prototype_weeks: 2

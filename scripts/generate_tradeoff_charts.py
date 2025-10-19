@@ -195,7 +195,7 @@ def load_architectures():
 
 def extract_spider_data(architectures):
     """
-    Extract 8 dimensions for spider chart from architectures
+    Extract 9 dimensions for spider chart from architectures
 
     Dimensions:
     1. Cost (lower is better - inverted)
@@ -205,15 +205,17 @@ def extract_spider_data(architectures):
     5. Robustness/Reliability (qualitative)
     6. Supply Chain Risk (qualitative - inverted)
     7. Power Efficiency (lower is better - inverted)
-    8. Complexity (lower is better - inverted)
+    8. EMI Margin (higher is better)
+    9. Complexity (lower is better - inverted)
 
     Returns:
-        dict: {arch_id: [8 scores on 0-10 scale]}
+        dict: {arch_id: [9 scores on 0-10 scale]}
     """
     # Collect raw data
     costs = []
     timelines = []
     powers = []
+    emi_margins = []
 
     for arch in architectures:
         quant = arch.get('quantitative', {})
@@ -227,14 +229,19 @@ def extract_spider_data(architectures):
         timeline = float(quant.get('timeline', {}).get('total_weeks', 8))
         timelines.append(timeline)
 
-        # Parse power - from nested performance.power_consumption_watts (not power_avg_w)
-        power = float(quant.get('performance', {}).get('power_consumption_watts', 0))
+        # Parse power - from new power.avg_power_continuous_W field (worst-case analysis)
+        power = float(quant.get('power', {}).get('avg_power_continuous_W', 0))
         powers.append(power)
+
+        # Parse EMI margin - from new emi.fcc_part15b_margin_dB field
+        emi_margin = float(quant.get('emi', {}).get('fcc_part15b_margin_dB', 0))
+        emi_margins.append(emi_margin)
 
     # Find min/max for normalization
     cost_min, cost_max = min(costs), max(costs)
     timeline_min, timeline_max = min(timelines), max(timelines)
     power_min, power_max = min(powers), max(powers)
+    emi_min, emi_max = min(emi_margins), max(emi_margins)
 
     # Build spider data for each architecture
     spider_data = {}
@@ -248,11 +255,13 @@ def extract_spider_data(architectures):
         cost = costs[i]
         timeline = timelines[i]
         power = powers[i]
+        emi_margin = emi_margins[i]
 
-        # Normalize quantitative (lower is better - invert)
+        # Normalize quantitative (lower is better - invert, except EMI where higher is better)
         cost_score = normalize_to_scale(cost, cost_min, cost_max, lower_is_better=True)
         timeline_score = normalize_to_scale(timeline, timeline_min, timeline_max, lower_is_better=True)
         power_score = normalize_to_scale(power, power_min, power_max, lower_is_better=True)
+        emi_score = normalize_to_scale(emi_margin, emi_min, emi_max, lower_is_better=False)  # Higher dB margin = better
 
         # Parse qualitative ratings (updated paths to match architectures.yaml structure)
         ux_score = parse_qualitative_rating(qual.get('ux', ''))  # Dict with setup/convenience/reliability/etc
@@ -261,7 +270,7 @@ def extract_spider_data(architectures):
         supply_score = 10 - parse_qualitative_rating(qual.get('risk', {}).get('supply_chain', ''))  # Was 'supply_chain_risk', now nested
         complexity_score = 10 - parse_qualitative_rating(qual.get('complexity', ''))  # Invert: low complexity = high score (dict with hardware/firmware/power/mechanical)
 
-        # Build 8-dimension array
+        # Build 9-dimension array
         spider_data[arch_id] = [
             cost_score,
             timeline_score,
@@ -270,6 +279,7 @@ def extract_spider_data(architectures):
             robust_score,
             supply_score,
             power_score,
+            emi_score,  # NEW: EMI margin (higher is better)
             complexity_score,
         ]
 
@@ -278,7 +288,7 @@ def extract_spider_data(architectures):
 
 def generate_spider_chart(spider_data, output_path):
     """
-    Generate spider/radar chart comparing architectures across 8 dimensions
+    Generate spider/radar chart comparing architectures across 9 dimensions
     """
     # Dimension labels
     dimensions = [
@@ -289,6 +299,7 @@ def generate_spider_chart(spider_data, output_path):
         'Robustness',
         'Supply Chain\n(lower risk)',
         'Power Efficiency\n(lower better)',
+        'EMI Margin\n(higher better)',
         'Simplicity\n(lower complexity)',
     ]
 
@@ -317,7 +328,7 @@ def generate_spider_chart(spider_data, output_path):
     ax.grid(True, linestyle='--', alpha=0.7)
 
     # Title and legend
-    plt.title('Architecture Trade-off Comparison\n(8 Key Dimensions)',
+    plt.title('Architecture Trade-off Comparison\n(9 Key Dimensions)',
               size=16, weight='bold', pad=20)
     plt.legend(loc='upper right', bbox_to_anchor=(1.3, 1.1), fontsize=11)
 
@@ -643,7 +654,7 @@ def main():
     print("="*60)
     print(f"\nOutput directory: {OUTPUT_DIR.absolute()}")
     print("\nFiles created:")
-    print(f"  • architecture-radar-comparison.png   (Spider chart - 8 dimensions)")
+    print(f"  • architecture-radar-comparison.png   (Spider chart - 9 dimensions)")
     print(f"  • architecture-cost-comparison.png    (Bar chart - BOM costs)")
     print(f"  • architecture-timeline-comparison.png (Bar chart - timelines)")
     print(f"  • architecture-decision-tree.png      (Decision framework)")
