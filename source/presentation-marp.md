@@ -702,22 +702,6 @@ table {
 
 ---
 
-# POWER - Architecture Comparison
-
-## Power Budgets & Battery Life
-
-**[PLACEHOLDER - TO BE COMPLETED]**
-
-**Key Topics:**
-- Power consumption comparison (Piezo vs Solenoid)
-- Battery sizing for ARCH_PIEZO_DLX
-- USB-C power delivery requirements
-- Hold power vs actuation power
-
-<!-- Speaker notes: Detailed power analysis comparing all 3 architectures. Piezo: ~0W hold, Solenoid: 9.6-19W hold (or 0W with latch). Battery life calculations for PIEZO_DLX. USB-C PD requirements. -->
-
----
-
 # EMI Compliance Trade-offs
 
 ## The GHz Antenna Challenge
