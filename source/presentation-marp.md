@@ -771,22 +771,6 @@ table {
 - **Manufacturability** - Assembly complexity, tolerances, yield
 - **Robustness** - EMI margins, component ratings, reliability
 
-**Decision Tree Based on YOUR Priorities:**
-
-```
-IF wireless required:
-  → ARCH_PIEZO_DLX (only option)
-
-ELSE IF cost < $300:
-  → ARCH_SOL_ECO (lowest BOM)
-
-ELSE IF timeline < 8 weeks:
-  → ARCH_PIEZO_ECO (fastest)
-
-ELSE:
-  → ARCH_PIEZO_ECO (most robust)
-```
-
 > **TAKEAWAY:** No "best" architecture - depends on YOUR priorities.
 
 <!-- Tell customer: "Give me your priorities, I'll tell you which architecture wins." -->
