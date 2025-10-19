@@ -907,6 +907,83 @@ Ready to discuss:
 
 ---
 
+## BACKUP-DEEP: EMI Field Strength - Fundamental Derivation to Rule of Thumb
+
+**1. Fundamental Equation (Hertzian Dipole / Short Antenna Far-Field):**
+
+```
+E = (Z₀ × I × L × k × sin(θ)) / (4π × r)    [V/m]
+
+Where:
+Z₀ = √(μ₀/ε₀) = 377Ω    (impedance of free space)
+μ₀ = 4π × 10⁻⁷ H/m      (permeability of free space)
+ε₀ = 8.85 × 10⁻¹² F/m   (permittivity of free space)
+k = 2πf/c = ω/c         (wave number, propagation constant)
+c = 3 × 10⁸ m/s         (speed of light)
+I = Peak current [A]
+L = Antenna length [m]  (must be << λ for "short" antenna)
+θ = Angle from antenna axis (sin(θ) = 1 for broadside, max radiation)
+r = Distance [m]
+4π = Total solid angle (steradians) for isotropic sphere
+```
+
+**2. Simplify for Isotropic Radiator (Conservative Worst-Case):**
+
+Assume sin(θ) = 1 (maximum radiation, broadside direction):
+
+```
+E = (Z₀ × I × L × k) / (4π × r)
+```
+
+**3. Substitute Wave Number k = 2πf/c:**
+
+```
+E = (Z₀ × I × L × 2πf/c) / (4π × r)
+E = (Z₀ × I × L × 2πf) / (4πc × r)
+E = (Z₀ × I × L × f) / (2c × r)
+```
+
+**4. Plug in Constants (Z₀ = 377Ω, c = 3×10⁸ m/s):**
+
+```
+E = (377 × I × L × f) / (2 × 3×10⁸ × r)
+E = (377 × I × L × f) / (6×10⁸ × r)
+E ≈ (6.28×10⁻⁷ × I × L × f) / r    [V/m]
+```
+
+**5. Convert to µV/m (FCC units) and Simplify:**
+
+Multiply by 10⁶ to get µV/m:
+
+```
+E ≈ (0.628 × I × L × f) / r    [µV/m]
+
+For rough engineering estimates, 0.628 ≈ 0.6 or "60" when I is in mA:
+
+E ≈ (I[mA] × L[m] × f[MHz] × 60) / r[m]    [µV/m]
+```
+
+**ASSUMPTIONS (All Conservative - Overestimate EMI):**
+1. ✓ Isotropic radiator (sin(θ) = 1 everywhere) - Real antennas have nulls
+2. ✓ 100% radiation efficiency - Real antennas: 1-10% efficient at these sizes
+3. ✓ Far-field approximation valid (r >> λ) - True for FCC 3m test @ 30-88 MHz
+4. ✓ Short antenna (L << λ) - True: 30mm << 3.4m (λ @ 88 MHz)
+5. ✓ All displacement current radiates - Real: Most trapped in capacitance
+6. ✓ No ground plane effects - Real: Horizontal wire over ground is LESS efficient
+
+**RELATIONSHIP TO POWER:**
+```
+Power density:  S = E² / Z₀    [W/m²]
+Therefore:      P ∝ E² ∝ I²
+
+But FCC regulates E-field (µV/m), not power!
+So use: E ∝ I (linear), not E ∝ I² (that's for power)
+```
+
+> **TAKEAWAY:** Rule of thumb E ≈ 60×I×L×f/r is conservative (overestimates EMI by 2-10×)
+
+---
+
 ## BACKUP: Radiated Emissions - FCC Part 15B Compliance Challenge
 
 <style scoped>
