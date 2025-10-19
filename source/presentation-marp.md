@@ -585,8 +585,11 @@ table {
 1. **100V HV power supply** → Flyback topology, isolation, shielded magnetics
 2. **EMI from piezo switching** → Sequential firing (-28dB), slew-rate limiting (-40dB), ferrite beads
 3. **Custom actuator lead time** → 12-week sourcing blocks 2-month timeline requirement
+4. **Dense 192-actuator packaging** → Requires ME support for multi-layer Z-axis stacking (see Path to Production)
 
 > **TAKEAWAY:** PIEZO_ECO wins on simplicity - standard piezo approach, fastest to pilot.
+
+***Note:** Mechanical design simplified for concept - dense packaging of 192×30mm cantilevers in 2.5mm spacing requires significant ME support*
 
 <!-- Speaker notes: "This is the baseline architecture - standard piezo actuators like 100% of commercial displays use. Key differentiators: USB-C wired (no wireless complexity), bus-powered (no battery), piezo actuators (proven technology). BOM $592 - over target but closest to 'industry standard' approach. Major technical challenge: 100V HV power supply requires flyback topology with isolation and extreme EMI mitigation. Custom piezo actuators are 12-week lead time - violates 2-month requirement but unavoidable (NO COTS 2mm piezos exist). Design strategy: Sequential actuation (1/24th of array active at once) reduces peak current and EMI by 28dB. This is the 'safest' architecture from technical risk perspective - we're copying what commercial products already do." -->
 
@@ -619,8 +622,11 @@ table {
 1. **Cam mechanism complexity** → Modular 6-dot subassemblies, SLA prototype validation
 2. **Mechanical tolerances** → ±0.2mm acceptable with injection molding
 3. **Custom solenoid lead time** → 12-week sourcing (same as piezo)
+4. **Dense 192-actuator packaging** → Requires ME support for multi-layer cam/solenoid stacking (see Path to Production)
 
 > **TAKEAWAY:** SOL_ECO wins cost via mechanical innovation - 15% actuator savings ($1.70 vs $2.00).
+
+***Note:** Mechanical design simplified for concept - dense packaging of 192 actuators in 2.5mm spacing requires significant ME support*
 
 <!-- Speaker notes: "This is the innovator's architecture - mechanical levers solve electrical constraints. Key insight: 6-7mm custom solenoids cost $1.70 (15% cheaper than $2.00 piezo), but don't fit 2.5mm braille spacing. Solution: Cam mechanism provides 2.4:1 leverage ratio (6mm solenoid stroke → 2.5mm effective pitch). BOM $506 - LOWEST COST of all 3 architectures. Trade-off: Mechanical complexity vs electrical simplicity. Uses standard 12V logic (ULN2803A drivers work fine), no 100V HV challenge. Design risk: Cam mechanism requires prototyping and tolerance validation - but automotive/robotics proven technology (not novel). Modular 6-dot subassemblies snap together - scalable to production. This architecture shows senior-level engineering: recognize when the solution isn't in the electrical domain." -->
 
@@ -840,7 +846,7 @@ ELSE:
 
 **Common Production Process:**
 - **Week 0-2:** Actuator sourcing resolution **[CRITICAL PATH]**
-- **Week 3-4:** Detailed design (schematic, PCB, BOM lock)
+- **Week 3-4:** Detailed design (schematic, PCB, BOM lock) + **ME support for dense actuator packaging**
 - **Week 5-6:** Prototype build (fab, assembly, debug)
 - **Week 7-9:** Pilot production (10-100 units, yield validation)
 - **Week 10-12:** Compliance testing & manufacturing transfer
@@ -849,6 +855,14 @@ ELSE:
 - ARCH_PIEZO_ECO: +0 weeks (base case)
 - ARCH_SOL_ECO: +2 weeks (cam tooling)
 - ARCH_PIEZO_DLX: +1 week (BLE cert)
+
+**Critical ME Support Required (All Architectures):**
+- **Dense packaging challenge:** 192 actuators (30mm long) must fit in 2.5mm vertical dot spacing
+- **Solution approach:** Radial/star actuator pattern within each cell + single-layer PCB assembly
+- **Key insight:** 6.2mm character spacing (base) → 2.5mm dot spacing (tips) like wheel spokes
+- **Layout:** Dots 1,4 vertical (top-justified), dots 3,6 vertical (bottom-justified), dots 2,5 at 45° (left/right)
+- **Benefit:** All actuators on ONE PCB plane, different orientations → Eliminates Z-axis stacking complexity
+- **Requirement:** ME resource with precision assembly/tolerance analysis experience
 
 ---
 
