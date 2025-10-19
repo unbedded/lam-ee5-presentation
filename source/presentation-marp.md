@@ -847,7 +847,7 @@ ELSE:
 **Common Production Process:**
 - **Week 0-2:** Actuator sourcing resolution **[CRITICAL PATH]**
 - **Week 3-4:** Detailed design (schematic, PCB, BOM lock) + **ME support for dense actuator packaging**
-- **Week 5-6:** Prototype build (fab, assembly, debug)
+- **Week 5-6:** Prototype build (fab, assembly, debug) + **Detailed EMI analysis when geometry solidifies**
 - **Week 7-9:** Pilot production (10-100 units, yield validation)
 - **Week 10-12:** Compliance testing & manufacturing transfer
 
