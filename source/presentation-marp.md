@@ -329,7 +329,7 @@ table {
 
 | Parameter | **PIEZO (Capacitive)** | **SOLENOID (Inductive + Bistable)** |
 |-----------|------------------------|-------------------------------------|
-| **Voltage** | 100V | 5V |
+| **Voltage** | 100V (unipolar drive) | 5V |
 | **Current (peak)** | 5 µA (slew-limited) | 630 mA |
 | **Actuation time** | 1 ms rise + 81 ms dwell | 50 ms pulse (magnet holds after) |
 | **Capacitance/Inductance** | 50 nF | 10 mH (6Ω coil) |
@@ -339,6 +339,8 @@ table {
 
 **Key Insight:** i = C(dV/dt) vs V = L(di/dt) — Bistable operation = **3.4× lower power** despite 480× higher energy/pulse
 
+***Note:** Piezo drive assumes unipolar (0-100V) unimorph config. Bipolar drive (±100V, 2 drivers/actuator) available if more displacement needed*
+
 <!-- Speaker notes: "This table shows the electrical parameters - look at that energy contrast: 250 microjoules versus 121,000 microjoules. Solenoid uses nearly FIVE HUNDRED TIMES more energy per pulse. Yet somehow it wins on average power - we'll see why on the next slide when we talk about sparse updates.
 
 PIEZO - Capacitive Load (i = C × dV/dt):
@@ -346,7 +348,14 @@ PIEZO - Capacitive Load (i = C × dV/dt):
 - Current: i = C × dV/dt = 50nF × 100,000 V/s = 5 microamps
 - The 81ms 'dwell time' is just timing budget allocation - electrically it's charged in 1ms, but mechanically the piezo cantilever needs to settle (stop ringing) before we can trust the position is stable
 - Energy: E = ½CV² = ½ × 50nF × 100V² = 250 microjoules per charge
-- Capacitors leak over time, so we must continuously refresh - can't do sparse updates
+- Raised dots experience leakage*(MechanicalCreep)* - domain walls drift, requiring ~60Hz refresh to maintain 0.7mm height
+
+PIEZO MECHANICAL CONFIG (30mm cantilever):
+- Bimorph cantilever: PZT top layer + metal shim (unimorph variant, not true bimorph with 2 active PZT layers)
+- Unipolar drive: 0V → +100V on top layer (1 driver per actuator = 192 total drivers)
+- Braille pin mounted PERPENDICULAR at cantilever TIP (not stacked parallel)
+- Why? Cantilever deflection δ ∝ L³ → 30mm gives ~1mm tip displacement → pin pushes UP through display surface
+- Drive options if more displacement needed: (1) Bipolar ±100V (2× displacement, 2× drivers, +$216 BOM), (2) Longer cantilever (35-40mm)
 
 SOLENOID - Inductive Load (V = L × di/dt):
 - 10 millihenry coil with 6 ohm resistance, 630 milliamps peak current
