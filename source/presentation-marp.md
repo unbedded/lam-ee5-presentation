@@ -714,7 +714,9 @@ table {
 
 # Trade-off Analysis
 
-## Evaluation Framework
+## 9-Dimension Comparison
+
+<img src="images/architecture-radar-comparison.png" alt="Architecture Trade-off Comparison" style="max-height: 450px;">
 
 | Criterion | Weight | PIEZO_ECO | SOL_ECO | PIEZO_DLX |
 |-----------|--------|-----------|---------|-----------|
@@ -754,6 +756,16 @@ ELSE:
 
 ---
 
+# NEXT STEPS - Initial Design to Pilot Production
+
+## Design Step 4 of 4
+
+<img src="images/orbit-reader-20_20percent.jpg" alt="Orbit Reader 20">
+
+<!-- Section title slide - clean delimiter between phases -->
+
+---
+
 # Actuator Sourcing - Critical Path Risk
 
 ## All Architectures Blocked Without Resolution
@@ -770,16 +782,6 @@ ELSE:
 **This is MAKE-OR-BREAK** - All 3 architectures depend on resolution
 
 <!-- THE ELEPHANT IN THE ROOM - address head-on. $50K NRE budget allocated. -->
-
----
-
-# NEXT STEPS - Initial Design to Pilot Production
-
-## Design Step 4 of 4
-
-<img src="images/orbit-reader-20_20percent.jpg" alt="Orbit Reader 20">
-
-<!-- Section title slide - clean delimiter between phases -->
 
 ---
 
