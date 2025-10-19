@@ -702,47 +702,6 @@ table {
 
 ---
 
-# EMI Compliance Trade-offs
-
-## The GHz Antenna Challenge
-
-**The Physics Problem:**
-```
-30mm Piezo Cantilever = Quarter-Wavelength Monopole Antenna
-λ/4 @ 1.67 GHz → 192 radiating antennas @ GHz
-```
-
-| Parameter | Solenoid | Piezo |
-|-----------|----------|-------|
-| **EMI Frequency** | <10 MHz | **500 MHz - 1 GHz (HIGH)** |
-| **Antenna Effect** | None | **λ/4 resonance** |
-| **Mitigation Cost** | **$4.32** | **$10.84** (2.5×) |
-| **Cert Risk** | LOW (10%) | HIGH (50%) |
-
-**Key Insight:** 30mm is NOT "just a wire" at GHz — it's a resonant antenna!
-
-<!-- This is the senior EE differentiator: GHz antenna physics -->
-
----
-
-# EMI Mitigation Strategy (Piezo)
-
-## 5-Layer Defense
-
-| Layer | Technique | dB Reduction | Cost |
-|-------|-----------|--------------|------|
-| **Firmware** | Sequential firing | -28 dB | **$0** |
-| | Slew-rate limiting | -40 dB | **$0** |
-| **PCB** | Twisted pairs | -20 dB | $2.00 |
-| | Ferrite beads (192×) | -15 dB | $3.84 |
-| **Enclosure** | Shielded aluminum | -30 dB | $4.00 |
-
-**Total:** 133 dB reduction → **21 dB compliance margin (PASS)**
-
-**Key:** Firmware alone = **68 dB reduction at $0 cost!**
-
----
-
 # Evaluate the Proposed Solutions
 
 ## Design Step 3 of 4
