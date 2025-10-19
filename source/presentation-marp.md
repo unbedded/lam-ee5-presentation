@@ -692,16 +692,6 @@ table {
 
 ---
 
-# Detailed Cost Breakdown
-
-<img src="images/architecture-cost-comparison.png" alt="BOM Cost Comparison" style="max-height: 450px;">
-
-> **TAKEAWAY:** SOL_ECO wins cost via mechanical innovation, not cheaper parts.
-
-<!-- Speaker notes: "Stacked bar shows subsystem breakdown. SOL_ECO $506, PIEZO_ECO $592, PIEZO_DLX $606. All over $200 target - honest engineering. Key insights: Actuators dominate 55-65% of BOM ($326-$384 for 192 pins). SOL_ECO saves 15% on actuators ($1.70 vs $2.00 piezo). PIEZO_DLX wireless premium only $13.68 (BLE + battery + charger). Lever mechanism adds $0 BOM but ME complexity. Path to $200: volume pricing (10K units), reduce 32→24 cells (25% savings), value engineering (2-layer PCB)." -->
-
----
-
 # Evaluate the Proposed Solutions
 
 ## Design Step 3 of 4
@@ -709,6 +699,16 @@ table {
 <img src="images/orbit-reader-20_20percent.jpg" alt="Orbit Reader 20">
 
 <!-- Section title slide - clean delimiter between phases -->
+
+---
+
+# Detailed Cost Breakdown
+
+<img src="images/architecture-cost-comparison.png" alt="BOM Cost Comparison" style="max-height: 450px;">
+
+> **TAKEAWAY:** SOL_ECO wins cost via mechanical innovation, not cheaper parts.
+
+<!-- Speaker notes: "Stacked bar shows subsystem breakdown. SOL_ECO $506, PIEZO_ECO $592, PIEZO_DLX $606. All over $200 target - honest engineering. Key insights: Actuators dominate 55-65% of BOM ($326-$384 for 192 pins). SOL_ECO saves 15% on actuators ($1.70 vs $2.00 piezo). PIEZO_DLX wireless premium only $13.68 (BLE + battery + charger). Lever mechanism adds $0 BOM but ME complexity. Path to $200: volume pricing (10K units), reduce 32→24 cells (25% savings), value engineering (2-layer PCB)." -->
 
 ---
 
