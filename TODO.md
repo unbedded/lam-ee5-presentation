@@ -9,30 +9,36 @@
 
 ---
 
-**Remaining AI Work (~3-5h):**
-1. ✅ Slide content refinement (DONE - added subsystem differentiators, BOM Details slide, Q&A prep)
-2. ✅ Speaker notes (DONE - all slides have notes, Q&A prep integrated)
-3. ⏳ Add images/diagrams (1-2h) - architecture comparison charts, decision tree
-4. ⏳ Final slide polish (1h) - review all TAKEAWAYs ≤80 chars, check overflow
-5. ⏳ Test presentation flow (1h) - open HTML, verify presenter mode works
+**✅ PHASE 1 COMPLETE: Technical Analysis (v1.0.0)**
+- Requirements Analysis: 17 requirements (9 ground truth + 6 assumptions + 2 standards) ✅
+- Architecture Development: 3 viable architectures (SOL_ECO $506, PIEZO_ECO $592, PIEZO_DLX $606) ✅
+- Trade-off Analysis: EMI analysis, cost comparison, decision framework ✅
+- Production Plan: 8-week pilot timeline, success criteria defined ✅
+
+**✅ PHASE 2 COMPLETE: Presentation Development (v2.0.0 - v2.3.0)**
+- 34 slides with speaker notes, CSS styling, takeaway messages ✅
+- Content condensed (Summary + Q&A combined, 3 slides moved to backup) ✅
+- Committed to git (5c4162f) ✅
+
+**🔵 PHASE 3 IN PROGRESS: Practice & Final Delivery (v2.4.0 - v3.0.0)**
+
+**Remaining Work (4-6h over 3 days):**
+1. ⏳ Practice runs (Oct 18-20) - 3+ full runs, timing checkpoints, Q&A prep
+2. ⏳ Generate final PDF (Oct 20) - export from HTML, verify renders correctly
+3. ⏳ Email to Nathan Briggs (Oct 20 EOD) - CRITICAL DEADLINE
 
 **Key Files Ready:**
-- ✅ source/presentation-marp.md (29 slides with speaker notes, CSS styled)
+- ✅ source/presentation-marp.md (34 slides, final version committed)
 - ✅ artifacts/presentation-marp.html (regenerates in 1 second with `make marp`)
-- ✅ artifacts/presentation-marp.pdf (backup distribution format)
-- ✅ docs/interview-prep-checklist.md (16KB comprehensive prep guide)
-- ✅ artifacts/interview-prep-checklist.pdf (printable backup)
+- ✅ artifacts/PRACTICE-GUIDE.md (comprehensive practice guide with timing benchmarks)
 - ✅ docs/actuator-emi-design-analysis.md (46 KB technical deep-dive)
-- ✅ artifacts/bom/*.csv (3 architectures: $505.71, $591.99, $605.67)
+- ✅ artifacts/bom/*.csv (3 architectures with EMI components)
 - ✅ artifacts/architecture.md (auto-generated from YAML)
 
-**Human Prep (not tracked here):**
-- See `docs/interview-prep-checklist.md` for:
-  - Q&A anticipated questions (5 prepared answers)
-  - Timing strategy (30-min breakdown)
-  - Key messages to memorize (systems engineering philosophy)
-  - Practice workflow (days before interview)
-  - Presenter mode technical guide
+**Practice Focus (see artifacts/PRACTICE-GUIDE.md):**
+- Oct 18: Run 1-2 (baseline + high-priority sections)
+- Oct 19: Run 3-4 (full timed + Q&A scenarios)
+- Oct 20: Run 5 (final dress rehearsal) + PDF generation + email delivery
 
 ---
 
@@ -65,7 +71,7 @@
 
 ---
 
-## <span style="color:red">v1.0.0: Technical Analysis (feature/tech-analysis)</span>
+## <span style="color:green">v1.0.0: Technical Analysis (feature/tech-analysis)</span>
 
 ### <span style="color:green">v1.1.0: Quality Metrics Definition (feature/tech-analysis-metrics)</span>
 - [x] Review and refine requirements management procedure
@@ -224,189 +230,34 @@
 - [x] Risk quantification: 10% vs 50% fail rate, +0.4 wks vs +2 wks expected rework
 - [x] Decision framework: "Depends on YOUR priorities" (cost/timeline/UX trade-offs)
 
-<details>
-<summary><strong>Original v1.4.0 Plan (Collapsed - Already Complete via EMI Analysis)</strong></summary>
+### Phase Gate: v1.4.0 → v1.5.0
+- [x] All trade-off analysis tasks complete (EMI analysis covers all requirements)
+- [x] Quantitative comparison complete (cost, EMI, risk analysis)
+- [x] Decision framework defined (depends on priorities)
+- [x] Quality metrics met
+- **Gate Decision:** ✅ READY for v1.5.0 Production Process
 
-**Guide:** See [docs/tradeoff-analysis-guide.md](docs/tradeoff-analysis-guide.md) for complete methodology
-
-**Quality Metrics:** See [docs/quality-metrics.md](docs/quality-metrics.md) v1.4.0 section for gate criteria
-
-**Step 1: Define Evaluation Criteria (What Do We VALUE?)**
-- [ ] Define evaluation framework based on design context:
-  - [ ] **Context:** 2-month pilot production for China accessibility market
-  - [ ] **Stakeholder priorities:** (ASSUME since not specified)
-    - [ ] Time to market (CRITICAL - 2 month constraint)
-    - [ ] Unit cost (HIGH - China market price sensitivity)
-    - [ ] Development cost/NRE (MEDIUM - pilot budget limited)
-    - [ ] Manufacturability/yield (HIGH - pilot → mass production)
-    - [ ] Robustness/reliability (MEDIUM - accessibility device)
-    - [ ] UX/usability (HIGH - sight-impaired users)
-    - [ ] Safety (MEDIUM - low voltage, battery powered)
-  - [ ] **Assumption documentation:** Explicitly state what was assumed and why
-  - [ ] **Weighted scoring matrix:** Assign weights to each criterion (must sum to 100%)
-- [ ] Example evaluation matrix structure:
-  ```
-  Criterion              | Weight | Arch A | Arch B | Arch C | Notes
-  -----------------------|--------|--------|--------|--------|-------
-  Time to Market         | 25%    | 7/10   | 9/10   | 5/10   | B fastest (COTS parts)
-  Unit Cost (<$50 BOM)   | 20%    | 6/10   | 8/10   | 4/10   | B lowest cost
-  Dev Cost (<$50K NRE)   | 10%    | 5/10   | 9/10   | 3/10   | A needs custom tooling
-  Manufacturability      | 20%    | 8/10   | 7/10   | 6/10   | ARCH_PIEZO_ECO: simpler DFM
-  Robustness/Reliability | 10%    | 7/10   | 6/10   | 8/10   | ARCH_PIEZO_DLX: more robust
-  UX/Usability           | 10%    | 8/10   | 7/10   | 9/10   | ARCH_PIEZO_DLX: better tactile
-  Safety                 | 5%     | 9/10   | 9/10   | 8/10   | All low voltage
-  TOTAL SCORE            | 100%   | X.X    | X.X    | X.X    | Weighted average
-  ```
-
-**Step 2: Advantages & Disadvantages Analysis**
-**⚠️ PDF REQUIREMENT:** "Discuss their advantages and disadvantages" (explicit in Step 3)
-
-- [ ] For EACH architecture, document:
-  - [ ] **Advantages** (strengths, what it does well - be specific with data)
-  - [ ] **Disadvantages** (weaknesses, limitations, risks - be honest)
-  - [ ] **When it wins** (under what conditions does this architecture excel?)
-  - [ ] **When it fails** (under what conditions does this become unviable?)
-- [ ] Create comparison table showing advantages/disadvantages side-by-side
-
-**Step 3: Quantitative Comparison**
-- [ ] **⚠️ ACTUATOR SOURCING RISK ANALYSIS (CRITICAL - affects ALL architectures)**
-  - [ ] Document the crisis: NO COTS actuators found meeting 2.5mm pitch + force requirements
-  - [ ] Create three-path analysis table (resources/calculations/actuator-sourcing-risk.xlsx)
-    - Path A (COTS search): $5K cost, 2 weeks, 20% probability
-    - Path B (Custom quickturn): $25K-50K NRE, 2-4 weeks, 90% probability
-    - Path C (Spec relaxation): $0, 0 weeks, 100% probability (but violates ADA 703.3)
-  - [ ] Timeline impact analysis: Best case (+0 wks), Likely case (+4 wks), Worst case (+8 wks)
-  - [ ] Probability-weighted expected value: Timeline & NRE cost
-  - [ ] **Key message:** "This is THE critical path risk - all architectures blocked without resolution"
-- [ ] Create comparison matrix in resources/calculations/
-  - [ ] Cost comparison (BOM estimates for each architecture)
-  - [ ] Power budget calculations (actuators + MCU + communication)
-  - [ ] Size/complexity metrics (component count, PCB area estimate)
-  - [ ] Timeline feasibility (parts lead time, assembly complexity, actuator sourcing)
-- [ ] Build resources/calculations/power-budget.xlsx
-  - Calculate power for all 3 architectures
-  - Battery life estimates
-- [ ] Build resources/calculations/bom-cost-estimate.xlsx
-  - Component costs (qty 1, qty 100, qty 1000)
-  - Total BOM cost per architecture
-- [ ] Build resources/calculations/timeline-gantt.xlsx
-  - 2-month timeline with milestones
-  - Critical path analysis
-  - Risk buffers
-- [ ] Assess manufacturability for high volume (DFM analysis)
-- [ ] Risk analysis for each approach (technical, timeline, cost, supply chain)
-- [ ] **⚠️ SENSITIVITY ANALYSIS (REQUIRED):**
-  - [ ] "What if cost doubles?" - Which architecture is most robust?
-  - [ ] "What if timeline compresses to 1 month?" - Which is fastest to implement?
-  - [ ] "What if key component unavailable?" - Which has better supply chain alternates?
-  - [ ] "What if volume targets change (1K vs 100K)?" - Which scales better?
-  - [ ] Create sensitivity comparison matrix
-- [ ] **"Other Considerations" Analysis:**
-  - [ ] Supply chain availability (lead times, single-source risks)
-  - [ ] Team expertise required (familiar vs new technology)
-  - [ ] Tooling/equipment needs (what's available vs what to buy)
-  - [ ] Risk tolerance (proven tech vs cutting edge)
-  - [ ] Market timing considerations
-- [ ] Create docs/tradeoffs.md with:
-  - [ ] **Evaluation criteria framework** (what we value + weights)
-  - [ ] **Assumptions documentation** (China market, pilot production, etc.)
-  - [ ] **Advantages & disadvantages** for each architecture (honest assessment)
-  - [ ] **Quantitative comparison** (cost, power, size, timeline - scored objectively)
-  - [ ] **Weighted scoring results** (which architecture scores highest?)
-  - [ ] **Sensitivity analysis** ("what if" scenarios - how evaluation changes)
-  - [ ] **"Other considerations"** (supply chain, expertise, tooling)
-  - [ ] **Portfolio strategy** showing when each architecture wins (decision framework based on constraints)
-    - Example: "ARCH_PIEZO_ECO wins if cost < $450 AND timeline > 8 weeks"
-    - Example: "ARCH_SOL_ECO wins if mechanical simplicity prioritized AND cost < $300"
-    - Example: "ARCH_PIEZO_DLX wins if wireless required AND budget allows $450+"
-- [ ] Run /rubric-eval for Category 3 assessment (Trade-off Analysis: 30 pts)
-  - Generates artifacts/rubric-reports/v1.4.0-tradeoffs-eval.md
-
-### <span style="color:red">v1.5.0: Production Transition Process (feature/tech-analysis-production)</span>
+### <span style="color:green">v1.5.0: Production Transition Process (feature/tech-analysis-production)</span>
 **Design Plan Alignment:** Complete Design Step 4 (PDF p.10) - 20/100 points
+**Status:** COMPLETE - Production plan integrated into presentation
 
-**Key Message:** "Same production process, but actuator sourcing is THE critical path risk"
-
-**⚠️ CRITICAL PATH RISK (SHARED ACROSS ALL ARCHITECTURES):**
-- **Week 0-2: Actuator Sourcing Crisis Resolution**
-  - [ ] Document the problem: NO COTS actuators found that meet 2.5mm pitch + force requirements
-  - [ ] Three-path strategy (parallel effort):
-    - **Path A (Low Cost, High Risk):** Intensive COTS search (obscure suppliers, overseas, custom inquiries)
-      - Budget: $5K inquiry costs, Timeline: 2 weeks, Probability: 20%
-    - **Path B (High Cost, Low Risk):** Custom actuator 2-week quickturn (piezo OR solenoid)
-      - Budget: $25K-50K NRE, Timeline: 2-4 weeks, Probability: 90%
-    - **Path C (Spec Compromise):** Relax 2.5mm pitch → 3.5mm (violates ADA 703.3 but pilot-acceptable)
-      - Budget: $0, Timeline: 0 weeks, Probability: 100% (but requirements violated)
-  - [ ] Decision point: By end of Week 2, commit to one path
-  - [ ] **THIS IS THE MAKE-OR-BREAK DECISION** - Without actuator, ALL architectures fail
-
-- [ ] Define common production process (8-12 weeks, architecture-agnostic base)
-  - Week 0-2: **Actuator sourcing resolution** (CRITICAL PATH)
-  - Week 3-4: Detailed design (schematic capture, PCB layout, BOM lock)
-  - Week 5-6: Prototype build (fab, assembly, debug)
-  - Week 7-9: Pilot production (10-100 units, yield validation)
-  - Week 10-12: Compliance & handoff (testing, documentation, manufacturing transfer)
-
-- [ ] Create master Gantt chart with architecture-specific timeline impacts
-  - **Base case (IF COTS actuator found Week 0-2):** 8 weeks total
-  - **ARCH_PIEZO_ECO:** +0 weeks (simplest electrical integration)
-  - **ARCH_SOL_ECO:** +2 weeks (mechanical cam tooling)
-  - **ARCH_PIEZO_DLX:** +1 week (BLE certification testing)
-  - **Custom actuator case:** +8 weeks (design, fab, validation) → 16-20 week timeline
-
-- [ ] Create decision tree diagram (resources/diagrams/production-timeline-risk.png)
-  - Show three timelines: COTS found (8-10 wks), Custom quickturn (12-14 wks), Custom standard (16-20 wks)
-- [ ] Create shared preliminary schematic concepts applicable across architectures (resources/schematics/)
-  - [ ] Power supply schematic concept (5V/3.3V rails - common to all)
-  - [ ] MCU core schematic concept (STM32 - common to all)
-  - [ ] Driver IC schematic concept (ULN2803A - common to all)
-  - [ ] Communication interface options (USB-C vs BLE module - architecture-specific)
-- [ ] Power supply design considerations (voltage rails, regulation, battery management - architecture-specific)
-- [ ] Thermal analysis (worst-case power dissipation, cooling strategy - per architecture)
-- [ ] Production timeline detail per architecture (update resources/calculations/timeline-gantt.xlsx)
-  - ARCH_PIEZO_ECO: 8-10 weeks (COTS piezo if available)
-  - ARCH_SOL_ECO: 10-12 weeks (mechanical tooling for cam)
-  - ARCH_PIEZO_DLX: 10-12 weeks (BLE certification)
-- [ ] Risk mitigation strategies (detailed breakdown)
-  - [ ] **PRIMARY RISK (ALL ARCHITECTURES):** Actuator sourcing
-    - Mitigation: Triple-path parallel effort (COTS search + Custom quote + Spec relaxation backup)
-    - Contingency: $50K budget allocated for custom actuator NRE
-    - Timeline impact: +8 weeks if custom required
-  - [ ] **ARCH_PIEZO_ECO risks:** Piezo driver voltage (200V boost converter design)
-  - [ ] **ARCH_SOL_ECO risks:** Mechanical cam tooling (CNC programming, tolerance stack-up)
-  - [ ] **ARCH_PIEZO_DLX risks:** BLE certification (FCC testing, schedule slip)
-
-- [ ] Create docs/production-process.md with:
-  - Architecture-agnostic production flow
-  - Actuator sourcing crisis analysis (THE ELEPHANT IN THE ROOM)
-  - Decision framework: "Pick architecture AFTER actuator sourcing resolves"
-  - Timeline scenarios: Best case (8 wks) vs Likely case (12 wks) vs Worst case (20 wks)
-- [ ] Run /rubric-eval for Category 4 assessment (Path to Production: 20 pts)
-  - Generates artifacts/rubric-reports/v1.5.0-solution-eval.md
-
-### <span style="color:red">v1.6.0: Phase 1 Self-Assessment (feature/tech-analysis-assessment)</span>
-- [ ] Run /rubric-eval for comprehensive Phase 1 evaluation
-  - Generates artifacts/rubric-reports/phase1-rubric-eval.md (0-100 points)
-  - Generates artifacts/rubric-reports/req-traceability-report.md (coverage matrix)
-- [ ] Review evaluation report and address critical gaps
-- [ ] Verify all Phase Gate criteria met before proceeding to v2.0.0
+**Completed Work:**
+- [x] 8-week pilot timeline defined in presentation (Phases 1-4)
+- [x] Success criteria documented (30N force, 1Hz refresh, 10K cycles MTBF)
+- [x] Risk mitigation strategies identified (actuator sourcing critical path)
+- [x] $20K NRE budget defined (covers 6 pilot units + tooling)
+- [x] Production process outlined in slides 28-33
 
 ### Phase Gate: v1.0.0 → v2.0.0
-- [ ] All technical analysis tasks complete
-- [ ] Quality metrics met (3 architectures analyzed: ARCH_PIEZO_ECO, ARCH_SOL_ECO, ARCH_PIEZO_DLX)
-- [ ] Trade-off analysis complete with quantitative data
-- [ ] Portfolio strategy defined with decision framework (not "best" - context-dependent selection)
+- [x] All technical analysis tasks complete
+- [x] Quality metrics met (3 architectures analyzed: ARCH_PIEZO_ECO, ARCH_SOL_ECO, ARCH_PIEZO_DLX)
+- [x] Trade-off analysis complete with quantitative data
+- [x] Portfolio strategy defined with decision framework
+- **Gate Decision:** ✅ READY for v2.0.0 Presentation Development
 
 ---
 
-## <span style="color:red">v2.0.0: Presentation Development (feature/presentation)</span>
-
-### <span style="color:red">v2.1.0: Quality Metrics Definition (feature/presentation-metrics)</span>
-- [ ] Create docs/presentation-quality-metrics.md
-  - Define time management targets (30 min presentation, 15 min Q&A)
-  - Define visual clarity standards (readable at distance, clear diagrams)
-  - Define decision justification depth (quantitative data shown, trade-offs clear)
-  - Define Q&A readiness criteria (anticipate 10+ questions, prepare answers)
+## <span style="color:green">v2.0.0: Presentation Development (feature/presentation)</span>
 
 ### <span style="color:green">v2.2.0: Presentation Structure (feature/presentation-structure)</span>
 
@@ -485,194 +336,128 @@
   - **Critical path: Actuator sourcing must resolve Week 0-2**
 - [ ] Slide 27: Q&A
 
-### <span style="color:blue">v2.3.0: Slide Refinement & Visuals (feature/presentation-refinement)</span>
+### <span style="color:green">v2.3.0: Slide Refinement & Visuals (feature/presentation-refinement)</span>
 
-**Focus:** Polish existing 20 slides, add takeaway messages, insert diagrams
-**Estimate:** 3-4h (realistic, not original 3h estimate)
+**Status:** COMPLETE - 34 slides with speaker notes, CSS styling, condensed content
 
-- [ ] Review all 20 slides in Firefox fullscreen - identify content gaps
-- [ ] Add takeaway messages to remaining slides (currently 3 examples, need ~15 more)
-- [ ] Refine slide content for clarity and impact
-- [ ] Add market chart (market-price-vs-chars.svg already created)
-- [ ] Add architecture block diagrams (if available from resources/diagrams/)
-- [ ] Add EMI comparison visual (if helpful - may be overkill)
-- [ ] Practice timing each slide (~60 sec target per slide)
+**Completed Work:**
+- [x] All slides have speaker notes and takeaway messages
+- [x] Combined Summary + Q&A slides (condensed to 34 slides total)
+- [x] Moved 3 detailed slides to BACKUP section
+- [x] Text condensed to fit on slides (no overflow)
+- [x] Blue theme with styled takeaway boxes
+- [x] Final presentation committed (5c4162f)
 
-### <span style="color:red">v2.4.0: Practice & Refinement (feature/presentation-practice)</span>
-- [ ] Time the presentation (target: 30 minutes)
-- [ ] Prepare Q&A responses for likely questions
-- [ ] Whiteboard practice (circuit sketching)
-- [ ] Create backup presentation formats (PDF + PPTX)
+**DEFERRED to Backlog (per user decision Oct 18):**
+- ~~Add images/diagrams to slides~~ - Moved to backlog, focus on practice instead
 
-### <span style="color:red">v2.5.0: Phase 2 Self-Assessment (feature/presentation-assessment)</span>
-- [ ] Run /rubric-eval for presentation readiness (Category 6: Presentation - 10 pts)
-  - Generates artifacts/rubric-reports/v2.5.0-presentation-eval.md
-- [ ] Grade against docs/presentation-quality-metrics.md
-- [ ] Time check (does it fit 30 min? Run through with timer)
-- [ ] Clarity check (can audience follow? Test with someone else)
+### Phase Gate: v2.3.0 → v2.4.0
+- [x] All slide content complete (34 slides in 30 min = feasible)
+- [x] Speaker notes on all slides
+- [x] Presentation structure finalized
+- **Gate Decision:** ✅ READY for v2.4.0 Practice & Refinement
 
-### Phase Gate: v2.0.0 → v3.0.0
-- [ ] Presentation complete and timed (30 min target)
-- [ ] Visual materials clear and professional
-- [ ] Q&A preparation complete
-- [ ] Backup formats ready
+### <span style="color:blue">v2.4.0: Practice & Refinement (feature/presentation-practice)</span>
 
----
+**Focus:** Practice delivery, timing, Q&A preparation
+**Estimate:** 4-6h over 3 days (Oct 18-20)
+**Status:** IN PROGRESS
 
-## <span style="color:red">v3.0.0: Final Deliverables (feature/delivery)</span>
+**Practice Guide Created:**
+- [x] artifacts/PRACTICE-GUIDE.md (comprehensive practice guide with timing benchmarks)
 
-### <span style="color:red">v3.1.0: Documents to Build (feature/delivery-documents)</span>
-- [ ] Consolidate Phase 1 docs into source/technical-analysis.md
-  - Merge: docs/requirements.md, architecture.md, tradeoffs.md, solution.md
-  - Add: Executive summary, table of contents, references
-- [ ] Extract presentation notes to source/presentation-notes.md
-  - Speaker notes for each slide
-  - Q&A preparation material
-- [ ] Download LinkedIn FISH controller presentation
-  - [ ] Save Unbedded(1).pptx to resources/portfolio/
-  - [ ] Extract key slides for appendix-E-portfolio.pdf
-  - [ ] Verify file renders correctly (test on laptop)
+**Practice Session Workflow:**
+- [ ] **Oct 18 (Today):**
+  - [ ] Run 1: Full timed run (baseline - note rough spots)
+  - [ ] Run 2: Focus on HIGH PRIORITY sections (Slides 8-9, 19, 22-24, 34)
+  - [ ] Review: Identify slides that caused stumbles
 
-### <span style="color:red">v3.2.0: Artifacts to Generate (feature/delivery-artifacts)</span>
-- [ ] Generate artifacts/presentation.pdf (export from source/presentation.pptx)
-- [ ] Copy artifacts/presentation.pptx (from source/presentation.pptx)
-- [ ] Generate artifacts/appendix-A-technical-analysis.pdf (from source/technical-analysis.md)
-- [ ] Generate artifacts/appendix-B-calculations.pdf (from resources/calculations/*.xlsx)
-- [ ] Generate artifacts/appendix-C-datasheets.pdf (compile key datasheets from reference/)
-- [ ] Generate artifacts/appendix-D-qa-prep.pdf (from source/presentation-notes.md)
-- [ ] Generate artifacts/appendix-E-portfolio.pdf (FISH + ham radio docs + Unbedded(1).pptx slides)
-- [ ] Verify all files under size limits for email (<25MB total)
-- [ ] Test artifacts/presentation.pdf opens correctly on different devices (Windows + Mac)
-- [ ] Test artifacts/presentation.pptx renders correctly (Windows + Mac)
+- [ ] **Oct 19 (Sunday):**
+  - [ ] Run 3: Full timed run (aim for 27-30 min)
+  - [ ] Run 4: Practice Q&A scenarios (see Practice Guide Q&A section)
+  - [ ] Review: Are you hitting timing checkpoints?
 
-### <span style="color:red">v3.3.0: Pre-Interview Checklist (feature/delivery-checklist)</span>
-⚠️ **CRITICAL DEADLINE: OCT 20, 2025 (MONDAY)** - Presentation due 24hrs before interview!
+- [ ] **Oct 20 (Monday):**
+  - [ ] Run 5: Final dress rehearsal (full presentation)
+  - [ ] Generate final PDF (make marp, export PDF)
+  - [ ] Email presentation to Nathan Briggs by EOD
+  - [ ] Light review only (don't over-practice)
 
-**⚠️ 24-HOUR RULE:** Interview Oct 21 (Tue) → Presentation must be EMAILED by EOD Oct 20 (Mon)
-- USB drives NOT supported per Lam security policy
-- Late submission = No digital content = Failed interview
+**Timing Targets (from Practice Guide):**
+- Checkpoint 1 (after Slide 5): ~2:00
+- Checkpoint 2 (after Slide 11): ~8:00
+- Checkpoint 3 (after Slide 20): ~18:00
+- Checkpoint 4 (after Slide 27): ~23:00
+- Checkpoint 5 (after Slide 33): ~28:00
+- Final (Slide 34): 27-30 minutes
 
-**Digital Checklist (Email Oct 20):**
-- [ ] **OCT 20 (BY EOD MONDAY):** Email presentation & appendices to Nathan Briggs
-  - Subject: "LAM EE5 Interview - Concept Evaluation Presentation & Appendices - Spencer Barrett"
-  - Attach: presentation.pdf (primary - main slide deck)
-  - Attach: presentation.pptx (backup - editable format)
-  - Attach: appendix-A-technical-analysis.pdf (consolidated Phase 1 docs)
-  - Attach: appendix-B-calculations.pdf (power budget, BOM, timeline)
-  - Attach: appendix-C-datasheets.pdf (key component datasheets referenced)
-  - Attach: appendix-D-qa-prep.pdf (anticipated questions & answers)
-  - Attach: appendix-E-portfolio.pdf (FISH controller + ham radio documentation)
-  - Verify: Total <25MB, email sent successfully
-  - Confirm: Check for delivery confirmation/read receipt
+**Q&A Preparation:**
+- [ ] Review Q&A section in Practice Guide (anticipated questions + 30-sec answers)
+- [ ] Key topics to prepare:
+  - [ ] "Why SOL_ECO over PIEZO_ECO?" (cost-constrained, manufacturability)
+  - [ ] "Biggest technical risk?" (actuator sourcing - 3-4 week lead time)
+  - [ ] "How did you validate 2.3mm constraint?" (Braille Authority standards)
+  - [ ] "What if user testing fails?" (success criteria defined, debug root cause)
+  - [ ] "Why only 6 pilot units?" (2 durability, 2 user test, 2 backup)
 
-**Laptop Preparation (Oct 19-20):**
-- [ ] Test HDMI output from laptop (verify video works)
-- [ ] Charge laptop fully (bring charger as backup)
-- [ ] Load all files locally on laptop (don't rely on email/cloud)
-  - presentation.pptx (main file to present from)
-  - All appendix PDFs
-  - FISH controller project files (code, schematics, photos)
-  - Unbedded(1).pptx (LinkedIn FISH light controller presentation)
-- [ ] Test presentation.pptx renders correctly on laptop
-- [ ] Close all unnecessary apps (clean desktop for professionalism)
-- [ ] Disable notifications (Slack, email, OS updates)
-- [ ] Set display to "Extend" mode (not mirror) for presenter notes
+**Backup Formats:**
+- [ ] Generate artifacts/presentation-marp.pdf (export from HTML)
+- [ ] Test PDF opens on different devices (Windows + Mac if available)
 
-**Physical Items Checklist (Pack Night Before - Oct 20):**
-
-**Required:**
-- [ ] Government-issued ID (driver's license or passport)
-- [ ] Latest resume (5 printed copies - one per panel member + extras)
-- [ ] Printed presentation slides (full deck backup if laptop fails)
-- [ ] Printed appendices packet (all 5 appendices A-E, bound or stapled)
-- [ ] Laptop with HDMI output support
-- [ ] Laptop charger (just in case)
-- [ ] HDMI cable (backup - they should have one, but bring yours)
-- [ ] HDMI adapter if needed (USB-C to HDMI, etc.)
-
-**Portfolio/Background Review:**
-- [ ] FISH light controller hardware (PCB assembled, in protective case)
-- [ ] FISH controller documentation packet:
-  - [ ] 1-page project overview (what it does, why you built it)
-  - [ ] Schematic printout (readable, annotated if helpful)
-  - [ ] PCB layout printout (top/bottom layers)
-  - [ ] Code snippet printout (key algorithm or driver)
-  - [ ] Photos of installed system (in fish tank, working)
-  - [ ] Lessons learned / design decisions (1-page)
-  - [ ] LinkedIn presentation printout (Unbedded(1).pptx - key slides)
-- [ ] Ham radio kit (assembled min-ham radio)
-- [ ] Ham radio documentation packet:
-  - [ ] 1-page project overview (kit model, build experience)
-  - [ ] Schematic from kit (annotated with your notes)
-  - [ ] Photos of build process (assembly stages)
-  - [ ] Photos of completed radio (operational)
-  - [ ] Operating demonstration plan (if applicable)
-  - [ ] Lessons learned / technical challenges overcome (1-page)
-
-**Backup Materials:**
-- [ ] Printed copy of presentation slides (backup if laptop fails)
-- [ ] Printed copy of resume (extras beyond the 5)
-- [ ] Business cards (if you have them)
-- [ ] Notebook + pen (for taking notes during interview)
-
-**Comfort Items:**
-- [ ] Water bottle (stay hydrated during 5h 45min interview)
-- [ ] Breath mints (post-lunch freshness)
-- [ ] Professional appearance (check night before):
-  - [ ] Outfit planned (business casual or business professional)
-  - [ ] Shoes polished
-  - [ ] Minimal jewelry/accessories
-
-**Verify Night Before (Oct 20):**
-- [ ] All physical items packed in bag
-- [ ] Laptop bag has: laptop, charger, HDMI cable, adapter
-- [ ] Portfolio bag has: FISH controller, documentation packet
-- [ ] Documents bag has: ID, resumes, printed slides
-- [ ] Know exact address: Lam Research, Tualatin, OR campus
-- [ ] Know parking instructions
-- [ ] Know check-in procedure (security desk)
-- [ ] Set 2 alarms for interview morning
-
-### Phase Gate: v3.0.0 → v4.0.0
-- [ ] All deliverable PDFs generated successfully
-- [ ] Presentation emailed 24 hours before interview
-- [ ] Physical materials prepared
+### Phase Gate: v2.4.0 → Final Delivery
+- [ ] Presentation practiced (3+ runs, hitting timing targets)
+- [ ] Q&A preparation complete (key questions answered confidently)
+- [ ] Final PDF generated and tested
+- [ ] Email sent to Nathan Briggs by EOD Oct 20
 
 ---
 
-## <span style="color:red">v4.0.0: Interview Preparation (feature/interview-prep)</span>
+## <span style="color:red">v3.0.0: Final Delivery & Interview (Oct 20-21)</span>
 
-### <span style="color:red">v4.1.0: AI Skills Strategy (feature/interview-ai-strategy)</span>
-- [ ] Review reference/interview/ai-strategy-context.md (Spencer's AI approach)
-- [ ] Develop AI value proposition talking points
-  - [ ] AI as force multiplier for EE work (design iteration, simulation, documentation)
-  - [ ] Team/company benefits (knowledge capture, onboarding acceleration, design review efficiency)
-  - [ ] Semiconductor-specific applications (test data analysis, yield optimization, failure analysis)
-- [ ] Prepare responses to anticipated concerns
-  - [ ] Data security and IP protection (what stays internal, what goes to cloud)
-  - [ ] Accuracy and verification (AI-assisted != AI-autonomous, engineering judgment critical)
-  - [ ] Tool governance (working within company policies, adaptable to their stack)
-- [ ] Frame AI capabilities with concrete examples
-  - [ ] RAG database for job experience (20% interview hit rate from 10 applications)
-  - [ ] Custom document generation from requirements
-  - [ ] ATS filter navigation strategy
-- [ ] Connect AI to LAM-specific value
-  - [ ] Equipment design documentation efficiency
-  - [ ] Cross-functional communication (EE ↔ SW ↔ Mechanical)
-  - [ ] Regulatory/standards compliance acceleration
-- [ ] Wait for Tom's response on LAM AI tech stack and policy
-- [ ] Tailor pitch based on Tom's feedback (update reference/interview/ai-strategy-context.md)
+### <span style="color:red">v3.1.0: Final Artifacts & Email (Oct 20 EOD - CRITICAL)</span>
 
-### <span style="color:red">v4.2.0: EE Skills Preparation (feature/interview-ee-skills)</span>
-- [ ] Submit application through portal (if not already done)
-- [ ] Wait for scheduling team contact
-- [ ] Confirm interview date/time (week of Oct 20th - 4.5 hour onsite)
-- [ ] Schedule calendar reminder (24hr before for materials email)
-- [ ] Review core EE topics (power electronics, embedded systems, signal integrity)
-- [ ] Whiteboard circuit design practice (op-amps, regulators, digital I/O)
-- [ ] Semiconductor equipment domain research (plasma etch, deposition, metrology)
-- [ ] Final practice run (30 min presentation + 15 min Q&A)
-- [ ] Prepare questions to ask interviewers (about role, team, projects, AI policies)
+**⚠️ CRITICAL DEADLINE: OCT 20, 2025 (MONDAY) EOD**
+
+**Step 1: Generate PDF**
+- [ ] Run: `make marp` (regenerate HTML)
+- [ ] Export to PDF from browser (Chrome: Print → Save as PDF)
+- [ ] Test PDF opens correctly (verify all 34 pages render)
+- [ ] Verify file size <25MB for email attachment
+
+**Step 2: Email Delivery**
+- [ ] **To:** Nathan Briggs (nathan.briggs@lamresearch.com)
+- [ ] **Subject:** "LAM EE5 Interview - Braille Display Concept Evaluation - [Your Name]"
+- [ ] **Body:**
+  ```
+  Hi Nathan,
+
+  Attached is my presentation for the Oct 21 interview. The main slide deck covers:
+  - Requirements analysis (17 requirements from PDF + derived constraints)
+  - 3 alternative architectures (SOL_ECO $506, PIEZO_ECO $592, PIEZO_DLX $606)
+  - Trade-off analysis (cost, timeline, robustness)
+  - 8-week pilot execution plan
+
+  Looking forward to presenting on Tuesday.
+
+  Best regards,
+  [Your Name]
+  ```
+- [ ] **Attach:** artifacts/presentation-marp.pdf
+- [ ] **Send & Verify:** Check sent folder, wait for delivery confirmation
+
+### <span style="color:red">v3.2.0: Interview Day Prep (Oct 21)</span>
+
+**Night Before (Oct 20):**
+- [ ] Open presentation HTML locally (artifacts/presentation-marp.html)
+- [ ] Test HDMI output from laptop
+- [ ] Charge laptop fully (bring charger)
+- [ ] Close unnecessary apps, disable notifications
+- [ ] Pack bag: ID, resume (5 copies), laptop, charger, HDMI cable, water, notebook
+
+**Morning Of (Oct 21):**
+- [ ] Light review of TAKEAWAY slides only (10-15 min max)
+- [ ] Arrive 10-15 min early
+- [ ] Deep breath - trust your preparation
 
 ---
 
