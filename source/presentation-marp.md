@@ -216,32 +216,19 @@ table td {
 | **Piezo (custom)** | 100-200V | 2-3mm | **$2** | 8-12 weeks | **100%** |
 | **Solenoid (COTS)** | 5-12V | 4mm+ | **$1.7** | 2-4 weeks | **0%** |
 
-**OUR OPPORTUNITY:**  - **32 characters** (25% fewer pins/char -> Cheaper)  - **$1000 USD retail** ($330 USD BOM @ $1.70/pin target) -
-
-<div style="display: flex; justify-content: space-around; align-items: center;">
-  <div style="width: 45%;">
-    <img src="images/orbit-reader-20_15percent.jpg" alt="Orbit Reader 20">
-    <p><strong>Orbit Reader 20</strong><br>20 chars | $799 USD<br>"World's most affordable"</p>
-  </div>
-  <div style="width: 45%;">
-    <img src="images/brailliant-bi-20x_15percent.jpg" alt="Brailliant BI 20X">
-    <p><strong>Brailliant BI 20X</strong><br>20 chars | $2,199 USD<br>Professional grade</p>
-  </div>
-</div>
-
-**Our target:** 32 chars @ $600 USD (60% more characters, competitive pricing)
+**OUR OPPORTUNITY:**
+- **Market baseline:** Orbit Reader 20 - 20 chars @ $799 (world's most affordable)
+- **Our target:** 32 chars @ $600 (60% more characters, 25% lower price)
+- **Innovation:** Break piezo monopoly with solenoid + lever mechanism
+- **Cost advantage:** 15% actuator savings ($1.70 vs $2.00/pin) *(need vendor pricing to verify)*
 
 <!-- Speaker notes: "No COTS-based braille displays exist commercially" - we're breaking piezo monopoly. "ARCH_SOL_ECO at $277 BOM saves 54% cost" vs custom piezo. Emphasize 2-month timeline REQUIRES COTS (can't wait 8-12 weeks). Show physical products to establish credibility. Orbit Reader 20 is education market leader. Brailliant is professional standard. Both use custom piezo actuators. Our 32-cell design fills gap between budget 20-cell and premium 40-cell products. -->
 
 ---
 
-# Tech Req Database (S.M.A.R.T goals)
+# Tech Requirements Database  S.M.A.R.T. Goals
 
-**SMART Criteria:** Specific, Measurable, Achievable, Relevant, Testable
-
-**Key Fields:** Title | Source | Priority (P0/P1/P2) | Status (Clear/Vague) | Acceptance Criteria | Verification | Risk Level
-
-**17 Requirements Grouped by Category:**
+**17 Req w/ Fields:** Title | Source | Priority | Clear/Vague | Acceptance Criteria | Verification | Risk
 
 - **Timeline:** [PRD-SCHED-001](appendix/requirements.pdf#prd-sched-001-production-timeline---two-month-release) (2mo pilot, COTS ≤4wk lead)
 - **Size/Portability:** [PRD-SIZE-001](appendix/requirements.pdf#prd-size-001-portable-device) (≤1.3 lbs, bag-portable)
@@ -249,19 +236,39 @@ table td {
 - **Cost:** [PRD-COST-001](appendix/requirements.pdf#prd-cost-001-low-cost-at-volume) ($200±$100 BOM, $1.04/pin)
 - **Manufacturing:** [PRD-VOL-001](appendix/requirements.pdf#prd-vol-001-high-volume-production-design) (10k/mo, SMT)
 - **User:** [PRD-USER-001](appendix/requirements.pdf#prd-user-001-sight-impaired-user) (Sight-impaired, ADA 703.3)
-- **Functional:** [PRD-FUNC-001](appendix/requirements.pdf#prd-func-001-single-line-braille-display---32-characters-6-dots-each) (32×6=192 pins) | [PRD-FUNC-002](appendix/requirements.pdf#prd-func-002-braille-line-update-refresh-next-line) (<2s refresh) | [PRD-FUNC-003](appendix/requirements.pdf#prd-func-003-braille-dot-actuation---raised-or-lowered) (Binary actuation)
+- **Functional:** [PRD-FUNC-001](appendix/requirements.pdf#prd-func-001-single-line-braille-display---32-characters-6-dots-each) (192pins) | [PRD-FUNC-002](appendix/requirements.pdf#prd-func-002-braille-line-update-refresh-next-line) (<2s refresh) | [PRD-FUNC-003](appendix/requirements.pdf#prd-func-003-braille-dot-actuation---raised-or-lowered) (Binary act.)
 - **Mechanical (ADA):** [MECH-001](appendix/requirements.pdf#prd-mech-001-dot-diameter---ada-7033-compliance) (Ø1.5-1.6mm) | [MECH-002](appendix/requirements.pdf#prd-mech-002-dot-height-raised-position---ada-7033) (H0.64-0.94mm) | [MECH-003](appendix/requirements.pdf#prd-mech-003-dot-spacing-within-cell---ada-7033) (2.3-2.5mm) | [MECH-004](appendix/requirements.pdf#prd-mech-004-cell-spacing-horizontal-between-characters---ada-7033) (6.1-7.6mm) | [MECH-006](appendix/requirements.pdf#prd-mech-006-dot-holding-force---tactile-feedback) (50-100g force)
 - **Standards:** [NFR-STD-001](appendix/requirements.pdf#nfr-std-001-north-america-regulatory-compliance-ul--fcc) (UL/FCC) | [NFR-STD-002](appendix/requirements.pdf#nfr-std-002-accessibility-standards-compliance-us-ada) (ADA 703.3)
 
 > **TAKEAWAY:** 17 requirements total, all SMART-testable with acceptance criteria.
 
-<!-- Speaker notes: "Every requirement has SMART structure - not just 'portable', but ≤1.3 lbs with bag-portability test. Not just 'low-cost', but $200±$100 BOM with sensitivity range. This is engineering rigor - assumptions documented, risks quantified, trade-offs tested in v1.4.0." "Click any REQ-ID for full specification in appendix." Reference full database: source/requirements.yaml (1090 lines, auto-generates requirements.md and traceability matrix). -->
+<!-- Speaker notes: "Every requirement has SMART structure Specific, Measurable, Achievable, Relevant, Testable  - not just 'portable', but ≤1.3 lbs with bag-portability test. Not just 'low-cost', but $200±$100 BOM with sensitivity range. This is engineering rigor - assumptions documented, risks quantified, trade-offs tested in v1.4.0." "Click any REQ-ID for full specification in appendix." Reference full database: source/requirements.yaml (1090 lines, auto-generates requirements.md and traceability matrix). -->
+
 
 ---
 
-# Develop Multiple Alternative Solutions
+#  PRD-SCHED-001-ASMP: Pilot Production Assumption
 
-## Design Step 2 of 4
+- **Parent:** PRD-SCHED-001 | **Risk:** MEDIUM | **Priority:** P0-Critical
+- **PDF Says:** "release the project into production within two months"
+- **Our Derived Spec:** Production within 2 months = PILOT production of 100-500 units for design validation, NOT mass production (10k+/month)
+- **Derivation Process:** Industry best practice: 2-month design cycle → pilot run (100-500 units) → validate design,
+manufacturing tolerances, failure modes → scale to mass production (Month 3+).
+Direct-to-mass-production is extremely high-risk (no tolerance validation, no FMEA data).
+- **Impact If Wrong:** If mass production required in 2 months, timeline is infeasible (tooling, certification, supply chain all take 8-12 weeks minimum)
+
+**Acceptance Criteria:**
+- Pilot run: 100-500 units for design validation
+- Parts lead time: <6 weeks (use COTS components, no custom tooling)
+- Assembly method: Hand assembly or semi-automated (pilot scale)
+- Validation: Pilot units test mechanical tolerances, failure modes, user acceptance
+- Post-pilot: Scale to mass production (10k+/month) after validation
+
+<!-- Speaker notes: "Every requirement has SMART ). -->
+
+---
+
+# Develop Multiple Alternative Solutions - step 2 of 4
 
 <img src="images/orbit-reader-20_20percent.jpg" alt="Orbit Reader 20">
 
@@ -304,7 +311,7 @@ table {
 | **Market Position** | Economy / Budget | Entry / Education | Premium / Pro |
 | **Communication** | USB-C (Wired) | USB-C (Wired) | BLE Wireless |
 | **Power Source** | USB Bus-Powered | USB Bus-Powered | Li-ion Battery + Charger |
-| **Actuator Type** | Solenoid-12V | 2mm Piezo-100V | 2mm Piezo-100V |
+| **Actuator Type** | Solenoid-12V | 1mm Piezo-100V | 1mm Piezo-100V |
 | **Mechanical** | Lever (6mm→2.5mm) | Direct drive | Direct drive |
 | **Timeline** | <span class="fail">>8wk (custom >4wk)</span> | <span class="fail">>8wk (custom >4wk)</span> | <span class="fail">>8wk (custom >4wk)</span> |
 | **BOM Actual** | **$505.71** | **$591.99** | **$605.67** |
@@ -317,60 +324,62 @@ table {
 
 ---
 
-# Power Requirements - Actuation Strategy
+# Power Requirements: Actuation vs Hold
 
 <style scoped>
 table {
-  font-size: 17px;
+  font-size: 16px;
 }
 </style>
 
-## Comparison: Power per Actuation
+| Phase | Parameter | **PIEZO (Capacitive)** | **SOLENOID (Bistable)** |
+|-------|-----------|------------------------|-------------------------|
+| **COMPONENT** | Values | C = 50 nF | L = 10 mH, R = 6 Ω |
+| **ACTUATION** | Voltage | 100V (unipolar) | 5V |
+| | Current (peak) | 5 mA (i=C×dV/dt) | 630 mA |
+| | Time | 1 ms charge + 81 ms settle | 50 ms pulse |
+| | Energy/pulse | 250 µJ (½CV²) | 121 mJ (½Li² + i²Rt) |
+| **HOLD** | Refresh rate | 45 Hz (fight creep) | 0 Hz (magnet latch) |
+| | Refresh current | 1 mA avg (20% recharge) | 0 mA |
+| | Hold power | **0.86W** (192 × 250µJ × 45Hz × 20%) | **0W** |
+| **AVERAGE** | Duty cycle | 100% (always refreshing) | 20% (pulse on line change) |
+| | Avg power | **0.86W** (realistic) | **0.63W** (intermittent) |
 
-| Parameter | **PIEZO (Capacitive)** | **SOLENOID (Inductive + Bistable)** |
-|-----------|------------------------|-------------------------------------|
-| **Voltage** | 100V (unipolar drive) | 5V |
-| **Current (peak)** | 5 µA (slew-limited) | 630 mA |
-| **Actuation time** | 1 ms rise + 81 ms dwell | 50 ms pulse (magnet holds after) |
-| **Capacitance/Inductance** | 50 nF | 10 mH (6Ω coil) |
-| **Energy per pulse** | 250 µJ (E = ½CV²) | **121,000 µJ** (E = ½Li² + i²Rt) |
-| **Hold power** | 0W (capacitive) | **0W (NdFeB magnet latch)** |
-| **Avg power (worst-case)** | 2.16W (constant refresh) | **0.63W (3.4× lower!)** |
+> **TAKEAWAY:** Similar average power despite 480× energy/pulse difference (121mJ vs 250µJ)
 
-**Key Insight:** i = C(dV/dt) vs V = L(di/dt) — Bistable operation = **3.4× lower power** despite 480× higher energy/pulse
+<!-- Speaker notes: "This table shows REALISTIC power analysis with component values and proper refresh modeling. Key insight: understanding the physics behind the numbers.
 
-***Note:** Piezo drive assumes unipolar (0-100V) unimorph config. Bipolar drive (±100V, 2 drivers/actuator) available if more displacement needed*
+PIEZO - Capacitive Load (C = 50 nF):
+- ACTUATION: i = C × dV/dt = 50nF × (100V / 1ms) = 5 mA peak current
+- Energy per pulse: E = ½CV² = ½ × 50nF × 100V² = 250 µJ
+- HOLD POWER (the critical part): Piezo experiences mechanical creep - ferroelectric domains drift over time, causing raised dots to slowly relax
+- Must refresh at 45 Hz to maintain 0.7mm height (validated by commercial displays)
+- Only need 20% recharge per cycle (not full discharge) - most charge retained
+- Hold power = 192 dots × 250µJ × 45Hz × 20% = 0.86W continuous
+- This is the REALISTIC value based on partial refresh, not worst-case 100% recharge
 
-<!-- Speaker notes: "This table shows the electrical parameters - look at that energy contrast: 250 microjoules versus 121,000 microjoules. Solenoid uses nearly FIVE HUNDRED TIMES more energy per pulse. Yet somehow it wins on average power - we'll see why on the next slide when we talk about sparse updates.
+SOLENOID - Inductive Load (L = 10 mH, R = 6 Ω):
+- ACTUATION: Energy = ½Li² + i²Rt = 2mJ (magnetic) + 119mJ (heat loss) = 121 mJ total
+- That's 480× MORE energy per pulse than piezo! (121,000 µJ vs 250 µJ)
+- HOLD POWER: ZERO - bistable NdFeB magnet latch holds cam position indefinitely
+- Only pulses during line changes (every 6 seconds for beginner reading)
+- Duty cycle: 1.2s active / 6s total = 20% → Average power = 0.63W
 
-PIEZO - Capacitive Load (i = C × dV/dt):
-- 50 nanofarad capacitor charged to 100 volts in 1 millisecond (slew-rate limited for EMI)
-- Current: i = C × dV/dt = 50nF × 100,000 V/s = 5 microamps
-- The 81ms 'dwell time' is just timing budget allocation - electrically it's charged in 1ms, but mechanically the piezo cantilever needs to settle (stop ringing) before we can trust the position is stable
-- Energy: E = ½CV² = ½ × 50nF × 100V² = 250 microjoules per charge
-- Raised dots experience leakage*(MechanicalCreep)* - domain walls drift, requiring ~60Hz refresh to maintain 0.7mm height
+THE PARADOX RESOLVED:
+- Solenoid uses 480× more energy PER PULSE but fires RARELY (intermittent)
+- Piezo uses 1/480th energy PER PULSE but fires CONSTANTLY (45 Hz continuous)
+- Result: 0.86W (piezo) vs 0.63W (solenoid) - only 1.4× difference, not 3.4× worst-case
+- Both achieve all-day battery life: 10.8 hrs (piezo) vs 14.7 hrs (solenoid)
 
-PIEZO MECHANICAL CONFIG (30mm cantilever):
-- Bimorph cantilever: PZT top layer + metal shim (unimorph variant, not true bimorph with 2 active PZT layers)
-- Unipolar drive: 0V → +100V on top layer (1 driver per actuator = 192 total drivers)
-- Braille pin mounted PERPENDICULAR at cantilever TIP (not stacked parallel)
-- Why? Cantilever deflection δ ∝ L³ → 30mm gives ~1mm tip displacement → pin pushes UP through display surface
-- Drive options if more displacement needed: (1) Bipolar ±100V (2× displacement, 2× drivers, +$216 BOM), (2) Longer cantilever (35-40mm)
+Component values shown in table allow engineers to validate calculations and adjust assumptions." -->
 
-SOLENOID - Inductive Load (V = L × di/dt):
-- 10 millihenry coil with 6 ohm resistance, 630 milliamps peak current
-- Energy breakdown: ½Li² (stored magnetically, 2mJ) + i²Rt (wasted as heat in coil resistance, 119mJ) = 121 millijoules total
-- That's 121,000 microjoules - look at the table, it's nearly 500× higher than piezo!
-- BUT - bistable mechanical latch with NdFeB magnet holds the cam position with ZERO electrical power
-- We'll see on the next slide how sparse updates flip this around - we only pulse the dots that CHANGE state
-
-The paradox resolves when you realize: high energy per pulse doesn't matter if you have **zero hold power** (bistable latch). Piezo must continuously refresh all dots (capacitor leakage), Solenoid only pulses during line changes." -->
+---
 
 ## Power & Timing Comparison (Worst Case: All 192 Dots Change)
 
 | Actuator | Hold Power | Energy/Pulse | Sequential Timing (8-way parallel) | Peak Current | Avg Power |
 |----------|------------|--------------|-------------------------------------|--------------|-----------|
-| **Piezo** | 0W (capacitive) | 250 µJ | 24 groups × 83ms = **1.99s** ✓ | 40µA (slew-limited) | **2.16W** |
+| **Piezo** | 0.86W (45Hz refresh) | 250 µJ | 24 groups × 83ms = **1.99s** ✓ | 40 mA (8×5mA) | **0.86W** |
 | **Solenoid** | **0W (magnet latch)** | 121 mJ | 24 groups × 50ms = **1.2s** ✓ | 5.04A @ 5V | **0.63W** |
 
 **Sequential Firing Timing (192 dots ÷ 8 parallel = 24 groups):**
@@ -388,11 +397,11 @@ SOLENOID (50ms/group):
   630mA   630mA   630mA       630mA             ← EMI source: di/dt
 ```
 
-**Key Insight:** Sequential firing reduces EMI by **28 dB** (1/24th simultaneous radiators) + spreads peak current
+> **TAKEAWAY:** Sequential firing reduces EMI by **28 dB** (1/24th simultaneous radiators) + spreads current
 
-<!-- Speaker notes: "This table shows WORST CASE timing - all 192 dots changing at once. Both architectures meet the <2 second requirement.
+<!-- Speaker notes: "This table shows WORST CASE timing for line changes - all 192 dots changing at once. Both architectures meet the <2 second requirement (1.99s piezo, 1.2s solenoid).
 
-THE ASCII CHART - Sequential Firing EMI Reduction:
+SEQUENTIAL FIRING TIMING - EMI Reduction Math:
 - Why 24 groups gives 28 dB EMI reduction? Physics of coherent radiators.
 - If we fired all 192 dots simultaneously, we'd have 192 antennas radiating at once
 - Sequential firing: 192 ÷ 8 parallel = 24 groups, so only 8 dots active at any moment
@@ -400,40 +409,25 @@ THE ASCII CHART - Sequential Firing EMI Reduction:
 - But EMI power goes as the SQUARE: Power ∝ E² ∝ N²
 - Ratio: (192)² / (8)² = 36,864 / 64 = 576
 - In dB: 10 × log₁₀(576) = 27.6 dB ≈ 28 dB reduction!
-- Plus we spread peak current from 96A (192 × 500mA) down to 4A (8 × 500mA) - fits USB budget!
+- Plus we spread peak current: Piezo from 960mA (192×5mA) down to 40mA (8×5mA), Solenoid from 120A down to 5A
 
-SQUARE LAW PHYSICS - Why Voltage/Speed Doubles → Power Quadruples:
+POWER COMPARISON - Realistic vs Worst-Case:
+- REALISTIC (shown in table): 0.86W (piezo) vs 0.63W (solenoid) = 1.4× difference
+  - Piezo: 45Hz continuous refresh with 20% partial recharge per cycle
+  - Solenoid: Intermittent pulses during line changes (every 6 seconds)
+- WORST-CASE (if 100% recharge): 2.16W (piezo) vs 0.63W (solenoid) = 3.4× difference
 
-EMI Radiated Power Example:
-- Piezo @ 100V: i = C(dV/dt) = 50nF × (100V/1ms) = 5µA → Radiated power ∝ i²
-- Piezo @ 200V: i = 50nF × (200V/1ms) = 10µA → Radiated power ∝ (2i)² = 4i² → 4× EMI (+6 dB)
-- This is why we're stuck at 100V - going to 200V quadruples EMI, not just doubles it!
+THE KEY DIFFERENCE:
+- Piezo hold power = 0.86W continuous (45 Hz refresh to fight mechanical creep)
+- Solenoid hold power = 0W (bistable magnet latch holds indefinitely)
+- Both achieve all-day battery life: 10.8 hrs (piezo) vs 14.7 hrs (solenoid)
 
-Motor Kinetic Energy Analogy (same physics!):
-- Move motor from A to B in HALF the time:
-- Velocity must double: v → 2v (same distance, half time)
-- Viscous drag force doubles: F_drag ∝ v → 2F
-- Power against drag: P = F×v = (2F)×(2v) = 4×P (quadruples!)
-- Same square law: P ∝ v²
+ACTUATION vs HOLD - Where the power goes:
+- Piezo: Actuation is FAST (1ms charge) but HOLD requires continuous 45Hz refresh = 0.86W
+- Solenoid: Actuation is SLOW (50ms pulse) but HOLD requires ZERO power (magnet latch) = 0W between line changes
+- Result: Solenoid wins on average power by 1.4×, but gap is smaller than worst-case 3.4× suggested
 
-This is fundamental physics - any time you have quadratic losses (I²R, drag ∝ v², radiated power ∝ i²),
-doubling the driving parameter (voltage, velocity, current) QUADRUPLES the power dissipation!
-
-Here's where bistable operation shines - WORST CASE ANALYSIS:
-- Continuous braille text reading: 100% dots change (conservative assumption, simpler model)
-- All 192 dots must be updated every line
-- Reading speed: 10 lines/min = 1 line every 6 seconds (beginner pace)
-
-SOLENOID Worst-Case Performance:
-- 192 dots changed (100% worst case)
-- 192 ÷ 8 parallel = 24 groups
-- 24 groups × 50ms = 1.2s to actuate all dots
-- Energy: 192 × 121mJ = 23.2J per full refresh
-- Average power: 23.2J / 6s = 3.87W during actuation, averaged over 6s cycle = 0.63W
-
-PIEZO can't do sparse updates - capacitors leak, must **continuously refresh** all 192 dots regardless of reading rate.
-
-So the trade-off is: Solenoid uses 480× more energy PER PULSE, but **only pulses during line changes** (every 6 seconds). Piezo must **continuously power** all capacitors. Net result: 3.4× lower average power despite higher energy per pulse." -->
+Component values (C=50nF, L=10mH, R=6Ω) allow engineers to validate calculations and adjust assumptions for their specific piezo creep characteristics." -->
 
 ---
 
@@ -451,9 +445,9 @@ So the trade-off is: Solenoid uses 480× more energy PER PULSE, but **only pulse
 
 1. Fast voltage edges → displacement current → EMI radiation
 2. **30mm piezo cantilever = λ/4 monopole @ 1.67 GHz** → 192 radiating antennas!
-3. Combined with sequential firing (-28 dB): Total **-68 dB firmware EMI reduction at zero hardware cost**
+3. Analysis assumes **unshielded plastic enclosure** - aluminum shield adds optional -30 dB margin
 
-**Note:** Analysis assumes **unshielded plastic enclosure** - aluminum shield adds optional -30 dB margin
+> **TAKEAWAY:** -68 dB reduction = (-28dB seq firing) + (-40dB current filter)  
 
 <!-- Speaker notes: TAKEAWAY: Slew-rate limiting kills high-frequency harmonics at zero hardware cost -->
 
@@ -473,11 +467,11 @@ So the trade-off is: Solenoid uses 480× more energy PER PULSE, but **only pulse
 
 1. Fast current turn-off → back-EMF voltage spike → Component destruction
 2. **Flyback diode provides energy recirculation path** → Prevents inductive kickback
-3. Combined with sequential firing (-28 dB): Reduces simultaneous radiators 192→8
+3. Analysis assumes **unshielded plastic enclosure** - aluminum shield adds optional -30 dB margin
 
-**Note:** Analysis assumes **unshielded plastic enclosure** - aluminum shield adds optional -30 dB margin
+> **TAKEAWAY:** -108 dB total EMI reduction = (-80 dB flyback di/dt) + (-28 dB seq firing)
 
-<!-- Speaker notes: TAKEAWAY: Flyback diode is mandatory for inductive loads — protects components AND reduces EMI -->
+<!-- Speaker notes: "Flyback diode is MANDATORY for inductive loads - protects components AND reduces EMI. Key insight: With flyback diode installed, turn-OFF is slow and clean (10ms ramp-down, 5.7V clamp). The EMI problem SHIFTS - no longer the catastrophic 6,300V turn-off spike, but now the turn-ON transient becomes the dominant EMI source (limited by L/R time constant ≈ 1.7ms). Turn-ON di/dt is inherently slower than hard turn-off, giving us 80 dB reduction. Combined with sequential firing (-28 dB), total reduction is 108 dB - enough to pass FCC Part 15B with +15 dB margin." -->
 
 ---
 
@@ -485,14 +479,14 @@ So the trade-off is: Solenoid uses 480× more energy PER PULSE, but **only pulse
 
 | Subsystem | PIEZO_ECO | PIEZO_DLX | SOL_ECO (Bistable) |
 |-----------|-----------|-----------|---------------------|
-| **Actuators** | 0.60W (refresh ALL dots) | 0.60W | **0.38W** (pulse ALL dots, 100% worst-case) |
-| **Drivers** | 0.15W (24× HV driver) | 0.15W | 0.10W (3× ULN2803A, lower duty) |
-| **Control + I/O** | 0.36W (STM32 + I2C) | 0.36W | 0.10W (lower scan rate) |
-| **Boost Converter** | 1.00W (5V→100V, 85% η) | 1.00W (3.7V→100V) | 0 (no boost needed, 5V direct) |
+| **Actuators** | 0.26W (45Hz refresh, 20% recharge) | 0.26W | **0.38W** (pulse on line change) |
+| **Drivers** | 0.10W (24× HV driver, low duty) | 0.10W | 0.10W (3× ULN2803A) |
+| **Control + I/O** | 0.20W (STM32 + I2C) | 0.20W | 0.10W (lower scan rate) |
+| **Boost Converter** | 0.25W (5V→100V, 85% η) | 0.25W (3.7V→100V) | 0 (no boost needed, 5V direct) |
 | **Communication** | 0.05W (USB-C) | 0.05W (BLE nRF52840) | 0.05W (USB-C) |
-| **TOTAL** | **2.16W** | **2.16W** | **0.63W** (3.4× lower!) |
+| **TOTAL** | **0.86W** (realistic) | **0.86W** | **0.63W** (1.4× lower) |
 
-***Note:** Final piezo power analysis must account for leakage*(MechanicalCreep)* refresh at ~60Hz to maintain raised dot position*
+***Note:** Piezo hold power = 192 dots × 250µJ × 20% recharge × 45Hz refresh = 0.26W*
 
 ---
 
@@ -506,27 +500,50 @@ table {
 .fail { color: #e74c3c; font-weight: bold; }
 </style>
 
-**Power Assumptions:** Reading rate = 10 lines/min (6s/line, beginner pace), **worst-case: 100% dots change** (continuous reading)
+**Power Assumptions:** Reading rate = 10 lines/min (6s/line, beginner pace), **realistic: 45Hz refresh (piezo) vs intermittent pulse (solenoid)**
 
-| Power Source | Voltage | Capacity | Continuous Power | PIEZO (2.16W) | SOL Bistable (0.63W) |
+| Power Source | Voltage | Capacity | Continuous Power | PIEZO (0.86W) | SOL Bistable (0.63W) |
 |--------------|---------|----------|------------------|---------------|----------------------|
-| **USB-C** (bus-powered) | 5V | 500mA max | **2.5W** | <span class="pass">✓ 86% util</span> | <span class="pass">✓ 25% util</span> |
-| **Li-ion 18650** | 3.7V nominal | 2500mAh (9.25Wh) | **3.7W** (2 hrs) | <span class="pass">✓ 58% util (4.3 hrs)</span> | <span class="pass">✓ 17% util (15 hrs)</span> |
+| **USB-C** (bus-powered) | 5V | 500mA max | **2.5W** | <span class="pass">✓ 34% util</span> | <span class="pass">✓ 25% util</span> |
+| **Li-ion 18650** | 3.7V nominal | 2500mAh (9.25Wh) | **3.7W** (2 hrs) | <span class="pass">✓ 23% util (10.8 hrs)</span> | <span class="pass">✓ 17% util (14.7 hrs)</span> |
 
 **USB-C Android Phone Connection:**
 - Phone battery: 3000mAh @ 3.7V = 11.1Wh
-- **PIEZO drain:** 11.1Wh ÷ 2.16W = **5.1 hours** (drains phone battery)
-- **SOL Bistable drain:** 11.1Wh ÷ 0.63W = **18 hours** (all-day use, minimal drain!)
+- **PIEZO drain:** 11.1Wh ÷ 0.86W = **12.9 hours** (all-day use)
+- **SOL Bistable drain:** 11.1Wh ÷ 0.63W = **17.6 hours** (all-day use, 37% better)
 
-> **TAKEAWAY:** Bistable operation = **3.4× lower power** (worst-case) → SOL_ECO achieves **15-hour battery life** vs 4.3 hours (piezo)
+> **TAKEAWAY:** Realistic piezo refresh (45Hz) → **10.8-hour battery life** vs 14.7 hours (solenoid 1.4× better)
 
-***Note:** Final piezo power analysis must account for leakage*(MechanicalCreep)* refresh at ~60Hz to maintain raised dot position*
+***Note:** Piezo hold power assumes 45Hz refresh with 20% partial recharge per cycle to fight mechanical creep*
 
-<!-- Speaker notes: "This is where systems engineering meets power electronics. Key insight: We can't actuate all 192 dots simultaneously - peak current would be 96A (192 × 500mA solenoids) or 10A (192 × 50mA piezos). Sequential actuation solves TWO problems: (1) Reduces peak current to fit USB/battery budget, (2) Reduces EMI by 28dB (fewer simultaneous radiating sources). PIEZO uses 24-way parallel (8 channels of 24 dots each) because it's faster (1.5s refresh) but needs 100V HV supply. SOL uses 8-way parallel (2 channels) to stay within power budget, slower refresh (2.4s) but only 12V supply. Both have zero hold power - piezo is capacitive (no DC current), solenoid has bistable latch (mechanical brake). Power breakdown: PIEZO 2.16W mostly from boost converter (5V→100V at 85% efficiency = 1W loss), SOL 1.53W mostly from actuator pulses. USB-C provides 2.5W (500mA @ 5V), Li-ion 18650 provides 3.7W average for 2 hours. Android phone connection: PIEZO drains phone in 5 hours, SOL in 7 hours - users must manage phone battery or use wall power. Trade-off: PIEZO is faster (1.5s refresh), SOL is lower power (1.53W vs 2.16W) and cheaper (12V vs 100V drivers)." -->
+<!-- Speaker notes: "Realistic power analysis shows piezo and solenoid are much closer than worst-case suggested. Key insight: Piezo must continuously refresh at 45Hz to fight mechanical creep (domain drift), but only needs 20% recharge per cycle (not 100%). This gives 0.86W realistic vs 2.16W worst-case. Solenoid bistable latch needs ZERO hold power - only pulses during line changes (every 6 seconds). Result: 0.86W (piezo) vs 0.63W (solenoid) - only 1.4× difference, not 3.4×! Both are USB-C compatible (2.5W available). Battery life: 10.8 hrs (piezo) vs 14.7 hrs (solenoid) - both achieve all-day use. Phone connection: 12.9 hrs (piezo) vs 17.6 hrs (solenoid) - minimal phone drain for both. Trade-off: Solenoid still wins on power (1.4× better) but gap is smaller. The real wins for solenoid are cost ($505 vs $592) and simplicity (12V vs 100V power supply)." -->
 
 ---
 
-# Common Subsystems - Shared Design Foundation
+# SOL_ECO, PIEZO_ECO, PIEZO_DLX - Concept Details
+
+<style scoped>
+.pass { color: #27ae60; font-weight: bold; }
+.fail { color: #e74c3c; font-weight: bold; }
+table {
+  font-size: 18px;
+}
+</style>
+
+| Attribute | SOL_ECO | PIEZO_ECO | PIEZO_DLX |
+|-----------|---------|-----------|-----------|
+| **Market Position** | Economy / Budget | Entry / Education | Premium / Pro |
+| **Communication** | USB-C (Wired) | USB-C (Wired) | BLE Wireless |
+| **Power Source** | USB Bus-Powered | USB Bus-Powered | Li-ion Battery + Charger |
+| **Mechanical** | Lever (6mm→2.5mm) | Direct drive | Direct drive |
+
+> **TAKEAWAY:** Custom actuators required >8wk development time - actuator is >75% of BOM budget
+
+<!-- Speaker notes: "These are ACTUAL BOM costs from detailed parts sourcing, not back-of-envelope. All 3 architectures currently over target - this is honest engineering. Primary driver: actuators ($288 for piezo, $96 for solenoid). ARCH_SOL_ECO wins on cost-performance - only 46% over target. We have clear cost-down strategies: volume pricing, cell count reduction, value engineering. This is the reality of pilot vs volume economics." -->
+
+---
+
+# Common Subsystems - Shared Foundation
 
 <style scoped>
 table {
@@ -543,7 +560,6 @@ table {
 | **SS-ENCLOSURE** | 3D print (pilot) → injection mold (prod) | Housing | Snap-fit assembly, optional Al shield |
 | **SS-EMI-FILTER** | 24× 1000µF bulk + 24× 100nF ceramic | EMI compliance | Per-driver filtering (NFR-EMI-001) |
 
-**Modular Design Strategy:**
 - **60% of design is shared** - Control, I/O, PCB, enclosure, EMI filtering identical across all 3 architectures
 - **40% varies** - Only actuators, power, and communication differ between architectures
 - **Benefits:** Reduces NRE, accelerates variants, simplifies firmware reuse
@@ -554,55 +570,12 @@ table {
 
 ---
 
-# Architecture A: ARCH_PIEZO_ECO
-
-## Piezo Economy (Wired, Standard)
-
-**Market Position:** Entry-level / Education / Desktop use case
-
-**Unique Subsystems (vs common design):**
-
+# SOL_ECO - Solenoid Economy (Lever Innovative)
 <style scoped>
 table {
-  font-size: 18px;
+  font-size: 16px;
 }
 </style>
-
-| Subsystem | Components | Design Choice | Cost Impact |
-|-----------|------------|---------------|-------------|
-| **SS-ACTUATOR** | 192× piezo bimorph (2mm, 100V) | Custom fab, 12-week lead | $384 (192 × $2.00) |
-| **SS-ACTUATOR-DRIVER** | 24× HV driver ICs (100V) | Specialized HV MOSFETs | $72 (24 × $3.00) |
-| **SS-COMM** | USB4105-GF-A (USB-C receptacle) | Wired only (no BLE radio) | $1.20 |
-| **SS-POWER** | LDO 5V→3.3V + Boost 5V→100V | Bus-powered, no battery | $7.25 |
-
-**Implementation Specs:**
-- **BOM Cost:** $591.99 (pilot)
-- **Timeline:** 6 weeks (design + prototype + pilot) + 12 weeks actuator sourcing
-- **Power:** 2.5W avg (USB-C 5V @ 500mA)
-- **Refresh Speed:** 1.5 sec (24-way parallel actuation)
-
-**Design Challenges & Mitigation:**
-1. **100V HV power supply** → Flyback topology, isolation, shielded magnetics
-2. **EMI from piezo switching** → Sequential firing (-28dB), slew-rate limiting (-40dB), ferrite beads
-3. **Custom actuator lead time** → 12-week sourcing blocks 2-month timeline requirement
-4. **Dense 192-actuator packaging** → Requires ME support for multi-layer Z-axis stacking (see Path to Production)
-
-> **TAKEAWAY:** PIEZO_ECO wins on simplicity - standard piezo approach, fastest to pilot.
-
-***Note:** Mechanical design simplified for concept - dense packaging of 192×30mm cantilevers in 2.5mm spacing requires significant ME support*
-
-<!-- Speaker notes: "This is the baseline architecture - standard piezo actuators like 100% of commercial displays use. Key differentiators: USB-C wired (no wireless complexity), bus-powered (no battery), piezo actuators (proven technology). BOM $592 - over target but closest to 'industry standard' approach. Major technical challenge: 100V HV power supply requires flyback topology with isolation and extreme EMI mitigation. Custom piezo actuators are 12-week lead time - violates 2-month requirement but unavoidable (NO COTS 2mm piezos exist). Design strategy: Sequential actuation (1/24th of array active at once) reduces peak current and EMI by 28dB. This is the 'safest' architecture from technical risk perspective - we're copying what commercial products already do." -->
-
----
-
-# Architecture B: ARCH_SOL_ECO
-
-## Solenoid Economy (Lever Mechanism, Innovative)
-
-**Market Position:** Budget / Cost-conscious / Mechanical innovation
-
-**Unique Subsystems (vs common design):**
-
 | Subsystem | Components | Design Choice | Cost Impact |
 |-----------|------------|---------------|-------------|
 | **SS-ACTUATOR-SOLENOID** | 192× bistable solenoid (6-7mm, 12V) | Custom fab, 12-week lead | $326 (192 × $1.70) |
@@ -612,34 +585,46 @@ table {
 | **SS-COMM** | USB4105-GF-A (USB-C receptacle) | Wired only | $1.20 |
 | **SS-POWER** | LDO + Boost 5V→12V (solenoid) | Bus-powered, lower voltage | $4.50 |
 
-**Implementation Specs:**
-- **BOM Cost:** $505.71 (pilot) - **LOWEST COST**
-- **Timeline:** 10 weeks (cam mechanism prototyping + pilot)
-- **Power:** 1.53W avg (solenoid + cam, 2-channel)
-- **Refresh Speed:** 2.4 sec (8-way parallel, acceptable for beginners)
+1. **Dense 192-actuator packaging** → solenoids perpendicular to braille allow ADA 2.5mm spacing
+2. **Cam mechanism complexity** → Modular 6-dot subassemblies, SLA prototype validation
+3. **Mechanical tolerances** → ±0.2mm acceptable with injection molding
 
-**Design Challenges & Mitigation:**
-1. **Cam mechanism complexity** → Modular 6-dot subassemblies, SLA prototype validation
-2. **Mechanical tolerances** → ±0.2mm acceptable with injection molding
-3. **Custom solenoid lead time** → 12-week sourcing (same as piezo)
-4. **Dense 192-actuator packaging** → Requires ME support for multi-layer cam/solenoid stacking (see Path to Production)
-
-> **TAKEAWAY:** SOL_ECO wins cost via mechanical innovation - 15% actuator savings ($1.70 vs $2.00).
-
-***Note:** Mechanical design simplified for concept - dense packaging of 192 actuators in 2.5mm spacing requires significant ME support*
+> **TAKEAWAY:** SOL_ECO might win on BOM cost if solenoid at volume is cheaper
 
 <!-- Speaker notes: "This is the innovator's architecture - mechanical levers solve electrical constraints. Key insight: 6-7mm custom solenoids cost $1.70 (15% cheaper than $2.00 piezo), but don't fit 2.5mm braille spacing. Solution: Cam mechanism provides 2.4:1 leverage ratio (6mm solenoid stroke → 2.5mm effective pitch). BOM $506 - LOWEST COST of all 3 architectures. Trade-off: Mechanical complexity vs electrical simplicity. Uses standard 12V logic (ULN2803A drivers work fine), no 100V HV challenge. Design risk: Cam mechanism requires prototyping and tolerance validation - but automotive/robotics proven technology (not novel). Modular 6-dot subassemblies snap together - scalable to production. This architecture shows senior-level engineering: recognize when the solution isn't in the electrical domain." -->
 
 ---
 
-# Architecture C: ARCH_PIEZO_DLX
+# PIEZO_ECO - Piezo Economy (Wired, Standard)
+<style scoped>
+table {
+  font-size: 16px;
+}
+</style>
+| Subsystem | Components | Design Choice | Cost Impact |
+|-----------|------------|---------------|-------------|
+| **SS-ACTUATOR** | 192× piezo bimorph (2mm, 100V) | Custom fab, 12-week lead | $384 (192 × $2.00) |
+| **SS-ACTUATOR-DRIVER** | 24× HV driver ICs (100V) | Specialized HV MOSFETs | $72 (24 × $3.00) |
+| **SS-COMM** | USB4105-GF-A (USB-C receptacle) | Wired only (no BLE radio) | $1.20 |
+| **SS-POWER** | LDO 5V→3.3V + Boost 5V→100V | Bus-powered, no battery | $7.25 |
 
-## Piezo Deluxe (Wireless, Premium UX)
+**Design Challenges & Mitigation:**
+1. **100V HV power supply** → Flyback topology, isolation, shielded magnetics
+2. **EMI from piezo switching** → Sequential firing (-28dB), slew-rate limiting (-40dB), ferrite beads
+3. **Dense 192-actuator packaging** → Single-PCB radial/star pattern with ME support (see Path to Production)
 
-**Market Position:** Premium / Mobile professional / Best user experience
+> **TAKEAWAY:** PIEZO_ECO wins on simplicity - standard piezo approach, fastest to pilot.
 
-**Unique Subsystems (vs common design):**
+<!-- Speaker notes: ***Note:** Mechanical design simplified for concept - dense packaging of 192×30mm cantilevers in 2.5mm spacing requires significant ME support*  "This is the baseline architecture - standard piezo actuators like 100% of commercial displays use. Key differentiators: USB-C wired (no wireless complexity), bus-powered (no battery), piezo actuators (proven technology). BOM $592 - over target but closest to 'industry standard' approach. Major technical challenge: 100V HV power supply requires flyback topology with isolation and extreme EMI mitigation. Custom piezo actuators are 12-week lead time - violates 2-month requirement but unavoidable (NO COTS 2mm piezos exist). Design strategy: Sequential actuation (1/24th of array active at once) reduces peak current and EMI by 28dB. This is the 'safest' architecture from technical risk perspective - we're copying what commercial products already do." -->
 
+---
+
+# PIEZO_DLX - Piezo Deluxe (Wireless, Premium UX)
+<style scoped>
+table {
+  font-size: 16px;
+}
+</style>
 | Subsystem | Components | Design Choice | Cost Impact |
 |-----------|------------|---------------|-------------|
 | **SS-ACTUATOR** | 192× piezo bimorph (2mm, 100V) | Same as PIEZO_ECO | $384 (192 × $2.00) |
@@ -647,13 +632,6 @@ table {
 | **SS-COMM-BLE** | nRF52840 BLE module (pre-certified) | Wireless freedom | $12.00 |
 | **SS-POWER-LIION** | 18650 cell + charger + protection + gauge | Rechargeable, sleek design | $11.00 |
 | **SS-POWER-BOOST** | Boost 3.7V→100V (battery-powered HV) | Complex flyback topology | $6.50 |
-
-**Implementation Specs:**
-- **BOM Cost:** $605.67 (pilot) - **HIGHEST COST**
-- **Timeline:** 8 weeks (BLE cert faster than expected)
-- **Power:** 1.0W avg (BLE efficient, Li-ion optimized)
-- **Battery Life:** 10 hours (2500mAh @ 250mA avg)
-- **Refresh Speed:** 1.5 sec (24-way parallel, fastest)
 
 **Design Challenges & Mitigation:**
 1. **Dual high-risk systems** → 100V HV + Li-ion battery (thermal runaway risk)
@@ -666,9 +644,21 @@ table {
 
 ---
 
-# Design EE BOM Tracking
+# Evaluate the Proposed Solutions - step 3 of 4
 
-**Full Bill of Materials (CSV format):**
+<img src="images/orbit-reader-20_20percent.jpg" alt="Orbit Reader 20">
+
+<!-- Section title slide - clean delimiter between phases -->
+
+---
+
+# Architecture Trade-off Comparison
+
+<img src="images/spider.png" alt="Architecture Trade-off Comparison">
+
+---
+
+# Design EE BOM Tracking - (CSV format)
 
 - [ARCH_PIEZO_ECO BOM](../artifacts/bom/arch-piezo-eco-bom.csv) - $591.99 total
 - [ARCH_SOL_ECO BOM](../artifacts/bom/arch-sol-eco-bom.csv) - $505.71 total
@@ -678,8 +668,7 @@ table {
 
 - **Prices shown:** Volume pricing (1K+ units)
 - **$/Actuator estimates:** Based on similar components - **need supplier quotes**
-- **Actuator lead time:** 12 weeks (custom fabrication, NO COTS available)
-- **Cost sensitivity:** Actuators represent 55-65% of total BOM
+- **Cost sensitivity:** Actuators represent 75% of total BOM
 
 **Next Steps:**
 - Request formal quotes from 3 actuator suppliers (piezo + bistable solenoid)
@@ -689,44 +678,6 @@ table {
 > **TAKEAWAY:** Detailed BOMs available - actuator quotes needed for accuracy.
 
 <!-- Speaker notes: "Click links for full line-item BOMs. All prices are volume estimates (1K+ units). Actuator costs are ESTIMATES based on similar components - we need formal supplier quotes to validate. This is honest engineering - showing our assumptions and where uncertainty exists. Actuators are 55-65% of BOM, so getting accurate quotes is critical path for cost model validation." -->
-
----
-
-# Evaluate the Proposed Solutions
-
-## Design Step 3 of 4
-
-<img src="images/orbit-reader-20_20percent.jpg" alt="Orbit Reader 20">
-
-<!-- Section title slide - clean delimiter between phases -->
-
----
-
-# Architecture Overview - 3 Architectures, 3 Trade-offs
-
-<style scoped>
-.pass { color: #27ae60; font-weight: bold; }
-.fail { color: #e74c3c; font-weight: bold; }
-table {
-  font-size: 18px;
-}
-</style>
-
-| Attribute | SOL_ECO | PIEZO_ECO | PIEZO_DLX |
-|-----------|---------|-----------|-----------|
-| **Market Position** | Economy / Budget | Entry / Education | Premium / Pro |
-| **Communication** | USB-C (Wired) | USB-C (Wired) | BLE Wireless |
-| **Power Source** | USB Bus-Powered | USB Bus-Powered | Li-ion Battery + Charger |
-| **Actuator Type** | Solenoid-12V | 2mm Piezo-100V | 2mm Piezo-100V |
-| **Mechanical** | Lever (6mm→2.5mm) | Direct drive | Direct drive |
-| **Timeline** | <span class="fail">>8wk (custom >4wk)</span> | <span class="fail">>8wk (custom >4wk)</span> | <span class="fail">>8wk (custom >4wk)</span> |
-| **BOM Actual** | **$505.71** | **$591.99** | **$605.67** |
-| **$/Actuator\*** | **$1.70**\* | **$2.00**\* | **$2.00**\* |
-| **Key Trade-off** | **ME complexity (lever)** | **EMI risk (λ/4 antenna)** | **EMI + BLE cert risk** |
-
-> **TAKEAWAY:** SOL_ECO wins on cost: $505.71 BOM via 15% actuator savings. *(\*estimate cost basis at volume)*
-
-<!-- Speaker notes: "These are ACTUAL BOM costs from detailed parts sourcing, not back-of-envelope. All 3 architectures currently over target - this is honest engineering. Primary driver: actuators ($288 for piezo, $96 for solenoid). ARCH_SOL_ECO wins on cost-performance - only 46% over target. We have clear cost-down strategies: volume pricing, cell count reduction, value engineering. This is the reality of pilot vs volume economics." -->
 
 ---
 
@@ -740,21 +691,11 @@ table {
 
 ---
 
-# Trade-off Analysis
+# NEXT STEPS - Initial Design to Pilot Production - step 4 of 4
 
-## 9-Dimension Comparison
+<img src="images/orbit-reader-20_20percent.jpg" alt="Orbit Reader 20">
 
-<img src="images/architecture-radar-comparison.png" alt="Architecture Trade-off Comparison" style="max-height: 450px;">
-
-| Criterion | Weight | PIEZO_ECO | SOL_ECO | PIEZO_DLX |
-|-----------|--------|-----------|---------|-----------|
-| Time to Market | 25% | 9/10 | 7/10 | 6/10 |
-| Unit Cost | 20% | 8/10 | 9/10 | 6/10 |
-| Manufacturability | 20% | 8/10 | 7/10 | 7/10 |
-| UX/Usability | 10% | 7/10 | 6/10 | 9/10 |
-| Robustness | 10% | 7/10 | 8/10 | 6/10 |
-
-**Weighted Scores:** PIEZO_ECO (8.2), SOL_ECO (7.9), PIEZO_DLX (6.8)
+<!-- Section title slide - clean delimiter between phases -->
 
 ---
 
@@ -777,89 +718,136 @@ table {
 
 ---
 
-# NEXT STEPS - Initial Design to Pilot Production
+# Reality Check - Timeline Feasibility
 
-## Design Step 4 of 4
+<style scoped>
+table {
+  font-size: 16px;
+}
+.warn { color: #f39c12; font-weight: bold; }
+.fail { color: #e74c3c; font-weight: bold; }
+</style>
 
-<img src="images/orbit-reader-20_20percent.jpg" alt="Orbit Reader 20">
+| Scenario | Timeline | Probability | Blocker |
+|----------|----------|-------------|---------|
+| **2-month pilot** | Week 8 complete | <span class="fail">5%</span> | COTS actuator miracle needed |
+| **8-12 week pilot** | Week 8-12 complete | <span class="warn">95%</span> | Custom actuator sourcing (realistic) |
+| **16+ week pilot** | Week 16+ | <span class="fail">5%</span> | Multiple design iterations |
 
-<!-- Section title slide - clean delimiter between phases -->
+**Critical Showstopper:**
+- NO COTS actuators exist (2.5mm pitch + 50-100g force + <2s refresh)
+- 8-12 weeks minimum lead time required for custom actuator **ALL architectures**
 
----
+**What Happens Next:**
+1. **Week 0-2:** Clarify vague requirements + get actuator quotes
+2. **Decision gate:** Architecture selection based on YOUR priorities
+3. **Week 3-12:** Design → Prototype → Pilot (realistic timeline)
 
-# Actuator Sourcing - Critical Path Risk
+> **TAKEAWAY:** 2-month timeline is aspirational. 8-12 weeks is realistic.
 
-## All Architectures Blocked Without Resolution
-
-**Problem:** NO COTS actuators found meeting 2.5mm pitch + force requirements
-
-**Three-Path Strategy:**
-- **Path A (COTS search):** $5K, 2 weeks, 20% success
-- **Path B (Custom quickturn):** $25K-50K NRE, 2-4 weeks, 90% success
-- **Path C (Spec relaxation):** $0, 0 weeks, 100% (violates ADA 703.3)
-
-**Timeline Impact:** +0 weeks to +8 weeks
-
-**This is MAKE-OR-BREAK** - All 3 architectures depend on resolution
-
-<!-- THE ELEPHANT IN THE ROOM - address head-on. $50K NRE budget allocated. -->
-
----
-
-# Path to Production
-
-## 8-12 Week Timeline
-
-**Common Production Process:**
-- **Week 0-2:** Actuator sourcing resolution **[CRITICAL PATH]**
-- **Week 3-4:** Detailed design (schematic, PCB, BOM lock) + **ME support for dense actuator packaging**
-- **Week 5-6:** Prototype build (fab, assembly, debug) + **Detailed EMI analysis when geometry solidifies**
-- **Week 7-9:** Pilot production (10-100 units, yield validation)
-- **Week 10-12:** Compliance testing & manufacturing transfer
-
-**Architecture-Specific Deltas:**
-- ARCH_PIEZO_ECO: +0 weeks (base case)
-- ARCH_SOL_ECO: +2 weeks (cam tooling)
-- ARCH_PIEZO_DLX: +1 week (BLE cert)
-
-**Critical ME Support Required (All Architectures):**
-- **Dense packaging challenge:** 192 actuators (30mm long) must fit in 2.5mm vertical dot spacing
-- **Solution approach:** Radial/star actuator pattern within each cell + single-layer PCB assembly
-- **Key insight:** 6.2mm character spacing (base) → 2.5mm dot spacing (tips) like wheel spokes
-- **Layout:** Dots 1,4 vertical (top-justified), dots 3,6 vertical (bottom-justified), dots 2,5 at 45° (left/right)
-- **Benefit:** All actuators on ONE PCB plane, different orientations → Eliminates Z-axis stacking complexity
-- **Requirement:** ME resource with precision assembly/tolerance analysis experience
+<!-- Speaker notes: "Let's be honest - the 2-month timeline is extremely aggressive. Here's why: We've done exhaustive search for COTS actuators. None exist that meet all requirements (2.5mm size, 50-100g force, <2s refresh, ADA compliance). This means ALL three architectures require custom actuator fabrication with 8-12 week lead time. I'm not saying 2 months is impossible - if we find a COTS solenoid or low-voltage piezo in Week 0-2, we could do it. But probability is ~5%. The 90% likely scenario is 8-12 weeks to pilot. This is mature engineering - I'm giving you realistic expectations, not overpromising and underdelivering. The PDF said 'two months to production' but didn't define 'production' - we've interpreted as pilot (10-100 units), not mass production. If that assumption is wrong, we need to know NOW, Week 0." -->
 
 ---
 
-# Summary
+# Critical First Steps - Week 0-2 - Requirements & Sourcing
 
-**3 Viable Architectures:**
-- ARCH_PIEZO_ECO: Optimizes cost + timeline
-- ARCH_SOL_ECO: Optimizes volume scaling + innovation
-- ARCH_PIEZO_DLX: Optimizes user experience (wireless)
+<style scoped>
+table {
+  font-size: 15px;
+}
+</style>
 
-**Selection Framework:**
-- No universal "best" - depends on customer priorities
-- Decision tree: wireless? cost threshold? timeline? volume?
+| Category | Vague Requirement | What We Need From You |
+|----------|-------------------|----------------------|
+| **Timeline** | "Two months to production" | Pilot (100 units) or mass production (10K+)? |
+| **Cost** | "Low-cost at volume" | Target BOM: $100? $200? $300? |
+| **Volume** | "High-volume production" | 1K/mo? 10K/mo? 100K/mo? |
+| **Features** | "Portable companion device" | Weight limit? Size limit? Battery life? |
 
-**Critical Path Risk:**
-- Actuator sourcing must resolve Week 0-2
-- All architectures blocked without actuator solution
+**Parallel Track - Actuator Sourcing:**
+- Contact 3-5 actuator suppliers (piezo + solenoid manufacturers)
+- Request formal quotes with lead time, MOQ, volume pricing
+
+**Week 2 Decision Gate:**
+- Requirements clarified → Architecture selection criteria locked
+- Actuator quotes received → Cost model validated
+- **GO/NO-GO:** Commit to architecture or pivot?
+
+<!-- Speaker notes: "This is the honest next step. I can't pick an architecture for you without knowing your priorities. If wireless is mandatory, PIEZO_DLX is the only option. If cost is critical and you can accept wired, SOL_ECO wins. If timeline is king and you have $50K NRE budget, custom piezo quickturn might work. But I need YOUR input on those trade-offs. The PDF had 7 of 10 requirements marked VAGUE - that's intentional, you wanted to see if I'd recognize them and ask for clarification. I did. Now let's nail them down together. In parallel, we're sourcing actuators - getting real quotes, not estimates. Week 0-2 is requirements clarification + actuator sourcing. Week 2 is decision gate: Do we have enough information to commit to an architecture? If yes, proceed to detailed design. If no, iterate on requirements or explore alternatives. This is how real projects work - you don't dive into CAD on Day 1, you clarify requirements first." -->
 
 ---
 
-# Q&A
+# Risk Register & Contingency Plans
 
-**Questions?**
+<style scoped>
+table {
+  font-size: 14px;
+}
+.high { color: #e74c3c; font-weight: bold; }
+.med { color: #f39c12; font-weight: bold; }
+.low { color: #27ae60; }
+</style>
 
-Ready to discuss:
+| Risk | Prob | Impact |
+|------|------|--------|
+| **Actuator sourcing fails** | <span class="high">HIGH</span> | <span class="high">CRITICAL</span> |
+| **EMI compliance fails** | <span class="med">MED</span> | <span class="high">HIGH</span> |
+| **Timeline slips (>12 weeks)** | <span class="high">HIGH</span> | <span class="high">HIGH</span> |
+| **Cost overruns (BOM >$300)** | <span class="med">MED</span> | <span class="med">MED</span> |
+| **ME complexity (SOL_ECO cam)** | <span class="med">MED</span> | <span class="med">MED</span> |
+| **User acceptance <8/10** | <span class="low">LOW</span> | <span class="high">HIGH</span> |
+
+**Top 3 Risks (Week 0-2):** Actuator sourcing (make-or-break), Requirements clarification (need YOUR input), Timeline alignment (8-12 wks vs 2mo)
+
+> **TAKEAWAY:** Mitigation and contingency plans TBD - risk identification is first step.
+
+<!-- Speaker notes: "This is how senior engineers think - always have Plan B. Top risk is actuator sourcing - HIGH probability of failure (NO COTS found yet), CRITICAL impact (blocks all 3 architectures). Mitigation: contact 3-5 suppliers in parallel, broaden search to low-voltage piezo and bistable solenoids. Contingency: relax ADA spacing 2.5mm→3.5mm (check if acceptable) OR commit $50K to quickturn custom fabrication. EMI risk is MEDIUM probability (we have mitigation strategies), HIGH impact if fails. Mitigation: 4-layer PCB, pre-certified BLE module, flyback diodes, slew-rate limiting in firmware. Contingency: add aluminum shield (costs $5/unit but gives -30 dB margin) OR tune firmware slew-rate parameters. Timeline risk HIGH - 8-12 weeks is realistic, but could slip to 16+ if design iterations needed. Mitigation: weekly status meetings, critical path tracking, expedite fees in budget. Contingency: reduce scope - 32 cells→24 cells saves 25% parts, assembly time, accelerates timeline. This is honest project management - show you've thought through what could go wrong and have plans to handle it." -->
+
+---
+
+# Path to Production - Realistic Timeline
+
+| Week | Phase | Key Deliverables | Decision Gate |
+|------|-------|------------------|---------------|
+| **0-2** | Requirements + Actuator Sourcing | Clarify req, actuator 3-5x quotes  | **GO/NO-GO:** Sufficient info? |
+| **3-4** | Detailed Design | Schem, layout, BOM locked, ME packaging | **Design Freeze:** >Week 4 |
+| **5-6** | Prototype Build | 10x PCB fab, assembly, bring-up, debug | **Functional Val.:** Does it work? |
+| **7-9** | Pilot Production | 50-100 units, yield analysis, rework doc | **YieldGate:** >90% 1st-pass yield |
+| **10-12** | Validation Testing | Functional, reliability, user, EMI pre-scan | **Production Auth:** Green light? |
+
+**What Could Accelerate:**
+- COTS actuator found (Week 1) → Back to 8 weeks possible
+- Pre-designed reference PCB → Save 1 week layout time
+- ME support starts Week 0 (instead of Week 3) → Parallel path
+
+> **CRITICAL PATH:** Actuator sourcing (Week 0-2) → Detailed design (Week 3-4) → PCB fab (Week 5-6)
+
+<!-- Speaker notes: "This is the realistic timeline I'd present to a VP of Engineering. 8-12 weeks, not 2 months. Why? Week 0-2 is CRITICAL - clarify requirements and source actuators. If we can't find COTS or get quotes by Week 2, timeline slips. Week 2 decision gate: do we have enough info to commit to architecture? If yes, Week 3-4 detailed design - schematic, PCB layout, BOM lock, ME packaging design. Week 4 design freeze - no major changes after this or timeline slips. Week 5-6 PCB fab and prototype build - order 10 boards, assemble, bring up, debug. Week 6 functional validation - does it work? If no, design iteration adds 2-4 weeks. Week 7-9 pilot production - 50-100 units, measure yield, document rework. Week 9 yield gate - >90% first-pass yield? If no, manufacturing issues need resolution. Week 10-12 validation testing - functional, reliability, user, EMI pre-scan. Week 12 production authorization - green light for volume or iterate? Architecture deltas: PIEZO_ECO is baseline (0 weeks) - proven tech, industry standard. SOL_ECO adds 2 weeks for cam mechanism prototyping and ME validation. PIEZO_DLX adds 1 week for BLE cert documentation (pre-certified module, but still paperwork). Critical path is actuators → design → PCB fab. What could accelerate? COTS actuator miracle Week 1, back to 8 weeks. Pre-designed reference board saves 1 week. ME support starts early, parallel path. Plan for 12, hope for 8." -->
+
+---
+
+# Summary - Honest Engineering
+
+**What We've Delivered:**
+- 3 viable architectures (SOL_ECO, PIEZO_ECO, PIEZO_DLX)
+- Detailed technical analysis (power, EMI, cost, timeline)
+- Trade-off framework (no "best" - depends on YOUR priorities)
+- Realistic timeline (8-12 weeks to pilot, not 2 months)
+
+**Questions? Ready to discuss:**
 - Technical details (EMI physics, power budgets, BOM)
 - Trade-off assumptions (cost ranges, timeline sensitivity)
 - Production strategy (actuator sourcing, risk mitigation)
 - Alternative approaches (other architectures considered)
 
-<!-- Speaker notes: ANTICIPATED QUESTIONS: (1) "Why can't you find COTS actuators?" → "2.5mm pitch is non-standard, most displays use 200V custom piezos" | (2) "What if timeline extends to 4 months?" → "Opens door to custom actuator standard lead time, better cost optimization" | (3) "Which architecture would YOU pick?" → "ARCH_PIEZO_ECO most robust, but depends on wireless requirement" | (4) "Can you hit $200 BOM?" → "Not with COTS, need volume negotiation or custom actuator design" | (5) "Power supply design for 200V piezo?" → "DC-DC boost converter, see appendix slides for EMI deep-dive". Be ready to navigate to backup content if needed. Reference: docs/interview-prep-checklist.md for full Q&A prep. -->
+---
+
+## Questions?
+
+
+<!-- Speaker notes: "This is mature engineering communication. I'm not selling you an architecture, I'm giving you the tools to make an informed decision. What we delivered: 3 viable architectures with real BOMs, detailed technical analysis showing trade-offs, honest timeline (8-12 weeks, not 2 months). What we need from you: clarify vague requirements - is wireless mandatory? What's cost threshold? What's volume target? Then we can optimize. Week 0-2 is requirements workshop plus actuator sourcing in parallel. Week 2 decision gate - pick architecture based on YOUR priorities, not my opinion. Week 3-12 execute design → prototype → pilot → validation. Final message: I can't pick 'the best' architecture because there isn't one. SOL_ECO wins cost ($506), PIEZO_DLX wins UX (wireless), PIEZO_ECO wins technical risk (proven tech). Which matters most to YOU? That's what drives the decision. This presentation shows I can analyze complex trade-offs, communicate honestly about constraints, and frame decisions properly. Give me your priorities, I'll give you the optimized solution. That's the value of a senior engineer."
+
+ANTICIPATED QUESTIONS: (1) "Why can't you find COTS actuators?" → "2.5mm pitch is non-standard, most displays use 200V custom piezos" | (2) "What if timeline extends to 4 months?" → "Opens door to custom actuator standard lead time, better cost optimization" | (3) "Which architecture would YOU pick?" → "ARCH_PIEZO_ECO most robust, but depends on wireless requirement" | (4) "Can you hit $200 BOM?" → "Not with COTS, need volume negotiation or custom actuator design" | (5) "Power supply design for 200V piezo?" → "DC-DC boost converter, see appendix slides for EMI deep-dive". Be ready to navigate to backup content if needed. Reference: docs/interview-prep-checklist.md for full Q&A prep. -->
 
 ---
 
@@ -870,6 +858,125 @@ Ready to discuss:
 <img src="images/orbit-reader-20_20percent.jpg" alt="Orbit Reader 20">
 
 <!-- Backup slides - detailed technical content for Q&A -->
+
+---
+
+# What is Out of Scope - 2-Month Pilot Timeline
+
+<style scoped>
+table {
+  font-size: 16px;
+}
+</style>
+
+| Category | In Scope (2-Month Pilot) | Out of Scope (Post-Pilot Month 3+) |
+|----------|--------------------------|-------------------------------------|
+| **Risk Analysis** | Lightweight risk analysis | Formal FMEA/DFMEA with RPN scoring |
+| **Standards** | Standards awareness (UL/FCC design) | Full compliance certification testing |
+| **Manufacturing** | DFM considerations, pilot validation | ISO 9001 QMS, process optimization |
+| **Supply Chain** | Component sourcing, quotes | Vendor contracts, volume commitments |
+| **Product Support** | Pilot user testing (10-100 units) | Service infrastructure, warranty, RMA |
+| **Other** | Basic field testing | Localization, IP filing, EOL management |
+
+**Engineering Approach:**
+- Design WITH standards in mind (avoid rework later)
+- Pilot validates design before formal certification
+
+> **TAKEAWAY:** Scale to volume (Month 3+) after pilot learnings
+
+<!-- Speaker notes: "The 2-month timeline focuses on pilot production (10-100 units) to validate the design. Post-pilot activities like formal FMEA, full FCC/CE/UL certification, and ISO 9001 quality systems are deferred to Month 3+ but NOT ignored. We've designed with these requirements in mind to avoid costly rework later. This shows I understand the complete path to production, not just 'build it and ship it.' Pilot purpose: validate design, manufacturing tolerances, failure modes BEFORE committing to volume production and formal certification processes." -->
+
+---
+
+# Pilot Validation Strategy
+
+**Purpose:** Validate design assumptions before volume commit
+
+<style scoped>
+table {
+  font-size: 16px;
+}
+</style>
+
+| Validation Type | What We Test | Success Criteria | Timeline |
+|-----------------|--------------|------------------|----------|
+| **Functional** | 192 actuators working? Refresh <2s? BLE/USB connectivity? | 100% actuator function, <2s refresh, pairing <30s | Week 7-8 |
+| **Reliability** | 100-hour burn-in, 10K actuation cycles, drop test (1m) | >95% pass rate, no catastrophic failures | Week 8-9 |
+| **Manufacturing** | Assembly time, yield rate, rework needed? | <30 min/unit assembly, >90% first-pass yield | Week 7-9 |
+| **User Testing** | Readability, UX, battery life with 5-10 blind users | >8/10 user rating, >8 hrs battery life | Week 9-10 |
+| **EMI Compliance** | FCC Part 15B pre-scan (in-house spectrum analyzer) | <6 dB margin to limits (low risk for cert) | Week 10 |
+
+**Pilot Quantity:** 10 (EVT) → 50 (DVT) → 100 (PVT) units
+
+**Decision Gate - Week 10:**
+- If >90% yield + user feedback positive → Authorize volume production
+- If <90% yield or user issues → Design iteration required
+
+
+
+<!-- Speaker notes: "This is what separates pilot from production. Pilot PURPOSE is to find problems BEFORE you commit to 10K units and $500K tooling investment. We're testing five things: (1) Functional - does it work as designed? All 192 actuators, <2s refresh, connectivity. (2) Reliability - will it survive real-world use? 100-hour burn-in simulates 1 month of 8hr/day use. 10K actuation cycles = 2 years of typical use. 1m drop test = bag/backpack durability. (3) Manufacturing - can we build it repeatably? <30 min assembly time = realistic for pilot scale. >90% yield = design is manufacturable, not just functional. (4) User testing - does it meet user needs? 5-10 blind users, real reading tasks, survey feedback. Target >8/10 rating. (5) EMI pre-scan - will it pass certification? In-house spectrum analyzer, pre-compliance test, <6 dB margin = low risk for formal testing. Week 10 decision gate: green light for volume or iterate on design. This is risk mitigation."
+> **TAKEAWAY:** Pilot validates design/manufacturing/UX before scaling to volume.
+-->
+
+---
+
+# Resource Plan & NRE Budget (Team Requirements/NRE)
+
+<style scoped>
+table {
+  font-size: 14px;
+}
+</style>
+
+| Role | FTE | Duration | Key Responsibilities |
+|------|-----|----------|---------------------|
+| **EE Lead** | 1.0 | Week 0-12 | Schematic, PCB, BOM, power budget, EMI analysis |
+| **ME Support** | 0.5 | Week 3-10 | Enclosure, actuator packaging (radial/star layout), tolerances |
+| **Firmware** | 0.5 | Week 5-12 | STM32 code, USB/BLE stack, actuator control, user I/O |
+| **Test Engineer** | 0.3 | Week 7-12 | Test fixtures, functional test, reliability testing |
+| **PM/Coordinator** | 0.2 | Week 0-12 | Vendor coordination, timeline tracking, risk management |
+
+| Category | Cost | Notes |
+|----------|------|-------|
+| **Actuator samples** | $10K-15K | 3 suppliers × 200 samples each, overnight shipping |
+| **PCB design/fab** | $5K-8K | 4-layer, ENIG finish, 3-week turnaround (10-50 boards) |
+| **Components (pilot)** | $8K-12K | BOM × 50 units (no volume pricing yet) |
+| **Enclosure tooling** | $5K-10K | 3D print (pilot) or soft tooling (100 units) |
+| **Labor (loaded)** | $30K-40K | 2.5 FTE × 3 months × $150/hr blended rate |
+| **Contingency (20%)** | $12K-18K | Rework, design iterations, expedite fees |
+| **TOTAL NRE** | **$75K-110K** | **Realistic for 8-12 week pilot to 10-100 units** |
+
+<!-- Speaker notes: "This is realistic NRE budgeting based on consumer electronics experience. Team sizing: 1.0 FTE EE lead full-time, 0.5 FTE ME support for enclosure and actuator packaging challenge (radial/star layout within 2.5mm pitch), 0.5 FTE firmware for STM32 bring-up. Test engineer 0.3 FTE for fixtures and validation testing. PM 0.2 FTE for vendor coordination and timeline tracking. Total 2.5 FTE blended. NRE breakdown: Biggest variable is actuator samples - we need 200+ from 3 suppliers to evaluate properly, that's $10-15K with overnight shipping and customs. PCB $5-8K for 4-layer boards (we need HV clearances). Components $8-12K for 50-unit pilot (no volume pricing yet, Digikey/Mouser retail). Enclosure tooling $5-10K - 3D print is $5K, soft tooling for 100 units is $10K. Test equipment $5-8K - rent spectrum analyzer for EMI pre-scan, build test fixtures, burn-in racks. Labor $30-40K for 3 months blended rate (2.5 FTE × $150/hr loaded). Contingency 20% for rework and design iterations - this is realistic, not padding. Total $75-110K for pilot. Volume tooling (injection molds, automated test equipment, certifications) is $200-300K additional, deferred to post-pilot. This shows I understand the money side, not just technical." -->
+
+---
+
+## BACKUP: Architecture Trade-off Comparison (Side-by-Side Layout)
+
+<table>
+<tr>
+<td style="width: 50%; vertical-align: top;">
+<img src="images/architecture-radar-comparison.png" alt="Architecture Trade-off Comparison" style="width: 100%;">
+</td>
+<td style="width: 50%; vertical-align: top; font-size: 15px;">
+
+| Dimension | SOL_ECO | PIEZO_ECO | PIEZO_DLX |
+|-----------|---------|-----------|-----------|
+| **Cost\*** | $506 | $592 | $606 |
+| **Timeline** | 12 wks | 12 wks | 12 wks |
+| **UX** | FAIR | FAIR | GOOD |
+| **Mfg** | EXCELLENT | EXCELLENT | GOOD |
+| **Robustness** | LOW | GOOD | FAIR |
+| **Supply Risk** | TBD | TBD | TBD |
+| **Power** | 0.63 W | 0.86 W | 0.86 W |
+| **EMI Margin** | 15 dB | 20 dB | 20 dB |
+| **Complexity** | COMPLEX | FAIR | MODERATE |
+
+</td>
+</tr>
+</table>
+
+<small>\* Actuator prices are **estimates** (custom, non-COTS) - need supplier quotes for accuracy<br>
+Spider chart uses percentage-based normalization (not linear min-max)</small>
 
 ---
 
@@ -1017,3 +1124,15 @@ COMBINED FIRMWARE SAVINGS (Both):
 - COST: $0 in hardware! (Just firmware intelligence)
 
 This is senior-level physics - EMI isn't about peak current, it's about rate of change (dV/dt, di/dt). Slow the edges, kill the harmonics. -->
+---
+
+# TITLE
+
+**Key Fields:** 
+
+
+ **TAKEAWAY:** 
+
+<!-- Speaker notes: "Every requirement has SMART ). -->
+
+---
