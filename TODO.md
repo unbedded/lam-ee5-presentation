@@ -36,7 +36,7 @@
 - ✅ artifacts/bom/*.csv (3 architectures with EMI components)
 - ✅ artifacts/architecture.md (auto-generated from YAML)
 
-**Practice Focus (see artifacts/PRACTICE-GUIDE.md):**
+**Practice Focus (see source/practice-guide.md):**
 - Oct 18: Run 1-2 (baseline + high-priority sections)
 - Oct 19: Run 3-4 (full timed + Q&A scenarios)
 - Oct 20: Run 5 (final dress rehearsal) + PDF generation + email delivery
