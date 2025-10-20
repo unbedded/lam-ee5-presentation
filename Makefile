@@ -126,7 +126,7 @@ artifacts/%.pdf: source/%.md $(STYLE)
 	@if echo "$<" | grep -qE "(rubric|metrics)"; then \
 		echo "  Using RUBRIC_OPTS (compact format)"; \
 		$(PANDOC) $< -o $@ $(RUBRIC_OPTS); \
-	elif echo "$<" | grep -q "presentation"; then \
+	elif echo "$<" | grep -qE "(presentation|practice)"; then \
 		echo "  Using PRES_OPTS (large font, no TOC)"; \
 		$(PANDOC) $< -o $@ $(PRES_OPTS); \
 	else \
@@ -203,6 +203,19 @@ appendix: artifacts/appendix/requirements.pdf \
 appendix-clean:
 	rm -rf artifacts/appendix
 	@echo "Cleaned appendix PDFs"
+
+# ============================================================================
+# PRACTICE GUIDE - Quick PDF generation for practice sessions
+# ============================================================================
+
+# Generate practice guide PDF (large font for reading while practicing)
+practice: source/practice-guide.md $(STYLE)
+	@echo "Converting practice guide to PDF..."
+	$(PANDOC) source/practice-guide.md -o artifacts/practice-guide.pdf $(PRES_OPTS)
+	@echo "✓ artifacts/practice-guide.pdf generated"
+	@echo ""
+	@echo "Print this for practice sessions or reference on mobile device"
+	@echo ""
 
 # ============================================================================
 # PRESENTATION GENERATION - Markdown → PPTX workflow
@@ -330,6 +343,7 @@ help:
 	@echo ""
 	@echo "Presentation Generation:"
 	@echo "  make marp                    - Generate HTML presentation with Marp"
+	@echo "  make practice                - Generate practice guide PDF (large font)"
 	@echo "  make presentation-clean      - Remove generated presentation files"
 	@echo ""
 	@echo "PDF Conversion (Pandoc):"
@@ -369,4 +383,4 @@ help:
 	@echo "    /req-trace         - Generate traceability matrix"
 	@echo "    /req-risk-report   - Risk-rank assumptions"
 
-.PHONY: all clean rebuild marp presentation-clean analysis rubrics print print-to email-pres list check help arch-gen tradeoff-extract tradeoff-plot tradeoff-charts artifacts appendix appendix-clean
+.PHONY: all clean rebuild marp practice presentation-clean analysis rubrics print print-to email-pres list check help arch-gen tradeoff-extract tradeoff-plot tradeoff-charts artifacts appendix appendix-clean
