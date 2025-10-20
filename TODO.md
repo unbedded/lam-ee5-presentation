@@ -30,7 +30,8 @@
 **Key Files Ready:**
 - ✅ source/presentation-marp.md (34 slides, final version committed)
 - ✅ artifacts/presentation-marp.html (regenerates in 1 second with `make marp`)
-- ✅ artifacts/PRACTICE-GUIDE.md (comprehensive practice guide with timing benchmarks)
+- ✅ source/practice-guide.md (comprehensive practice guide with ChatGPT voice coaching)
+- ✅ artifacts/practice-guide.pdf (run `make practice` to regenerate)
 - ✅ docs/actuator-emi-design-analysis.md (46 KB technical deep-dive)
 - ✅ artifacts/bom/*.csv (3 architectures with EMI components)
 - ✅ artifacts/architecture.md (auto-generated from YAML)
@@ -364,9 +365,17 @@
 **Status:** IN PROGRESS
 
 **Practice Guide Created:**
-- [x] artifacts/PRACTICE-GUIDE.md (comprehensive practice guide with timing benchmarks)
+- [x] source/practice-guide.md (comprehensive practice guide with timing benchmarks)
+- [x] ChatGPT voice mode coaching instructions (see Practice Guide for prompts)
 
-**Practice Session Workflow:**
+**Practice Session Workflow (Human Work):**
+
+**💡 TIP:** Use ChatGPT voice mode as your practice coach!
+- Opens mobile app, start voice conversation
+- Prompt: "Act as my presentation coach. Time me, note filler words, ask clarifying questions."
+- Benefits: Real-time timing feedback, pacing guidance, Q&A simulation
+
+**Manual Practice Sessions:**
 - [ ] **Oct 18 (Today):**
   - [ ] Run 1: Full timed run (baseline - note rough spots)
   - [ ] Run 2: Focus on HIGH PRIORITY sections (Slides 8-9, 19, 22-24, 34)
