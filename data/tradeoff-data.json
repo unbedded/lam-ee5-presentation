@@ -43,31 +43,31 @@
     "data": {
       "ARCH_PIEZO_ECO": [
         5.0,
-        10.0,
-        7.6,
+        5.0,
+        5.0,
         8.25,
-        6.2,
-        1.0,
+        5.4,
+        5.0,
         5.0,
         5.0
       ],
       "ARCH_SOL_ECO": [
         5.0,
-        0.0,
-        7.83,
+        5.0,
+        5.0,
         6.75,
-        9.0,
-        1.0,
+        7.0,
+        5.0,
         5.0,
         5.0
       ],
       "ARCH_PIEZO_DLX": [
         5.0,
         5.0,
-        6.67,
+        7.0,
         6.0,
-        4.4,
-        4.0,
+        4.2,
+        5.0,
         5.0,
         5.0
       ]
@@ -77,45 +77,42 @@
     {
       "arch_id": "ARCH_SOL_ECO",
       "name": "Solenoid Economy (Rotary Cam)",
-      "cost": 240.75,
+      "cost": 535.79,
       "breakdown": {
-        "Actuators": 152.03,
+        "Actuators": 380.47999999999996,
+        "Drivers": 31.2,
         "Control": 11.0,
-        "Power": 5.65,
+        "Power": 2.55,
         "Communication": 1.2,
-        "Mechanical": 37.36,
-        "EMI": 2.11,
-        "Misc": 31.4
+        "Misc": 69.89
       },
       "order": 0
     },
     {
       "arch_id": "ARCH_PIEZO_ECO",
       "name": "Piezo Economy (Wired)",
-      "cost": 415.35,
+      "cost": 867.99,
       "breakdown": {
-        "Actuators": 302.4,
+        "Actuators": 384.0,
+        "Drivers": 312.0,
         "Control": 11.0,
         "Power": 7.1,
         "Communication": 1.2,
-        "Mechanical": 37.36,
-        "EMI": 2.11,
-        "Misc": 54.18
+        "Misc": 113.22
       },
       "order": 1
     },
     {
       "arch_id": "ARCH_PIEZO_DLX",
       "name": "Piezo Deluxe (Wireless)",
-      "cost": 429.03,
+      "cost": 889.15,
       "breakdown": {
-        "Actuators": 302.4,
+        "Actuators": 384.0,
+        "Drivers": 312.0,
         "Control": 11.0,
-        "Power": 9.7,
+        "Power": 16.2,
         "Communication": 10.5,
-        "Mechanical": 37.36,
-        "EMI": 2.11,
-        "Misc": 55.96
+        "Misc": 115.98
       },
       "order": 2
     }
@@ -124,49 +121,49 @@
     {
       "arch_id": "ARCH_SOL_ECO",
       "name": "Solenoid Economy (Rotary Cam)",
-      "timeline_low": 10.0,
-      "timeline_high": 14.0,
-      "max_leadtime_weeks": 6.0,
+      "timeline_low": 16.0,
+      "timeline_high": 20.0,
+      "max_leadtime_weeks": 12.0,
       "certification_weeks": 4.0,
       "order": 0
     },
     {
       "arch_id": "ARCH_PIEZO_ECO",
       "name": "Piezo Economy (Wired)",
-      "timeline_low": 10.0,
-      "timeline_high": 14.0,
-      "max_leadtime_weeks": 8.0,
+      "timeline_low": 14.0,
+      "timeline_high": 18.0,
+      "max_leadtime_weeks": 12.0,
       "certification_weeks": 4.0,
       "order": 1
     },
     {
       "arch_id": "ARCH_PIEZO_DLX",
       "name": "Piezo Deluxe (Wireless)",
-      "timeline_low": 11.0,
-      "timeline_high": 19.0,
-      "max_leadtime_weeks": 8.0,
+      "timeline_low": 15.0,
+      "timeline_high": 23.0,
+      "max_leadtime_weeks": 12.0,
       "certification_weeks": 8.0,
       "order": 2
     }
   ],
   "actuator_assumptions": {
     "ARCH_PIEZO_ECO": {
-      "unit_price": 1.2,
+      "unit_price": 2.0,
       "qty": 192,
-      "total_cost": 230.4,
-      "notes": "Need vendor quote - placeholder cost, critical width \u22642.3mm (from 2.5mm pitch - 1.5mm dot \u00f7 2). 28mm length for 0.7mm stroke @ 100V (per actuator-piezo-voltage-options-analysis.md)"
+      "total_cost": 384.0,
+      "notes": "Custom OEM $2.00 @ 1K+ (12-week lead, MOQ 1000). NO COTS available. Critical width \u22642.3mm (from 2.5mm pitch - 1.5mm dot \u00f7 2). 28mm length for 0.7mm stroke @ 100V."
     },
     "ARCH_SOL_ECO": {
-      "unit_price": 0.5,
+      "unit_price": 1.7,
       "qty": 192,
-      "total_cost": 96.0,
-      "notes": "Production: Custom OEM $0.50 @ 1K+ (12-week lead, MOQ 1000). Pilot: Olimex PUSH-PULL-SOLENOID-5V $2.73 @ 100 (4-week lead, Digikey stock, 5mm stroke mech-limited to 1mm). Flat face for cam contact, PRD-FUNC-003-ARCH-C-EXCEPT (4mm size relaxation)"
+      "total_cost": 326.4,
+      "notes": "Custom OEM $1.70 @ 1K+ (12-week lead, MOQ 1000). NO COTS bistable solenoids <7mm dia available. Bistable (latching) for zero hold power. Flat face for cam/lever contact. Lever mechanism reduces 6mm\u21922.5mm pitch."
     },
     "ARCH_PIEZO_DLX": {
-      "unit_price": 1.2,
+      "unit_price": 2.0,
       "qty": 192,
-      "total_cost": 230.4,
-      "notes": "Need vendor quote - placeholder cost, critical width \u22642.3mm (from 2.5mm pitch - 1.5mm dot \u00f7 2). 28mm length for 0.7mm stroke @ 100V (per actuator-piezo-voltage-options-analysis.md)"
+      "total_cost": 384.0,
+      "notes": "Custom OEM $2.00 @ 1K+ (12-week lead, MOQ 1000). NO COTS available. Critical width \u22642.3mm (from 2.5mm pitch - 1.5mm dot \u00f7 2). 28mm length for 0.7mm stroke @ 100V."
     }
   },
   "decision_tree": [

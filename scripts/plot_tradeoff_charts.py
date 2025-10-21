@@ -103,6 +103,7 @@ def generate_cost_chart(data, output_path):
     names = []
     arch_ids = []
     breakdowns = []
+    bom_totals = []  # Store actual BOM totals from CSV
 
     for item in cost_data:
         arch_id = item['arch_id']
@@ -110,30 +111,26 @@ def generate_cost_chart(data, output_path):
         short_name = arch_id.replace('ARCH_', '').replace('_', ' ')
         names.append(short_name)
         breakdowns.append(item.get('breakdown', {}))
+        bom_totals.append(item.get('cost', 0))  # Use actual BOM total, not calculated
 
     # Define subsystem categories and colors
-    categories = ['Actuators', 'Control', 'Power', 'Communication', 'Mechanical', 'EMI', 'Misc']
+    categories = ['Actuators', 'Drivers', 'Control', 'Power', 'Communication', 'Misc']
     category_colors = {
-        'Actuators': '#E63946',      # Red (biggest cost)
+        'Actuators': '#E63946',       # Red (actuators themselves)
+        'Drivers': '#C1121F',         # Dark red (drivers - critical for PIEZO cost story)
         'Control': '#457B9D',         # Blue
         'Power': '#F1FAEE',           # Light blue
         'Communication': '#A8DADC',   # Cyan
-        'Mechanical': '#1D3557',      # Dark blue
-        'EMI': '#2A9D8F',             # Teal
-        'Misc': '#FFB703'             # Orange (passives, connectors)
+        'Misc': '#FFB703'             # Orange (passives, connectors, PCB, enclosure, EMI, user IO)
     }
 
     # Extract costs by category
     category_costs = {cat: [] for cat in categories}
-    total_costs = []
 
     for breakdown in breakdowns:
-        total = 0
         for cat in categories:
             cost = breakdown.get(cat, 0)
             category_costs[cat].append(cost)
-            total += cost
-        total_costs.append(total)
 
     # Create figure
     fig, ax = plt.subplots(figsize=(14, 8))
@@ -151,8 +148,8 @@ def generate_cost_chart(data, output_path):
         bars_dict[cat] = bars
         bottom += np.array(costs)
 
-    # Add total cost labels on top
-    for i, (total, arch_id) in enumerate(zip(total_costs, arch_ids)):
+    # Add total cost labels on top (use actual BOM totals, not calculated sums)
+    for i, (total, arch_id) in enumerate(zip(bom_totals, arch_ids)):
         ax.text(i, total + 10, f'${total:.0f}',
                 ha='center', va='bottom', fontsize=13, weight='bold')
 
@@ -166,8 +163,9 @@ def generate_cost_chart(data, output_path):
 
     # Add warning note at bottom
     fig.text(0.5, 0.02,
-             '⚠️  Actuator costs are PRELIMINARY assumptions (no COTS found - vendor quotes needed)',
-             ha='center', fontsize=10, style='italic', weight='bold',
+             '⚠️  Actuator costs are PRELIMINARY assumptions (no COTS found - vendor quotes needed)\n' +
+             'Misc includes: PCB, enclosure, EMI filters, user IO, and passives/connectors (15% overhead)',
+             ha='center', fontsize=9, style='italic', weight='bold',
              bbox=dict(boxstyle='round,pad=0.5', facecolor='orange', alpha=0.3))
 
     # Styling
@@ -183,7 +181,7 @@ def generate_cost_chart(data, output_path):
     ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda val, p: f'${val:.0f}'))
 
     # Extend y-axis for annotations
-    y_max = max(total_costs)
+    y_max = max(bom_totals)
     ax.set_ylim(-50, y_max * 1.15)
 
     plt.tight_layout(rect=[0, 0.05, 1, 1])

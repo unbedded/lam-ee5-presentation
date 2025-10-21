@@ -112,13 +112,20 @@ def parse_qualitative_rating(rating_data):
 
 def normalize_to_scale(value, min_val, max_val, lower_is_better=False):
     """
-    Normalize a value to 0-10 scale
+    Normalize using percentage-based scaling (more honest for small differences)
+
+    Instead of linear 0-10 min-max, use percentage of best:
+    - Best value = 10
+    - Others = (best/actual) * 10 (for lower_is_better)
+    - Others = (actual/best) * 10 (for higher_is_better)
+
+    This prevents exaggerating small absolute differences.
 
     Args:
         value: Raw value to normalize
         min_val: Minimum value in dataset
         max_val: Maximum value in dataset
-        lower_is_better: If True, invert scale (e.g., for cost, timeline)
+        lower_is_better: If True, lower values score higher (cost, timeline, power)
 
     Returns:
         Normalized score 0-10
@@ -126,12 +133,18 @@ def normalize_to_scale(value, min_val, max_val, lower_is_better=False):
     if max_val == min_val:
         return 5  # All same, return middle
 
-    normalized = (value - min_val) / (max_val - min_val) * 10
-
     if lower_is_better:
-        normalized = 10 - normalized  # Invert: lower cost = higher score
-
-    return normalized
+        # Best = min value (lowest cost/time/power is best)
+        # Score = (best/actual) * 10
+        best = min_val
+        score = (best / value) * 10 if value > 0 else 5
+        return min(score, 10)  # Cap at 10
+    else:
+        # Best = max value (highest EMI margin is best)
+        # Score = (actual/best) * 10
+        best = max_val
+        score = (value / best) * 10 if best > 0 else 5
+        return score
 
 
 def extract_bom_cost(arch_id):
@@ -264,9 +277,9 @@ def extract_spider_data(architectures):
         emi_score = normalize_to_scale(emi_margin, emi_min, emi_max, lower_is_better=False)  # Higher dB margin = better
 
         # Parse qualitative ratings (updated paths to match architectures.yaml structure)
-        ux_score = parse_qualitative_rating(qual.get('ux', ''))  # Dict with setup/convenience/reliability/etc
+        ux_score = parse_qualitative_rating(qual.get('ux', ''))  # Simple string rating (FAIR/GOOD)
         mfg_score = parse_qualitative_rating(qual.get('manufacturing', ''))  # Was 'manufacturability', now 'manufacturing'
-        robust_score = parse_qualitative_rating(qual.get('ux', {}).get('reliability', ''))  # Use ux.reliability as robustness proxy
+        robust_score = parse_qualitative_rating(qual.get('robustness', ''))  # Direct robustness field (LOW/GOOD/FAIR)
         supply_score = 10 - parse_qualitative_rating(qual.get('risk', {}).get('supply_chain', ''))  # Was 'supply_chain_risk', now nested
         complexity_score = 10 - parse_qualitative_rating(qual.get('complexity', ''))  # Invert: low complexity = high score (dict with hardware/firmware/power/mechanical)
 
@@ -327,9 +340,7 @@ def generate_spider_chart(spider_data, output_path):
     ax.set_yticklabels(['2', '4', '6', '8', '10'], size=8)
     ax.grid(True, linestyle='--', alpha=0.7)
 
-    # Title and legend
-    plt.title('Architecture Trade-off Comparison\n(9 Key Dimensions)',
-              size=16, weight='bold', pad=20)
+    # Legend only (no title - slide provides context)
     plt.legend(loc='upper right', bbox_to_anchor=(1.3, 1.1), fontsize=11)
 
     # Save

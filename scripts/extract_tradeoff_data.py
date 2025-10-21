@@ -260,12 +260,11 @@ def load_bom_data(arch_id):
     # Initialize cost breakdown by category
     cost_breakdown = {
         "Actuators": 0.0,
+        "Drivers": 0.0,     # Actuator drivers (separate to show HV driver impact)
         "Control": 0.0,
         "Power": 0.0,
         "Communication": 0.0,
-        "Mechanical": 0.0,
-        "EMI": 0.0,
-        "Misc": 0.0  # Passives, connectors (15% overhead)
+        "Misc": 0.0  # Passives, connectors, PCB, enclosure, EMI, user IO (15% overhead + small items)
     }
 
     # Extract actuator data and categorize costs
@@ -291,10 +290,14 @@ def load_bom_data(arch_id):
         line_total = float(row.get('Line_Total', 0))
 
         # Categorize by subsystem prefix
-        if subsystem_id.startswith('SS-ACTUATOR'):
+        if subsystem_id.startswith('SS-ACTUATOR-DRIVER') or subsystem_id.startswith('SS-ACTUATOR-SOLENOID-DRIVER'):
+            # Actuator drivers are separate category to show HV driver cost impact
+            cost_breakdown["Drivers"] += line_total
+        elif subsystem_id.startswith('SS-ACTUATOR'):
+            # Actuators (solenoids, piezos, mechanical parts like cams/pistons/springs)
             cost_breakdown["Actuators"] += line_total
-            # Save primary actuator details
-            if not subsystem_id.endswith('-DRIVER') and actuator_data["cost"] == 0:
+            # Save primary actuator details (for unit price annotation)
+            if subsystem_id in ['SS-ACTUATOR-SOLENOID', 'SS-ACTUATOR-PIEZO', 'SS-ACTUATOR'] and actuator_data["cost"] == 0:
                 actuator_data = {
                     "cost": line_total,
                     "qty": int(row.get('Qty', 0)),
@@ -307,10 +310,9 @@ def load_bom_data(arch_id):
             cost_breakdown["Power"] += line_total
         elif subsystem_id.startswith('SS-COMM'):
             cost_breakdown["Communication"] += line_total
-        elif subsystem_id.startswith('SS-PCB') or subsystem_id.startswith('SS-ENCLOSURE') or subsystem_id.startswith('SS-USER-IO'):
-            cost_breakdown["Mechanical"] += line_total
-        elif subsystem_id.startswith('SS-EMI'):
-            cost_breakdown["EMI"] += line_total
+        elif subsystem_id.startswith('SS-PCB') or subsystem_id.startswith('SS-ENCLOSURE') or subsystem_id.startswith('SS-USER-IO') or subsystem_id.startswith('SS-EMI'):
+            # Group small categories (PCB, enclosure, user IO, EMI) into Misc
+            cost_breakdown["Misc"] += line_total
 
     return {
         "total_cost": total_cost,
@@ -517,7 +519,7 @@ def extract_chart_data(architectures):
             }
 
             print(f"  {arch_id}: ${cost:.2f} (actuator: ${bom_data['actuator_unit_price']:.2f} × {bom_data['actuator_qty']})")
-            print(f"    Breakdown: Actuators=${bom_data['cost_breakdown']['Actuators']:.0f}, Control=${bom_data['cost_breakdown']['Control']:.0f}, Power=${bom_data['cost_breakdown']['Power']:.0f}, Comm=${bom_data['cost_breakdown']['Communication']:.0f}")
+            print(f"    Breakdown: Actuators=${bom_data['cost_breakdown']['Actuators']:.0f}, Drivers=${bom_data['cost_breakdown']['Drivers']:.0f}, Control=${bom_data['cost_breakdown']['Control']:.0f}, Power=${bom_data['cost_breakdown']['Power']:.0f}, Comm=${bom_data['cost_breakdown']['Communication']:.0f}, Misc=${bom_data['cost_breakdown']['Misc']:.0f}")
         else:
             # Fallback to YAML if BOM not found
             cost_data = quant.get('cost', {})

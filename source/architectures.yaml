@@ -65,17 +65,9 @@ architectures:
         physical: "SMALL"
         weight: "LIGHT"
         portability: "MEDIUM"
-      ux:
-        setup: "BEST"
-        convenience: "FAIR"
-        reliability: "BEST"
-        battery_anxiety: "NONE"
-        mobility: "POOR"
-      complexity:
-        hardware: "COMPLEX"      # 200V HV design: PCB clearances, 4-layer stack, conformal coating
-        firmware: "SIMPLE"
-        power: "COMPLEX"         # 200V flyback converter, HV driver ICs, extreme EMI suppression
-        mechanical: "SIMPLE"
+      ux: "FAIR"  # Wired, tethered to phone, no wireless freedom
+      robustness: "GOOD"  # Solid state piezo, fewer moving parts
+      complexity: "FAIR"  # 200V HV power, but no BLE/battery complexity
       timeline:
         pilot: "FASTEST"
         parts_leadtime: "SHORT"
@@ -87,7 +79,7 @@ architectures:
         yield_risk: "LOW"
       risk:
         technical: "HIGH"        # 200V HV power supply design (flyback topology, isolation, EMI), HV driver ICs (discrete MOSFET arrays)
-        supply_chain: "LOW"
+        supply_chain: "TBD"      # Custom actuators, non-COTS (12-week lead)
         safety: "MEDIUM"         # 200V high voltage requires conformal coating, creepage/clearance per IPC-2221
         timeline: "MEDIUM"       # HV component sourcing may extend leadtime
         cost_overrun: "MEDIUM"   # HV components cost 4-6× more than initially estimated
@@ -119,7 +111,7 @@ architectures:
       power:
         energy_per_refresh_J: 12.96  # 2.16W × 6s (10 lines/min reading rate)
         peak_power_during_refresh_W: 2.16  # Continuous refresh (capacitor leakage)
-        avg_power_continuous_W: 2.16  # Same as peak (must refresh constantly)
+        avg_power_continuous_W: 0.86  # Realistic: 45Hz refresh with 20% partial recharge per cycle
         reading_rate_lines_per_min: 10  # Beginner pace assumption
         refresh_interval_sec: 6  # Time between line changes
       emi:
@@ -131,7 +123,7 @@ architectures:
         design_weeks: 2
         prototype_weeks: 2
         pilot_production_weeks: 2
-        total_weeks: 6
+        total_weeks: 12  # Driven by custom actuator sourcing (>8 weeks)
         certification_weeks: 4     # FCC 15B (simplest)
       manufacturing:
         component_count: 250       # Approx (192 actuators + 24 drivers + 4 expanders + MCU + passives)
@@ -193,18 +185,9 @@ architectures:
         physical: "SMALL"        # 198mm (standard ADA spacing, not 280mm)
         weight: "MEDIUM"         # 4× AA + cam mechanism
         portability: "HIGH"      # Wireless capable
-      ux:
-        setup: "BEST"            # Plug and play (wired USB-C)
-        convenience: "GOOD"      # Wired only, but instant AA battery swap
-        reliability: "BEST"      # Wired connection (no radio dropouts)
-        battery_anxiety: "NONE"  # Instant AA swap
-        mobility: "FAIR"         # Wired limits mobility
-        refresh_speed: "ACCEPTABLE" # 2.4 sec (vs 1.5 sec piezo, good for beginners)
-      complexity:
-        hardware: "MODERATE"
-        firmware: "SIMPLE"       # USB-C only (no BLE stack)
-        power: "MODERATE"        # Boost converters (no charger)
-        mechanical: "COMPLEX"    # Cam mechanism + layer offsets + piston alignment
+      ux: "FAIR"  # Wired, tethered to phone, slower refresh (2.4s)
+      robustness: "LOW"  # Mechanical cam complexity, more moving parts
+      complexity: "COMPLEX"  # Cam mechanism + mechanical levers + tolerances
       timeline:
         pilot: "LONG"            # 12+ weeks (custom actuators), similar to piezo architectures
         parts_leadtime: "LONG" # Custom solenoids 12-week lead time, NO COTS available
@@ -216,7 +199,7 @@ architectures:
         yield_risk: "MEDIUM"     # Cam mechanism prototype validation needed
       risk:
         technical: "MEDIUM"      # Custom solenoids (12-week lead), cam mechanisms proven (automotive/robotics), modular design
-        supply_chain: "MEDIUM"   # AA globally available but custom solenoids 12-week lead time
+        supply_chain: "TBD"      # Custom actuators, non-COTS (12-week lead)
         safety: "LOW"            # AA safe (no Li-ion hazard), 12V low voltage
         timeline: "MEDIUM"       # Custom actuators increase risk, modular assembly de-risks production
         cost_overrun: "LOW"      # Actuators lower cost vs piezo ($326.40 vs $384.00)
@@ -260,7 +243,7 @@ architectures:
         design_weeks: 3
         prototype_weeks: 3        # Cam mechanism prototyping (SLA 3D print)
         pilot_production_weeks: 4 # Proto molds (soft tooling)
-        total_weeks: 10
+        total_weeks: 12  # Driven by custom actuator sourcing (>8 weeks)
         certification_weeks: 4     # FCC 15B only (wired, no radio)
       manufacturing:
         component_count: 320       # Higher count (cam parts) but modular assembly
@@ -316,18 +299,9 @@ architectures:
         physical: "MEDIUM"       # Integrated battery (sleeker than AA)
         weight: "MEDIUM"         # Li-ion lighter than AA
         portability: "HIGH"
-      ux:
-        setup: "GOOD"            # BLE pairing
-        convenience: "GOOD"      # Wireless freedom
-        reliability: "GOOD"      # BLE can drop (no fallback)
-        battery_anxiety: "HIGH"  # Forgot to charge?
-        mobility: "EXCELLENT"    # Truly wireless
-        refresh_speed: "FAST"    # 1.5 sec (best performance)
-      complexity:
-        hardware: "COMPLEX"      # 200V HV design + BLE wireless + Li-ion battery
-        firmware: "MODERATE"     # BLE only (simpler than dual stack)
-        power: "VERY COMPLEX"    # 200V flyback converter + Li-ion charger + fuel gauge + thermal mgmt + HV driver ICs
-        mechanical: "MODERATE"   # Integrated battery pack
+      ux: "GOOD"  # Wireless freedom, but battery anxiety (BLE pairing)
+      robustness: "FAIR"  # Solid state piezo, but BLE complexity adds risk
+      complexity: "MODERATE"  # BLE + Li-ion adds complexity over wired, but still solid state
       timeline:
         pilot: "MODERATE"        # 8 weeks
         parts_leadtime: "MEDIUM" # BLE module, Li-ion pack
@@ -339,7 +313,7 @@ architectures:
         yield_risk: "MEDIUM"
       risk:
         technical: "HIGH"        # 200V HV power supply + BLE wireless + Li-ion battery (triple complexity)
-        supply_chain: "MEDIUM"   # Li-ion sourcing + HV component availability
+        supply_chain: "TBD"      # Custom actuators, non-COTS (12-week lead)
         safety: "VERY HIGH"      # 200V high voltage + Li-ion thermal runaway risk (dual hazard)
         timeline: "HIGH"         # HV component sourcing + UL 2054 + FCC 15C certification
         cost_overrun: "HIGH"     # HV components cost 4-6× more + Li-ion pack + BLE module
@@ -371,7 +345,7 @@ architectures:
       power:
         energy_per_refresh_J: 12.96  # 2.16W × 6s (10 lines/min reading rate)
         peak_power_during_refresh_W: 2.16  # Continuous refresh (capacitor leakage)
-        avg_power_continuous_W: 2.16  # Same as peak (must refresh constantly)
+        avg_power_continuous_W: 0.86  # Realistic: 45Hz refresh with 20% partial recharge per cycle
         reading_rate_lines_per_min: 10  # Beginner pace assumption
         refresh_interval_sec: 6  # Time between line changes
       emi:
@@ -383,7 +357,7 @@ architectures:
         design_weeks: 3
         prototype_weeks: 2
         pilot_production_weeks: 3
-        total_weeks: 8
+        total_weeks: 12  # Driven by custom actuator sourcing (>8 weeks)
         certification_weeks: 8     # FCC 15C + UL 2054 (slowest)
       manufacturing:
         component_count: 270

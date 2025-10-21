@@ -7,16 +7,15 @@ Line,Subsystem_ID,Subsystem_Name,Digikey_PN,MFR,MFR_PN,Description,Qty,Unit_Pric
 6,SS-ACTUATOR-SPRING,Compression Spring Array,CUSTOM-SPRING-01,Custom,SPRING-COMP-01,Compression spring for piston return,192,0.01,2.88,2,Y,Standard COTS spring
 7,SS-CONTROL,Main Control Unit (MCU),497-14367-ND,STMicro,STM32F407VGT6,"ARM Cortex-M4 168MHz, 1MB Flash, 192KB RAM, 140 GPIO",1,7.20,7.20,12,Y,"Main MCU, check stock (long leadtime)"
 8,SS-IO-EXPAND,I/O Expander Array,MCP23017-E/SP-ND,Microchip,MCP23017-E/SP,"16-bit I2C I/O expander, 1.6MHz",4,0.95,3.80,6,Y,Also available in SOIC/QFN for SMT
-9,SS-ACTUATOR-DRIVER-2CH,Actuator Driver Array (2-channel),296-1781-5-ND,TI,ULN2803A,8-channel Darlington array (for 2-ch architecture),3,0.65,1.95,4,Y,Same as SS-ACTUATOR-DRIVER but fewer qty (12 vs 24 chips) for 2-channel design
+9,SS-ACTUATOR-DRIVER-2CH,Actuator Driver Array (H-bridge for bistable),296-1781-5-ND,TI,ULN2803A,8-channel Darlington array (H-bridge config for bidirectional drive),48,0.65,31.20,4,Y,"Bistable solenoids need bidirectional drive (SET/RESET pulses). 192 solenoids × 2 directions = 384 channels. 384 ÷ 8 = 48 chips needed for full H-bridge control."
 10,SS-USER-IO,User Interface Buttons,CKN12221-ND,C&K,KMR221NGLFS,"Tactile switch, 160gf, 1M+ cycles",2,0.18,0.36,2,Y,4.5×4.5mm footprint
 11,SS-PCB,Main PCB (4-layer),CUSTOM-PCB-01,PCBWay,PCB-4L-200x100,"4-layer PCB 200×100mm, ENIG finish",1,12.00,12.00,3,Y,"Quote for qty 100 (pilot), 1.6mm thick"
 12,SS-ENCLOSURE,Mechanical Enclosure,CUSTOM-ENCL-01,Shapeways,3DP-SLS-NYLON,"3D print SLS nylon, natural finish",1,25.00,25.00,2,Y,"Pilot only, ~200×100×25mm, switch to injection mold for production"
 13,SS-EMI-BULK-CAP,EMI Bulk Capacitor Array,493-2203-ND,Nichicon,UVR1H102MHD,Electrolytic capacitor 1000µF 50V 20% radial,24,0.08,1.92,2,Y,"Bulk cap for driver IC power rail filtering (EMI suppression, inductive kickback energy absorption). Place one per ULN2803A IC (24 total for ARCH_SOL_ECO, 3 ICs; varies by architecture). NFR-EMI-001 compliance."
 14,SS-EMI-BYPASS-CAP,EMI Bypass Capacitor Array,399-4151-1-ND,Kemet,C0805C104K5RACTU,Ceramic capacitor 100nF 50V X7R 0805,24,0.01,0.19,2,Y,"Ceramic bypass for driver IC (EMI suppression, high-frequency decoupling). Place one per ULN2803A IC (24 total for ARCH_PIEZO_ECO/DLX, 3 for ARCH_SOL_ECO). NFR-EMI-001 compliance."
 15,SS-COMM-USB,USB-C Communication Interface,2073-USB4105-GF-A-ND,GCT,USB4105-GF-A,"USB-C receptacle 16-pin, mid-mount",1,1.20,1.20,6,Y,USB 2.0 Full Speed capable
-16,SS-POWER-AA-HOLDER,AA Battery Holder (4×AA),36-2466K-ND,Keystone,2466,"4×AA battery holder, PCB mount",1,1.75,1.75,2,Y,Dimensions: 60×55×15mm
-17,SS-POWER-AA-BOOST-3V3,AA Power - Boost (6V→3.3V),296-50464-1-ND,TI,TPS61088,"Boost/buck 6V→3.3V, buck-boost mode",1,1.95,1.95,6,Y,Same chip as USB boost (design reuse)
-18,SS-POWER-AA-BOOST-12V,AA Power - Boost (6V→12V),296-50464-1-ND,TI,TPS61088,"Boost 6V→12V, 2.5A switch (solenoid overdrive)",1,1.95,1.95,6,Y,"Lower voltage than 30V piezo (easier isolation, less EMI)"
----,---,---,---,---,---,SUBTOTAL,---,---,439.75,---,---,---
----,---,---,---,---,---,Misc 15%,---,---,65.96,---,---,"Passives, connectors"
----,---,---,---,---,---,TOTAL,---,---,505.71,---,---,---
+16,SS-POWER-USB-LDO,USB Power - LDO (5V→3.3V),296-38833-1-ND,TI,TPS73633,"LDO 5V→3.3V, 400mA, low noise",1,0.60,0.60,4,Y,For logic power rail (USB bus-powered)
+17,SS-POWER-USB-BOOST-12V,USB Power - Boost (5V→12V),296-50464-1-ND,TI,TPS61088,"Boost 5V→12V, 2.5A switch (solenoid drive)",1,1.95,1.95,6,Y,"USB bus-powered, lower voltage than 100V piezo (easier isolation, less EMI)"
+---,---,---,---,---,---,SUBTOTAL,---,---,465.90,---,---,---
+---,---,---,---,---,---,Misc 15%,---,---,69.89,---,---,"Passives, connectors"
+---,---,---,---,---,---,TOTAL,---,---,535.79,---,---,---
