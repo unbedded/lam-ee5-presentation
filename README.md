@@ -294,3 +294,483 @@ make pptx-pdf       # Export PPTX to PDF (requires LibreOffice)
 2. Alternative Solution Development (25 pts)
 3. Solution Evaluation & Trade-off Analysis (30 pts)
 4. Path to Production (20 pts)
+
+---
+
+## Post-Interview Lessons Learned
+
+**Interview Stats:**
+- **Duration:** 7 hours
+- **Format:** Technical deep-dive + whiteboard + Q&A
+- **Result:** 80% chance of offer, no other candidates under consideration
+- **Overall Feedback:** Presentation was well-received, strong technical depth
+
+### What Worked ✅
+
+1. **Technical Depth & Accuracy**
+   - Detailed power analysis (PIEZO vs SOLENOID calculations)
+   - Realistic BOM sourcing (actual Digikey part numbers, not estimates)
+   - EMI physics derivations (slew-rate limiting, sequential firing)
+   - Trade-off framework (8 dimensions: cost, timeline, UX, manufacturability)
+
+2. **Requirements Rigor**
+   - 17 SMART requirements with acceptance criteria
+   - Assumption risk ranking (6 assumptions documented)
+   - Traceability matrix (requirements → architectures)
+   - Standards compliance (ADA 703.3, FCC Part 15B, UL)
+
+3. **AI Transparency**
+   - Disclosed AI usage upfront: "I used Claude Code + 500 lines of Python to generate BOMs and manage requirements database"
+   - Showed automation: requirements.yaml → Markdown → PDF pipeline
+   - Demonstrated AI as force multiplier, not replacement for engineering judgment
+
+4. **Verification Discipline**
+   - Caught AI math errors (10% → 33% dot change rate, piezo power confusion)
+   - Cross-checked all calculations in speaker notes
+   - Validated BOMs against actual Digikey pricing
+
+### What to Improve ❌
+
+#### 1. **Timeline Messaging (Major Miss)**
+**Problem:** Focused too much on "2-month timeline doesn't work" without providing the alternative.
+
+**Better Approach:**
+- "2 months is aspirational for pilot production. Here's the realistic 12-week plan:"
+  - Week 0-2: Requirements clarification + actuator sourcing
+  - Week 3-4: Detailed design (schematic, PCB, BOM lock)
+  - Week 5-6: Prototype build (10 boards, bring-up, debug)
+  - Week 7-9: Pilot production (50-100 units, yield analysis)
+  - Week 10-12: Validation testing (functional, EMI, user)
+- Don't just say "it doesn't work" - give the **realistic path forward**
+
+**Action:** Move timeline slide from BACKUP to MAIN deck
+
+#### 2. **Missing "Pick a Winner" Slide (Critical)**
+**Problem:** Presented 3 architectures with trade-offs but didn't make a recommendation.
+
+**What They Wanted:**
+- "If we had to commit TODAY, I recommend **PIEZO_ECO** because:"
+  - Proven technology (100% of commercial displays use piezo)
+  - Lowest technical risk (no cam mechanism)
+  - 5.8× better power efficiency than solenoid (0.22W vs 1.27W)
+  - Trade-off: Higher cost ($868 vs $536), but faster to pilot
+- Then: "However, if wireless is mandatory → PIEZO_DLX. If cost is critical → SOL_ECO."
+
+**Action:** Add explicit "RECOMMENDATION" slide with reasoning
+
+#### 3. **Forgot Backup Slides During Q&A**
+**Problem:** FTE/NRE resource plan existed in backup slides, but I forgot to reference it when asked.
+
+**Root Cause:** AI generated the slide, I didn't internalize the content.
+
+**Fix:**
+- If AI generates content, you MUST review and **own it**
+- Practice Q&A: "What resources do you need?" → "See backup slide 28: 2.5 FTE, $75-110K NRE"
+- Print backup slide index on note cards
+
+**Action:** Move FTE/NRE to MAIN deck (not backup)
+
+#### 4. **Didn't Explain AI Workflow Visually**
+**Problem:** Said "I used AI and 500 lines of code" but interviewers had no context for what that means.
+
+**Better Approach:** Half-slide visual showing:
+```
+Human Input              AI Assistant           Human Verification
+────────────            ──────────────         ──────────────────
+Define requirements  →  Generate BOMs      →   Validate pricing
+  (YAML SSOT)           (3 architectures)      (Digikey actual)
+                     →  Create charts      →   Check math
+Write policies       →  Draft slides       →   Rewrite for accuracy
+  (SMART criteria)      (speaker notes)        (catch 10%→33% error)
+```
+
+**Key Message:** "AI is my drafting tool, not my thinking replacement. I verify everything."
+
+**Action:** Add "AI Workflow" slide to appendix
+
+#### 5. **Role Confusion: EE vs EE+PM**
+**Problem:** Presented as "Electrical Engineer" but they wanted "EE Lead who owns the entire project."
+
+**What They Expected:**
+- Not: "I design circuits, someone else manages schedule"
+- But: "I own end-to-end: design + team + schedule + budget + risk"
+- Program Director = VP-level strategy, NOT day-to-day PM
+- You ARE the project manager for this pilot
+
+**Action:** Frame future presentations as "EE Lead + PM" role
+
+### Discoveries During Interview
+
+#### COTS Piezo Pin Found
+- **What:** There IS a COTS piezo pin with simple driver available
+- **Impact:** Invalidates "no COTS actuators exist" assumption
+- **Lesson:** Even exhaustive searches can miss parts (especially niche actuator market)
+- **Fix:** Always caveat: "No COTS found in my search, but actuator market is fragmented"
+
+#### Timeline Reality Check
+- Unanimous agreement: 2-month pilot is unrealistic for custom actuators
+- 8-12 weeks is honest engineering estimate
+- Don't apologize for reality - own it and provide the path
+
+### AI Usage Philosophy: "Not-Trust, Always Verify"
+
+**What Worked:**
+- AI as **drafting tool**: Generate initial BOMs, speaker notes, calculations
+- Human as **verification**: Check math, validate assumptions, cross-reference sources
+- Iterative refinement: Ask AI "Is 10% dots change realistic?" → Update to 33%
+
+**Pitfalls Avoided:**
+- AI gets simple math wrong (power calculations, percentage rates)
+- AI hallucinates part numbers (always cross-check Digikey)
+- AI over-optimizes (10% change rate was too optimistic)
+
+**The Discipline:**
+1. **AI generates** → 2. **Human questions** → 3. **AI refines** → 4. **Human validates**
+
+**Quote:** "A bad carpenter blames his tools. AI is a superpower, but only if you stay curious and ask questions. Don't trust - verify."
+
+### Interview Preparation Experiment
+
+**Hypothesis:** What can a Senior EE accomplish with Claude Code in 14 days (84 hours)?
+
+**Results:**
+- ✅ 17 SMART requirements documented
+- ✅ 3 complete architectures with real BOMs
+- ✅ 500+ lines of automation (YAML → Markdown → PDF)
+- ✅ Marp presentation with 40+ slides
+- ✅ Power analysis, EMI calculations, timeline planning
+- ✅ Resource plan (FTE, NRE, validation strategy)
+
+**Time Saved:** Estimated 3-4 weeks of manual work compressed to 2 weeks with AI assistance
+
+**Key Learning:** AI accelerates **breadth** (generate BOMs, requirements matrix, charts) so human can focus on **depth** (validate physics, catch errors, make decisions)
+
+### Recommended Changes for Future Use
+
+**Main Deck Additions:**
+1. **Slide 5:** "RECOMMENDATION: Pick a Winner" (after trade-off analysis)
+2. **Slide 6:** "Realistic Timeline: 12-Week Plan" (move from backup)
+3. **Slide 7:** "Resource Plan: FTE & NRE" (move from backup)
+
+**Backup Additions:**
+4. **Backup Slide:** "AI-Assisted Workflow" (transparency visual)
+
+**Speaker Notes:**
+- Add "See backup slide X" reminders for common Q&A topics
+- Internalize ALL backup content (don't let AI-generated slides become black boxes)
+
+---
+
+## AI-Assisted Slide Workflow (Retrospective)
+
+This section documents the actual workflow used to create the Marp presentation with Claude Code assistance.
+
+### Workflow Overview
+
+```
+┌─────────────────┐
+│ Human defines   │
+│ requirements    │ → source/requirements.yaml (SSOT)
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│ AI generates    │
+│ artifacts       │ → /req-yaml-to-md → artifacts/requirements.md
+└────────┬────────┘   /arch-gen → artifacts/bom/*.csv
+         │            scripts/generate_tradeoff_charts.py → charts
+         ▼
+┌─────────────────┐
+│ Human validates │
+│ & corrects      │ → Check BOMs against Digikey
+└────────┬────────┘   Verify power calculations
+         │            Catch AI math errors (10%→33%)
+         ▼
+┌─────────────────┐
+│ AI drafts       │
+│ slides          │ → source/presentation-marp.md (Markdown)
+└────────┬────────┘   speaker notes, tables, technical content
+         │
+         ▼
+┌─────────────────┐
+│ Human rewrites  │
+│ for accuracy    │ → Correct piezo power: 0.43W → 0.22W
+└────────┬────────┘   Update solenoid: 0.38W → 1.27W
+         │            Add "TOTAL POWER Per dot" clarity
+         ▼
+┌─────────────────┐
+│ make marp       │
+│ (1-sec rebuild) │ → artifacts/presentation-marp.html
+└─────────────────┘   artifacts/presentation-marp.pdf
+```
+
+### Step-by-Step Process
+
+#### Phase 1: Requirements Definition (Human-Led)
+**Tools:** Text editor, YAML
+**Time:** ~6 hours
+
+1. Read interview PDF (pages 9-10: "EE Concept Evaluation")
+2. Extract 9 ground-truth requirements (PRD-SCHED-001, PRD-SIZE-001, etc.)
+3. Derive 6 assumption requirements (pilot production, BOM cost, power budget)
+4. Write `source/requirements.yaml` with SMART structure:
+   ```yaml
+   - id: PRD-FUNC-001
+     title: "Single Line Braille Display - 32 characters, 6 dots each"
+     source: "PDF p.9 Scope Item 2"
+     priority: "P0-Critical"
+     acceptance_criteria:
+       - "32 braille cells arranged horizontally"
+       - "Each cell: 6 dots (2×3 matrix)"
+       - "Total: 192 independently-controlled actuators"
+   ```
+
+**AI Role:** Minimal - just YAML syntax validation
+
+#### Phase 2: Architecture & BOM Generation (AI-Assisted)
+**Tools:** Claude Code, Python scripts, YAML
+**Time:** ~12 hours (would be 3-4 weeks manual)
+
+1. **Human defines architectures in YAML:**
+   ```yaml
+   architectures:
+     - id: ARCH_PIEZO_ECO
+       actuator_type: "Piezo Bimorph"
+       communication: "USB-C Wired"
+       subsystems: [SS-ACTUATOR-PIEZO, SS-COMM-USB, ...]
+   ```
+
+2. **AI generates BOMs via `/arch-gen`:**
+   - Reads `source/parts.csv` (29 parts with Digikey PNs)
+   - Reads `source/subsystems.yaml` (19 subsystems with specs)
+   - Maps architectures → subsystems → parts → BOM CSV
+   - Output: `artifacts/bom/arch-piezo-eco-bom.csv` ($868 total)
+
+3. **Human validates pricing:**
+   - Cross-check Digikey part numbers (STM32F407VGT6, nRF52840, etc.)
+   - Verify volume pricing (1K+ units)
+   - Catch AI errors: Initial BOM had wrong STM32 variant ($8 → $12)
+
+4. **AI generates trade-off charts:**
+   ```bash
+   python3 scripts/extract_tradeoff_data.py  # YAML+CSV → JSON
+   python3 scripts/plot_tradeoff_charts.py   # JSON → PNG charts
+   ```
+   - Output: spider chart, cost bars, timeline comparison
+
+**AI Role:** High automation (BOM generation, chart plotting)
+**Human Role:** Validation, error correction, design decisions
+
+#### Phase 3: Slide Content Drafting (AI-Heavy)
+**Tools:** Claude Code, Marp Markdown
+**Time:** ~8 hours
+
+1. **Human provides slide outline:**
+   ```
+   Slide 1: Title
+   Slide 2: Agenda
+   Slide 3: Requirements (ground truth)
+   Slide 4: ADA 703.3 mechanical specs
+   Slide 5: Actuator technology comparison
+   ...
+   ```
+
+2. **AI drafts Markdown slides:**
+   ```markdown
+   # Power Per Actuator: Actuation and Hold
+
+   | Phase | Parameter | PIEZO | SOLENOID |
+   |-------|-----------|-------|----------|
+   | ACTUATION | Energy/pulse | 250 µJ | 120 mJ |
+   | HOLD | Refresh rate | 45 Hz | 0 Hz |
+   ```
+
+3. **AI generates speaker notes:**
+   - Technical explanations (i=C×dV/dt derivation)
+   - Calculation step-by-step math
+   - Key talking points
+
+**Critical Error Example:**
+- AI initially calculated solenoid realistic power as 0.38W (10% dot change)
+- Human questioned: "Is 10% dot change realistic for braille text?"
+- AI refined: 33% is more realistic (typical English letter transitions)
+- Human corrected: 0.38W → 1.27W
+- **Lesson:** AI over-optimizes without domain knowledge
+
+#### Phase 4: Math Verification (Human-Critical)
+**Tools:** Calculator, whiteboard, speaker notes
+**Time:** ~4 hours
+
+**Example 1: Piezo Power Confusion**
+- AI conflated "hold power per dot" with "total power per dot"
+- Slide showed 2.25 mW in HOLD section, unclear if this was total
+- Human added row: "TOTAL POWER | Per dot (avg) | 2.25 mW"
+- **Fix:** Clarity that actuation = hold refresh for piezo
+
+**Example 2: Solenoid Change Rate**
+- AI assumed 10% dots change per line (too optimistic)
+- Human calculated: 33% realistic (consecutive English lines)
+- Recalculated power: 192 × 33% × 120mJ / 6s = 1.27W
+- Updated slide: 0.38W → 1.27W
+
+**Example 3: Power Budget Rollup**
+- AI showed piezo "Avg power (realistic)" as 0.43W
+- But this assumed 100% dots asserted, not 50%
+- Human corrected: 192 × 50% × 2.25mW = 0.22W
+- **Key insight:** Piezo = f(dots ASSERTED), Solenoid = f(dots CHANGED)
+
+**Verification Process:**
+1. Read AI-generated calculation in speaker notes
+2. Work it out independently on whiteboard
+3. If mismatch → question AI → iterate → validate
+4. Add "SHOW YOUR WORK" math to speaker notes
+
+#### Phase 5: Iterative Refinement (Human-Led)
+**Tools:** Marp, `make marp` (1-second rebuild)
+**Time:** ~6 hours
+
+1. **Present to yourself (dry run):**
+   - Read slides aloud, time each section
+   - Notice confusing wording, awkward tables
+   - Flag slides that need backup content
+
+2. **Refine with AI:**
+   - "This table is too dense - split into 2 slides"
+   - "Move FTE/NRE to main deck, not backup"
+   - "Add 'TOTAL POWER Per dot' row for clarity"
+
+3. **Rebuild instantly:**
+   ```bash
+   vim source/presentation-marp.md
+   make marp  # 1 second
+   firefox artifacts/presentation-marp.html
+   ```
+
+4. **Iterate until flow is smooth:**
+   - 30-minute target (achieved: 28 minutes)
+   - Smooth transitions between sections
+   - No jargon without definitions
+
+### Tools & Technologies Used
+
+**Single Source of Truth (SSOT):**
+- `source/requirements.yaml` - All requirements (470 lines)
+- `source/architectures.yaml` - 3 architectures (280 lines)
+- `source/parts.csv` - 29 parts with Digikey PNs
+- `source/subsystems.yaml` - 19 subsystems (350 lines)
+
+**Automation Pipeline:**
+- Python scripts: 500+ lines of code
+- Slash commands: `/req-yaml-to-md`, `/arch-gen`, `/rubric-eval`
+- Makefile: `make marp` (Marp CLI)
+
+**AI Assistance:**
+- Claude Code (Sonnet 4.5)
+- Used for: BOM generation, chart plotting, slide drafting, speaker notes
+- NOT used for: Design decisions, math validation, requirement prioritization
+
+**Version Control:**
+- Git + GitHub
+- 47 commits over 14 days
+- Semantic versioning (v0.1.0 → v1.3.0)
+
+### Time Breakdown
+
+| Phase | Task | Human Time | AI Time | Total |
+|-------|------|------------|---------|-------|
+| 1 | Requirements definition (YAML) | 6h | 0.5h | 6.5h |
+| 2 | Architecture & BOM generation | 4h | 8h | 12h |
+| 3 | Slide content drafting | 2h | 6h | 8h |
+| 4 | Math verification & correction | 4h | 1h | 5h |
+| 5 | Iterative refinement | 6h | 2h | 8h |
+| **Total** | | **22h** | **17.5h** | **39.5h** |
+
+**Traditional Approach (estimated):** 60-80 hours for equivalent output
+
+**AI Productivity Gain:** 1.5-2× faster (39.5h vs 60-80h)
+
+### Key Principles for AI-Assisted Technical Work
+
+1. **Human Defines Strategy, AI Executes Tactics**
+   - You pick architectures (PIEZO vs SOLENOID)
+   - AI generates BOMs, charts, calculations
+   - You validate and correct
+
+2. **Never Trust, Always Verify**
+   - AI math errors are common (10% → 33%, 0.38W → 1.27W)
+   - Cross-check against primary sources (datasheets, standards)
+   - Work calculations independently before accepting AI results
+
+3. **Iterate Quickly, Validate Slowly**
+   - Use AI for fast iteration (`make marp` = 1 second)
+   - Spend time on validation (whiteboard math, dry runs)
+   - Don't let speed compromise accuracy
+
+4. **Document AI Usage Transparently**
+   - Disclose: "I used Claude Code + 500 lines of Python"
+   - Explain: "AI drafted, I validated"
+   - Show: "Here's where I caught AI errors"
+
+5. **Own the Content**
+   - If AI generates backup slides (FTE/NRE), internalize them
+   - Don't let AI-generated content become a black box
+   - Practice Q&A for every slide (main + backup)
+
+### What AI Did Well
+
+✅ **BOM Generation:** Mapped 3 architectures × 19 subsystems × 29 parts = 3 BOMs in minutes
+✅ **Chart Plotting:** Spider charts, cost bars, timeline stacks (would take hours in Excel)
+✅ **Speaker Notes:** Technical derivations (i=C×dV/dt, EMI field strength)
+✅ **Iteration Speed:** 1-second slide rebuild enabled rapid refinement
+✅ **Requirements Matrix:** Generated traceability report (17 requirements → 3 architectures)
+
+### What AI Struggled With
+
+❌ **Domain Knowledge:** Assumed 10% dot change rate (too optimistic for braille)
+❌ **Math Verification:** Power calculations had errors (0.38W → 1.27W)
+❌ **Design Judgment:** Couldn't "pick a winner" - needed human prioritization
+❌ **Cost Sourcing:** Hallucinated part numbers (always cross-check Digikey)
+❌ **Presentation Strategy:** Generated backup slides but didn't flag importance (FTE/NRE should be main)
+
+### The "Not-Trust, Always Verify" Workflow
+
+```
+┌──────────────────────────────────────────────────────────┐
+│  AI GENERATES                                            │
+│  ├─ Power calculation: "Solenoid realistic = 0.38W"     │
+│  ├─ Assumption: 10% dots change per line                │
+│  └─ Speaker notes: P = (192 × 0.10 × 120mJ) / 6s       │
+└──────────────────────────────────────────────────────────┘
+                          │
+                          ▼
+┌──────────────────────────────────────────────────────────┐
+│  HUMAN QUESTIONS                                         │
+│  ├─ "Is 10% dots change realistic for braille?"         │
+│  ├─ "What's the actual letter frequency in English?"    │
+│  └─ "How correlated are consecutive braille lines?"     │
+└──────────────────────────────────────────────────────────┘
+                          │
+                          ▼
+┌──────────────────────────────────────────────────────────┐
+│  AI REFINES                                              │
+│  ├─ "33% is more realistic (consecutive lines differ)"  │
+│  ├─ Recalculates: (192 × 0.33 × 120mJ) / 6s = 1.27W    │
+│  └─ Updates slide: 0.38W → 1.27W                        │
+└──────────────────────────────────────────────────────────┘
+                          │
+                          ▼
+┌──────────────────────────────────────────────────────────┐
+│  HUMAN VALIDATES                                         │
+│  ├─ Whiteboard check: 192 × 0.33 × 0.120 / 6 = 1.267W ✓│
+│  ├─ Cross-reference: Typical braille density = 50% dots │
+│  └─ Update speaker notes with detailed derivation       │
+└──────────────────────────────────────────────────────────┘
+```
+
+**Key Insight:** The questioning phase is what separates senior engineers from juniors. Stay curious, don't rush to solutions.
+
+---
+
+**Project Status:** ✅ Interview Complete (October 23, 2025)
+**Outcome:** 80% chance of offer, no other candidates
+**AI Experiment:** Success - 1.5-2× productivity gain with rigorous verification
